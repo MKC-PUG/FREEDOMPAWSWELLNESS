@@ -37,10 +37,6 @@ export default function SuperBudPhotoBooth() {
     }
   };
 
-  const downloadPhoto = () => {
-    alert("📥 Download feature coming in next update!\n\nFor now, take a screenshot of the preview.");
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-black to-red-950 text-white p-8">
       <div className="max-w-6xl mx-auto">
@@ -52,31 +48,31 @@ export default function SuperBudPhotoBooth() {
           <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
             <h2 className="text-2xl font-bold mb-6 text-center">Preview</h2>
             
-            <div className="relative bg-black rounded-3xl overflow-hidden aspect-video border border-white/30 flex items-center justify-center">
-              {uploadedImage ? (
-                <img src={uploadedImage} alt="dog" className="max-h-full object-contain relative z-10" />
-              ) : (
-                <div className="text-center">
-                  <div className="text-8xl mb-6">📸</div>
-                  <p className="text-2xl">Upload your dog's photo</p>
-                </div>
-              )}
+            <div className="relative bg-black rounded-3xl overflow-hidden aspect-video border border-white/30 min-h-[500px] flex items-center justify-center">
+              {/* Background */}
+              <img 
+                src={backgrounds[selectedBackground as keyof typeof backgrounds]} 
+                alt="background" 
+                className="absolute inset-0 w-full h-full object-cover"
+              />
 
-              {/* Background Overlay */}
+              {/* Dog Photo */}
               {uploadedImage && (
                 <img 
-                  src={backgrounds[selectedBackground as keyof typeof backgrounds]} 
-                  alt="bg" 
-                  className="absolute inset-0 w-full h-full object-cover opacity-40 z-0" 
+                  src={uploadedImage} 
+                  alt="dog" 
+                  className="relative z-10 max-h-[85%] rounded-xl shadow-2xl"
                 />
               )}
 
-              {/* Wardrobe Items */}
-              {activeItems.includes("cape") && <div className="absolute top-1/3 right-1/4 text-[180px] z-20">🦸</div>}
-              {activeItems.includes("hat") && <div className="absolute top-12 left-1/2 -translate-x-1/2 text-[110px] z-20">🎩</div>}
-              {activeItems.includes("glasses") && <div className="absolute top-[42%] left-1/2 -translate-x-1/2 text-[90px] z-20">😎</div>}
-              {activeItems.includes("bandana") && <div className="absolute bottom-1/4 left-1/3 text-[100px] z-20">🧣</div>}
-              {activeItems.includes("bow") && <div className="absolute bottom-1/3 right-1/3 text-[80px] z-20">🎀</div>}
+              {/* Wardrobe Overlays */}
+              <div className="absolute inset-0 z-20 pointer-events-none">
+                {activeItems.includes("cape") && <div className="absolute top-[25%] right-[15%] text-[220px]">🦸</div>}
+                {activeItems.includes("hat") && <div className="absolute top-[8%] left-[42%] text-[130px]">🎩</div>}
+                {activeItems.includes("glasses") && <div className="absolute top-[42%] left-[45%] text-[95px]">😎</div>}
+                {activeItems.includes("bandana") && <div className="absolute bottom-[28%] left-[35%] text-[110px]">🧣</div>}
+                {activeItems.includes("bow") && <div className="absolute bottom-[35%] right-[32%] text-[85px]">🎀</div>}
+              </div>
             </div>
           </div>
 
@@ -91,7 +87,7 @@ export default function SuperBudPhotoBooth() {
 
             {/* Backgrounds */}
             <div>
-              <h3 className="font-bold mb-4">Background</h3>
+              <h3 className="font-bold mb-4">🌄 Background</h3>
               <div className="grid grid-cols-4 gap-3">
                 {Object.keys(backgrounds).map((bg) => (
                   <button
@@ -107,7 +103,7 @@ export default function SuperBudPhotoBooth() {
 
             {/* Wardrobe */}
             <div>
-              <h3 className="font-bold mb-4">Tap to Add / Remove Items</h3>
+              <h3 className="font-bold mb-4">👕 Tap to Add / Remove</h3>
               <div className="grid grid-cols-2 gap-4">
                 {wardrobe.map((item) => (
                   <button
@@ -124,10 +120,10 @@ export default function SuperBudPhotoBooth() {
 
             {uploadedImage && (
               <button
-                onClick={downloadPhoto}
+                onClick={() => alert("📸 Take a screenshot of the preview for now!\n\nFull download coming soon.")}
                 className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-6 rounded-3xl text-xl"
               >
-                📥 Download Photo (Screenshot for now)
+                📥 Save Your Photo (Screenshot)
               </button>
             )}
           </div>
