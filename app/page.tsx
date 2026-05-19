@@ -1,31 +1,46 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Xumm } from 'xumm';
+
+let xumm: Xumm | null = null;
 
 export default function FreedomPawsDashboard() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
 
+  // Initialize Xumm once
+  useEffect(() => {
+    if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_XUMM_API_KEY) {
+      xumm = new Xumm(process.env.NEXT_PUBLIC_XUMM_API_KEY);
+    }
+  }, []);
+
   const connectWallet = async () => {
+    if (!xumm) {
+      alert("Xumm is not initialized. Please check your API key in Vercel.");
+      return;
+    }
+
     setIsConnecting(true);
     try {
-      // This will trigger the Xumm QR code
-      const payload = await (window as any).xumm?.authorize?.();
+      const payload = await xumm.authorize();
+      
       if (payload?.account) {
         setWalletAddress(payload.account);
-        alert(`✅ Successfully Connected!\n\nAddress: ${payload.account}`);
+        alert(`✅ Successfully Connected!\n\nWallet Address:\n${payload.account}`);
       } else {
-        alert("Connection cancelled.");
+        alert("Connection was cancelled or failed.");
       }
     } catch (error) {
-      console.error(error);
-      alert("Failed to connect. Make sure Xumm app is installed on your phone.");
+      console.error("Xumm Error:", error);
+      alert("Failed to connect to Xumm. Please make sure the Xumm app is open on your phone.");
     } finally {
       setIsConnecting(false);
     }
   };
 
-  // Keep your existing functions for ViT and Tool Box
+  // Keep your existing ViT and Tool Box functions here (unchanged)
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
@@ -92,22 +107,20 @@ export default function FreedomPawsDashboard() {
             disabled={isConnecting}
             className="px-6 py-2 bg-[#F5C242] hover:bg-[#F5C242]/90 disabled:opacity-50 text-black font-bold rounded-2xl transition"
           >
-            {isConnecting ? "Connecting..." : walletAddress ? `Connected` : "Connect Xumm Wallet"}
+            {isConnecting ? "Connecting..." : walletAddress ? `✅ Connected` : "Connect Xumm Wallet"}
           </button>
         </div>
       </header>
 
-      {/* Rest of your dashboard remains the same - keep your existing cards */}
+      {/* Rest of your dashboard (keep your existing cards) */}
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold mb-4">Welcome, Patriot Dog Guardian</h2>
           <p className="text-xl text-[#A3BFFA]">Tokenized Wellness • AI Vision Diagnostics • Secure Records • Fun Memories</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Your existing 4 cards go here - My Pets, ViT, Tool Box, Photo Booth */}
-          {/* ... (you can keep your current cards) */}
-        </div>
+        {/* Your 4 cards go here - My Pets, ViT, Tool Box, Photo Booth */}
+        {/* (Keep your existing grid code) */}
       </div>
     </div>
   );
