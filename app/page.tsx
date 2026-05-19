@@ -38,7 +38,6 @@ export default function FreedomPawsDashboard() {
   const handleToolBoxUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const fakeCid = "Qm" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const newFile = {
       name: file.name,
@@ -46,7 +45,6 @@ export default function FreedomPawsDashboard() {
       date: new Date().toLocaleDateString(),
       size: (file.size / 1024).toFixed(1) + " KB"
     };
-
     setToolBoxFiles([...toolBoxFiles, newFile]);
     alert(`✅ File securely uploaded to IPFS Tool Box!\n\nFile: ${file.name}`);
   };
@@ -83,69 +81,11 @@ export default function FreedomPawsDashboard() {
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold mb-4">Welcome, Patriot Dog Guardian</h2>
-          <p className="text-xl text-gray-300">Tokenized Wellness • AI Vision Diagnostics • Secure Records</p>
+          <p className="text-xl text-gray-300">Tokenized Wellness • AI Vision Diagnostics • Secure Records • Fun Memories</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-  {/* My Pets Card */}
-  <a href="/mypets" className="group">
-    <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-yellow-400 transition-all h-full">
-      <div className="text-6xl mb-6">🐕</div>
-      <h3 className="text-3xl font-bold mb-3">My Pets</h3>
-      <p className="text-gray-400">View tokenized profiles & Dynamic NFTs</p>
-      <div className="mt-8 text-yellow-400 font-bold group-hover:underline">Open My Pets →</div>
-    </div>
-  </a>
-
-  {/* ViT Diagnostics Card */}
-  <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-yellow-400 transition-all">
-    <div className="text-6xl mb-6">🔬</div>
-    <h3 className="text-3xl font-bold mb-3">ViT Diagnostics</h3>
-    <p className="text-gray-400 mb-6">Upload photo for AI analysis</p>
-    <label className="block w-full cursor-pointer">
-      <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
-      <div className="border-2 border-dashed border-white/40 rounded-2xl p-8 text-center hover:border-yellow-400">
-        {uploadedImage ? <img src={uploadedImage} alt="preview" className="max-h-64 mx-auto rounded-xl" /> : <div className="text-4xl mb-3">📸</div>}
-        <p className="font-medium">Click to upload dog photo</p>
-      </div>
-    </label>
-    {isAnalyzing && <p className="text-center mt-4 text-yellow-400">Analyzing with ViT...</p>}
-    {analysisResult && (
-      <div className="mt-6 bg-black/50 p-6 rounded-2xl">
-        <h4 className="font-bold text-lg">{analysisResult.protocol}</h4>
-        <p className="text-green-400">{analysisResult.finding}</p>
-      </div>
-    )}
-  </div>
-
-  {/* Tool Box Card */}
-  <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-yellow-400 transition-all">
-    <div className="text-6xl mb-6">🔒</div>
-    <h3 className="text-3xl font-bold mb-3">Tool Box</h3>
-    <p className="text-gray-400 mb-6">Secure IPFS vault</p>
-    <label className="block w-full cursor-pointer mb-4">
-      <input type="file" onChange={handleToolBoxUpload} className="hidden" />
-      <div className="bg-green-600 hover:bg-green-500 text-center py-4 rounded-2xl font-bold cursor-pointer">
-        Upload Vet Record or X-Ray
-      </div>
-    </label>
-    {toolBoxFiles.length > 0 && (
-      <button onClick={viewAllRecords} className="w-full bg-green-600 font-bold py-4 rounded-2xl hover:bg-green-500">
-        View All Secure Records ({toolBoxFiles.length})
-      </button>
-    )}
-  </div>
-
-  {/* NEW: SuperBud Photo Booth Card */}
-  <a href="/photobooth" className="group">
-    <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-yellow-400 transition-all h-full">
-      <div className="text-6xl mb-6">📸</div>
-      <h3 className="text-3xl font-bold mb-3">SuperBud Photo Booth</h3>
-      <p className="text-gray-400">Dress up your dog like a hero! Create shareable fun photos</p>
-      <div className="mt-8 text-yellow-400 font-bold group-hover:underline">Open Photo Booth →</div>
-    </div>
-  </a>
-</div>
+          {/* My Pets */}
           <a href="/mypets" className="group">
             <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-yellow-400 transition-all h-full">
               <div className="text-6xl mb-6">🐕</div>
@@ -155,6 +95,7 @@ export default function FreedomPawsDashboard() {
             </div>
           </a>
 
+          {/* ViT Diagnostics */}
           <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-yellow-400 transition-all">
             <div className="text-6xl mb-6">🔬</div>
             <h3 className="text-3xl font-bold mb-3">ViT Diagnostics</h3>
@@ -175,6 +116,7 @@ export default function FreedomPawsDashboard() {
             )}
           </div>
 
+          {/* Tool Box */}
           <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-yellow-400 transition-all">
             <div className="text-6xl mb-6">🔒</div>
             <h3 className="text-3xl font-bold mb-3">Tool Box</h3>
@@ -191,6 +133,16 @@ export default function FreedomPawsDashboard() {
               </button>
             )}
           </div>
+
+          {/* SuperBud Photo Booth */}
+          <a href="/photobooth" className="group">
+            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-yellow-400 transition-all h-full">
+              <div className="text-6xl mb-6">📸</div>
+              <h3 className="text-3xl font-bold mb-3">SuperBud Photo Booth</h3>
+              <p className="text-gray-400">Dress up your dog like a hero! Create shareable memories</p>
+              <div className="mt-8 text-yellow-400 font-bold group-hover:underline">Open Photo Booth →</div>
+            </div>
+          </a>
         </div>
       </div>
     </div>
