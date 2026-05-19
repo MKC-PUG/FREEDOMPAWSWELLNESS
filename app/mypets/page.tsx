@@ -26,8 +26,8 @@ export default function MyPets() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {protocols.map((protocol, index) => (
             <div key={index} className="bg-[#1F2A44] border border-[#334155] hover:border-[#F5C242] rounded-3xl overflow-hidden transition-all group flex flex-col">
-              {/* Zoomed-Out Image Container */}
-              <div className="h-72 bg-black flex items-center justify-center p-8 overflow-hidden">
+              {/* Smaller Zoomed-Out Image Container */}
+              <div className="h-64 bg-black flex items-center justify-center p-12 overflow-hidden">
                 <img 
                   src={protocol.image} 
                   alt={protocol.name} 
