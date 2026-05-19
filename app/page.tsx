@@ -4,18 +4,40 @@ import { useState, useEffect } from 'react';
 
 export default function FreedomPawsDashboard() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [status, setStatus] = useState("Loading...");
-
-  useEffect(() => {
-    setStatus("✅ Demo Mode Active - Xumm coming soon");
-  }, []);
+  const [status, setStatus] = useState("✅ Demo Mode Active - Xumm coming soon");
 
   const connectWallet = () => {
-    // Demo connection
     const demoAddress = "rDemoXummWallet1234567890TestnetXRPL";
     setWalletAddress(demoAddress);
     setStatus("✅ Demo Wallet Connected");
-    alert(`✅ Demo Wallet Connected!\n\nAddress:\n${demoAddress}\n\n(Real Xumm will be added after build is stable)`);
+    alert(`✅ Demo Wallet Connected!\n\nAddress:\n${demoAddress}\n\nReal Xumm will be added next.`);
+  };
+
+  // Tool Box State
+  const [toolBoxFiles, setToolBoxFiles] = useState<any[]>([]);
+
+  const handleToolBoxUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const fakeCid = "Qm" + Math.random().toString(36).substring(2, 20);
+    const newFile = { 
+      name: file.name, 
+      cid: fakeCid, 
+      date: new Date().toLocaleDateString(),
+      size: (file.size / 1024).toFixed(1) + " KB" 
+    };
+    setToolBoxFiles([...toolBoxFiles, newFile]);
+    alert(`✅ Uploaded to Secure Tool Box!\nFile: ${file.name}`);
+  };
+
+  const viewAllRecords = () => {
+    if (toolBoxFiles.length === 0) {
+      alert("No records yet. Upload something to the Tool Box.");
+      return;
+    }
+    let msg = "Secure Records:\n\n";
+    toolBoxFiles.forEach((f, i) => msg += `${i+1}. ${f.name} (${f.date})\n`);
+    alert(msg);
   };
 
   return (
@@ -29,19 +51,54 @@ export default function FreedomPawsDashboard() {
 
           <button 
             onClick={connectWallet}
-            className="px-8 py-3 bg-[#F5C242] text-black font-bold rounded-2xl hover:bg-yellow-300 transition"
+            className="px-8 py-3 bg-[#F5C242] hover:bg-yellow-300 text-black font-bold rounded-2xl transition"
           >
             {walletAddress ? `✅ Connected` : "Connect Xumm Wallet"}
           </button>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-12 text-center">
-        <p className="text-2xl mb-6">Status: <span className="text-[#00D4C8] font-mono">{status}</span></p>
-        <p className="text-sm text-gray-400">Xumm integration will be added once build is stable</p>
-      </div>
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-bold mb-3">Welcome, Patriot Dog Guardian</h2>
+          <p className="text-xl text-[#00D4C8]">Status: {status}</p>
+        </div>
 
-      {/* Add your 4 cards (My Pets, ViT, Tool Box, Photo Booth) below here later */}
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          {/* My Pets Card */}
+          <a href="/mypets" className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition group">
+            <div className="text-6xl mb-6">🐕</div>
+            <h3 className="text-2xl font-bold mb-3">My Pets</h3>
+            <p className="text-gray-400">View & update your 10 tokenized protocols</p>
+          </a>
+
+          {/* ViT Diagnostics Card */}
+          <div className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition">
+            <div className="text-6xl mb-6">📸</div>
+            <h3 className="text-2xl font-bold mb-3">ViT Diagnostics</h3>
+            <p className="text-gray-400">Upload photo for AI protocol recommendation</p>
+            <input type="file" accept="image/*" onChange={() => alert("Photo upload ready in full version")} className="mt-6 w-full" />
+          </div>
+
+          {/* Tool Box Card */}
+          <div className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition">
+            <div className="text-6xl mb-6">🔐</div>
+            <h3 className="text-2xl font-bold mb-3">Tool Box</h3>
+            <p className="text-gray-400">Secure IPFS vault for vet records</p>
+            <input type="file" onChange={handleToolBoxUpload} className="mt-6 w-full" />
+            <button onClick={viewAllRecords} className="mt-4 w-full bg-green-600 py-3 rounded-2xl">View Records ({toolBoxFiles.length})</button>
+          </div>
+
+          {/* Photo Booth Card */}
+          <a href="/photobooth" className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition group">
+            <div className="text-6xl mb-6">📸</div>
+            <h3 className="text-2xl font-bold mb-3">SuperBud Photo Booth</h3>
+            <p className="text-gray-400">Dress up your dog with fun capes & backgrounds</p>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
