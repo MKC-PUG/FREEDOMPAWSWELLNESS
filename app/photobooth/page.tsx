@@ -9,8 +9,8 @@ export default function SuperBudPhotoBooth() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const backgrounds = {
-    lake: "https://ipfs.io/ipfs/bafybeigsubrahu7ya7vj7cwkxlj7miilgmslorydkbe7gynm7lo6opgus4", // Lake background
-    patriotic: "https://picsum.photos/id/1015/800/600",
+    lake: "https://picsum.photos/id/1015/800/600",   // Lake scene
+    patriotic: "https://picsum.photos/id/1016/800/600",
     superhero: "https://picsum.photos/id/133/800/600",
     forest: "https://picsum.photos/id/1018/800/600",
   };
@@ -48,78 +48,90 @@ export default function SuperBudPhotoBooth() {
     link.click();
   };
 
-  // Draw composite image
+  // Improved Canvas Rendering
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !uploadedImage) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
     const img = new Image();
     img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+      canvas.width = 800;
+      canvas.height = 600;
 
-      // Add background if needed (simple overlay for now)
-      if (selectedBackground !== "lake") {
-        const bg = new Image();
-        bg.src = backgrounds[selectedBackground as keyof typeof backgrounds];
-        bg.onload = () => {
-          ctx.globalAlpha = 0.4;
-          ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-          ctx.globalAlpha = 1.0;
-        };
-      }
+      // Draw background
+      const bgImg = new Image();
+      bgImg.src = backgrounds[selectedBackground as keyof typeof backgrounds];
+      bgImg.onload = () => {
+        ctx.drawImage(bgImg, 0, 0, 800, 600);
 
-      // Add SuperBud Cape (simple overlay simulation)
-      if (selectedItems.includes("cape")) {
-        ctx.font = "bold 120px Arial";
-        ctx.fillText("🦸", canvas.width * 0.6, canvas.height * 0.4);
-      }
+        // Draw dog photo (centered)
+        const ratio = Math.min(800 / img.width, 500 / img.height);
+        const newWidth = img.width * ratio;
+        const newHeight = img.height * ratio;
+        const x = (800 - newWidth) / 2;
+        const y = (600 - newHeight) / 2 + 30;
+        ctx.drawImage(img, x, y, newWidth, newHeight);
+
+        // Add wardrobe items
+        ctx.font = "bold 140px Arial";
+        ctx.textAlign = "center";
+
+        if (selectedItems.includes("cape")) ctx.fillText("🦸", 580, y + 120);
+        if (selectedItems.includes("hat")) ctx.fillText("🎩", 420, y - 40);
+        if (selectedItems.includes("bandana")) ctx.fillText("🧣", 380, y + 180);
+        if (selectedItems.includes("glasses")) ctx.fillText("😎", 480, y + 80);
+        if (selectedItems.includes("bow")) ctx.fillText("🎀", 520, y + 160);
+      };
     };
     img.src = uploadedImage;
   }, [uploadedImage, selectedBackground, selectedItems]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-black to-red-950 text-white p-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <h1 className="text-5xl font-bold text-center mb-2">🦸 SuperBud Photo Booth</h1>
-        <p className="text-center text-xl text-gray-300 mb-10">Dress up your dog like a hero!</p>
+        <p className="text-center text-xl text-gray-300 mb-10">Turn your dog into a hero!</p>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Upload & Preview */}
-          <div>
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
-              <h2 className="text-2xl font-bold mb-6">Upload Your Dog's Photo</h2>
-              <label className="block w-full cursor-pointer">
-                <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
-                <div className="border-2 border-dashed border-white/40 rounded-2xl p-12 text-center hover:border-yellow-400 transition">
-                  {uploadedImage ? (
-                    <img src={uploadedImage} alt="preview" className="max-h-96 mx-auto rounded-xl" />
-                  ) : (
-                    <div>
-                      <div className="text-6xl mb-4">📸</div>
-                      <p className="text-lg font-medium">Click to upload or take a photo</p>
-                    </div>
-                  )}
+        <div className="grid lg:grid-cols-2 gap-10">
+          {/* Preview Area */}
+          <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
+            <h2 className="text-2xl font-bold mb-6 text-center">Live Preview</h2>
+            <div className="bg-black rounded-2xl overflow-hidden aspect-video flex items-center justify-center">
+              {uploadedImage ? (
+                <canvas ref={canvasRef} className="max-w-full rounded-2xl" />
+              ) : (
+                <div className="text-center">
+                  <div className="text-7xl mb-4">📸</div>
+                  <p className="text-xl">Upload a photo to start</p>
                 </div>
-              </label>
+              )}
             </div>
           </div>
 
           {/* Controls */}
-          <div className="space-y-6">
+          <div className="space-y-8">
+            {/* Upload */}
+            <div>
+              <label className="block w-full cursor-pointer">
+                <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
+                <div className="bg-white/10 hover:bg-white/20 border border-white/30 rounded-3xl p-8 text-center transition">
+                  📸 Click to Upload Dog Photo
+                </div>
+              </label>
+            </div>
+
             {/* Backgrounds */}
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
-              <h3 className="text-xl font-bold mb-4">Choose Background</h3>
+            <div>
+              <h3 className="font-bold mb-4">Backgrounds</h3>
               <div className="grid grid-cols-4 gap-3">
                 {Object.keys(backgrounds).map((bg) => (
                   <button
                     key={bg}
                     onClick={() => setSelectedBackground(bg)}
-                    className={`p-3 rounded-xl border ${selectedBackground === bg ? 'border-yellow-400 bg-yellow-400/20' : 'border-white/20'}`}
+                    className={`p-4 rounded-2xl border text-sm ${selectedBackground === bg ? 'border-yellow-400 bg-yellow-400/20' : 'border-white/20 hover:border-white/40'}`}
                   >
                     {bg}
                   </button>
@@ -128,8 +140,8 @@ export default function SuperBudPhotoBooth() {
             </div>
 
             {/* Wardrobe */}
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
-              <h3 className="text-xl font-bold mb-4">SuperBud Wardrobe</h3>
+            <div>
+              <h3 className="font-bold mb-4">Wardrobe</h3>
               <div className="grid grid-cols-2 gap-3">
                 {wardrobe.map((item) => (
                   <button
@@ -138,7 +150,7 @@ export default function SuperBudPhotoBooth() {
                     className={`p-4 rounded-2xl border text-left transition ${selectedItems.includes(item.id) ? 'border-yellow-400 bg-yellow-400/20' : 'border-white/20 hover:border-white/40'}`}
                   >
                     <span className="text-3xl block mb-1">{item.emoji}</span>
-                    <span className="font-medium">{item.name}</span>
+                    <span>{item.name}</span>
                   </button>
                 ))}
               </div>
@@ -148,16 +160,13 @@ export default function SuperBudPhotoBooth() {
             {uploadedImage && (
               <button
                 onClick={downloadPhoto}
-                className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-5 rounded-3xl text-xl transition"
+                className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-5 rounded-3xl text-xl transition flex items-center justify-center gap-3"
               >
-                📥 Download SuperBud Photo
+                📥 Download Your SuperBud Photo
               </button>
             )}
           </div>
         </div>
-
-        {/* Hidden Canvas for Rendering */}
-        <canvas ref={canvasRef} className="hidden" />
       </div>
     </div>
   );
