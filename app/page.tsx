@@ -16,19 +16,19 @@ export default function FreedomPawsDashboard() {
     alert(`✅ Demo Wallet Connected!\n\nAddress:\n${demoAddress}`);
   };
 
-  // ViT Diagnostics with Preview
+  // ViT Diagnostics - FIXED with immediate preview
   const handleViTUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const imageUrl = URL.createObjectURL(file);
-    setVitImage(imageUrl);
-    setAnalysis("Analyzing image with AI...");
+    setVitImage(imageUrl);           // This forces preview
+    setAnalysis("🔍 Analyzing with AI...");
 
-    // Simulate AI (we'll make this real next)
+    // Simulated AI response
     setTimeout(() => {
-      setAnalysis("✅ Analysis Complete!\n\nRecommended Protocol: **Allergy Shield** or **Gut Balance** depending on symptoms.\n\nFull GPT-4o AI coming in next update.");
-    }, 1500);
+      setAnalysis(`✅ AI Analysis Complete!\n\n**Recommended Protocol:**\n• Allergy Shield (if skin issues)\n• Buddy's Gut Balance (if digestive signs)\n\nFull real GPT-4o coming next.`);
+    }, 1200);
   };
 
   // Tool Box
@@ -48,10 +48,10 @@ export default function FreedomPawsDashboard() {
 
   const viewAllRecords = () => {
     if (toolBoxFiles.length === 0) {
-      alert("No records yet.");
+      alert("Tool Box is empty. Upload records first.");
       return;
     }
-    let msg = "🔐 Secure Records:\n\n";
+    let msg = "🔐 Secure Records in Tool Box:\n\n";
     toolBoxFiles.forEach((f, i) => msg += `${i+1}. ${f.name} (${f.date})\n`);
     alert(msg);
   };
@@ -82,13 +82,14 @@ export default function FreedomPawsDashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
+          {/* My Pets */}
           <a href="/mypets" className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition group">
             <div className="text-6xl mb-6">🐕</div>
             <h3 className="text-2xl font-bold mb-3">My Pets</h3>
             <p className="text-gray-400">View your 10 tokenized protocols</p>
           </a>
 
-          {/* ViT with Preview */}
+          {/* ViT Diagnostics - Now with Preview */}
           <div className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition">
             <div className="text-6xl mb-6">📸</div>
             <h3 className="text-2xl font-bold mb-3">ViT Diagnostics</h3>
@@ -102,12 +103,16 @@ export default function FreedomPawsDashboard() {
             />
 
             {vitImage && (
-              <div className="mt-4">
-                <img src={vitImage} alt="Uploaded dog" className="w-full rounded-2xl border border-[#334155]" />
+              <div className="mt-6 border border-[#334155] rounded-2xl overflow-hidden">
+                <img src={vitImage} alt="Dog preview" className="w-full h-auto" />
               </div>
             )}
 
-            {analysis && <p className="mt-4 text-sm whitespace-pre-line text-[#00D4C8]">{analysis}</p>}
+            {analysis && (
+              <div className="mt-4 p-4 bg-black/50 rounded-2xl text-sm whitespace-pre-line">
+                {analysis}
+              </div>
+            )}
           </div>
 
           {/* Tool Box */}
@@ -129,10 +134,11 @@ export default function FreedomPawsDashboard() {
             </button>
           </div>
 
+          {/* Photo Booth */}
           <a href="/photobooth" className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition group">
             <div className="text-6xl mb-6">🎨</div>
             <h3 className="text-2xl font-bold mb-3">SuperBud Photo Booth</h3>
-            <p className="text-gray-400">Dress up your dog</p>
+            <p className="text-gray-400">Dress up your dog with fun items</p>
           </a>
         </div>
       </div>
