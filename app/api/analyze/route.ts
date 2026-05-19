@@ -15,23 +15,26 @@ export async function POST(request: NextRequest) {
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      temperature: 0.0,   // Very strict
-      max_tokens: 250,
+      temperature: 0.0,
+      max_tokens: 200,
       messages: [
         {
           role: "system",
-          content: `You are a strict holistic dog veterinarian. Look at the photo and pick EXACTLY ONE best protocol. 
+          content: `You are a strict holistic canine veterinarian. 
 
-Pooping / rear / stool / digestive signs = Buddy's Gut Balance & Cleanse
-Skin rash / redness / itching / hot spots = Allergy Shield
-Eyes / discharge = Clear Vision Defender
-Stiffness / limping = Max Movement Pro
-NEVER give multiple options. Be decisive.`
+CRITICAL RULES - FOLLOW EXACTLY:
+- If the photo shows poop, rear end, stool, diarrhea, gas, or digestive area → MUST recommend Buddy's Gut Balance & Cleanse as #1
+- Only recommend Allergy Shield if clear skin rash, redness, itching, or hot spots are visible
+- Never list multiple options. Pick ONE best protocol.
+- Be direct and confident.`
         },
-        { role: "user", content: [
-          { type: "text", text: "Analyze this dog photo and recommend ONLY ONE protocol with short reason." },
-          { type: "image_url", image_url: { url: dataUrl }}
-        ]}
+        { 
+          role: "user", 
+          content: [
+            { type: "text", text: "Analyze this dog photo and recommend ONLY ONE protocol." },
+            { type: "image_url", image_url: { url: dataUrl } }
+          ]
+        }
       ]
     });
 
@@ -40,9 +43,8 @@ NEVER give multiple options. Be decisive.`
     return NextResponse.json({
       success: true,
       finding: text,
-      protocol: text.includes("Gut") ? "Buddy's Gut Balance & Cleanse" : 
-                text.includes("Allergy") ? "Allergy Shield" : "Foundation Liver & Kidney Detox",
-      confidence: "82%"
+      protocol: text,
+      confidence: "88%"
     });
 
   } catch (error) {
