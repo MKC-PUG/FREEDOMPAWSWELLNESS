@@ -26,8 +26,8 @@ export default function MyPets() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {protocols.map((protocol, index) => (
             <div key={index} className="bg-[#1F2A44] border border-[#334155] hover:border-[#F5C242] rounded-3xl overflow-hidden transition-all group flex flex-col">
-              {/* Image Container - Fixed height with proper containment */}
-              <div className="h-72 bg-black flex items-center justify-center p-6 overflow-hidden">
+              {/* Fixed Height Image Container */}
+              <div className="h-64 bg-black flex items-center justify-center p-4 overflow-hidden">
                 <img 
                   src={protocol.image} 
                   alt={protocol.name} 
@@ -35,7 +35,7 @@ export default function MyPets() {
                 />
               </div>
 
-              {/* Content */}
+              {/* Content Area */}
               <div className="p-8 flex-1 flex flex-col">
                 <div className="text-5xl mb-4">{protocol.emoji}</div>
                 <h3 className="text-2xl font-bold mb-3">{protocol.name}</h3>
