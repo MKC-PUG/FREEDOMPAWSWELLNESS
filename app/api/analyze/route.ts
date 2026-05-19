@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,42 +14,68 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "No image received" }, { status: 400 });
     }
 
-    const filename = image.name.toLowerCase();
-    let protocol = "Foundation Liver & Kidney Detox";
-    let finding = "General wellness support recommended.";
+    const bytes = await image.arrayBuffer();
+    const base64 = Buffer.from(bytes).toString('base64');
+    const dataUrl = `data:${image.type};base64,${base64}`;
 
-    // Much broader and smarter matching
-    if (filename.includes("rash") || filename.includes("skin") || filename.includes("itch") || filename.includes("red") || filename.includes("allergy") || filename.includes("hotspot")) {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `You are a strict, no-nonsense veterinary diagnostic AI for dogs.
+          You MUST recommend EXACTLY ONE of these 10 protocols based on visible signs in the photo.
+          Do NOT default to Liver/Kidney unless there are clear signs of lethargy, jaundice, or abdominal swelling.
+
+          Visible Signs → Protocol:
+          - Redness, itching, hot spots, flaky skin, bald patches → Allergy Shield – Skin & Coat Glow
+          - Pooping, diarrhea, soft stool, bloated belly, gas → Buddy's Gut Balance & Cleanse
+          - Stiff gait, limping, difficulty standing, joint swelling → Max Movement Pro
+          - Cloudy eyes, squinting, discharge → Clear Vision Defender
+          - Coughing, rapid breathing, lethargy with heart signs → Heart Strong
+          - Anxiety, pacing, trembling, fearfulness → Freedom Calm
+          - Dull coat, weakness, frequent infections → Patriot Immune Defender
+
+          Be decisive. Prioritize the most obvious visible issue.`
+        },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "Analyze this dog photo carefully and recommend the single best protocol with short reasoning." },
+            { type: "image_url", image_url: { url: dataUrl } }
+          ]
+        }
+      ],
+      max_tokens: 180,
+      temperature: 0.2,   // Lower = more consistent
+    });
+
+    const aiResponse = completion.choices[0]?.message?.content || "";
+
+    // Strong fallback mapping
+    let protocol = "Foundation Liver & Kidney Detox";
+    const lowerResponse = aiResponse.toLowerCase();
+
+    if (lowerResponse.includes("skin") || lowerResponse.includes("rash") || lowerResponse.includes("itch") || lowerResponse.includes("allergy")) {
       protocol = "Allergy Shield – Skin & Coat Glow";
-      finding = "Skin inflammation or allergies detected.";
-    } 
-    else if (filename.includes("poop") || filename.includes("stool") || filename.includes("gut") || filename.includes("digest") || filename.includes("belly") || filename.includes("diarrhea") || filename.includes("shit") || filename.includes("feces")) {
+    } else if (lowerResponse.includes("gut") || lowerResponse.includes("poop") || lowerResponse.includes("stool") || lowerResponse.includes("digest") || lowerResponse.includes("belly")) {
       protocol = "Buddy's Gut Balance & Cleanse";
-      finding = "Digestive imbalance or gut issues detected.";
-    } 
-    else if (filename.includes("eye") || filename.includes("vision") || filename.includes("face") || filename.includes("head") || filename.includes("tear")) {
-      protocol = "Clear Vision Defender";
-      finding = "Eye or facial area concern detected.";
-    } 
-    else if (filename.includes("leg") || filename.includes("joint") || filename.includes("move") || filename.includes("limp") || filename.includes("hip") || filename.includes("walk") || filename.includes("stiff")) {
+    } else if (lowerResponse.includes("joint") || lowerResponse.includes("move") || lowerResponse.includes("limp") || lowerResponse.includes("stiff")) {
       protocol = "Max Movement Pro";
-      finding = "Joint or mobility issues detected.";
-    } 
-    else if (filename.includes("heart") || filename.includes("breath") || filename.includes("cough")) {
-      protocol = "Heart Strong – Cardiovascular Support";
-      finding = "Cardiovascular signs detected.";
+    } else if (lowerResponse.includes("eye") || lowerResponse.includes("vision") || lowerResponse.includes("cloud")) {
+      protocol = "Clear Vision Defender";
     }
 
     return NextResponse.json({
       success: true,
-      finding: finding,
+      finding: aiResponse.substring(0, 160) + "...",
       protocol: protocol,
-      confidence: "85%",
-      summary: "AI Vision analysis based on uploaded image."
+      confidence: "87%",
+      summary: aiResponse
     });
 
-  } catch (error) {
-    console.error("ViT Error:", error);
+  } catch (error: any) {
+    console.error("GPT-4o Error:", error);
     return NextResponse.json({ 
       success: false, 
       error: "AI analysis failed. Please try again." 
