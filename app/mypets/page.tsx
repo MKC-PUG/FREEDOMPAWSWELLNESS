@@ -17,7 +17,7 @@ export default function MyPets() {
   return (
     <div className="min-h-screen bg-[#0A1428] text-white p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Hero Header - Matching your screenshot style */}
+        {/* Hero Header */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">Our 10 Tokenized Holistic Protocols</h1>
           <p className="text-[#A3BFFA] text-2xl">SuperBud flying above a fresh new era in canine wellness.</p>
@@ -26,19 +26,19 @@ export default function MyPets() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {protocols.map((protocol, index) => (
             <div key={index} className="bg-[#1F2A44] border border-[#334155] hover:border-[#F5C242] rounded-3xl overflow-hidden transition-all group">
-              <div className="h-64 relative">
+              <div className="h-72 relative bg-black flex items-center justify-center overflow-hidden">
                 <img 
                   src={protocol.image} 
                   alt={protocol.name} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform" 
+                  className="w-full h-full object-contain p-4" 
                 />
               </div>
               <div className="p-8">
                 <div className="text-5xl mb-4">{protocol.emoji}</div>
                 <h3 className="text-2xl font-bold mb-3">{protocol.name}</h3>
-                <p className="text-[#A3BFFA] text-lg leading-relaxed">{protocol.description}</p>
+                <p className="text-[#A3BFFA] text-lg leading-relaxed mb-8">{protocol.description}</p>
                 
-                <button className="w-full mt-8 bg-[#F5C242] hover:bg-[#F5C242]/90 text-black font-bold py-4 rounded-2xl transition text-lg">
+                <button className="w-full bg-[#F5C242] hover:bg-[#F5C242]/90 text-black font-bold py-4 rounded-2xl transition text-lg">
                   View / Update Record →
                 </button>
               </div>
