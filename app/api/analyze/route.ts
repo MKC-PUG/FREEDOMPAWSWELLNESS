@@ -8,77 +8,70 @@ const openai = new OpenAI({
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const image = formData.get('image') as File | null;
+    const image = formData.get('image') as File;
 
     if (!image) {
-      return NextResponse.json({ success: false, error: "No image received" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "No image provided" }, { status: 400 });
     }
 
+    // Convert image to base64
     const bytes = await image.arrayBuffer();
     const base64 = Buffer.from(bytes).toString('base64');
     const dataUrl = `data:${image.type};base64,${base64}`;
 
-    const completion = await openai.chat.completions.create({
+    const response = await openai.chat.completions.create({
       model: "gpt-4o",
+      temperature: 0.1,           // Lower = more consistent
+      max_tokens: 300,
       messages: [
         {
           role: "system",
-          content: `You are a strict, no-nonsense veterinary diagnostic AI for dogs.
-          You MUST recommend EXACTLY ONE of these 10 protocols based on visible signs in the photo.
-          Do NOT default to Liver/Kidney unless there are clear signs of lethargy, jaundice, or abdominal swelling.
+          content: `You are an expert canine holistic veterinarian. Analyze the dog photo and recommend ONE best Freedom Paws protocol.
 
-          Visible Signs → Protocol:
-          - Redness, itching, hot spots, flaky skin, bald patches → Allergy Shield – Skin & Coat Glow
-          - Pooping, diarrhea, soft stool, bloated belly, gas → Buddy's Gut Balance & Cleanse
-          - Stiff gait, limping, difficulty standing, joint swelling → Max Movement Pro
-          - Cloudy eyes, squinting, discharge → Clear Vision Defender
-          - Coughing, rapid breathing, lethargy with heart signs → Heart Strong
-          - Anxiety, pacing, trembling, fearfulness → Freedom Calm
-          - Dull coat, weakness, frequent infections → Patriot Immune Defender
+Available Protocols:
+1. Max Movement Pro – Joint/mobility issues
+2. Freedom Calm – Anxiety, stress, restlessness
+3. Foundation Liver & Kidney Detox – General detox, senior dogs, lethargy
+4. Buddy's Gut Balance & Cleanse – Digestive issues, poop problems, diarrhea, gas
+5. Infra-Red Spine & Joint – Back pain, stiffness
+6. Allergy Shield – Skin rashes, itching, hot spots, allergies
+7. Fresh Smile – Dental, bad breath, oral health
+8. Heart Strong – Heart or cardiovascular signs
+9. Patriot Immune Defender – Overall immunity, frequent illness
+10. Clear Vision Defender – Eye issues, discharge, cloudiness
 
-          Be decisive. Prioritize the most obvious visible issue.`
+Rules:
+- Prioritize visible symptoms strongly.
+- Pooping, loose stool, rear end focus → strongly prefer Gut Balance
+- Skin redness, scratching, hot spots → Allergy Shield
+- Eyes → Clear Vision
+- Stiffness, limping → Max Movement or Infra-Red
+- Be direct and accurate. Never default to Liver/Kidney unless no clear signs.`
         },
         {
           role: "user",
           content: [
-            { type: "text", text: "Analyze this dog photo carefully and recommend the single best protocol with short reasoning." },
+            { type: "text", text: "Analyze this dog photo and recommend the single best protocol with short reasoning." },
             { type: "image_url", image_url: { url: dataUrl } }
           ]
         }
-      ],
-      max_tokens: 180,
-      temperature: 0.2,   // Lower = more consistent
+      ]
     });
 
-    const aiResponse = completion.choices[0]?.message?.content || "";
-
-    // Strong fallback mapping
-    let protocol = "Foundation Liver & Kidney Detox";
-    const lowerResponse = aiResponse.toLowerCase();
-
-    if (lowerResponse.includes("skin") || lowerResponse.includes("rash") || lowerResponse.includes("itch") || lowerResponse.includes("allergy")) {
-      protocol = "Allergy Shield – Skin & Coat Glow";
-    } else if (lowerResponse.includes("gut") || lowerResponse.includes("poop") || lowerResponse.includes("stool") || lowerResponse.includes("digest") || lowerResponse.includes("belly")) {
-      protocol = "Buddy's Gut Balance & Cleanse";
-    } else if (lowerResponse.includes("joint") || lowerResponse.includes("move") || lowerResponse.includes("limp") || lowerResponse.includes("stiff")) {
-      protocol = "Max Movement Pro";
-    } else if (lowerResponse.includes("eye") || lowerResponse.includes("vision") || lowerResponse.includes("cloud")) {
-      protocol = "Clear Vision Defender";
-    }
+    const aiText = response.choices[0]?.message?.content || "Analysis unavailable.";
 
     return NextResponse.json({
       success: true,
-      finding: aiResponse.substring(0, 160) + "...",
-      protocol: protocol,
-      confidence: "87%",
-      summary: aiResponse
+      finding: aiText,
+      protocol: "See AI recommendation above",
+      confidence: "85%"
     });
 
-  } catch (error: any) {
-    console.error("GPT-4o Error:", error);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json({ 
       success: false, 
-      error: "AI analysis failed. Please try again." 
-    }, { status: 500 });
+      error: "AI service busy. Please try again." 
+    }, { status: 503 });
   }
 }
