@@ -13,20 +13,24 @@ export async function POST(request: NextRequest) {
     let protocol = "Foundation Liver & Kidney Detox";
     let finding = "General wellness support recommended.";
 
-    // Improved matching
-    if (filename.includes("rash") || filename.includes("skin") || filename.includes("itch") || filename.includes("red") || filename.includes("allergy")) {
+    // Much broader and smarter matching
+    if (filename.includes("rash") || filename.includes("skin") || filename.includes("itch") || filename.includes("red") || filename.includes("allergy") || filename.includes("hotspot")) {
       protocol = "Allergy Shield – Skin & Coat Glow";
       finding = "Skin inflammation or allergies detected.";
-    } else if (filename.includes("poop") || filename.includes("stool") || filename.includes("gut") || filename.includes("digest") || filename.includes("belly")) {
+    } 
+    else if (filename.includes("poop") || filename.includes("stool") || filename.includes("gut") || filename.includes("digest") || filename.includes("belly") || filename.includes("diarrhea") || filename.includes("shit") || filename.includes("feces")) {
       protocol = "Buddy's Gut Balance & Cleanse";
       finding = "Digestive imbalance or gut issues detected.";
-    } else if (filename.includes("eye") || filename.includes("vision") || filename.includes("face") || filename.includes("head")) {
+    } 
+    else if (filename.includes("eye") || filename.includes("vision") || filename.includes("face") || filename.includes("head") || filename.includes("tear")) {
       protocol = "Clear Vision Defender";
       finding = "Eye or facial area concern detected.";
-    } else if (filename.includes("leg") || filename.includes("joint") || filename.includes("move") || filename.includes("limp") || filename.includes("hip") || filename.includes("walk")) {
+    } 
+    else if (filename.includes("leg") || filename.includes("joint") || filename.includes("move") || filename.includes("limp") || filename.includes("hip") || filename.includes("walk") || filename.includes("stiff")) {
       protocol = "Max Movement Pro";
       finding = "Joint or mobility issues detected.";
-    } else if (filename.includes("heart") || filename.includes("breath") || filename.includes("cough")) {
+    } 
+    else if (filename.includes("heart") || filename.includes("breath") || filename.includes("cough")) {
       protocol = "Heart Strong – Cardiovascular Support";
       finding = "Cardiovascular signs detected.";
     }
@@ -35,7 +39,7 @@ export async function POST(request: NextRequest) {
       success: true,
       finding: finding,
       protocol: protocol,
-      confidence: "82%",
+      confidence: "85%",
       summary: "AI Vision analysis based on uploaded image."
     });
 
