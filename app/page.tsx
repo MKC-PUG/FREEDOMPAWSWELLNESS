@@ -1,19 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function FreedomPawsDashboard() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
-  const [status, setStatus] = useState("✅ Demo Mode Active - Xumm coming soon");
+  const [status, setStatus] = useState("✅ Demo Mode Active");
 
   const connectWallet = () => {
     const demoAddress = "rDemoXummWallet1234567890TestnetXRPL";
     setWalletAddress(demoAddress);
     setStatus("✅ Demo Wallet Connected");
-    alert(`✅ Demo Wallet Connected!\n\nAddress:\n${demoAddress}\n\nReal Xumm will be added next.`);
+    alert(`✅ Demo Wallet Connected!\n\n${demoAddress}`);
   };
 
-  // Tool Box State
+  // Tool Box
   const [toolBoxFiles, setToolBoxFiles] = useState<any[]>([]);
 
   const handleToolBoxUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,17 +27,24 @@ export default function FreedomPawsDashboard() {
       size: (file.size / 1024).toFixed(1) + " KB" 
     };
     setToolBoxFiles([...toolBoxFiles, newFile]);
-    alert(`✅ Uploaded to Secure Tool Box!\nFile: ${file.name}`);
+    alert(`✅ Securely uploaded to Tool Box!\n\nFile: ${file.name}`);
   };
 
   const viewAllRecords = () => {
     if (toolBoxFiles.length === 0) {
-      alert("No records yet. Upload something to the Tool Box.");
+      alert("Tool Box is empty. Upload veterinary records or X-rays.");
       return;
     }
-    let msg = "Secure Records:\n\n";
+    let msg = "🔐 Secure Records in Tool Box:\n\n";
     toolBoxFiles.forEach((f, i) => msg += `${i+1}. ${f.name} (${f.date})\n`);
     alert(msg);
+  };
+
+  // ViT Upload
+  const handleViTUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    alert(`📸 Photo received: ${file.name}\n\nAI Analysis starting...\n\n(Full GPT-4o analysis will return here soon)`);
   };
 
   return (
@@ -64,38 +71,51 @@ export default function FreedomPawsDashboard() {
           <p className="text-xl text-[#00D4C8]">Status: {status}</p>
         </div>
 
-        {/* 4 Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          {/* My Pets Card */}
+          {/* My Pets - Working */}
           <a href="/mypets" className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition group">
             <div className="text-6xl mb-6">🐕</div>
             <h3 className="text-2xl font-bold mb-3">My Pets</h3>
-            <p className="text-gray-400">View & update your 10 tokenized protocols</p>
+            <p className="text-gray-400">View your 10 tokenized wellness protocols</p>
           </a>
 
-          {/* ViT Diagnostics Card */}
+          {/* ViT Diagnostics */}
           <div className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition">
             <div className="text-6xl mb-6">📸</div>
             <h3 className="text-2xl font-bold mb-3">ViT Diagnostics</h3>
-            <p className="text-gray-400">Upload photo for AI protocol recommendation</p>
-            <input type="file" accept="image/*" onChange={() => alert("Photo upload ready in full version")} className="mt-6 w-full" />
+            <p className="text-gray-400 mb-6">AI-powered health analysis from photos</p>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleViTUpload}
+              className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-[#F5C242] file:text-black hover:file:bg-yellow-300"
+            />
           </div>
 
-          {/* Tool Box Card */}
+          {/* Tool Box */}
           <div className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition">
             <div className="text-6xl mb-6">🔐</div>
             <h3 className="text-2xl font-bold mb-3">Tool Box</h3>
-            <p className="text-gray-400">Secure IPFS vault for vet records</p>
-            <input type="file" onChange={handleToolBoxUpload} className="mt-6 w-full" />
-            <button onClick={viewAllRecords} className="mt-4 w-full bg-green-600 py-3 rounded-2xl">View Records ({toolBoxFiles.length})</button>
+            <p className="text-gray-400 mb-6">Secure IPFS vault for records</p>
+            <input 
+              type="file" 
+              onChange={handleToolBoxUpload}
+              className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-green-600 file:text-white"
+            />
+            <button 
+              onClick={viewAllRecords}
+              className="mt-4 w-full bg-green-600 hover:bg-green-500 py-3 rounded-2xl font-bold"
+            >
+              View Records ({toolBoxFiles.length})
+            </button>
           </div>
 
-          {/* Photo Booth Card */}
+          {/* Photo Booth */}
           <a href="/photobooth" className="bg-[#1F2A44] hover:bg-[#2A3A5A] p-8 rounded-3xl border border-[#334155] transition group">
-            <div className="text-6xl mb-6">📸</div>
+            <div className="text-6xl mb-6">🎨</div>
             <h3 className="text-2xl font-bold mb-3">SuperBud Photo Booth</h3>
-            <p className="text-gray-400">Dress up your dog with fun capes & backgrounds</p>
+            <p className="text-gray-400">Dress up your dog with capes & backgrounds</p>
           </a>
         </div>
       </div>
