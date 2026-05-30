@@ -1,103 +1,104 @@
-'use client';
-
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
-export default function HomePage() {
+const cards = [
+  {
+    icon: '📸',
+    title: 'ViT Diagnostics',
+    desc: 'Upload a photo + symptoms for instant holistic protocol recommendations',
+    cta: 'LAUNCH →',
+    href: '/diagnostics',
+  },
+  {
+    icon: '🐾',
+    title: 'My Pets',
+    desc: 'Manage your dogs and their wellness protocols',
+    cta: 'MANAGE →',
+    href: '/mypets',
+  },
+  {
+    icon: '📋',
+    title: 'Protocol Overview',
+    desc: 'Browse all 10 tokenized holistic wellness protocols',
+    cta: 'VIEW ALL →',
+    href: '/protocols',
+  },
+  {
+    icon: '📡',
+    title: 'Monitor My Dog',
+    desc: 'Real-time health & location monitoring',
+    cta: 'COMING SOON',
+    href: '/monitor',
+  },
+];
+
+export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0A1428] text-white overflow-hidden relative">
-      <div className="absolute inset-0 z-0">
+    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
+      {/* Lake background spans hero + cards */}
+      <div className="relative">
         <Image
           src="/images/tn-lake-bg.jpg"
           alt="Tennessee Lake"
           fill
-          className="object-cover opacity-40"
           priority
           quality={90}
           sizes="100vw"
+          className="object-cover object-center"
         />
-      </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A1625]/60 via-[#0A1625]/70 to-[#0A1625]/90" />
 
-      <div className="relative z-10">
-        <nav className="bg-black/80 backdrop-blur-md border-b border-[#F5C242]/30 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Image
-                src="https://framerusercontent.com/images/BZRD2eHCJvHq4La2GWisAfN3zM.jpg"
-                alt="SuperBud"
-                width={60}
-                height={60}
-                className="rounded-full border-2 border-[#F5C242]"
-              />
-              <div>
-                <h1 className="text-2xl font-bold">Freedom Paws Wellness</h1>
-                <p className="text-[#F5C242] text-sm -mt-1">Honor Buddy’s Legacy</p>
+        <div className="relative z-10">
+          {/* Hero */}
+          <section className="px-6 pt-16 pb-12 text-center">
+            <div className="flex justify-center mb-8">
+              <div className="rounded-2xl border-2 border-amber-400 overflow-hidden shadow-2xl shadow-black/50">
+                <Image
+                  src="/images/superbud-hero.png"
+                  alt="SuperBud in a superhero cape with a group of happy dogs by a lake at sunset"
+                  width={1024}
+                  height={771}
+                  quality={80}
+                  sizes="(max-width: 768px) 100vw, 720px"
+                  priority
+                  className="block h-auto w-full max-w-[420px] md:max-w-[720px]"
+                />
               </div>
             </div>
-            <div className="flex gap-8 text-lg font-medium">
-              <Link href="/" className="hover:text-[#F5C242]">Home</Link>
-              <Link href="/diagnostics" className="hover:text-[#F5C242]">ViT Diagnostics</Link>
-              <Link href="/mypets" className="hover:text-[#F5C242]">My Pets</Link>
-              <Link href="/protocols" className="hover:text-[#F5C242]">Protocol Overview</Link>
-            </div>
-            <button
-              type="button"
-              className="bg-[#F5C242] hover:bg-white text-black px-6 py-3 rounded-2xl font-bold"
-            >
-              Connect Wallet
-            </button>
-          </div>
-        </nav>
 
-        <div className="h-[85vh] flex items-center justify-center text-center px-6">
-          <div className="max-w-5xl mx-auto">
-            <Image
-              src="https://framerusercontent.com/images/BZRD2eHCJvHq4La2GWisAfN3zM.jpg"
-              alt="SuperBud"
-              width={280}
-              height={280}
-              className="mx-auto mb-8 rounded-full border-8 border-[#F5C242] shadow-2xl"
-              priority
-            />
-            <h2 className="text-6xl md:text-7xl font-bold mb-6">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]">
               Welcome To<br />Freedom Paws Wellness
-            </h2>
-            <p className="text-2xl text-[#F5C242] mb-12">
-              Tokenized Holistic Wellness on XRPL • Inspired by Buddy’s Miracle
+            </h1>
+            <p className="mt-6 text-base md:text-lg text-amber-200/90">
+              Tokenized Holistic Wellness on XRPL &amp; Inspired by Buddy&apos;s Miracle
             </p>
-          </div>
-        </div>
+          </section>
 
-        <div className="max-w-7xl mx-auto px-6 pb-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Link href="/diagnostics" className="group">
-            <div className="bg-[#1F2A44] p-8 rounded-3xl border border-[#F5C242]/30 hover:border-[#F5C242] h-full transition-all hover:scale-105">
-              <div className="text-5xl mb-6">📸</div>
-              <h3 className="text-2xl font-bold mb-3">ViT Diagnostics</h3>
-              <p className="text-gray-300">AI photo + symptom analysis</p>
+          {/* Feature cards */}
+          <section className="px-6 pb-20">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {cards.map((c) => (
+                <div
+                  key={c.title}
+                  className="bg-[#0F1E38]/85 backdrop-blur-sm rounded-3xl p-7 min-h-[260px] flex flex-col border border-white/10 hover:border-amber-400/40 hover:bg-[#132A4F]/90 transition-all"
+                >
+                  <div className="text-3xl mb-6">{c.icon}</div>
+                  <h2 className="text-xl font-bold mb-3 leading-snug">{c.title}</h2>
+                  <p className="text-sm text-white/60 flex-1 leading-relaxed">{c.desc}</p>
+                  {c.href === '#' ? (
+                    <span className="mt-6 text-xs font-bold tracking-wider text-amber-400">{c.cta}</span>
+                  ) : (
+                    <Link
+                      href={c.href}
+                      className="mt-6 text-xs font-bold tracking-wider text-amber-400 hover:text-amber-300 transition-colors"
+                    >
+                      {c.cta}
+                    </Link>
+                  )}
+                </div>
+              ))}
             </div>
-          </Link>
-
-          <Link href="/mypets" className="group">
-            <div className="bg-[#1F2A44] p-8 rounded-3xl border border-[#F5C242]/30 hover:border-[#F5C242] h-full transition-all hover:scale-105">
-              <div className="text-5xl mb-6">🐾</div>
-              <h3 className="text-2xl font-bold mb-3">My Pets</h3>
-              <p className="text-gray-300">Manage dogs & records</p>
-            </div>
-          </Link>
-
-          <Link href="/protocols" className="group">
-            <div className="bg-[#1F2A44] p-8 rounded-3xl border border-[#F5C242]/30 hover:border-[#F5C242] h-full transition-all hover:scale-105">
-              <div className="text-5xl mb-6">🛡️</div>
-              <h3 className="text-2xl font-bold mb-3">Protocol Overview</h3>
-              <p className="text-gray-300">10 tokenized wellness protocols</p>
-            </div>
-          </Link>
-
-          <div className="bg-[#1F2A44]/70 p-8 rounded-3xl border border-[#F5C242]/20 h-full opacity-75 cursor-not-allowed">
-            <div className="text-5xl mb-6">📡</div>
-            <h3 className="text-2xl font-bold mb-3">Monitor My Dog</h3>
-            <p className="text-gray-400">Coming Soon</p>
-          </div>
+          </section>
         </div>
       </div>
     </div>

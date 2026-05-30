@@ -1,131 +1,76 @@
-'use client';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { useState } from 'react';
+export async function POST(request: NextRequest) {
+  try {
+    const formData = await request.formData();
+    const symptoms = (formData.get('symptoms') || '').toString().toLowerCase().trim();
 
-export default function ViTDiagnostics() {
-  const [image, setImage] = useState<string | null>(null);
-  const [symptoms, setSymptoms] = useState('');
-  const [result, setResult] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+    console.log("🔍 Symptoms received:", symptoms);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setImage(URL.createObjectURL(file));
-  };
+    const recommendations: Array<{ protocol: string; confidence: string }> = [];
 
-  const analyzeImage = async () => {
-    if (!symptoms.trim()) {
-      setError("Please describe symptoms");
-      return;
+    // 1. Gut / Digestive
+    if (/constipation|diarrhea|gut|stool|loose|digest|vomiting|appetite/.test(symptoms)) {
+      recommendations.push({ protocol: "Buddy's Gut Balance & Cleanse", confidence: "85%" });
     }
 
-    setLoading(true);
-    setError('');
-    setResult(null);
-
-    try {
-      const formData = new FormData();
-      formData.append('symptoms', symptoms);
-
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setResult(data);
-      } else {
-        setError(data.error || "Analysis failed");
-      }
-    } catch (err) {
-      setError("Connection error. Try again.");
-    } finally {
-      setLoading(false);
+    // 2. Joint / Mobility
+    if (/joint|pain|stiff|limp|arthritis|mobility|leg|hip|shoulder/.test(symptoms)) {
+      recommendations.push({ protocol: "Max Movement Pro", confidence: "88%" });
     }
-  };
 
-  const resetAnalysis = () => {
-    setResult(null);
-    setSymptoms('');
-    setImage(null);
-    setError('');
-  };
+    // 3. Eyes / Vision
+    if (/eye|red|watery|vision|discharge|tear|cloudy/.test(symptoms)) {
+      recommendations.push({ protocol: "Clear Vision Defender", confidence: "90%" });
+    }
 
-  return (
-    <div className="min-h-screen bg-[#0A1428] text-white p-8">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-5xl font-bold text-center mb-2">ViT Diagnostics</h1>
-        <p className="text-center text-[#F5C242] mb-12">Upload photo + symptoms for AI protocol recommendation</p>
+    // 4. Skin / Allergy
+    if (/itch|skin|rash|allergy|scratch|hotspot|coat/.test(symptoms)) {
+      recommendations.push({ protocol: "Allergy Shield", confidence: "87%" });
+    }
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Photo Upload */}
-          <div className="bg-[#1F2A44] rounded-3xl p-8">
-            <h3 className="text-xl font-semibold mb-4">1. Upload Photo</h3>
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="photo" />
-            <label htmlFor="photo" className="cursor-pointer block border-2 border-dashed border-[#F5C242]/50 rounded-3xl p-8 text-center hover:border-[#F5C242] transition-all">
-              {image ? (
-                <img src={image} alt="Dog" className="max-h-80 mx-auto rounded-2xl shadow-lg" />
-              ) : (
-                <div className="py-16">
-                  <span className="text-7xl block mb-4">📸</span>
-                  <p className="text-lg">Choose File</p>
-                </div>
-              )}
-            </label>
-          </div>
+    // 5. Heart / Fatigue / Breathing
+    if (/fatigue|exhaust|breath|shortness|breathing|tired|weak|heart|panting/.test(symptoms)) {
+      recommendations.push({ protocol: "Heart Vitality Pro", confidence: "89%" });
+    }
 
-          {/* Symptoms + Results */}
-          <div className="bg-[#1F2A44] rounded-3xl p-8 flex flex-col">
-            <h3 className="text-xl font-semibold mb-4">2. Describe Symptoms</h3>
-            <textarea
-              value={symptoms}
-              onChange={(e) => setSymptoms(e.target.value)}
-              placeholder="e.g. painful joints, constipation, red eyes, fatigue..."
-              className="w-full h-40 bg-[#0A1428] border border-[#F5C242]/30 rounded-2xl p-6 text-white resize-y focus:outline-none focus:border-[#F5C242]"
-            />
+    // 6. Liver / Kidney / Detox
+    if (/liver|kidney|detox|urine|jaundice|appetite|weight/.test(symptoms)) {
+      recommendations.push({ protocol: "Foundation Liver & Kidney Detox", confidence: "84%" });
+    }
 
-            <button
-              onClick={analyzeImage}
-              disabled={loading}
-              className="mt-6 bg-[#F5C242] hover:bg-[#F5C242]/90 disabled:opacity-50 text-black font-bold py-4 rounded-2xl text-xl transition"
-            >
-              {loading ? "Analyzing..." : "Get AI Recommendation"}
-            </button>
+    // 7. Immune / Overall Wellness
+    if (/immune|infection|recover|weak|energy|lethargy/.test(symptoms)) {
+      recommendations.push({ protocol: "Immune Boost Pro", confidence: "86%" });
+    }
 
-            {/* Results */}
-            {result && (
-              <div className="mt-8 space-y-6">
-                {result.primary && (
-                  <div className="bg-green-900/30 border border-green-500/50 rounded-2xl p-6">
-                    <h4 className="text-green-400 text-sm font-medium">PRIMARY RECOMMENDATION</h4>
-                    <p className="text-3xl font-bold mt-2">{result.primary.protocol}</p>
-                    <p className="text-green-400 mt-1">Confidence: {result.primary.confidence}</p>
-                  </div>
-                )}
+    // 8. Dental / Oral Health
+    if (/teeth|breath|dental|gums|chew|mouth/.test(symptoms)) {
+      recommendations.push({ protocol: "Dental Defense Pro", confidence: "82%" });
+    }
 
-                {result.secondary && (
-                  <div className="bg-blue-900/30 border border-blue-500/50 rounded-2xl p-6">
-                    <h4 className="text-blue-400 text-sm font-medium">SECONDARY CONSIDERATION</h4>
-                    <p className="text-3xl font-bold mt-2">{result.secondary.protocol}</p>
-                    <p className="text-blue-400 mt-1">Confidence: {result.secondary.confidence}</p>
-                  </div>
-                )}
+    // 9. Calm / Anxiety
+    if (/anxiety|fear|stress|nervous|calm|bark|restless/.test(symptoms)) {
+      recommendations.push({ protocol: "Freedom Calm Support", confidence: "83%" });
+    }
 
-                <button
-                  onClick={resetAnalysis}
-                  className="w-full border border-[#F5C242] hover:bg-[#F5C242]/10 text-[#F5C242] font-medium py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
-                >
-                  🔄 Try Another Analysis
-                </button>
-              </div>
-            )}
+    // Default fallback
+    if (recommendations.length === 0) {
+      recommendations.push({ protocol: "Buddy's Gut Balance & Cleanse", confidence: "65%" });
+    }
 
-            {error && <p className="text-red-400 mt-6 text-center">{error}</p>}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    // Return up to 2 best matches
+    const finalRecs = recommendations.slice(0, 2);
+
+    return NextResponse.json({
+      success: true,
+      primary: finalRecs[0],
+      secondary: finalRecs.length > 1 ? finalRecs[1] : null,
+      finding: `Analyzed: ${symptoms}`
+    });
+
+  } catch (error) {
+    console.error("Analysis error:", error);
+    return NextResponse.json({ success: false, error: "Analysis failed" });
+  }
 }

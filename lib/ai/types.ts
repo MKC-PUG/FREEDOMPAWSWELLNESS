@@ -15,7 +15,8 @@ export interface AnalysisResponse {
 }
 
 export interface ImageQuality {
+  isValid: boolean;
   issues: string[];
   score: number;
-  recommendations: string[];
+  suggestions: string[];
 }

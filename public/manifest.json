@@ -1,0 +1,30 @@
+{
+  "name": "Freedom Paws Wellness",
+  "short_name": "Freedom Paws",
+  "description": "Tokenized Holistic Wellness on XRPL • Inspired by Buddy’s Miracle",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A1428",
+  "theme_color": "#F5C242",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
