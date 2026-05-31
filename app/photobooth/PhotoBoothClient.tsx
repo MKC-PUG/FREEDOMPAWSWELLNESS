@@ -18,8 +18,13 @@ import {
 } from '@/lib/photobooth/frames';
 import {
   CUSTOM_HEADLINE_MAX,
+  CUSTOM_HEADLINE_OFFSET_MAX,
+  CUSTOM_HEADLINE_OFFSET_MIN,
+  CUSTOM_HEADLINE_OFFSET_STEP,
   ME_AND_MY_PUP_FRAME_COLORS,
+  ME_AND_MY_PUP_SCENE_BACKGROUNDS,
   ME_AND_MY_PUP_VARIANTS,
+  type MeAndMyPupCustomBackgroundId,
   type MeAndMyPupFrameColorId,
   type MeAndMyPupVariant,
   type SlotId,
@@ -91,6 +96,8 @@ export default function PhotoBoothClient({
   const [meMyPupVariant, setMeMyPupVariant] = useState<MeAndMyPupVariant>('classic');
   const [meMyPupCustomText, setMeMyPupCustomText] = useState('Me & My Pup');
   const [meMyPupFrameColor, setMeMyPupFrameColor] = useState<MeAndMyPupFrameColorId>('navy');
+  const [meMyPupCustomBg, setMeMyPupCustomBg] = useState<MeAndMyPupCustomBackgroundId>('navy');
+  const [meMyPupHeadlineOffset, setMeMyPupHeadlineOffset] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState<SlotId | null>('dog');
 
   const handleStickersChange = useCallback(
@@ -599,7 +606,91 @@ export default function PhotoBoothClient({
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-amber-400 mb-2">Frame color</p>
+                    <p className="text-sm font-bold text-amber-400 mb-2">Headline position</p>
+                    <div className="flex items-center justify-center gap-3">
+                      <button
+                        type="button"
+                        aria-label="Move headline up"
+                        disabled={meMyPupHeadlineOffset <= CUSTOM_HEADLINE_OFFSET_MIN}
+                        onClick={() =>
+                          setMeMyPupHeadlineOffset((y) =>
+                            Math.max(CUSTOM_HEADLINE_OFFSET_MIN, y - CUSTOM_HEADLINE_OFFSET_STEP)
+                          )
+                        }
+                        className="min-h-[44px] min-w-[52px] rounded-xl border border-white/20 bg-[#0A1625] text-lg font-bold disabled:opacity-30 touch-manipulation"
+                      >
+                        ↑
+                      </button>
+                      <span className="text-xs text-white/55 min-w-[5.5rem] text-center">
+                        {meMyPupHeadlineOffset === 0
+                          ? 'Default'
+                          : meMyPupHeadlineOffset < 0
+                            ? 'Higher'
+                            : 'Lower'}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label="Move headline down"
+                        disabled={meMyPupHeadlineOffset >= CUSTOM_HEADLINE_OFFSET_MAX}
+                        onClick={() =>
+                          setMeMyPupHeadlineOffset((y) =>
+                            Math.min(CUSTOM_HEADLINE_OFFSET_MAX, y + CUSTOM_HEADLINE_OFFSET_STEP)
+                          )
+                        }
+                        className="min-h-[44px] min-w-[52px] rounded-xl border border-white/20 bg-[#0A1625] text-lg font-bold disabled:opacity-30 touch-manipulation"
+                      >
+                        ↓
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-amber-400 mb-2">Background</p>
+                    <p className="text-[10px] text-white/45 mb-2">Solid colors</p>
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                      {ME_AND_MY_PUP_FRAME_COLORS.map((color) => (
+                        <button
+                          key={color.id}
+                          type="button"
+                          onClick={() => setMeMyPupCustomBg(color.id)}
+                          className={`min-h-[44px] rounded-xl px-2 py-2 text-[10px] font-bold touch-manipulation ${
+                            meMyPupCustomBg === color.id
+                              ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-[#0F1E38]'
+                              : 'border border-white/15'
+                          }`}
+                        >
+                          <span
+                            className="block h-6 w-full rounded-md mb-1 border border-white/20"
+                            style={{ background: color.swatch }}
+                          />
+                          {color.name}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-white/45 mb-2">Photo Booth scenes</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {ME_AND_MY_PUP_SCENE_BACKGROUNDS.map((scene) => (
+                        <button
+                          key={scene.id}
+                          type="button"
+                          onClick={() => setMeMyPupCustomBg(scene.id)}
+                          className={`min-h-[44px] rounded-xl px-2 py-2 text-[10px] font-bold touch-manipulation ${
+                            meMyPupCustomBg === scene.id
+                              ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-[#0F1E38]'
+                              : 'border border-white/15'
+                          }`}
+                        >
+                          <span
+                            className="block h-6 w-full rounded-md mb-1 border border-white/20"
+                            style={{ background: scene.swatch }}
+                          />
+                          <span className="text-sm block">{scene.emoji}</span>
+                          {scene.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-amber-400 mb-2">Ring &amp; text color</p>
                     <div className="grid grid-cols-3 gap-2">
                       {ME_AND_MY_PUP_FRAME_COLORS.map((color) => (
                         <button
@@ -631,6 +722,8 @@ export default function PhotoBoothClient({
                 variant={meMyPupVariant}
                 customHeadline={meMyPupCustomText}
                 frameColorId={meMyPupFrameColor}
+                customBackgroundId={meMyPupCustomBg}
+                customHeadlineOffsetY={meMyPupHeadlineOffset}
                 onReadyChange={setCanvasReady}
                 onSlotSelectedChange={setSelectedSlot}
                 onError={setError}

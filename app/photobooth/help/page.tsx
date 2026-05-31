@@ -26,7 +26,7 @@ const meAndMyPupSteps = [
   'Tap Add my photo for a selfie — it stays on your device until you share.',
   'Pick a frame style (Birthday, Whole Lives, Make It Yours, etc.).',
   'Tap MY PUP or ME, then drag to pan and pinch (or use ±) to zoom each circle.',
-  'Make It Yours: type your own headline and pick a frame color.',
+  'Make It Yours: type your own headline, move it up/down, pick a solid or scene background, and choose ring color.',
 ];
 
 const accessoryTips = [

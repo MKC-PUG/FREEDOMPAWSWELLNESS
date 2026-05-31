@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import ConnectWithUs from '@/app/components/ConnectWithUs';
 
 const cards = [
   {
@@ -106,6 +107,10 @@ export default function Home() {
                 </Link>
               ))}
             </div>
+          </section>
+
+          <section className="px-6 pb-16 text-center">
+            <ConnectWithUs variant="prominent" />
           </section>
         </div>
       </div>

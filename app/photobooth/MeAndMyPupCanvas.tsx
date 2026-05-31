@@ -15,6 +15,7 @@ import {
   hitTestSlot,
   ME_AND_MY_PUP_LOGO_URL,
   type MeAndMyPupVariant,
+  type MeAndMyPupCustomBackgroundId,
   type MeAndMyPupFrameColorId,
   type SlotId,
   type SlotTransform,
@@ -40,6 +41,8 @@ type Props = {
   variant: MeAndMyPupVariant;
   customHeadline?: string;
   frameColorId?: MeAndMyPupFrameColorId;
+  customBackgroundId?: MeAndMyPupCustomBackgroundId;
+  customHeadlineOffsetY?: number;
   onReadyChange?: (ready: boolean) => void;
   onSlotSelectedChange?: (slot: SlotId | null) => void;
   onError?: (message: string) => void;
@@ -97,6 +100,8 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
     variant,
     customHeadline = '',
     frameColorId = 'navy',
+    customBackgroundId = 'navy',
+    customHeadlineOffsetY = 0,
     onReadyChange,
     onSlotSelectedChange,
     onError,
@@ -120,12 +125,16 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
   const variantRef = useRef(variant);
   const customHeadlineRef = useRef(customHeadline);
   const frameColorIdRef = useRef(frameColorId);
+  const customBackgroundIdRef = useRef(customBackgroundId);
+  const customHeadlineOffsetYRef = useRef(customHeadlineOffsetY);
   const loadGenRef = useRef(0);
   const [busy, setBusy] = useState(true);
 
   variantRef.current = variant;
   customHeadlineRef.current = customHeadline;
   frameColorIdRef.current = frameColorId;
+  customBackgroundIdRef.current = customBackgroundId;
+  customHeadlineOffsetYRef.current = customHeadlineOffsetY;
 
   const getTransform = (slot: SlotId) =>
     slot === 'dog' ? dogTransformRef.current : ownerTransformRef.current;
@@ -156,6 +165,8 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
       logoImg: logoRef.current,
       customHeadline: customHeadlineRef.current,
       frameColorId: frameColorIdRef.current,
+      customBackgroundId: customBackgroundIdRef.current,
+      customHeadlineOffsetY: customHeadlineOffsetYRef.current,
       dogImg: dogRef.current,
       ownerImg: ownerRef.current,
       dogTransform: dogTransformRef.current,
@@ -190,7 +201,10 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
       if (gen !== loadGenRef.current) return;
 
       bgRef.current = null;
-      for (const url of variantBackgroundUrls(variantRef.current)) {
+      for (const url of variantBackgroundUrls(
+        variantRef.current,
+        customBackgroundIdRef.current
+      )) {
         try {
           bgRef.current = await loadImage(url);
           break;
@@ -224,7 +238,7 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
     let cancelled = false;
     const reloadBg = async () => {
       bgRef.current = null;
-      for (const url of variantBackgroundUrls(variant)) {
+      for (const url of variantBackgroundUrls(variant, customBackgroundId)) {
         try {
           bgRef.current = await loadImage(url);
           break;
@@ -247,11 +261,11 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
     return () => {
       cancelled = true;
     };
-  }, [variant, busy]);
+  }, [variant, customBackgroundId, busy]);
 
   useEffect(() => {
     if (!busy) paintRef.current();
-  }, [customHeadline, frameColorId, busy]);
+  }, [customHeadline, frameColorId, customHeadlineOffsetY, busy]);
 
   useEffect(() => {
     const wrap = wrapRef.current;

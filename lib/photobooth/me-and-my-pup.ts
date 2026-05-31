@@ -1,5 +1,7 @@
 /** Me & My Pup — dual circular portrait layout and drawing. */
 
+import { drawThemeBackground } from '@/lib/photobooth/draw-theme-background';
+
 export type MeAndMyPupVariant =
   | 'classic'
   | 'happy-birthday'
@@ -109,7 +111,96 @@ export function getFrameColor(id: MeAndMyPupFrameColorId): MeAndMyPupFrameColor 
   return ME_AND_MY_PUP_FRAME_COLORS.find((c) => c.id === id) ?? ME_AND_MY_PUP_FRAME_COLORS[0];
 }
 
+export type MeAndMyPupSceneId =
+  | 'lake'
+  | 'superbud'
+  | 'birthday'
+  | 'patriot'
+  | 'hollywood'
+  | 'wellness';
+
+export type MeAndMyPupCustomBackgroundId = MeAndMyPupFrameColorId | MeAndMyPupSceneId;
+
+export type MeAndMyPupSceneBackground = {
+  id: MeAndMyPupSceneId;
+  name: string;
+  emoji: string;
+  swatch: string;
+  urls?: string[];
+  themeDraw?: string;
+};
+
+export const ME_AND_MY_PUP_SCENE_BACKGROUNDS: MeAndMyPupSceneBackground[] = [
+  {
+    id: 'lake',
+    name: 'Lake Legend',
+    emoji: '🌅',
+    swatch: 'linear-gradient(135deg, #1e3a5f, #38bdf8)',
+    urls: ['/images/photobooth/backgrounds/bg-lake-legend.jpg', '/images/tn-lake-bg.jpg'],
+  },
+  {
+    id: 'superbud',
+    name: 'SuperBud Hero',
+    emoji: '🦸',
+    swatch: 'linear-gradient(135deg, #0A1625, #F5C242)',
+    urls: ['/images/photobooth/backgrounds/bg-superbud-hero.png', '/images/superbud-hero.png'],
+  },
+  {
+    id: 'birthday',
+    name: 'Birthday Bash',
+    emoji: '🎉',
+    swatch: 'linear-gradient(135deg, #fdf4ff, #7c3aed)',
+    urls: ['/images/photobooth/backgrounds/bg-birthday-bash.png'],
+    themeDraw: 'birthday-bash',
+  },
+  {
+    id: 'patriot',
+    name: 'Patriot Pup',
+    emoji: '🇺🇸',
+    swatch: 'linear-gradient(180deg, #1E3A8A, #7F1D1D)',
+    themeDraw: 'patriot-pup',
+  },
+  {
+    id: 'hollywood',
+    name: 'Hollywood',
+    emoji: '⭐',
+    swatch: 'linear-gradient(135deg, #1a0a2e, #4a1942)',
+    themeDraw: 'hollywood-star',
+  },
+  {
+    id: 'wellness',
+    name: 'Wellness',
+    emoji: '💚',
+    swatch: 'linear-gradient(180deg, #ecfdf5, #047857)',
+    themeDraw: 'wellness-warrior',
+  },
+];
+
+export function isCustomColorBackground(
+  id: MeAndMyPupCustomBackgroundId
+): id is MeAndMyPupFrameColorId {
+  return ME_AND_MY_PUP_FRAME_COLORS.some((c) => c.id === id);
+}
+
+export function getSceneBackground(id: MeAndMyPupSceneId): MeAndMyPupSceneBackground {
+  return ME_AND_MY_PUP_SCENE_BACKGROUNDS.find((s) => s.id === id) ?? ME_AND_MY_PUP_SCENE_BACKGROUNDS[0];
+}
+
+export function customBackgroundUrls(id: MeAndMyPupCustomBackgroundId): string[] {
+  if (isCustomColorBackground(id)) return [];
+  const scene = getSceneBackground(id);
+  return scene.urls ?? [];
+}
+
+export function customBackgroundThemeDraw(id: MeAndMyPupCustomBackgroundId): string | null {
+  if (isCustomColorBackground(id)) return null;
+  return getSceneBackground(id).themeDraw ?? null;
+}
+
 export const CUSTOM_HEADLINE_MAX = 48;
+export const CUSTOM_HEADLINE_OFFSET_MIN = -0.12;
+export const CUSTOM_HEADLINE_OFFSET_MAX = 0.14;
+export const CUSTOM_HEADLINE_OFFSET_STEP = 0.02;
 
 export type SlotId = 'dog' | 'owner';
 
@@ -642,15 +733,30 @@ export function drawMeAndMyPupBackground(
   w: number,
   h: number,
   photoBg: HTMLImageElement | null,
-  frameColorId: MeAndMyPupFrameColorId = 'navy'
+  frameColorId: MeAndMyPupFrameColorId = 'navy',
+  customBackgroundId: MeAndMyPupCustomBackgroundId = 'navy'
 ) {
   switch (variant) {
     case 'classic':
       drawClassicCardBg(ctx, w, h);
       return;
-    case 'custom':
-      drawCustomBackground(ctx, w, h, getFrameColor(frameColorId));
+    case 'custom': {
+      if (isCustomColorBackground(customBackgroundId)) {
+        drawCustomBackground(ctx, w, h, getFrameColor(customBackgroundId));
+        return;
+      }
+      if (photoBg) {
+        drawPhotoCover(ctx, photoBg, w, h, 0.38);
+        return;
+      }
+      const themeDraw = customBackgroundThemeDraw(customBackgroundId);
+      if (themeDraw) {
+        drawThemeBackground(ctx, themeDraw, w, h);
+      } else {
+        drawCustomBackground(ctx, w, h, getFrameColor(frameColorId));
+      }
       return;
+    }
     case 'love-my-dog':
       drawLoveMyDogBg(ctx, w, h);
       return;
@@ -787,7 +893,8 @@ function drawHeader(
   variant: MeAndMyPupVariant,
   logoImg: HTMLImageElement | null,
   customHeadline?: string,
-  frameColorId: MeAndMyPupFrameColorId = 'navy'
+  frameColorId: MeAndMyPupFrameColorId = 'navy',
+  customHeadlineOffsetY = 0
 ) {
   const tune = layoutTune(variant);
   const isCustom = variant === 'custom';
@@ -828,7 +935,14 @@ function drawHeader(
   }
 
   const lineHeight = titleSize * (isLivesWhole ? 1.2 : 1.12);
-  const startY = h * tune.headerStartY;
+  const offsetY =
+    isCustom
+      ? Math.min(
+          CUSTOM_HEADLINE_OFFSET_MAX,
+          Math.max(CUSTOM_HEADLINE_OFFSET_MIN, customHeadlineOffsetY)
+        )
+      : 0;
+  const startY = h * tune.headerStartY + h * offsetY;
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
@@ -870,6 +984,8 @@ type DrawFrameOpts = {
   logoImg?: HTMLImageElement | null;
   customHeadline?: string;
   frameColorId?: MeAndMyPupFrameColorId;
+  customBackgroundId?: MeAndMyPupCustomBackgroundId;
+  customHeadlineOffsetY?: number;
   dogImg: HTMLImageElement | null;
   ownerImg: HTMLImageElement | null;
   dogTransform: SlotTransform;
@@ -888,6 +1004,8 @@ export function drawMeAndMyPupFrame(opts: DrawFrameOpts) {
     logoImg = null,
     customHeadline = '',
     frameColorId = 'navy',
+    customBackgroundId = 'navy',
+    customHeadlineOffsetY = 0,
     dogImg,
     ownerImg,
     dogTransform,
@@ -898,8 +1016,17 @@ export function drawMeAndMyPupFrame(opts: DrawFrameOpts) {
 
   const frameColor = variant === 'custom' ? getFrameColor(frameColorId) : null;
 
-  drawMeAndMyPupBackground(ctx, variant, cw, ch, photoBg, frameColorId);
-  drawHeader(ctx, cw, ch, variant, logoImg ?? null, customHeadline, frameColorId);
+  drawMeAndMyPupBackground(ctx, variant, cw, ch, photoBg, frameColorId, customBackgroundId);
+  drawHeader(
+    ctx,
+    cw,
+    ch,
+    variant,
+    logoImg ?? null,
+    customHeadline,
+    frameColorId,
+    customHeadlineOffsetY
+  );
 
   const layout = getSlotLayout(cw, ch, variant);
 
@@ -966,9 +1093,15 @@ export function hitTestSlot(
   return null;
 }
 
-export function variantBackgroundUrls(variant: MeAndMyPupVariant): string[] {
+export function variantBackgroundUrls(
+  variant: MeAndMyPupVariant,
+  customBackgroundId: MeAndMyPupCustomBackgroundId = 'navy'
+): string[] {
   if (variant === 'happy-birthday') {
     return ['/images/photobooth/backgrounds/bg-lake-legend.jpg', '/images/tn-lake-bg.jpg'];
+  }
+  if (variant === 'custom') {
+    return customBackgroundUrls(customBackgroundId);
   }
   return [];
 }
