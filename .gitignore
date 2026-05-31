@@ -43,4 +43,5 @@ yarn-error.log*
 next-env.d.ts
 
 # symptom feedback queue (local dev / review data)
-/data/symptom-feedback/
+.tmp-imgly-bg/
+public/imgly-bg-removal/

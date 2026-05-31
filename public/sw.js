@@ -1,7 +1,7 @@
 // Freedom Paws PWA — network-first, Photo Booth / API never cached.
 // Bump CACHE_NAME on each deploy that changes static assets.
 
-const CACHE_NAME = 'freedom-paws-v15';
+const CACHE_NAME = 'freedom-paws-v16';
 
 const PRECACHE_URLS = [
   '/manifest.json',
@@ -34,6 +34,7 @@ function isCacheableAsset(pathname) {
   return (
     pathname.startsWith('/_next/static/') ||
     pathname.startsWith('/images/') ||
+    pathname.startsWith('/imgly-bg-removal/') ||
     pathname === '/favicon.ico' ||
     pathname === '/manifest.json' ||
     pathname === '/offline.html'

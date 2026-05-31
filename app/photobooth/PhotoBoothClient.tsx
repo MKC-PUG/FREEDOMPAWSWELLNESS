@@ -16,7 +16,6 @@ import {
   FRAME_WIDTH_MIN,
   type FrameStyleId,
 } from '@/lib/photobooth/frames';
-import { removePetBackground } from '@/lib/photobooth/remove-background';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
 
 const PhotoBoothCanvas = dynamic(() => import('./PhotoBoothCanvas'), {
@@ -64,6 +63,7 @@ export default function PhotoBoothClient({
   const [frameWidth, setFrameWidth] = useState(0.5);
   const [bgRemoving, setBgRemoving] = useState(false);
   const [bgProgress, setBgProgress] = useState('');
+  const [bgError, setBgError] = useState('');
   const [cutoutApplied, setCutoutApplied] = useState(false);
 
   const handleStickersChange = useCallback(
@@ -178,6 +178,7 @@ export default function PhotoBoothClient({
     setCutoutApplied(false);
     setBgRemoving(false);
     setBgProgress('');
+    setBgError('');
     setShareMsg('');
     setLocalUploadError('');
     setLoadingPhoto(false);
@@ -188,14 +189,23 @@ export default function PhotoBoothClient({
     if (!petImageUrl || bgRemoving) return;
     setBgRemoving(true);
     setBgProgress('Starting…');
+    setBgError('');
     setError('');
     setShareMsg('');
     try {
-      const source = petImageUrl.startsWith('blob:')
-        ? await fetch(petImageUrl).then((r) => r.blob())
-        : petImageUrl;
-      const cutout = await removePetBackground(source, (p) => {
-        setBgProgress(p.percent > 0 ? `${p.percent}%` : 'Processing…');
+      const sourceBlob = petImageUrl.startsWith('blob:')
+        ? await fetch(petImageUrl).then((r) => {
+            if (!r.ok) throw new Error('Could not read photo');
+            return r.blob();
+          })
+        : await fetch(petImageUrl).then((r) => {
+            if (!r.ok) throw new Error('Could not read photo');
+            return r.blob();
+          });
+
+      const { removePetBackground } = await import('@/lib/photobooth/remove-background');
+      const cutout = await removePetBackground(sourceBlob, (p) => {
+        setBgProgress(p.percent > 0 ? `${p.percent}%` : 'Loading AI model…');
       });
       if (!originalPhotoUrlRef.current) {
         originalPhotoUrlRef.current = petImageUrl;
@@ -203,8 +213,12 @@ export default function PhotoBoothClient({
       setPhotoUrl(URL.createObjectURL(cutout));
       setCutoutApplied(true);
       setShareMsg('Background removed — tap a theme below!');
-    } catch {
-      setError('Background removal failed. Try again, or continue with your original photo.');
+    } catch (e) {
+      const msg =
+        e instanceof Error ? e.message : 'Background removal failed';
+      setBgError(
+        `${msg}. Stay on Wi‑Fi, wait for the download to finish, then try again — or tap a theme to continue without cutout.`
+      );
     } finally {
       setBgRemoving(false);
       setBgProgress('');
@@ -321,14 +335,27 @@ export default function PhotoBoothClient({
 
             {!editorActive && (
               <div className="mt-4 space-y-2">
+                {bgRemoving && (
+                  <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4 text-center">
+                    <p className="text-base font-bold text-amber-400">Removing background…</p>
+                    <p className="mt-2 text-sm text-white/70">{bgProgress || 'Please wait'}</p>
+                    <p className="mt-2 text-xs text-white/45">First time downloads ~40MB on Wi‑Fi (15–45 sec)</p>
+                  </div>
+                )}
+                {bgError && (
+                  <div className="rounded-2xl border border-red-500/50 bg-red-950/40 p-4 text-sm text-red-300 leading-relaxed">
+                    {bgError}
+                  </div>
+                )}
                 {!cutoutApplied ? (
                   <button
                     type="button"
                     disabled={bgRemoving}
                     onClick={() => void handleRemoveBackground()}
-                    className="w-full min-h-[52px] rounded-xl bg-[#1F2A44] border-2 border-amber-400/50 py-3 text-sm font-bold text-amber-300 disabled:opacity-50 touch-manipulation"
+                    className="w-full min-h-[52px] rounded-xl bg-[#1F2A44] border-2 border-amber-400/50 py-3 text-sm font-bold text-amber-300 disabled:opacity-50 touch-manipulation relative z-20"
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
-                    {bgRemoving ? `✨ Removing background… ${bgProgress}` : '✨ Remove background (beta)'}
+                    {bgRemoving ? `✨ Working… ${bgProgress}` : '✨ Remove background (beta)'}
                   </button>
                 ) : (
                   <button

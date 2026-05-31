@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ['@imgly/background-removal'],
   images: {
     remotePatterns: [
       {
