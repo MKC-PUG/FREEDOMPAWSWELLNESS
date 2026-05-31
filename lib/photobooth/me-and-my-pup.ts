@@ -117,7 +117,8 @@ export type MeAndMyPupSceneId =
   | 'birthday'
   | 'patriot'
   | 'hollywood'
-  | 'wellness';
+  | 'wellness'
+  | 'snow-mountain';
 
 export type MeAndMyPupCustomBackgroundId = MeAndMyPupFrameColorId | MeAndMyPupSceneId;
 
@@ -173,6 +174,13 @@ export const ME_AND_MY_PUP_SCENE_BACKGROUNDS: MeAndMyPupSceneBackground[] = [
     emoji: '💚',
     swatch: 'linear-gradient(180deg, #ecfdf5, #047857)',
     themeDraw: 'wellness-warrior',
+  },
+  {
+    id: 'snow-mountain',
+    name: 'Snow Mountain',
+    emoji: '🏔️',
+    swatch: 'linear-gradient(180deg, #94a3b8, #f8fafc)',
+    themeDraw: 'snow-mountain',
   },
 ];
 
