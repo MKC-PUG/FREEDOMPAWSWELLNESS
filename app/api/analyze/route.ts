@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { analyzeDogImage } from '@/lib/ai/diagnostics';
 import { isValidImageFile } from '@/lib/ai/image-utils';
+import { toAnalyzeApiResponse } from '@/lib/ai/types';
 import { getApprovedAliases, recordAnalysis } from '@/lib/symptom-feedback-store';
 
 export async function POST(request: NextRequest) {
@@ -53,24 +54,12 @@ export async function POST(request: NextRequest) {
       usedFallback: analysisMeta?.usedFallback ?? false,
     });
 
-    return NextResponse.json({
-      success: true,
-      analysisId: saved.id,
-      primary: {
-        protocol: data.primaryProtocol,
-        confidence: `${data.confidence}%`,
-      },
-      secondary: data.secondaryProtocol
-        ? {
-            protocol: data.secondaryProtocol,
-            confidence: `${Math.max(data.confidence - 8, 60)}%`,
-          }
-        : null,
-      finding: data.finding,
-      reasoning: data.reasoning,
-      matchedTerms: analysisMeta?.matchedTerms ?? [],
-      unknownPhrases: analysisMeta?.unknownPhrases ?? [],
-    });
+    return NextResponse.json(
+      toAnalyzeApiResponse(saved.id, data, {
+        matchedTerms: analysisMeta?.matchedTerms ?? [],
+        unknownPhrases: analysisMeta?.unknownPhrases ?? [],
+      })
+    );
   } catch (error) {
     console.error('Analysis error:', error);
     return NextResponse.json({ success: false, error: 'Analysis failed' });

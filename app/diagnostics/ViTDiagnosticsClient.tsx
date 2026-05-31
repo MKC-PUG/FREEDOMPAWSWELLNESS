@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { protocols } from '@/app/protocols/protocols';
 import { compressFileToUpload } from '@/lib/compress-image';
 import PhotoUploadZone, { PHOTO_UPLOAD_BUILD } from '@/app/components/PhotoUploadZone';
 import BackLink from '@/app/components/BackLink';
 import { protocolDisplayName } from '@/lib/ai/symptom-lexicon';
+import type { AnalyzeApiResponse } from '@/lib/ai/types';
 import type { ImageSelection } from '@/lib/read-image-file';
 
 type Props = {
@@ -29,7 +31,7 @@ export default function ViTDiagnosticsClient({
 }: Props) {
   const symptomsRef = useRef<HTMLTextAreaElement>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<AnalyzeApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [localUploadError, setLocalUploadError] = useState('');
@@ -235,29 +237,75 @@ export default function ViTDiagnosticsClient({
 
             {result && (
               <div className="mt-8 space-y-6">
+                {result.vetUrgent && (
+                  <div className="rounded-2xl border-2 border-red-500 bg-red-950/50 p-5">
+                    <p className="text-red-300 font-bold text-sm">⚠️ VETERINARY ATTENTION RECOMMENDED</p>
+                    <p className="text-red-200/90 text-sm mt-2 leading-relaxed">
+                      {result.vetUrgentReason ||
+                        'Visible or reported signs may need prompt professional evaluation.'}
+                    </p>
+                  </div>
+                )}
+
                 {result.primary && (
                   <div className="bg-green-900/30 border border-green-500/50 rounded-2xl p-6">
-                    <h4 className="text-green-400 text-sm font-medium">PRIMARY RECOMMENDATION</h4>
-                    <p className="text-3xl font-bold mt-2">{result.primary.protocol}</p>
-                    <p className="text-green-400 mt-1">Confidence: {result.primary.confidence}</p>
+                    <h4 className="text-green-400 text-sm font-medium">#1 SUPPLEMENT PROTOCOL</h4>
+                    <p className="text-lg text-amber-300/90 mt-1 font-semibold">{result.primary.specCategory}</p>
+                    <p className="text-2xl font-bold mt-2">{result.primary.brandedTitle}</p>
+                    <p className="text-green-400 mt-2">Confidence: {result.primary.confidence}</p>
+                    {result.primary.slug && (
+                      <Link
+                        href={`/protocols/${result.primary.slug}`}
+                        className="inline-block mt-3 text-sm text-[#F5C242] underline"
+                      >
+                        View protocol details →
+                      </Link>
+                    )}
                   </div>
                 )}
 
                 {result.secondary && (
                   <div className="bg-blue-900/30 border border-blue-500/50 rounded-2xl p-6">
-                    <h4 className="text-blue-400 text-sm font-medium">SECONDARY CONSIDERATION</h4>
-                    <p className="text-3xl font-bold mt-2">{result.secondary.protocol}</p>
-                    <p className="text-blue-400 mt-1">Confidence: {result.secondary.confidence}</p>
+                    <h4 className="text-blue-400 text-sm font-medium">#2 SUPPLEMENT PROTOCOL</h4>
+                    <p className="text-lg text-amber-300/90 mt-1 font-semibold">{result.secondary.specCategory}</p>
+                    <p className="text-2xl font-bold mt-2">{result.secondary.brandedTitle}</p>
+                    <p className="text-blue-400 mt-2">Confidence: {result.secondary.confidence}</p>
+                    {result.secondary.slug && (
+                      <Link
+                        href={`/protocols/${result.secondary.slug}`}
+                        className="inline-block mt-3 text-sm text-[#F5C242] underline"
+                      >
+                        View protocol details →
+                      </Link>
+                    )}
+                  </div>
+                )}
+
+                {result.visualFindings && result.visualFindings.length > 0 && (
+                  <div className="rounded-xl border border-white/10 bg-[#0A1428]/60 p-4">
+                    <p className="text-xs font-semibold text-white/50 mb-2">Visual observations</p>
+                    <ul className="text-sm text-white/75 list-disc pl-5 space-y-1">
+                      {result.visualFindings.map((f) => (
+                        <li key={f}>{f}</li>
+                      ))}
+                    </ul>
+                    {result.usedVision && (
+                      <p className="text-[10px] text-white/35 mt-2">Photo analyzed with AI vision + symptom matching</p>
+                    )}
                   </div>
                 )}
 
                 {result.reasoning && (
-                  <p className="text-center text-xs text-white/45">{result.reasoning}</p>
+                  <p className="text-center text-xs text-white/45 leading-relaxed">{result.reasoning}</p>
                 )}
 
-                {result.unknownPhrases?.length > 0 && (
+                {result.disclaimer && (
+                  <p className="text-center text-[10px] text-white/35 leading-relaxed">{result.disclaimer}</p>
+                )}
+
+                {(result.unknownPhrases?.length ?? 0) > 0 && (
                   <p className="text-center text-xs text-amber-400/80">
-                    New phrases queued for review: {result.unknownPhrases.join(', ')}
+                    New phrases queued for review: {result.unknownPhrases!.join(', ')}
                   </p>
                 )}
 

@@ -1,7 +1,9 @@
 import { normalizeSymptoms } from './normalize-symptoms';
-import { protocolDisplayName } from './symptom-lexicon';
+import { rankTopTwoProtocols } from './rank-protocols';
+import { formatDualLabel } from './protocol-registry';
 import type { ApprovedAlias } from '../symptom-feedback-store';
 import { AnalysisResponse } from './types';
+import { analyzePhotoVision } from './vision-analyze';
 
 export type SymptomAnalysisResult = NonNullable<AnalysisResponse['data']> & {
   analysisMeta: {
@@ -9,6 +11,9 @@ export type SymptomAnalysisResult = NonNullable<AnalysisResponse['data']> & {
     unknownPhrases: string[];
     usedFallback: boolean;
     normalized: string;
+    usedVision: boolean;
+    visualFindings: string[];
+    vetUrgent: boolean;
   };
 };
 
@@ -17,59 +22,87 @@ export async function analyzeDogImage(
   petContext?: { symptoms?: string },
   approved: ApprovedAlias[] = []
 ): Promise<AnalysisResponse & { analysisMeta?: SymptomAnalysisResult['analysisMeta'] }> {
-  const parsed = normalizeSymptoms(petContext?.symptoms || '', approved);
+  const symptoms = petContext?.symptoms || '';
+  const parsed = normalizeSymptoms(symptoms, approved);
+  const vision = await analyzePhotoVision(file, symptoms);
 
-  const primaryFull = parsed.protocols[0];
-  const secondaryFull = parsed.protocols.length > 1 ? parsed.protocols[1] : null;
-
-  const primary = protocolDisplayName(primaryFull);
-  const secondary = secondaryFull ? protocolDisplayName(secondaryFull) : null;
-
-  const confidence =
-    parsed.usedFallback
-      ? 68
-      : parsed.unknownPhrases.length > 0
-        ? Math.max(72, 88 - parsed.unknownPhrases.length * 4)
-        : parsed.matches.length === 1
-          ? 92
-          : Math.max(85, 94 - parsed.matches.length * 2);
+  const ranked = rankTopTwoProtocols({
+    matches: parsed.matches,
+    protocolTitles: parsed.protocols,
+    usedFallback: parsed.usedFallback,
+    unknownPhrases: parsed.unknownPhrases,
+    visionPrimary: vision.primaryProtocolTitle,
+    visionSecondary: vision.secondaryProtocolTitle,
+    visionConfidenceBoost: vision.confidenceBoost,
+  });
 
   const termSummary =
     parsed.canonicalTerms.length > 0
       ? parsed.canonicalTerms.slice(0, 4).join('; ')
       : 'general wellness check';
 
-  const reasoning =
-    parsed.usedFallback
-      ? `No lexicon match — queued unknown phrases for review: ${parsed.unknownPhrases.join(', ') || parsed.raw}.`
-      : parsed.unknownPhrases.length > 0
-        ? `Matched: ${termSummary}. Unknown phrases queued: ${parsed.unknownPhrases.join(', ')}.`
-        : secondary
-          ? `Matched: ${termSummary}. Multiple protocol areas detected.`
-          : `Matched: ${termSummary}. Strong alignment with ${primary}.`;
+  let reasoning = parsed.usedFallback
+    ? `No lexicon match — queued unknown phrases for review: ${parsed.unknownPhrases.join(', ') || parsed.raw}.`
+    : parsed.unknownPhrases.length > 0
+      ? `Matched: ${termSummary}. Unknown phrases queued: ${parsed.unknownPhrases.join(', ')}.`
+      : `Matched: ${termSummary}.`;
+
+  if (vision.usedVision && vision.reasoning) {
+    reasoning += ` Visual analysis: ${vision.reasoning}`;
+  }
+  if (vision.visualFindings.length > 0) {
+    reasoning += ` Observed: ${vision.visualFindings.join('; ')}.`;
+  }
+  if (ranked.forcedPairUsed) {
+    reasoning += ' Overlap detected — prioritised top 2 supplement protocols.';
+  }
+
+  if (vision.vetUrgent) {
+    reasoning = `⚠️ ${vision.vetUrgentReason || 'Signs warrant prompt veterinary evaluation.'} ${reasoning}`;
+  }
+
+  const primaryLabel = formatDualLabel(ranked.primary.protocolTitle);
+  const secondaryLabel = ranked.secondary
+    ? formatDualLabel(ranked.secondary.protocolTitle)
+    : null;
 
   const analysisMeta = {
     matchedTerms: parsed.canonicalTerms,
     unknownPhrases: parsed.unknownPhrases,
     usedFallback: parsed.usedFallback,
     normalized: parsed.normalized,
+    usedVision: vision.usedVision,
+    visualFindings: vision.visualFindings,
+    vetUrgent: vision.vetUrgent,
   };
 
   return {
     success: true,
     data: {
-      protocol: primary,
-      primaryProtocol: primary,
-      secondaryProtocol: secondary,
-      finding: `Primary: ${primary}`,
+      protocol: primaryLabel,
+      primaryProtocol: ranked.primary.brandedTitle,
+      secondaryProtocol: ranked.secondary?.brandedTitle ?? null,
+      primary: ranked.primary,
+      secondary: ranked.secondary,
+      finding: vision.vetUrgent
+        ? 'Urgent veterinary evaluation recommended'
+        : `Primary: ${primaryLabel}`,
       reasoning,
-      confidence,
+      confidence: ranked.primary.confidence,
       recommendations: [
-        `✅ PRIMARY: ${primary}`,
-        secondary ? `⚠️ SECONDARY: ${secondary}` : '',
+        `✅ #1 SUPPLEMENT: ${primaryLabel} (${ranked.primary.confidence}%)`,
+        ranked.secondary
+          ? `✅ #2 SUPPLEMENT: ${secondaryLabel} (${ranked.secondary.confidence}%)`
+          : '',
+        vision.vetUrgent ? '⚠️ See a veterinarian promptly — do not delay care.' : '',
       ].filter(Boolean),
-      disclaimer: 'Educational tool only. Not a substitute for veterinary care.',
+      disclaimer:
+        'Educational tool only. Not a diagnosis or substitute for licensed veterinary care. Always consult your veterinarian.',
       analyzedAt: new Date().toISOString(),
+      vetUrgent: vision.vetUrgent,
+      vetUrgentReason: vision.vetUrgentReason,
+      visualFindings: vision.visualFindings,
+      usedVision: vision.usedVision,
     },
     analysisMeta,
   };

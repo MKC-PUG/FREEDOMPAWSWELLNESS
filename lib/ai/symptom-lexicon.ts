@@ -11,6 +11,8 @@ export type SymptomEntry = {
   protocol: string;
   /** Lower number = higher priority when choosing primary recommendation */
   priority: number;
+  /** When this entry matches, recommend this as #2 supplement (overlap pairing) */
+  forcedSecondary?: string;
 };
 
 /** Short label shown in ViT results (part before en-dash in protocol title). */
@@ -459,7 +461,38 @@ export const SYMPTOM_LEXICON: SymptomEntry[] = [
     priority: 80,
   },
 
-  // ── Immune / systemic ─────────────────────────────────────────────────────
+  // ── Immune / systemic / senior cognitive (→ Immune #1 + Freedom Calm #2) ─
+  {
+    id: 'cognitive_senior',
+    canonical: 'cognitive decline / senior support',
+    aliases: [
+      'senior dog',
+      'senior',
+      'elderly',
+      'old dog',
+      'getting old',
+      'dementia',
+      'cognitive dysfunction',
+      'cds',
+      'canine cognitive dysfunction',
+      'disoriented',
+      'disorientation',
+      'confused',
+      'confusion',
+      'circling',
+      'head tilt',
+      'pacing at night',
+      'sundowning',
+      'sundown',
+      'staring at wall',
+      'lost in house',
+      'forgetful',
+      'senile',
+    ],
+    protocol: 'Patriot Defender – Immunity & Vitality',
+    priority: 88,
+    forcedSecondary: 'Freedom Calm – Anxiety Relief',
+  },
   {
     id: 'immune_infection',
     canonical: 'infection / immune weakness',
