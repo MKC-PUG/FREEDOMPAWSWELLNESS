@@ -28,6 +28,13 @@ const ST = (file: string) => `/images/photobooth/stickers/${file}`;
 
 export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [
   {
+    id: 'me-and-my-pup',
+    name: 'Me & My Pup',
+    emoji: '💞',
+    background: '',
+    stickers: [],
+  },
+  {
     id: 'frame-only',
     name: 'Frame Only',
     emoji: '🖼️',

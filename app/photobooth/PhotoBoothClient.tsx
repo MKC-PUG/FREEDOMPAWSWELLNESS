@@ -16,6 +16,12 @@ import {
   FRAME_WIDTH_MIN,
   type FrameStyleId,
 } from '@/lib/photobooth/frames';
+import {
+  ME_AND_MY_PUP_VARIANTS,
+  type MeAndMyPupVariant,
+  type SlotId,
+} from '@/lib/photobooth/me-and-my-pup';
+import type { MeAndMyPupCanvasHandle } from './MeAndMyPupCanvas';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
 
 const PhotoBoothCanvas = dynamic(() => import('./PhotoBoothCanvas'), {
@@ -23,6 +29,15 @@ const PhotoBoothCanvas = dynamic(() => import('./PhotoBoothCanvas'), {
   loading: () => (
     <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-white/15 bg-[#0F1E38]/50 text-sm text-amber-300">
       Loading editor…
+    </div>
+  ),
+});
+
+const MeAndMyPupCanvas = dynamic(() => import('./MeAndMyPupCanvas'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-amber-400/30 bg-[#0F1E38]/50 text-sm text-amber-300">
+      Loading Me &amp; My Pup…
     </div>
   ),
 });
@@ -45,6 +60,9 @@ export default function PhotoBoothClient({
   uploadSuccess,
 }: Props) {
   const canvasRef = useRef<PhotoBoothCanvasHandle>(null);
+  const meMyPupRef = useRef<MeAndMyPupCanvasHandle>(null);
+  const ownerInputRef = useRef<HTMLInputElement>(null);
+  const ownerBlobUrlRef = useRef<string | null>(null);
   const blobUrlRef = useRef<string | null>(null);
   const originalPhotoUrlRef = useRef<string | null>(null);
   const themesRef = useRef<HTMLElement>(null);
@@ -66,6 +84,9 @@ export default function PhotoBoothClient({
   const [bgError, setBgError] = useState('');
   const [cutoutApplied, setCutoutApplied] = useState(false);
   const [petSelected, setPetSelected] = useState(false);
+  const [ownerImageUrl, setOwnerImageUrl] = useState<string | null>(null);
+  const [meMyPupVariant, setMeMyPupVariant] = useState<MeAndMyPupVariant>('classic');
+  const [selectedSlot, setSelectedSlot] = useState<SlotId | null>('dog');
 
   const handleStickersChange = useCallback(
     (stickers: StickerListItem[], selectedId: number | null) => {
@@ -137,13 +158,31 @@ export default function PhotoBoothClient({
     setThemeId(id);
     setEditorActive(true);
     setCanvasReady(false);
-    setShareMsg('Looking good! Share below — or add an accessory if you want.');
+    if (id === 'me-and-my-pup') {
+      setShareMsg('Add your photo · drag each circle to adjust · then Share!');
+    } else {
+      setShareMsg('Looking good! Share below — or add an accessory if you want.');
+    }
     if (cutoutApplied && id !== 'frame-only') {
       setFrameId('none');
     } else if (id === 'frame-only' && frameId === 'none') {
       setFrameId('walnut');
     }
   }, [frameId, cutoutApplied]);
+
+  const handleOwnerFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (ownerBlobUrlRef.current?.startsWith('blob:')) {
+      URL.revokeObjectURL(ownerBlobUrlRef.current);
+    }
+    const url = URL.createObjectURL(file);
+    ownerBlobUrlRef.current = url;
+    setOwnerImageUrl(url);
+    setShareMsg('Your photo added — drag the ME circle to fit your face!');
+    setSelectedSlot('owner');
+  }, []);
 
   const pickFrameStyle = useCallback((id: FrameStyleId) => {
     setFrameId(id);
@@ -169,7 +208,12 @@ export default function PhotoBoothClient({
     if (originalPhotoUrlRef.current?.startsWith('blob:')) {
       URL.revokeObjectURL(originalPhotoUrlRef.current);
     }
+    if (ownerBlobUrlRef.current?.startsWith('blob:')) {
+      URL.revokeObjectURL(ownerBlobUrlRef.current);
+    }
     originalPhotoUrlRef.current = null;
+    ownerBlobUrlRef.current = null;
+    setOwnerImageUrl(null);
     blobUrlRef.current = null;
     setPhotoUrl(null);
     setCutoutApplied(false);
@@ -234,29 +278,55 @@ export default function PhotoBoothClient({
   }, [setPhotoUrl]);
 
   const savePhoto = useCallback(async () => {
-    canvasRef.current?.clearSelection();
-    const blob = await canvasRef.current?.exportBlob();
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'freedom-paws-superbud.png';
-    link.click();
-    URL.revokeObjectURL(url);
+    const isDuo = themeId === 'me-and-my-pup';
+    if (isDuo) {
+      meMyPupRef.current?.clearSelection();
+      const blob = await meMyPupRef.current?.exportBlob();
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'freedom-paws-me-and-my-pup.png';
+      link.click();
+      URL.revokeObjectURL(url);
+    } else {
+      canvasRef.current?.clearSelection();
+      const blob = await canvasRef.current?.exportBlob();
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'freedom-paws-superbud.png';
+      link.click();
+      URL.revokeObjectURL(url);
+    }
     setShareMsg('Saved to your device!');
-  }, []);
+  }, [themeId]);
 
   const sharePhoto = useCallback(async () => {
-    canvasRef.current?.clearSelection();
-    const blob = await canvasRef.current?.exportBlob();
+    const isDuo = themeId === 'me-and-my-pup';
+    let blob: Blob | null = null;
+    if (isDuo) {
+      meMyPupRef.current?.clearSelection();
+      blob = await meMyPupRef.current?.exportBlob() ?? null;
+    } else {
+      canvasRef.current?.clearSelection();
+      blob = await canvasRef.current?.exportBlob() ?? null;
+    }
     if (!blob) return;
 
-    const file = new File([blob], 'freedom-paws-superbud.png', { type: 'image/png' });
+    const file = new File(
+      [blob],
+      isDuo ? 'freedom-paws-me-and-my-pup.png' : 'freedom-paws-superbud.png',
+      { type: 'image/png' }
+    );
     if (navigator.share && navigator.canShare?.({ files: [file] })) {
       try {
         await navigator.share({
-          title: 'SuperBud Photo Booth',
-          text: 'Look at my pet in the Freedom Paws Photo Booth! 🐾',
+          title: isDuo ? 'Me & My Pup — Freedom Paws' : 'SuperBud Photo Booth',
+          text: isDuo
+            ? 'Me and my best friend! 🐾💞'
+            : 'Look at my pet in the Freedom Paws Photo Booth! 🐾',
           files: [file],
         });
         setShareMsg('Shared!');
@@ -266,7 +336,7 @@ export default function PhotoBoothClient({
       }
     }
     await savePhoto();
-  }, [savePhoto]);
+  }, [savePhoto, themeId]);
 
   const displayError = uploadError && !petImageUrl && !loadingPhoto ? uploadError : localUploadError;
 
@@ -281,10 +351,16 @@ export default function PhotoBoothClient({
       style={editorActive ? { top: 'var(--nav-total-height)' } : undefined}
     >
       <p className="text-base font-bold text-amber-400 mb-1">
-        {editorActive ? 'Change background' : 'Step 2 — Choose a background'}
+        {editorActive && themeId === 'me-and-my-pup'
+          ? 'Me & My Pup frame'
+          : editorActive
+            ? 'Change background'
+            : 'Step 2 — Pick a style'}
       </p>
       <p className="text-[11px] text-white/45 mb-3 leading-relaxed">
-        Tap a background — your full photo looks great. Add accessories below only if you want.
+        {editorActive && themeId === 'me-and-my-pup'
+          ? 'You + your pup in gold circles — great for sharing with family.'
+          : 'Tap a background — your full photo looks great. Try 💞 Me & My Pup for a duo card.'}
       </p>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {PHOTO_BOOTH_THEMES.map((theme) => (
@@ -442,7 +518,183 @@ export default function PhotoBoothClient({
             </div>
           )}
 
-          {petImageUrl && editorActive && (
+          {petImageUrl && editorActive && themeId === 'me-and-my-pup' && (
+            <>
+              <input
+                ref={ownerInputRef}
+                type="file"
+                accept="image/*"
+                capture="user"
+                className="sr-only"
+                aria-hidden
+                onChange={handleOwnerFile}
+              />
+              <div className="mt-4 rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-4">
+                <p className="text-sm font-bold text-amber-400 mb-2">Step 1 — Add your photo</p>
+                <button
+                  type="button"
+                  onClick={() => ownerInputRef.current?.click()}
+                  className="w-full min-h-[52px] rounded-xl bg-amber-400 py-3 text-sm font-bold text-black touch-manipulation"
+                >
+                  {ownerImageUrl ? '📷 Change my photo' : '📷 Add my photo (selfie)'}
+                </button>
+                <p className="mt-2 text-[10px] text-white/45 text-center">
+                  Stays on your phone until you share — not uploaded to our server.
+                </p>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-xs font-semibold text-white/60 mb-2">Frame style</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {ME_AND_MY_PUP_VARIANTS.map((v) => (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setMeMyPupVariant(v.id)}
+                      className={`min-h-[44px] rounded-xl px-2 py-2 text-xs font-bold touch-manipulation ${
+                        meMyPupVariant === v.id
+                          ? 'bg-amber-400 text-black'
+                          : 'bg-[#0F1E38] border border-white/15 text-white'
+                      }`}
+                    >
+                      <span className="text-lg block">{v.emoji}</span>
+                      {v.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <MeAndMyPupCanvas
+                ref={meMyPupRef}
+                petImageUrl={petImageUrl}
+                ownerImageUrl={ownerImageUrl}
+                variant={meMyPupVariant}
+                onReadyChange={setCanvasReady}
+                onSlotSelectedChange={setSelectedSlot}
+                onError={setError}
+              />
+
+              {canvasReady && (
+                <>
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => meMyPupRef.current?.selectSlot('dog')}
+                      className={`flex-1 min-h-[44px] rounded-xl py-2 text-xs font-bold touch-manipulation ${
+                        selectedSlot === 'dog'
+                          ? 'bg-amber-400 text-black'
+                          : 'border border-white/20 text-white/80'
+                      }`}
+                    >
+                      🐾 MY PUP
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!ownerImageUrl) {
+                          ownerInputRef.current?.click();
+                          return;
+                        }
+                        meMyPupRef.current?.selectSlot('owner');
+                      }}
+                      className={`flex-1 min-h-[44px] rounded-xl py-2 text-xs font-bold touch-manipulation ${
+                        selectedSlot === 'owner'
+                          ? 'bg-amber-400 text-black'
+                          : 'border border-white/20 text-white/80'
+                      }`}
+                    >
+                      🙂 ME
+                    </button>
+                  </div>
+
+                  {selectedSlot && (
+                    <div className="mt-3 flex flex-col items-center gap-2">
+                      <p className="text-[10px] text-white/40">
+                        Adjust {selectedSlot === 'dog' ? 'your pup' : 'your face'} in the circle
+                      </p>
+                      <div className="grid grid-cols-3 gap-1">
+                        <span />
+                        <button
+                          type="button"
+                          onClick={() => meMyPupRef.current?.nudgeSelected(0, -0.08)}
+                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
+                        >
+                          ↑
+                        </button>
+                        <span />
+                        <button
+                          type="button"
+                          onClick={() => meMyPupRef.current?.nudgeSelected(-0.08, 0)}
+                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
+                        >
+                          ←
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => meMyPupRef.current?.nudgeSelected(0, 0.08)}
+                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
+                        >
+                          ↓
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => meMyPupRef.current?.nudgeSelected(0.08, 0)}
+                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
+                        >
+                          →
+                        </button>
+                      </div>
+                      <div className="flex w-full max-w-xs gap-2">
+                        <button
+                          type="button"
+                          onClick={() => meMyPupRef.current?.scaleSelected(0.9)}
+                          className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold"
+                        >
+                          − Zoom out
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => meMyPupRef.current?.scaleSelected(1.1)}
+                          className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold"
+                        >
+                          + Zoom in
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-5 grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      disabled={!ownerImageUrl}
+                      onClick={() => void sharePhoto()}
+                      className="rounded-2xl bg-amber-400 py-4 text-base font-bold text-black touch-manipulation disabled:opacity-40"
+                    >
+                      📤 Share
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!ownerImageUrl}
+                      onClick={() => void savePhoto()}
+                      className="rounded-2xl border border-amber-400/60 py-4 text-base font-bold text-amber-300 touch-manipulation disabled:opacity-40"
+                    >
+                      💾 Save
+                    </button>
+                  </div>
+                  {!ownerImageUrl && (
+                    <p className="mt-2 text-center text-xs text-amber-300/80">
+                      Add your photo above to enable Share &amp; Save
+                    </p>
+                  )}
+                  {shareMsg && (
+                    <p className="mt-2 text-center text-sm text-green-400">{shareMsg}</p>
+                  )}
+                </>
+              )}
+            </>
+          )}
+
+          {petImageUrl && editorActive && themeId !== 'me-and-my-pup' && (
             <>
               <PhotoBoothCanvas
                 ref={canvasRef}
