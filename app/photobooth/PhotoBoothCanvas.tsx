@@ -53,6 +53,8 @@ type Props = {
   themeId: string;
   frameId?: FrameStyleId;
   frameWidth?: number;
+  /** True after AI background removal — pet PNG has alpha; skip opaque mat/shadow on themes. */
+  cutoutApplied?: boolean;
   showWatermark?: boolean;
   onReadyChange?: (ready: boolean) => void;
   onStickersChange?: (stickers: StickerListItem[], selectedId: number | null) => void;
@@ -108,6 +110,16 @@ async function loadFirstImage(urls: string[]): Promise<HTMLImageElement> {
   throw new Error('Image not found');
 }
 
+/** Sample pixels — JPEG export destroys alpha from background-removal PNGs. */
+function canvasHasAlpha(ctx: CanvasRenderingContext2D, w: number, h: number): boolean {
+  const { data } = ctx.getImageData(0, 0, w, h);
+  const stride = Math.max(4, Math.floor((w * h) / 4096) * 4);
+  for (let i = 3; i < data.length; i += stride) {
+    if (data[i] < 252) return true;
+  }
+  return false;
+}
+
 async function loadPetImage(url: string): Promise<HTMLImageElement> {
   const img = await loadImageElement(url);
   const maxSide = Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height);
@@ -119,10 +131,14 @@ async function loadPetImage(url: string): Promise<HTMLImageElement> {
   const scratch = document.createElement('canvas');
   scratch.width = w;
   scratch.height = h;
-  const ctx = scratch.getContext('2d');
+  const ctx = scratch.getContext('2d', { willReadFrequently: true });
   if (!ctx) return img;
   ctx.drawImage(img, 0, 0, w, h);
-  return loadImageElement(scratch.toDataURL('image/jpeg', 0.88));
+  const hasAlpha = canvasHasAlpha(ctx, w, h);
+  const dataUrl = hasAlpha
+    ? scratch.toDataURL('image/png')
+    : scratch.toDataURL('image/jpeg', 0.88);
+  return loadImageElement(dataUrl);
 }
 
 function drawCheckerboard(ctx: CanvasRenderingContext2D, w: number, h: number) {
@@ -253,6 +269,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     themeId,
     frameId = 'none',
     frameWidth = 0.45,
+    cutoutApplied = false,
     showWatermark = true,
     onReadyChange,
     onStickersChange,
@@ -278,10 +295,12 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   const selectedIdRef = useRef<number | null>(null);
   const frameIdRef = useRef<FrameStyleId>(frameId);
   const frameWidthRef = useRef(frameWidth);
+  const cutoutAppliedRef = useRef(cutoutApplied);
   const [busy, setBusy] = useState(false);
 
   frameIdRef.current = frameId;
   frameWidthRef.current = frameWidth;
+  cutoutAppliedRef.current = cutoutApplied;
 
   busyRef.current = busy;
 
@@ -330,7 +349,12 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       const styleId = frameIdRef.current;
       const widthNorm = frameWidthRef.current;
 
-      if (styleId !== 'none') {
+      // Cutout PNGs must composite directly on the theme — opaque mat/shadow reads as a black box.
+      const floatCutout =
+        cutoutAppliedRef.current && !frameOnlyRef.current && !accessoriesOnlyRef.current;
+      const drawFrameBacking = styleId !== 'none' && !floatCutout;
+
+      if (drawFrameBacking) {
         frameLayout = computeFrameRects(photo, widthNorm, cw, ch);
         drawFrameShadow(ctx, photo, frameLayout.framePx, frameLayout.matPx);
         drawFrameMat(ctx, frameLayout.mat);
@@ -358,7 +382,9 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       }
     }
 
-    if (frameLayout && frameIdRef.current !== 'none') {
+    const floatCutout =
+      cutoutAppliedRef.current && !frameOnlyRef.current && !accessoriesOnlyRef.current;
+    if (frameLayout && frameIdRef.current !== 'none' && !floatCutout) {
       drawFrameBorder(ctx, frameLayout.outer, frameLayout.mat, frameIdRef.current);
     }
 
@@ -633,7 +659,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   useEffect(() => {
     if (!petImageUrl || busy) return;
     paintRef.current();
-  }, [frameId, frameWidth, petImageUrl, busy]);
+  }, [frameId, frameWidth, cutoutApplied, petImageUrl, busy]);
 
   const addSticker = useCallback(
     async (placement: StickerPlacement) => {

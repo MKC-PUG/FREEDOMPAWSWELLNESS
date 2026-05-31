@@ -138,13 +138,15 @@ export default function PhotoBoothClient({
     setThemeId(id);
     setEditorActive(true);
     setCanvasReady(false);
-    if (id === 'frame-only' && frameId === 'none') {
+    if (cutoutApplied && id !== 'frame-only') {
+      setFrameId('none');
+    } else if (id === 'frame-only' && frameId === 'none') {
       setFrameId('walnut');
     }
     if (id === 'accessories-only') {
       setCustomizeOpen(true);
     }
-  }, [frameId]);
+  }, [frameId, cutoutApplied]);
 
   const pickFrameStyle = useCallback((id: FrameStyleId) => {
     setFrameId(id);
@@ -213,6 +215,7 @@ export default function PhotoBoothClient({
       }
       setPhotoUrl(URL.createObjectURL(cutout));
       setCutoutApplied(true);
+      setFrameId('none');
       setShareMsg('Background removed — pick a background above!');
       requestAnimationFrame(() => {
         themesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -448,6 +451,7 @@ export default function PhotoBoothClient({
                 themeId={themeId}
                 frameId={frameId}
                 frameWidth={frameWidth}
+                cutoutApplied={cutoutApplied}
                 onReadyChange={setCanvasReady}
                 onStickersChange={handleStickersChange}
                 onError={setError}
@@ -456,7 +460,9 @@ export default function PhotoBoothClient({
                 <div className="mt-4 rounded-2xl border border-amber-400/25 bg-[#0F1E38]/90 p-4">
                   <p className="text-sm font-semibold text-amber-400 mb-1">Picture frame</p>
                   <p className="text-[10px] text-white/45 mb-3">
-                    Works on any theme · drag slider for thin → thick
+                    {cutoutApplied && themeId !== 'frame-only'
+                      ? 'After background removal, use Frame Only for a mat & border — themes show your pet directly on the scene.'
+                      : 'Works on any theme · drag slider for thin → thick'}
                   </p>
                   <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory">
                     {FRAME_STYLES.map((frame) => (
