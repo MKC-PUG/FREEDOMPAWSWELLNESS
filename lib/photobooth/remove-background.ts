@@ -7,19 +7,24 @@ export type BgRemovalProgress = {
 
 const PACKAGE_VERSION = '1.7.0';
 
-/** Same-origin assets (built by scripts/fetch-imgly-bg-assets.mjs). */
-const LOCAL_PUBLIC_PATH = '/imgly-bg-removal/';
-
-/** IMG.LY CDN fallback if local assets missing (e.g. dev without build script). */
+/** IMG.LY CDN — always a valid absolute base URL for the library. */
 const CDN_PUBLIC_PATH = `https://staticimgly.com/@imgly/background-removal-data/${PACKAGE_VERSION}/dist/`;
+
+function localPublicPath(): string {
+  if (typeof window === 'undefined') return CDN_PUBLIC_PATH;
+  // imgly resolves assets via `new URL(relative, publicPath)` — must be absolute, not "/path/"
+  return `${window.location.origin}/imgly-bg-removal/`;
+}
 
 async function resolvePublicPath(): Promise<string> {
   if (typeof window === 'undefined') return CDN_PUBLIC_PATH;
+
+  const local = localPublicPath();
   try {
-    const res = await fetch(`${LOCAL_PUBLIC_PATH}resources.json`, { method: 'HEAD' });
-    if (res.ok) return LOCAL_PUBLIC_PATH;
+    const res = await fetch(`${local}resources.json`, { method: 'GET', cache: 'no-store' });
+    if (res.ok) return local;
   } catch {
-    /* use CDN */
+    /* fall through to CDN */
   }
   return CDN_PUBLIC_PATH;
 }
