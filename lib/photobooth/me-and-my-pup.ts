@@ -30,7 +30,7 @@ export const ME_AND_MY_PUP_VARIANTS: { id: MeAndMyPupVariant; name: string; emoj
   { id: 'classic', name: 'Classic Navy', emoji: '💙' },
   { id: 'happy-birthday', name: 'Happy Birthday!!', emoji: '🎉' },
   { id: 'love-my-dog', name: 'I Love My Dog', emoji: '💕' },
-  { id: 'lives-whole', name: 'Lives Whole', emoji: '🐾' },
+  { id: 'lives-whole', name: 'Whole Lives', emoji: '🐾' },
   { id: 'love-this-app', name: 'I Love This App!', emoji: '📱' },
 ];
 
@@ -41,6 +41,7 @@ type VariantCopy = {
   subtitleColor?: string;
   italicBold?: boolean;
   showLogo?: boolean;
+  largeHeadline?: boolean;
 };
 
 const VARIANT_COPY: Record<MeAndMyPupVariant, VariantCopy> = {
@@ -50,14 +51,16 @@ const VARIANT_COPY: Record<MeAndMyPupVariant, VariantCopy> = {
   },
   'happy-birthday': {
     lines: ['Happy Birthday!!'],
-    subtitle: '🎈 Party time · Freedom Paws',
+    subtitle: 'Another Great Year With My Best Friend',
     titleColor: '#FFE082',
+    largeHeadline: true,
   },
   'love-my-dog': {
     lines: ['I Love My Dog'],
     subtitle: 'Forever in my heart',
     titleColor: '#FFFFFF',
-    subtitleColor: 'rgba(255,255,255,0.85)',
+    subtitleColor: 'rgba(255,255,255,0.92)',
+    largeHeadline: true,
   },
   'lives-whole': {
     lines: ['Dogs are not our whole lives,', 'but they make our lives whole'],
@@ -73,21 +76,50 @@ const VARIANT_COPY: Record<MeAndMyPupVariant, VariantCopy> = {
   },
 };
 
-function headerBand(variant: MeAndMyPupVariant): number {
-  if (variant === 'lives-whole') return 0.48;
-  return 0.24;
+type LayoutTune = {
+  headerStartY: number;
+  slotCyRatio: number;
+  dogRadius: number;
+  ownerRadius: number;
+};
+
+function layoutTune(variant: MeAndMyPupVariant): LayoutTune {
+  switch (variant) {
+    case 'lives-whole':
+      return {
+        headerStartY: 0.1,
+        slotCyRatio: 0.57,
+        dogRadius: 0.24,
+        ownerRadius: 0.185,
+      };
+    case 'happy-birthday':
+    case 'love-my-dog':
+      return {
+        headerStartY: 0.05,
+        slotCyRatio: 0.58,
+        dogRadius: 0.255,
+        ownerRadius: 0.198,
+      };
+    default:
+      return {
+        headerStartY: 0.055,
+        slotCyRatio: 0.56,
+        dogRadius: 0.265,
+        ownerRadius: 0.205,
+      };
+  }
 }
 
 export const DEFAULT_SLOT_TRANSFORM: SlotTransform = { panX: 0, panY: 0, scale: 1 };
 
 export function getSlotLayout(cw: number, ch: number, variant: MeAndMyPupVariant = 'classic'): SlotLayout {
   const minDim = Math.min(cw, ch);
-  const headerBottom = ch * headerBand(variant);
-  const slotCy = headerBottom + (ch - headerBottom) * 0.44;
+  const tune = layoutTune(variant);
+  const slotCy = ch * tune.slotCyRatio;
 
   return {
-    dog: { cx: cw * 0.355, cy: slotCy, radius: minDim * 0.265 },
-    owner: { cx: cw * 0.715, cy: slotCy, radius: minDim * 0.205 },
+    dog: { cx: cw * 0.355, cy: slotCy, radius: minDim * tune.dogRadius },
+    owner: { cx: cw * 0.715, cy: slotCy, radius: minDim * tune.ownerRadius },
   };
 }
 
@@ -582,16 +614,24 @@ function drawHeader(
   logoImg: HTMLImageElement | null
 ) {
   const copy = VARIANT_COPY[variant];
+  const tune = layoutTune(variant);
   const isLivesWhole = variant === 'lives-whole';
-  const maxTextWidth = isLivesWhole ? w * 0.75 : w * 0.92;
-  const startSize = isLivesWhole ? h * 0.125 : Math.max(14, w * 0.042);
+  const isLargeHeadline = copy.largeHeadline === true;
+  const maxTextWidth = isLivesWhole ? w * 0.78 : w * 0.92;
+  const startSize = isLivesWhole
+    ? h * 0.108
+    : isLargeHeadline
+      ? Math.max(20, w * 0.058)
+      : Math.max(14, w * 0.042);
   const titleSize = isLivesWhole
     ? fitTitleSize(ctx, copy.lines, maxTextWidth, startSize, true)
     : copy.lines.length > 1
       ? Math.max(11, w * 0.032)
-      : Math.max(14, w * 0.042);
-  const lineHeight = titleSize * (isLivesWhole ? 1.22 : 1.15);
-  const startY = isLivesWhole ? h * 0.04 : h * 0.055;
+      : isLargeHeadline
+        ? Math.max(20, w * 0.058)
+        : Math.max(14, w * 0.042);
+  const lineHeight = titleSize * (isLivesWhole ? 1.2 : 1.12);
+  const startY = h * tune.headerStartY;
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
@@ -607,10 +647,12 @@ function drawHeader(
   });
 
   if (copy.subtitle) {
-    const subSize = Math.max(10, w * 0.028);
+    const subSize = isLargeHeadline
+      ? Math.max(13, w * 0.036)
+      : Math.max(10, w * 0.028);
     ctx.font = `600 ${subSize}px system-ui, sans-serif`;
     ctx.fillStyle = copy.subtitleColor ?? 'rgba(255,255,255,0.65)';
-    let subY = startY + copy.lines.length * lineHeight + 6;
+    let subY = startY + copy.lines.length * lineHeight + (isLargeHeadline ? 8 : 6);
 
     if (copy.showLogo && logoImg) {
       const logoSize = Math.max(28, w * 0.09);
