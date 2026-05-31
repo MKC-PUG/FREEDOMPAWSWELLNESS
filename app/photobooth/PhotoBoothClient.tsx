@@ -7,7 +7,7 @@ import PhotoUploadZone from '@/app/components/PhotoUploadZone';
 import { clearPhotoFromDb } from '@/lib/photo-db';
 import { clearPhotoPreview } from '@/lib/photo-storage';
 import {
-  EXTRA_STICKERS,
+  ACCESSORY_STICKERS,
   PHOTO_BOOTH_THEMES,
 } from '@/lib/photobooth/themes';
 import {
@@ -56,7 +56,6 @@ export default function PhotoBoothClient({
   const [canvasReady, setCanvasReady] = useState(false);
   const [error, setError] = useState('');
   const [localUploadError, setLocalUploadError] = useState('');
-  const [customizeOpen, setCustomizeOpen] = useState(false);
   const [shareMsg, setShareMsg] = useState('');
   const [canvasStickers, setCanvasStickers] = useState<StickerListItem[]>([]);
   const [selectedStickerId, setSelectedStickerId] = useState<number | null>(null);
@@ -94,7 +93,6 @@ export default function PhotoBoothClient({
     setPetImageUrl(url);
     setEditorActive(false);
     setCanvasReady(false);
-    setCustomizeOpen(false);
   }, []);
 
   const loadUploadById = useCallback(
@@ -138,13 +136,11 @@ export default function PhotoBoothClient({
     setThemeId(id);
     setEditorActive(true);
     setCanvasReady(false);
+    setShareMsg('Looking good! Share below — or add an accessory if you want.');
     if (cutoutApplied && id !== 'frame-only') {
       setFrameId('none');
     } else if (id === 'frame-only' && frameId === 'none') {
       setFrameId('walnut');
-    }
-    if (id === 'accessories-only') {
-      setCustomizeOpen(true);
     }
   }, [frameId, cutoutApplied]);
 
@@ -157,12 +153,9 @@ export default function PhotoBoothClient({
     }
   }, [editorActive]);
 
-  const startFrameOnly = useCallback(() => {
-    setThemeId('frame-only');
-    setEditorActive(true);
-    setCanvasReady(false);
-    if (frameId === 'none') setFrameId('walnut');
-  }, [frameId]);
+  const addAccessory = useCallback((sticker: (typeof ACCESSORY_STICKERS)[number]) => {
+    void canvasRef.current?.addSticker(sticker);
+  }, []);
 
   const clearPhoto = useCallback(async () => {
     await fetch('/api/clear-upload', { method: 'POST' }).catch(() => {});
@@ -224,7 +217,7 @@ export default function PhotoBoothClient({
       const msg =
         e instanceof Error ? e.message : 'Background removal failed';
       setBgError(
-        `${msg}. Stay on Wi‑Fi, wait for the download to finish, then try again — or tap a theme to continue without cutout.`
+        `${msg}. Pick a background above with your original photo — that works great without cutout.`
       );
     } finally {
       setBgRemoving(false);
@@ -290,7 +283,7 @@ export default function PhotoBoothClient({
         {editorActive ? 'Change background' : 'Step 2 — Choose a background'}
       </p>
       <p className="text-[11px] text-white/45 mb-3 leading-relaxed">
-        Tap any theme to dress up your pet. Scroll here anytime to switch backgrounds.
+        Tap a background — your full photo looks great. Add accessories below only if you want.
       </p>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {PHOTO_BOOTH_THEMES.map((theme) => (
@@ -324,7 +317,7 @@ export default function PhotoBoothClient({
 
         <h1 className="text-3xl font-bold text-center">SuperBud Photo Booth</h1>
         <p className="mt-2 text-center text-sm text-white/60">
-          Upload · add a frame or theme · dress up your pet
+          Upload · pick a background · share in seconds
         </p>
 
         {displayError && (
@@ -344,7 +337,7 @@ export default function PhotoBoothClient({
             <p className="mb-3 text-center text-xs text-white/50 leading-relaxed">
               Tap <strong className="text-white">Choose Photo</strong> below — upload starts automatically.
               <br />
-              After upload, choose a <strong className="text-amber-300">background</strong> at the top.
+              Then pick a <strong className="text-amber-300">background</strong> — no cutout needed.
             </p>
             <PhotoUploadZone
               onSelect={() => {}}
@@ -382,7 +375,7 @@ export default function PhotoBoothClient({
               <div className="mt-4 space-y-2">
                 {bgRemoving && (
                   <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4 text-center">
-                    <p className="text-base font-bold text-amber-400">Removing background…</p>
+                    <p className="text-base font-bold text-amber-400">Magic cutout working…</p>
                     <p className="mt-2 text-sm text-white/70">{bgProgress || 'Please wait'}</p>
                     <p className="mt-2 text-xs text-white/45">First time downloads ~80MB on Wi‑Fi (30–60 sec)</p>
                   </div>
@@ -393,15 +386,24 @@ export default function PhotoBoothClient({
                   </div>
                 )}
                 {!cutoutApplied ? (
-                  <button
-                    type="button"
-                    disabled={bgRemoving}
-                    onClick={() => void handleRemoveBackground()}
-                    className="w-full min-h-[52px] rounded-xl bg-[#1F2A44] border-2 border-amber-400/50 py-3 text-sm font-bold text-amber-300 disabled:opacity-50 touch-manipulation relative z-20"
-                    style={{ WebkitTapHighlightColor: 'transparent' }}
-                  >
-                    {bgRemoving ? `✨ Working… ${bgProgress}` : '✨ Remove background (beta)'}
-                  </button>
+                  <>
+                    <p className="text-center text-[11px] text-white/50 leading-relaxed px-1">
+                      <strong className="text-amber-300/90">Tip:</strong> Most people skip cutout and pick a
+                      background — your full photo still looks amazing.
+                    </p>
+                    <button
+                      type="button"
+                      disabled={bgRemoving}
+                      onClick={() => void handleRemoveBackground()}
+                      className="w-full min-h-[48px] rounded-xl border border-white/20 bg-[#1F2A44]/80 py-2.5 text-sm font-semibold text-white/75 disabled:opacity-50 touch-manipulation"
+                      style={{ WebkitTapHighlightColor: 'transparent' }}
+                    >
+                      {bgRemoving ? `✨ Cutout… ${bgProgress}` : '✨ Optional: try magic cutout (beta)'}
+                    </button>
+                    <p className="text-center text-[10px] text-white/40 leading-relaxed px-2">
+                      Best with one pet on a plain background. Busy photos? Pick a theme above instead.
+                    </p>
+                  </>
                 ) : (
                   <button
                     type="button"
@@ -411,10 +413,6 @@ export default function PhotoBoothClient({
                     ↩ Restore original photo
                   </button>
                 )}
-                <p className="text-center text-[11px] text-white/45 leading-relaxed px-2">
-                  Higher quality cutout (~80MB first download on Wi‑Fi). If a leg looks cut off, tap{' '}
-                  <strong className="text-white/70">Restore original</strong> and use a theme without cutout.
-                </p>
               </div>
             )}
           </>
@@ -438,7 +436,7 @@ export default function PhotoBoothClient({
                 />
               </div>
               <p className="border-t border-white/10 py-3 text-center text-xs text-amber-300/90">
-                ↑ Preview · pick a <strong>background</strong> at the top
+                ↑ Your pet · pick a <strong>background</strong> above · share anytime
               </p>
             </div>
           )}
@@ -456,9 +454,66 @@ export default function PhotoBoothClient({
                 onStickersChange={handleStickersChange}
                 onError={setError}
               />
+              {canvasReady && editorActive && (
+                <>
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => void sharePhoto()}
+                      className="rounded-2xl bg-amber-400 py-4 text-base font-bold text-black touch-manipulation"
+                    >
+                      📤 Share
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void savePhoto()}
+                      className="rounded-2xl border border-amber-400/60 py-4 text-base font-bold text-amber-300 touch-manipulation"
+                    >
+                      💾 Save
+                    </button>
+                  </div>
+                  {shareMsg && (
+                    <p className="mt-2 text-center text-sm text-green-400">{shareMsg}</p>
+                  )}
+
+                  <div className="mt-4 rounded-2xl border border-white/15 bg-[#0F1E38]/90 p-4">
+                    <p className="text-sm font-bold text-amber-400 mb-1">Add accessory (optional)</p>
+                    <p className="text-[10px] text-white/45 mb-3 leading-relaxed">
+                      Tap to add · drag on photo to move · gold corners to resize · double-tap to remove
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                      {ACCESSORY_STICKERS.map((sticker) => (
+                        <button
+                          key={sticker.src}
+                          type="button"
+                          onClick={() => addAccessory(sticker)}
+                          className="min-h-[44px] rounded-xl bg-black/30 border border-white/15 py-2.5 px-2 text-xs font-semibold leading-tight touch-manipulation hover:border-amber-400/50 active:bg-amber-400/10"
+                        >
+                          + {sticker.label}
+                        </button>
+                      ))}
+                    </div>
+                    {canvasStickers.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => canvasRef.current?.removeSelected()}
+                        className="mt-3 w-full min-h-[44px] rounded-xl border border-red-500/40 py-2.5 text-sm text-red-300 touch-manipulation"
+                      >
+                        Remove selected accessory
+                      </button>
+                    )}
+                  </div>
+
+                  {themeId === 'accessories-only' && (
+                    <p className="mt-2 text-center text-xs text-white/45">
+                      Checkerboard = no background
+                    </p>
+                  )}
+                </>
+              )}
               {canvasReady && (
-                <div className="mt-4 rounded-2xl border border-amber-400/25 bg-[#0F1E38]/90 p-4">
-                  <p className="text-sm font-semibold text-amber-400 mb-1">Picture frame</p>
+                <div className="mt-4 rounded-2xl border border-white/10 bg-[#0F1E38]/60 p-4">
+                  <p className="text-sm font-semibold text-white/70 mb-1">Picture frame (optional)</p>
                   <p className="text-[10px] text-white/45 mb-3">
                     {cutoutApplied && themeId !== 'frame-only'
                       ? 'After background removal, use Frame Only for a mat & border — themes show your pet directly on the scene.'
@@ -513,7 +568,8 @@ export default function PhotoBoothClient({
               {canvasReady && canvasStickers.length > 0 && (
                 <div className="mt-3">
                   <p className="mb-2 text-center text-[10px] text-white/45">
-                    Tap a name to select · tap again or Done to hide the gold box
+                    Tap a name to select · <strong className="text-amber-300/90">double-tap</strong>{' '}
+                    the accessory on the photo to remove it
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {canvasStickers.map((sticker) => (
@@ -605,8 +661,9 @@ export default function PhotoBoothClient({
                       + Bigger
                     </button>
                   </div>
-                  <p className="text-[10px] text-white/40 text-center">
-                    Or pinch with two fingers on the selected accessory
+                  <p className="text-[10px] text-white/40 text-center leading-relaxed">
+                    Drag the <strong className="text-amber-300/90">gold corner dots</strong> to push
+                    or pull bigger/smaller · or pinch with two fingers
                   </p>
                   <div className="flex w-full max-w-xs gap-2">
                     <button
@@ -629,83 +686,6 @@ export default function PhotoBoothClient({
                     </button>
                   </div>
                 </div>
-              )}
-              {canvasReady && editorActive && (
-                <>
-                  {themeId === 'frame-only' && (
-                    <p className="mt-3 text-center text-xs text-white/45">
-                      Plain studio backdrop · pick a frame above · no stickers required
-                    </p>
-                  )}
-                  {themeId === 'accessories-only' && (
-                    <p className="mt-3 text-center text-xs text-white/45">
-                      Checkerboard = no background. Tap <strong className="text-amber-300">Customize</strong> below to add hats &amp; glasses.
-                    </p>
-                  )}
-                  {themeId !== 'accessories-only' && themeId !== 'frame-only' && canvasStickers.length > 0 && (
-                    <p className="mt-3 text-center text-xs text-white/45">
-                      Tap a sticker name above, then drag or use the arrow buttons.
-                    </p>
-                  )}
-
-                  <div className="mt-5 grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      disabled={!canvasReady}
-                      onClick={() => void sharePhoto()}
-                      className="rounded-2xl bg-amber-400 py-4 font-bold text-black disabled:opacity-40"
-                    >
-                      📤 Share
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!canvasReady}
-                      onClick={() => void savePhoto()}
-                      className="rounded-2xl border border-amber-400/60 py-4 font-bold text-amber-300 disabled:opacity-40"
-                    >
-                      💾 Save
-                    </button>
-                  </div>
-
-                  {shareMsg && (
-                    <p className="mt-3 text-center text-sm text-green-400">{shareMsg}</p>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={() => setCustomizeOpen((o) => !o)}
-                    className="mt-4 w-full text-sm text-white/50 underline"
-                  >
-                    {customizeOpen ? 'Hide customize' : 'Customize — add or remove stickers'}
-                  </button>
-
-                  {customizeOpen && (
-                    <div className="mt-4 rounded-2xl border border-white/10 bg-[#0F1E38]/80 p-4">
-                      <p className="text-xs text-white/50 mb-3">
-                        Tap a sticker to add · touch &amp; drag on photo to move · gold box = selected
-                      </p>
-                      <div className="grid grid-cols-4 gap-2">
-                        {EXTRA_STICKERS.map((sticker) => (
-                          <button
-                            key={sticker.src}
-                            type="button"
-                            onClick={() => void canvasRef.current?.addSticker(sticker)}
-                            className="rounded-xl bg-black/30 border border-white/10 py-2 px-1 text-[10px] leading-tight hover:border-amber-400/40"
-                          >
-                            {sticker.label}
-                          </button>
-                        ))}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => canvasRef.current?.removeSelected()}
-                        className="mt-3 w-full rounded-xl border border-red-500/40 py-2 text-sm text-red-300"
-                      >
-                        Remove selected sticker
-                      </button>
-                    </div>
-                  )}
-                </>
               )}
             </>
           )}

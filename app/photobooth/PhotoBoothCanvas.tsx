@@ -33,6 +33,9 @@ const PET_MAX_DIM = 640;
 /** ~6° per tap */
 const TILT_STEP_RAD = Math.PI / 30;
 const TILT_MAX_RAD = Math.PI / 2;
+/** Double-tap accessory on canvas to remove it */
+const DOUBLE_TAP_MS = 400;
+const DOUBLE_TAP_MAX_DIST_PX = 40;
 
 export type StickerListItem = { id: number; label: string };
 
@@ -186,7 +189,7 @@ function stickerSize(layer: StickerLayer, cw: number) {
   return { targetW, targetH };
 }
 
-function stickerBounds(layer: StickerLayer, cw: number, ch: number) {
+function getStickerCorners(layer: StickerLayer, cw: number, ch: number) {
   const { targetW, targetH } = stickerSize(layer, cw);
   const cx = cw * layer.x;
   const cy = ch * layer.y;
@@ -194,7 +197,7 @@ function stickerBounds(layer: StickerLayer, cw: number, ch: number) {
   const hh = targetH / 2;
   const cos = Math.cos(layer.rotation);
   const sin = Math.sin(layer.rotation);
-  const corners = [
+  return [
     [-hw, -hh],
     [hw, -hh],
     [hw, hh],
@@ -203,6 +206,10 @@ function stickerBounds(layer: StickerLayer, cw: number, ch: number) {
     x: cx + x * cos - y * sin,
     y: cy + x * sin + y * cos,
   }));
+}
+
+function stickerBounds(layer: StickerLayer, cw: number, ch: number) {
+  const corners = getStickerCorners(layer, cw, ch);
   const xs = corners.map((c) => c.x);
   const ys = corners.map((c) => c.y);
   const left = Math.min(...xs);
@@ -214,6 +221,38 @@ function stickerBounds(layer: StickerLayer, cw: number, ch: number) {
     height: Math.max(...ys) - top,
   };
 }
+
+/** ~44px on screen — comfortable for large fingers on iPhone. */
+function handleHitRadius(canvas: HTMLCanvasElement) {
+  const rect = canvas.getBoundingClientRect();
+  const minScreenPx = 44;
+  return minScreenPx * (canvas.width / Math.max(rect.width, 1));
+}
+
+function drawCornerHandles(
+  ctx: CanvasRenderingContext2D,
+  corners: { x: number; y: number }[],
+  cw: number
+) {
+  const visualR = Math.max(10, cw * 0.024);
+  for (const c of corners) {
+    ctx.fillStyle = '#F5C242';
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = Math.max(2, cw * 0.005);
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, visualR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#0A1625';
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, visualR * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+type InteractionMode =
+  | { kind: 'move'; index: number; grabDx: number; grabDy: number }
+  | { kind: 'resize'; index: number; initialDist: number; initialScale: number };
 
 function drawCenteredWidth(
   ctx: CanvasRenderingContext2D,
@@ -289,7 +328,10 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   const stickerIdRef = useRef(0);
   const applyGenRef = useRef(0);
   const dimsRef = useRef({ width: 360, height: 270 });
-  const dragRef = useRef<{ index: number; grabDx: number; grabDy: number } | null>(null);
+  const interactionRef = useRef<InteractionMode | null>(null);
+  const lastTapRef = useRef<{ time: number; stickerIndex: number; x: number; y: number } | null>(
+    null
+  );
   const pinchRef = useRef<{ initialDistance: number; initialScale: number } | null>(null);
   const busyRef = useRef(false);
   const selectedIdRef = useRef<number | null>(null);
@@ -379,6 +421,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
         ctx.setLineDash([6, 4]);
         ctx.strokeRect(b.left - 2, b.top - 2, b.width + 4, b.height + 4);
         ctx.setLineDash([]);
+        drawCornerHandles(ctx, getStickerCorners(layer, cw, ch), cw);
       }
     }
 
@@ -428,21 +471,76 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     return null;
   }, []);
 
-  const beginDrag = useCallback(
+  const removeStickerAt = useCallback(
+    (index: number) => {
+      if (index < 0 || index >= stickersRef.current.length) return;
+      stickersRef.current.splice(index, 1);
+      lastTapRef.current = null;
+      interactionRef.current = null;
+      setSelected(null);
+      paintRef.current();
+      notifyStickers();
+    },
+    [setSelected, notifyStickers]
+  );
+
+  const beginInteraction = useCallback(
     (clientX: number, clientY: number): boolean => {
       const canvas = canvasRef.current;
       if (!canvas || busyRef.current) return false;
       const pt = canvasPoint(canvas, clientX, clientY);
+      const { width: cw, height: ch } = dimsRef.current;
+
+      const selectedId = selectedIdRef.current;
+      if (selectedId !== null) {
+        const selIndex = stickersRef.current.findIndex((s) => s.id === selectedId);
+        if (selIndex >= 0) {
+          const layer = stickersRef.current[selIndex];
+          const corners = getStickerCorners(layer, cw, ch);
+          const hitR = handleHitRadius(canvas);
+          for (const c of corners) {
+            if (Math.hypot(pt.x - c.x, pt.y - c.y) <= hitR) {
+              lastTapRef.current = null;
+              const cx = cw * layer.x;
+              const cy = ch * layer.y;
+              interactionRef.current = {
+                kind: 'resize',
+                index: selIndex,
+                initialDist: Math.max(24, Math.hypot(pt.x - cx, pt.y - cy)),
+                initialScale: layer.scale,
+              };
+              paintRef.current();
+              return true;
+            }
+          }
+        }
+      }
+
       const index = hitTestSticker(pt.x, pt.y);
       if (index === null) {
+        lastTapRef.current = null;
         setSelected(null);
         paintRef.current();
         return false;
       }
+
+      const now = Date.now();
+      const last = lastTapRef.current;
+      if (
+        last &&
+        last.stickerIndex === index &&
+        now - last.time < DOUBLE_TAP_MS &&
+        Math.hypot(clientX - last.x, clientY - last.y) < DOUBLE_TAP_MAX_DIST_PX
+      ) {
+        removeStickerAt(index);
+        return true;
+      }
+      lastTapRef.current = { time: now, stickerIndex: index, x: clientX, y: clientY };
+
       const layer = stickersRef.current[index];
-      const { width: cw, height: ch } = dimsRef.current;
       setSelected(layer.id);
-      dragRef.current = {
+      interactionRef.current = {
+        kind: 'move',
         index,
         grabDx: pt.x - cw * layer.x,
         grabDy: pt.y - ch * layer.y,
@@ -450,26 +548,34 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       paintRef.current();
       return true;
     },
-    [hitTestSticker, setSelected]
+    [hitTestSticker, setSelected, removeStickerAt]
   );
 
-  const moveDrag = useCallback(
-    (clientX: number, clientY: number) => {
-      if (!dragRef.current) return;
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const pt = canvasPoint(canvas, clientX, clientY);
-      const { width: cw, height: ch } = dimsRef.current;
-      const layer = stickersRef.current[dragRef.current.index];
-      layer.x = Math.min(1.05, Math.max(-0.05, (pt.x - dragRef.current.grabDx) / cw));
-      layer.y = Math.min(1.05, Math.max(-0.05, (pt.y - dragRef.current.grabDy) / ch));
-      paintRef.current();
-    },
-    []
-  );
+  const moveInteraction = useCallback((clientX: number, clientY: number) => {
+    const mode = interactionRef.current;
+    if (!mode) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const pt = canvasPoint(canvas, clientX, clientY);
+    const { width: cw, height: ch } = dimsRef.current;
+    const layer = stickersRef.current[mode.index];
+    if (!layer) return;
 
-  const endDrag = useCallback(() => {
-    dragRef.current = null;
+    if (mode.kind === 'resize') {
+      const cx = cw * layer.x;
+      const cy = ch * layer.y;
+      const dist = Math.hypot(pt.x - cx, pt.y - cy);
+      const ratio = dist / mode.initialDist;
+      layer.scale = Math.min(0.95, Math.max(0.06, mode.initialScale * ratio));
+    } else {
+      layer.x = Math.min(1.05, Math.max(-0.05, (pt.x - mode.grabDx) / cw));
+      layer.y = Math.min(1.05, Math.max(-0.05, (pt.y - mode.grabDy) / ch));
+    }
+    paintRef.current();
+  }, []);
+
+  const endInteraction = useCallback(() => {
+    interactionRef.current = null;
   }, []);
 
   useEffect(() => {
@@ -485,7 +591,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
             initialDistance: touchDistance(e.touches[0], e.touches[1]),
             initialScale: layer.scale,
           };
-          dragRef.current = null;
+          interactionRef.current = null;
           e.preventDefault();
           return;
         }
@@ -493,7 +599,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       pinchRef.current = null;
       const touch = e.touches[0];
       if (!touch) return;
-      if (beginDrag(touch.clientX, touch.clientY)) {
+      if (beginInteraction(touch.clientX, touch.clientY)) {
         e.preventDefault();
       }
     };
@@ -510,16 +616,16 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
         }
         return;
       }
-      if (!dragRef.current) return;
+      if (!interactionRef.current) return;
       const touch = e.touches[0];
       if (!touch) return;
-      moveDrag(touch.clientX, touch.clientY);
+      moveInteraction(touch.clientX, touch.clientY);
       e.preventDefault();
     };
 
     const onTouchEnd = (e: TouchEvent) => {
       if (e.touches.length < 2) pinchRef.current = null;
-      if (e.touches.length === 0) endDrag();
+      if (e.touches.length === 0) endInteraction();
     };
 
     const blockContextMenu = (e: Event) => e.preventDefault();
@@ -542,34 +648,37 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       wrap.removeEventListener('contextmenu', blockContextMenu);
       wrap.removeEventListener('selectstart', blockSelect);
     };
-  }, [beginDrag, moveDrag, endDrag]);
+  }, [beginInteraction, moveInteraction, endInteraction]);
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
       if (e.pointerType === 'touch') return;
-      if (beginDrag(e.clientX, e.clientY)) {
+      if (beginInteraction(e.clientX, e.clientY)) {
         canvasRef.current?.setPointerCapture(e.pointerId);
         e.preventDefault();
       }
     },
-    [beginDrag]
+    [beginInteraction]
   );
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
       if (e.pointerType === 'touch') return;
-      if (!dragRef.current) return;
-      moveDrag(e.clientX, e.clientY);
+      if (!interactionRef.current) return;
+      moveInteraction(e.clientX, e.clientY);
       e.preventDefault();
     },
-    [moveDrag]
+    [moveInteraction]
   );
 
-  const onPointerUp = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (e.pointerType === 'touch') return;
-    endDrag();
-    canvasRef.current?.releasePointerCapture(e.pointerId);
-  }, [endDrag]);
+  const onPointerUp = useCallback(
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
+      if (e.pointerType === 'touch') return;
+      endInteraction();
+      canvasRef.current?.releasePointerCapture(e.pointerId);
+    },
+    [endInteraction]
+  );
 
   const loadCachedPet = useCallback(async (petUrl: string) => {
     if (petCacheRef.current?.url === petUrl) {
@@ -683,16 +792,26 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     if (selectedId !== null) {
       const idx = stickersRef.current.findIndex((s) => s.id === selectedId);
       if (idx >= 0) {
-        stickersRef.current.splice(idx, 1);
-        setSelected(null);
-        paintRef.current();
+        removeStickerAt(idx);
         return;
       }
     }
-    stickersRef.current.pop();
-    setSelected(null);
-    paintRef.current();
-  }, [setSelected]);
+    removeStickerAt(stickersRef.current.length - 1);
+  }, [removeStickerAt]);
+
+  const onCanvasDoubleClick = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      const canvas = canvasRef.current;
+      if (!canvas || busyRef.current) return;
+      const pt = canvasPoint(canvas, e.clientX, e.clientY);
+      const index = hitTestSticker(pt.x, pt.y);
+      if (index !== null) {
+        removeStickerAt(index);
+        e.preventDefault();
+      }
+    },
+    [hitTestSticker, removeStickerAt]
+  );
 
   const nudgeSelected = useCallback((dx: number, dy: number) => {
     const selectedId = selectedIdRef.current;
@@ -792,13 +911,14 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
           Applying theme…
         </div>
       )}
-      <p className="mb-2 text-center text-[11px] text-amber-300/80">
-        Select a sticker · move with arrows · tilt ↺ ↻
+      <p className="mb-2 text-center text-[11px] text-amber-300/80 leading-relaxed">
+        Drag to move · gold corners to resize · double-tap accessory to remove
       </p>
       <canvas
         ref={canvasRef}
         className="w-full touch-none rounded-2xl border border-white/15 shadow-xl select-none"
         style={{ WebkitTouchCallout: 'none', WebkitUserSelect: 'none' }}
+        onDoubleClick={onCanvasDoubleClick}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
