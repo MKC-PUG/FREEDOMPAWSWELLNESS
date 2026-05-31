@@ -13,10 +13,12 @@ import {
   drawMeAndMyPupFrame,
   getSlotLayout,
   hitTestSlot,
+  ME_AND_MY_PUP_LOGO_URL,
   type MeAndMyPupVariant,
   type SlotId,
   type SlotTransform,
   variantBackgroundUrls,
+  variantUsesLogo,
 } from '@/lib/photobooth/me-and-my-pup';
 
 const PAN_MAX = 1.2;
@@ -94,6 +96,7 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
   const dogRef = useRef<HTMLImageElement | null>(null);
   const ownerRef = useRef<HTMLImageElement | null>(null);
   const bgRef = useRef<HTMLImageElement | null>(null);
+  const logoRef = useRef<HTMLImageElement | null>(null);
   const dogTransformRef = useRef<SlotTransform>({ ...DEFAULT_SLOT_TRANSFORM });
   const ownerTransformRef = useRef<SlotTransform>({ ...DEFAULT_SLOT_TRANSFORM });
   const selectedSlotRef = useRef<SlotId | null>('dog');
@@ -134,6 +137,7 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
       ch,
       variant: variantRef.current,
       photoBg: bgRef.current,
+      logoImg: logoRef.current,
       dogImg: dogRef.current,
       ownerImg: ownerRef.current,
       dogTransform: dogTransformRef.current,
@@ -155,6 +159,16 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
       if (gen !== loadGenRef.current) return;
       dogRef.current = dog;
       ownerRef.current = ownerImageUrl ? await loadImage(ownerImageUrl) : null;
+      if (gen !== loadGenRef.current) return;
+
+      logoRef.current = null;
+      if (variantUsesLogo(variantRef.current)) {
+        try {
+          logoRef.current = await loadImage(ME_AND_MY_PUP_LOGO_URL);
+        } catch {
+          /* logo optional */
+        }
+      }
       if (gen !== loadGenRef.current) return;
 
       bgRef.current = null;
@@ -200,6 +214,15 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
           /* try next */
         }
       }
+      if (variantUsesLogo(variant)) {
+        try {
+          logoRef.current = await loadImage(ME_AND_MY_PUP_LOGO_URL);
+        } catch {
+          logoRef.current = null;
+        }
+      } else {
+        logoRef.current = null;
+      }
       if (!cancelled) paintRef.current();
     };
     void reloadBg();
@@ -227,14 +250,14 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
       if (!canvas || busy) return false;
       const pt = canvasPoint(canvas, clientX, clientY);
       const { width: cw, height: ch } = dimsRef.current;
-      const slot = hitTestSlot(pt.x, pt.y, cw, ch);
+      const slot = hitTestSlot(pt.x, pt.y, cw, ch, variantRef.current);
       if (!slot) {
         setSelected(null);
         paintRef.current();
         return false;
       }
       setSelected(slot);
-      const layout = getSlotLayout(cw, ch)[slot];
+      const layout = getSlotLayout(cw, ch, variantRef.current)[slot];
       const t = getTransform(slot);
       const imgCx = layout.cx + t.panX * layout.radius;
       const imgCy = layout.cy + t.panY * layout.radius;
@@ -257,7 +280,7 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
     if (!canvas) return;
     const pt = canvasPoint(canvas, clientX, clientY);
     const { width: cw, height: ch } = dimsRef.current;
-    const layout = getSlotLayout(cw, ch)[mode.slot];
+    const layout = getSlotLayout(cw, ch, variantRef.current)[mode.slot];
     const t = getTransform(mode.slot);
     t.panX = Math.min(
       PAN_MAX,
