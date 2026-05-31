@@ -666,22 +666,30 @@ export default function PhotoBoothClient({
                         </button>
                       ))}
                     </div>
-                    <p className="text-[10px] text-white/45 mb-2">Photo Booth scenes</p>
-                    <div className="grid grid-cols-3 gap-2">
+                    <p className="text-[10px] text-white/45 mb-2">Photo Booth scenes · swipe for more</p>
+                    <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
                       {ME_AND_MY_PUP_SCENE_BACKGROUNDS.map((scene) => (
                         <button
                           key={scene.id}
                           type="button"
                           onClick={() => setMeMyPupCustomBg(scene.id)}
-                          className={`min-h-[44px] rounded-xl px-2 py-2 text-[10px] font-bold touch-manipulation ${
+                          className={`min-h-[72px] min-w-[5.5rem] shrink-0 snap-start rounded-xl px-2 py-2 text-[10px] font-bold touch-manipulation ${
                             meMyPupCustomBg === scene.id
                               ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-[#0F1E38]'
                               : 'border border-white/15'
                           }`}
                         >
                           <span
-                            className="block h-6 w-full rounded-md mb-1 border border-white/20"
-                            style={{ background: scene.swatch }}
+                            className="block h-10 w-full rounded-md mb-1 border border-white/20 bg-[#0A1625]"
+                            style={
+                              scene.urls?.[0]
+                                ? {
+                                    backgroundImage: `url(${scene.urls[0]})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                  }
+                                : { background: scene.swatch }
+                            }
                           />
                           <span className="text-sm block">{scene.emoji}</span>
                           {scene.name}

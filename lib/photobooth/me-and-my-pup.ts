@@ -118,7 +118,8 @@ export type MeAndMyPupSceneId =
   | 'patriot'
   | 'hollywood'
   | 'wellness'
-  | 'snow-mountain';
+  | 'snow-mountain'
+  | 'tropical-beach';
 
 export type MeAndMyPupCustomBackgroundId = MeAndMyPupFrameColorId | MeAndMyPupSceneId;
 
@@ -132,6 +133,20 @@ export type MeAndMyPupSceneBackground = {
 };
 
 export const ME_AND_MY_PUP_SCENE_BACKGROUNDS: MeAndMyPupSceneBackground[] = [
+  {
+    id: 'snow-mountain',
+    name: 'Snow Mountain',
+    emoji: '🏔️',
+    swatch: 'linear-gradient(180deg, #1e3a8a, #f8fafc)',
+    urls: ['/images/photobooth/backgrounds/bg-snow-mountain.png'],
+  },
+  {
+    id: 'tropical-beach',
+    name: 'Tropical Beach',
+    emoji: '🏝️',
+    swatch: 'linear-gradient(180deg, #38bdf8, #fef3c7)',
+    urls: ['/images/photobooth/backgrounds/bg-tropical-beach.png'],
+  },
   {
     id: 'lake',
     name: 'Lake Legend',
@@ -174,13 +189,6 @@ export const ME_AND_MY_PUP_SCENE_BACKGROUNDS: MeAndMyPupSceneBackground[] = [
     emoji: '💚',
     swatch: 'linear-gradient(180deg, #ecfdf5, #047857)',
     themeDraw: 'wellness-warrior',
-  },
-  {
-    id: 'snow-mountain',
-    name: 'Snow Mountain',
-    emoji: '🏔️',
-    swatch: 'linear-gradient(180deg, #94a3b8, #f8fafc)',
-    themeDraw: 'snow-mountain',
   },
 ];
 
