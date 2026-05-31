@@ -16,6 +16,7 @@ import {
   FRAME_WIDTH_MIN,
   type FrameStyleId,
 } from '@/lib/photobooth/frames';
+import { removePetBackground } from '@/lib/photobooth/remove-background';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
 
 const PhotoBoothCanvas = dynamic(() => import('./PhotoBoothCanvas'), {
@@ -46,6 +47,7 @@ export default function PhotoBoothClient({
 }: Props) {
   const canvasRef = useRef<PhotoBoothCanvasHandle>(null);
   const blobUrlRef = useRef<string | null>(null);
+  const originalPhotoUrlRef = useRef<string | null>(null);
 
   const [petImageUrl, setPetImageUrl] = useState<string | null>(null);
   const [loadingPhoto, setLoadingPhoto] = useState(Boolean(initialUploadId));
@@ -60,6 +62,9 @@ export default function PhotoBoothClient({
   const [selectedStickerId, setSelectedStickerId] = useState<number | null>(null);
   const [frameId, setFrameId] = useState<FrameStyleId>('walnut');
   const [frameWidth, setFrameWidth] = useState(0.5);
+  const [bgRemoving, setBgRemoving] = useState(false);
+  const [bgProgress, setBgProgress] = useState('');
+  const [cutoutApplied, setCutoutApplied] = useState(false);
 
   const handleStickersChange = useCallback(
     (stickers: StickerListItem[], selectedId: number | null) => {
@@ -75,7 +80,10 @@ export default function PhotoBoothClient({
   }, []);
 
   const setPhotoUrl = useCallback((url: string | null) => {
-    if (blobUrlRef.current?.startsWith('blob:')) {
+    if (
+      blobUrlRef.current?.startsWith('blob:') &&
+      blobUrlRef.current !== originalPhotoUrlRef.current
+    ) {
       URL.revokeObjectURL(blobUrlRef.current);
       blobUrlRef.current = null;
     }
@@ -94,7 +102,10 @@ export default function PhotoBoothClient({
       setLocalUploadError('');
       try {
         const blob = await fetchUploadBlob(uploadId);
-        setPhotoUrl(URL.createObjectURL(blob));
+        const url = URL.createObjectURL(blob);
+        originalPhotoUrlRef.current = url;
+        setCutoutApplied(false);
+        setPhotoUrl(url);
       } catch {
         setLocalUploadError('Could not load saved photo. Please upload again.');
       } finally {
@@ -152,11 +163,59 @@ export default function PhotoBoothClient({
 
   const clearPhoto = useCallback(async () => {
     await fetch('/api/clear-upload', { method: 'POST' }).catch(() => {});
+    if (
+      blobUrlRef.current?.startsWith('blob:') &&
+      blobUrlRef.current !== originalPhotoUrlRef.current
+    ) {
+      URL.revokeObjectURL(blobUrlRef.current);
+    }
+    if (originalPhotoUrlRef.current?.startsWith('blob:')) {
+      URL.revokeObjectURL(originalPhotoUrlRef.current);
+    }
+    originalPhotoUrlRef.current = null;
+    blobUrlRef.current = null;
     setPhotoUrl(null);
+    setCutoutApplied(false);
+    setBgRemoving(false);
+    setBgProgress('');
     setShareMsg('');
     setLocalUploadError('');
     setLoadingPhoto(false);
     window.history.replaceState({}, '', '/photobooth');
+  }, [setPhotoUrl]);
+
+  const handleRemoveBackground = useCallback(async () => {
+    if (!petImageUrl || bgRemoving) return;
+    setBgRemoving(true);
+    setBgProgress('Starting…');
+    setError('');
+    setShareMsg('');
+    try {
+      const source = petImageUrl.startsWith('blob:')
+        ? await fetch(petImageUrl).then((r) => r.blob())
+        : petImageUrl;
+      const cutout = await removePetBackground(source, (p) => {
+        setBgProgress(p.percent > 0 ? `${p.percent}%` : 'Processing…');
+      });
+      if (!originalPhotoUrlRef.current) {
+        originalPhotoUrlRef.current = petImageUrl;
+      }
+      setPhotoUrl(URL.createObjectURL(cutout));
+      setCutoutApplied(true);
+      setShareMsg('Background removed — tap a theme below!');
+    } catch {
+      setError('Background removal failed. Try again, or continue with your original photo.');
+    } finally {
+      setBgRemoving(false);
+      setBgProgress('');
+    }
+  }, [petImageUrl, bgRemoving, setPhotoUrl]);
+
+  const handleRestoreOriginal = useCallback(() => {
+    if (!originalPhotoUrlRef.current) return;
+    setPhotoUrl(originalPhotoUrlRef.current);
+    setCutoutApplied(false);
+    setShareMsg('Original photo restored.');
   }, [setPhotoUrl]);
 
   const savePhoto = useCallback(async () => {
@@ -259,6 +318,32 @@ export default function PhotoBoothClient({
             >
               Upload a different photo
             </button>
+
+            {!editorActive && (
+              <div className="mt-4 space-y-2">
+                {!cutoutApplied ? (
+                  <button
+                    type="button"
+                    disabled={bgRemoving}
+                    onClick={() => void handleRemoveBackground()}
+                    className="w-full min-h-[52px] rounded-xl bg-[#1F2A44] border-2 border-amber-400/50 py-3 text-sm font-bold text-amber-300 disabled:opacity-50 touch-manipulation"
+                  >
+                    {bgRemoving ? `✨ Removing background… ${bgProgress}` : '✨ Remove background (beta)'}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleRestoreOriginal}
+                    className="w-full min-h-[48px] rounded-xl border border-white/20 py-2.5 text-sm text-white/70 touch-manipulation"
+                  >
+                    ↩ Restore original photo
+                  </button>
+                )}
+                <p className="text-center text-[11px] text-white/45 leading-relaxed px-2">
+                  Cutout runs on your phone — first time may take 15–30 seconds. Works best with one clear pet photo.
+                </p>
+              </div>
+            )}
           </>
         )}
 
