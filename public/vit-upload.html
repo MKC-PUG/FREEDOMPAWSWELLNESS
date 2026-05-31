@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ViT Photo Upload</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a1428;
+      color: #fff;
+      padding: 24px 16px;
+    }
+    h1 { font-size: 1.4rem; margin: 0 0 8px; }
+    p { color: rgba(255,255,255,0.65); font-size: 0.9rem; line-height: 1.5; }
+    .gold { color: #f5c242; font-weight: 700; }
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      margin: 20px 0;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(245,194,66,0.4);
+      background: #0a1428;
+      color: #fff;
+    }
+    #status {
+      margin-top: 16px;
+      text-align: center;
+      color: #f5c242;
+      font-weight: 600;
+    }
+    a { color: #f5c242; }
+  </style>
+</head>
+<body>
+  <h1>ViT Direct Upload</h1>
+  <p class="gold">Tap Choose Photo below. Photo is compressed automatically, then uploaded.</p>
+  <p>If Chrome warns the connection is not secure, tap <strong>Send anyway</strong>.</p>
+
+  <form id="upload-form" action="/api/upload-photo" method="POST">
+    <input type="hidden" name="storageKey" value="vit-diagnostics" />
+    <input type="hidden" name="returnTo" value="/diagnostics" />
+    <input type="hidden" name="photoBase64" id="photo-base64" />
+    <input type="hidden" name="photoName" id="photo-name" />
+    <input type="file" id="photo-file" accept="image/*" />
+  </form>
+
+  <p id="status">Waiting for photo…</p>
+  <p><a href="/diagnostics">← Back to ViT Diagnostics</a></p>
+
+  <script>
+    function compressImageForUpload(file, maxDim, quality) {
+      return new Promise(function (resolve, reject) {
+        var url = URL.createObjectURL(file);
+        var img = new Image();
+        img.onload = function () {
+          URL.revokeObjectURL(url);
+          var width = img.width;
+          var height = img.height;
+          var scale = Math.min(1, maxDim / Math.max(width, height));
+          width = Math.max(1, Math.round(width * scale));
+          height = Math.max(1, Math.round(height * scale));
+          var canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          var ctx = canvas.getContext('2d');
+          if (!ctx) { reject(new Error('Canvas not available')); return; }
+          ctx.drawImage(img, 0, 0, width, height);
+          var dataUrl = canvas.toDataURL('image/jpeg', quality);
+          var base = (file.name || 'photo').replace(/\.[^.]+$/, '') || 'photo';
+          resolve({ dataUrl: dataUrl, name: base + '.jpg' });
+        };
+        img.onerror = function () {
+          URL.revokeObjectURL(url);
+          reject(new Error('Could not load image'));
+        };
+        img.src = url;
+      });
+    }
+
+    function base64ByteLength(dataUrl) {
+      var base64 = (dataUrl.split(',')[1] || '');
+      return Math.ceil((base64.length * 3) / 4);
+    }
+
+    function compressImageToTarget(file) {
+      var attempts = [
+        { maxDim: 1280, quality: 0.82 },
+        { maxDim: 1024, quality: 0.72 },
+        { maxDim: 960, quality: 0.62 },
+        { maxDim: 800, quality: 0.52 },
+        { maxDim: 640, quality: 0.42 }
+      ];
+      var chain = Promise.resolve(null);
+      attempts.forEach(function (attempt) {
+        chain = chain.then(function (last) {
+          if (last && base64ByteLength(last.dataUrl) <= 1500000) return last;
+          return compressImageForUpload(file, attempt.maxDim, attempt.quality);
+        });
+      });
+      return chain.then(function (last) {
+        return last || compressImageForUpload(file, 640, 0.4);
+      });
+    }
+
+    (function () {
+      var fileInput = document.getElementById('photo-file');
+      var form = document.getElementById('upload-form');
+      var base64Field = document.getElementById('photo-base64');
+      var nameField = document.getElementById('photo-name');
+      var status = document.getElementById('status');
+
+      fileInput.addEventListener('change', function () {
+        var file = fileInput.files && fileInput.files[0];
+        if (!file) return;
+
+        status.textContent = 'Compressing ' + file.name + '…';
+
+        compressImageToTarget(file).then(function (result) {
+          status.textContent = 'Uploading ' + result.name + '…';
+          base64Field.value = result.dataUrl;
+          nameField.value = result.name;
+          form.submit();
+        }).catch(function () {
+          status.textContent = 'Could not process photo. Try a different image.';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

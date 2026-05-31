@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import BackLink from '@/app/components/BackLink';
 import { protocolDetailHref, tokenShopBuyHref } from '../lib/routes';
 import TokenShopFocus from './TokenShopFocus';
 import { SHOP_PRICE, tokenShopItems } from './shop-items';
@@ -16,7 +17,8 @@ function ViewProtocolButton({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="mt-5 mx-auto flex w-full max-w-xs items-center justify-center rounded-full border-2 border-white bg-transparent px-6 py-3.5 text-base font-bold text-white tracking-wide hover:bg-white hover:text-[#1E3050] transition-colors"
+      prefetch={false}
+      className="mt-5 mx-auto flex w-full max-w-xs min-h-[52px] items-center justify-center rounded-full border-2 border-white bg-transparent px-6 py-3.5 text-base font-bold text-white tracking-wide hover:bg-white hover:text-[#1E3050] active:bg-white/90 transition-colors touch-manipulation"
     >
       {label}
     </Link>
@@ -88,7 +90,8 @@ function TokenShopCard({ item }: { item: (typeof tokenShopItems)[number] }) {
         <Link
           href={tokenShopBuyHref(item.slug)}
           data-purchase
-          className="mt-4 block w-full text-center bg-[#F5C242] hover:bg-amber-300 text-black text-sm font-bold py-3.5 rounded-full transition-colors"
+          prefetch={false}
+          className="mt-4 block w-full min-h-[52px] text-center bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 text-black text-sm font-bold py-3.5 rounded-full transition-colors touch-manipulation flex items-center justify-center"
         >
           Buy Now – Lifetime Access
         </Link>
@@ -105,17 +108,11 @@ export default function TokenShopPage() {
       </Suspense>
 
       <header className="relative overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 flex items-center justify-center select-none"
-        >
-          <span className="text-[clamp(4rem,18vw,12rem)] font-bold text-white/[0.04] tracking-tight whitespace-nowrap">
-            Token Shop
-          </span>
-        </div>
-
-        <div className="relative max-w-4xl mx-auto px-6 pt-14 pb-10 text-center">
-          <p className="text-sm text-white/50 mb-4">
+        <div className="relative max-w-5xl mx-auto px-6 pt-8 sm:pt-10 pb-10">
+          <div className="text-left mb-4">
+            <BackLink href="/protocols" label="Back to Protocol Overview" />
+          </div>
+          <p className="text-sm text-white/50 mb-6">
             <Link href="/protocols" className="hover:text-white transition-colors">
               Protocol Overview
             </Link>
@@ -123,11 +120,23 @@ export default function TokenShopPage() {
             <span className="text-[#F5C242]">Token Shop</span>
           </p>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">Token Shop</h1>
-          <p className="mt-2 text-2xl md:text-3xl font-bold text-white/95">
+          <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40">
+            <Image
+              src="/images/token-shop/header.jpg"
+              alt="SuperBud and happy dogs by a Tennessee lake with XRP wellness tokens — Wellness, Freedom, Community"
+              width={1024}
+              height={771}
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="block w-full h-auto"
+            />
+          </div>
+
+          <h1 className="sr-only">Token Shop</h1>
+          <p className="mt-8 text-2xl md:text-3xl font-bold text-white/95 text-center">
             Lifetime Wellness Protocols
           </p>
-          <p className="mt-4 text-sm md:text-base font-semibold tracking-wide text-white/80">
+          <p className="mt-4 text-sm md:text-base font-semibold tracking-wide text-white/80 text-center">
             AI-Powered • XRPL Tokenized • Natural Holistic Care
           </p>
 

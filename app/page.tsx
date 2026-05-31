@@ -24,6 +24,20 @@ const cards = [
     href: '/protocols',
   },
   {
+    icon: '🪙',
+    title: 'Token Shop',
+    desc: 'Purchase lifetime protocol access on XRPL — supports shelters & veteran programs',
+    cta: 'SHOP →',
+    href: '/token-shop',
+  },
+  {
+    icon: '🎨',
+    title: 'SuperBud Photo Booth',
+    desc: 'One-tap themes — dress up your pet and share in seconds',
+    cta: 'OPEN →',
+    href: '/photobooth',
+  },
+  {
     icon: '📡',
     title: 'Monitor My Dog',
     desc: 'Real-time health & location monitoring',
@@ -76,26 +90,20 @@ export default function Home() {
 
           {/* Feature cards */}
           <section className="px-6 pb-20">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {cards.map((c) => (
-                <div
+                <Link
                   key={c.title}
-                  className="bg-[#0F1E38]/85 backdrop-blur-sm rounded-3xl p-7 min-h-[260px] flex flex-col border border-white/10 hover:border-amber-400/40 hover:bg-[#132A4F]/90 transition-all"
+                  href={c.href}
+                  prefetch={false}
+                  className="bg-[#0F1E38]/85 backdrop-blur-sm rounded-3xl p-7 min-h-[260px] flex flex-col border border-white/10 hover:border-amber-400/40 hover:bg-[#132A4F]/90 active:border-amber-400/60 transition-all touch-manipulation relative z-10"
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   <div className="text-3xl mb-6">{c.icon}</div>
                   <h2 className="text-xl font-bold mb-3 leading-snug">{c.title}</h2>
                   <p className="text-sm text-white/60 flex-1 leading-relaxed">{c.desc}</p>
-                  {c.href === '#' ? (
-                    <span className="mt-6 text-xs font-bold tracking-wider text-amber-400">{c.cta}</span>
-                  ) : (
-                    <Link
-                      href={c.href}
-                      className="mt-6 text-xs font-bold tracking-wider text-amber-400 hover:text-amber-300 transition-colors"
-                    >
-                      {c.cta}
-                    </Link>
-                  )}
-                </div>
+                  <span className="mt-6 text-xs font-bold tracking-wider text-amber-400">{c.cta}</span>
+                </Link>
               ))}
             </div>
           </section>

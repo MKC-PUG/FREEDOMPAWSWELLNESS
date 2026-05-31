@@ -2,11 +2,17 @@
   "name": "Freedom Paws Wellness",
   "short_name": "Freedom Paws",
   "description": "Tokenized Holistic Wellness on XRPL • Inspired by Buddy’s Miracle",
-  "start_url": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "id": "/",
   "display": "standalone",
+  "display_override": ["standalone", "browser"],
   "background_color": "#0A1428",
   "theme_color": "#F5C242",
   "orientation": "portrait-primary",
+  "categories": ["health", "lifestyle", "medical"],
   "icons": [
     {
       "src": "/images/icon-192.png",
@@ -21,10 +27,56 @@
       "purpose": "any"
     },
     {
-      "src": "/images/icon-512.png",
+      "src": "/images/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/superbud-hero.png",
+      "sizes": "1024x771",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "SuperBud Photo Booth and wellness home"
+    },
+    {
+      "src": "/images/tn-lake-bg.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Freedom Paws lake wellness backdrop"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "SuperBud Photo Booth",
+      "short_name": "Photo Booth",
+      "description": "Dress up your pet and share",
+      "url": "/photobooth?source=shortcut",
+      "icons": [{ "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "ViT Diagnostics",
+      "short_name": "Diagnostics",
+      "description": "Upload photo + symptoms for protocol recommendations",
+      "url": "/diagnostics?source=shortcut",
+      "icons": [{ "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Protocol Overview",
+      "short_name": "Protocols",
+      "description": "Browse holistic wellness protocols",
+      "url": "/protocols?source=shortcut",
+      "icons": [{ "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Token Shop",
+      "short_name": "Token Shop",
+      "description": "Purchase lifetime wellness protocols on XRPL",
+      "url": "/token-shop?source=shortcut",
+      "icons": [{ "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }

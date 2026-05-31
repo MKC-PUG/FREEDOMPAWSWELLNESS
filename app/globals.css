@@ -5,12 +5,45 @@
   --background: #0A1428;
   --foreground: #ffffff;
   --accent: #F5C242;
+  /* Nav content row height (excludes notch inset) */
+  --nav-bar-height: 3.75rem;
+  --nav-total-height: calc(var(--nav-bar-height) + env(safe-area-inset-top, 0px));
 }
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #0A1428;
   color: #ffffff;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Navbar layout fallbacks — keeps menu readable if Tailwind utilities fail in PWA */
+.fp-nav a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.fp-nav-desktop {
+  display: none !important;
+}
+
+.fp-nav-mobile {
+  display: flex !important;
+}
+
+@media (min-width: 768px) {
+  .fp-nav-desktop {
+    display: flex !important;
+  }
+
+  .fp-nav-mobile {
+    display: none !important;
+  }
+
+  .fp-mobile-menu-panel,
+  .fp-mobile-menu-backdrop {
+    display: none !important;
+  }
 }
 
 a {
@@ -35,4 +68,41 @@ button {
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Photo Booth — stop iOS long-press copy/search on the canvas */
+.photobooth-editor,
+.photobooth-editor canvas {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+.photobooth-frame-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(to right, rgba(245, 194, 66, 0.35), rgba(245, 194, 66, 0.85));
+  outline: none;
+}
+
+.photobooth-frame-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f5c242;
+  border: 2px solid #0a1625;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.photobooth-frame-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f5c242;
+  border: 2px solid #0a1625;
 }

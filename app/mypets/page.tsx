@@ -1,9 +1,12 @@
 'use client';
 
+import BackLink from '@/app/components/BackLink';
+
 export default function MyPetsPage() {
   return (
-    <div className="min-h-screen bg-[#0A1428] text-white p-8">
+    <div className="min-h-screen bg-[#0A1428] text-white p-6 sm:p-8">
       <div className="max-w-5xl mx-auto">
+        <BackLink />
         <div className="flex items-center gap-4 mb-8">
           <span className="text-5xl">🐾</span>
           <h1 className="text-5xl font-bold">My Pets</h1>
@@ -17,7 +20,10 @@ export default function MyPetsPage() {
           <p className="text-gray-400 max-w-md mx-auto mb-10">
             Add your first dog to start tracking wellness protocols, upload records, and mint Dynamic NFTs on XRPL.
           </p>
-          <button className="bg-[#F5C242] hover:bg-white text-black font-bold px-10 py-4 rounded-2xl text-lg transition">
+          <button
+            type="button"
+            className="bg-[#F5C242] hover:bg-white active:bg-amber-300 text-black font-bold px-10 py-4 min-h-[52px] rounded-2xl text-lg transition touch-manipulation"
+          >
             + Add New Pet
           </button>
         </div>

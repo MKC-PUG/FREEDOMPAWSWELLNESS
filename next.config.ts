@@ -27,6 +27,22 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/diagnostics',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+      {
+        source: '/token-shop',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+      {
+        source: '/api/:path*',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+      {
+        source: '/offline.html',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=86400' }],
+      },
     ];
   },
 };

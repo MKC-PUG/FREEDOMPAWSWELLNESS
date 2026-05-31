@@ -1,0 +1,78 @@
+Freedom Paws Wellness — 5-Year Financial Model (Base Case),,,,,,,,,
+Edit yellow assumption rows in a copy; figures are planning estimates not guarantees,,,,,,,,,
+,,,,,,,,,
+ASSUMPTIONS (edit these),Value,Notes,,,,,,,
+Core membership price (monthly),9.99,USD,,,,,,,
+Annual membership equivalent,79,USD per year,,,,,,,
+Single protocol price,14.99,One-time,,,,,,,
+Protocol pack price,34.99,3 protocols,,,,,,,
+Payment processing fee,3%,Of revenue,,,,,,,
+Give-back to veterans/shelters,10%,Of net profit after fees,,,,,,,
+,,,,,,,,,
+QUARTERLY MILESTONES — YEARS 1–5,,,,,,,,,
+Quarter,Calendar,Total Members (end),Paying Members (end),New Paying (quarter),Membership Revenue,Protocol Revenue,Affiliate Revenue,Total Revenue,Operating Expenses
+Y1 Q1,2026 Q3,80,0,0,0,0,0,0,3500
+Y1 Q2,2026 Q4,350,45,45,1350,675,0,2025,2800
+Y1 Q3,2027 Q1,750,130,85,3900,1950,150,6000,4200
+Y1 Q4,2027 Q2,1400,280,150,8400,4200,400,13000,5800
+Y2 Q1,2027 Q3,2200,450,170,13500,5400,800,19700,7200
+Y2 Q2,2027 Q4,3200,720,270,21600,8100,1500,31200,8800
+Y2 Q3,2028 Q1,4300,1050,330,31500,10500,2800,44800,10500
+Y2 Q4,2028 Q2,5500,1450,400,43500,14500,4500,62500,12800
+Y3 Q1,2028 Q3,6800,1900,450,57000,17100,6200,80300,15200
+Y3 Q2,2028 Q4,8200,2400,500,72000,21600,8500,102100,17800
+Y3 Q3,2029 Q1,9600,2950,550,88500,26550,11000,126050,20500
+Y3 Q4,2029 Q2,11200,3600,650,108000,32400,14500,154900,23500
+Y4 Q1,2029 Q3,12800,4300,700,129000,38700,18000,185700,27000
+Y4 Q2,2029 Q4,14500,5100,800,153000,45900,22000,220900,31000
+Y4 Q3,2030 Q1,16200,6000,900,180000,54000,27000,261000,35500
+Y4 Q4,2030 Q2,18000,7000,1000,210000,63000,33000,306000,40000
+Y5 Q1,2030 Q3,19800,8200,1200,246000,73800,40000,359800,45000
+Y5 Q2,2030 Q4,21800,9500,1300,285000,85500,48000,418500,52000
+Y5 Q3,2031 Q1,23800,11000,1500,330000,99000,58000,487000,60000
+Y5 Q4,2031 Q2,26000,12800,1800,384000,115200,70000,569200,68000
+,,,,,,,,,
+QUARTERLY — FEES GIVE-BACK NET (calculated from revenue above),,,,,,,,,
+Quarter,Payment Fees (3%),Give-Back Reserve (10% of pre-giveback net),Net Profit Before Give-Back,Net Profit After Give-Back,Cumulative Net Profit,Paying Member Milestone Note,,,
+Y1 Q1,0,0,-3500,-3500,-3500,Pre-launch / legal,,,
+Y1 Q2,61,0,-836,-836,-4336,Soft launch ~45 paying,,,
+Y1 Q3,180,0,1620,1620,-2716,First 100+ paying,,,
+Y1 Q4,390,684,4810,4126,1410,250+ paying — break-even quarter,,,
+Y2 Q1,591,1189,10909,9720,11130,450 paying,,,
+Y2 Q2,936,2146,20416,18270,29400,720 paying,,,
+Y2 Q3,1344,3106,30946,27840,57240,1000+ paying milestone,,,
+Y2 Q4,1875,4372,46328,41956,99196,1450 paying,,,
+Y3 Q1,2409,5508,54391,48883,148079,1900 paying,,,
+Y3 Q2,3063,7032,81202,74170,222249,2400 paying,,,
+Y3 Q3,3782,8675,101868,93193,315442,2950 paying,,,
+Y3 Q4,4647,10640,127760,117120,432562,3600 paying — $150K+ annualized run rate,,,
+Y4 Q1,5571,12770,152929,140159,572721,4300 paying,,,
+Y4 Q2,6627,15190,178673,163483,736204,5100 paying,,,
+Y4 Q3,7830,17950,217670,199720,935924,6000 paying,,,
+Y4 Q4,9180,21060,256760,235700,1171624,7000 paying — $300K+ quarter,,,
+Y5 Q1,10794,24780,310006,285226,1456850,8200 paying,,,
+Y5 Q2,12555,28850,353695,324845,1781695,9500 paying,,,
+Y5 Q3,14610,33500,393390,359890,2141585,11000 paying,,,
+Y5 Q4,17076,39072,484148,445076,2586661,12800 paying — $2M+ annualized run rate,,,
+,,,,,,,,,
+ANNUAL SUMMARY,,,,,,,,,
+Year,Total Members (end),Paying (end),Annual Revenue,Annual Expenses,Net After Give-Back,Key Milestone,,,
+Year 1,1400,280,21025,16300,1410,Preview launch + Monitor MVP + founding members,,,
+Year 2,5500,1450,158200,39300,99196,Grassroots scale + affiliate pilot,,,
+Year 3,11200,3600,463350,77500,432562,Grant applications + shelter B2B pilot,,,
+Year 4,18000,7000,974600,133500,1171624,Public brand + regional partnerships,,,
+Year 5,26000,12800,1834500,225000,2586661,National niche leader — evaluate Series A or stay indie,,,
+,,,,,,,,,
+SCENARIO COMPARISON (Year 5 end — paying members),,,,,,,,,
+Scenario,Paying Members Y5,Annual Revenue Y5,Notes,,,,,,
+Conservative (70% of base),8960,1284150,Slower social; delay monitor,,,,,,
+Base (this model),12800,1834500,Grassroots + hybrid pricing,,,,,,
+Optimistic (140% of base),17920,2568300,Viral Photo Booth + shelter PR,,,,,,
+,,,,,,,,,
+EXPENSE BREAKDOWN GUIDE (typical Year 1–2 quarterly),,,,,,,,,
+Category,Year 1 typical,Year 3 typical,Notes,,,,,,
+Hosting + video relay,600–1200/qtr,3000–6000/qtr,Monitor relay scales with users,,,,,,
+Legal + compliance,2000 one-time + 500/qtr,1000/qtr,LLC TM terms,,,,,,
+Marketing (grassroots),200–800/qtr,2000–5000/qtr,Paid ads only when CAC works,,,,,,
+Tools + AI API,300–600/qtr,1500/qtr,ViT inference,,,,,,
+Support + ops,0–500/qtr,3000/qtr,Part-time VA Year 2+,,,,,,

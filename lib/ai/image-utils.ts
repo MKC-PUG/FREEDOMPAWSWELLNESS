@@ -17,8 +17,8 @@ export async function assessImageQuality(file: File): Promise<ImageQuality> {
   }
 
   // Check file type
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-  if (!allowedTypes.includes(file.type)) {
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+  if (file.type && !allowedTypes.includes(file.type) && !file.type.startsWith('image/')) {
     issues.push("Unsupported image format");
     score -= 30;
     suggestions.push("Please upload JPG, PNG, or WebP");
@@ -55,5 +55,9 @@ export async function assessImageQuality(file: File): Promise<ImageQuality> {
 
 /** Simple helper to validate file before sending to AI */
 export function isValidImageFile(file: File): boolean {
-  return file.type.startsWith('image/') && file.size < 15 * 1024 * 1024;
+  const isImage =
+    file.type.startsWith('image/') ||
+    file.type === '' ||
+    /\.(jpe?g|png|webp|heic|heif|gif)$/i.test(file.name);
+  return isImage && file.size > 0 && file.size < 15 * 1024 * 1024;
 }

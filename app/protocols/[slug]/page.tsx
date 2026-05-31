@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import BackLink from '@/app/components/BackLink';
 import { protocols } from '../protocols';
 import { protocolDetails, type Block, type DetailSection } from '../details';
 import { protocolOverviewHref, tokenShopHref } from '../../lib/routes';
@@ -114,15 +115,10 @@ export default async function ProtocolDetailPage({
 
   return (
     <div className="min-h-screen bg-[#0A1428] text-white">
-      <div className="max-w-5xl mx-auto px-6 py-12">
-        <Link
-          href={protocolOverviewHref()}
-          className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors"
-        >
-          ← Protocol Overview
-        </Link>
+      <div className="max-w-5xl mx-auto px-6 py-8 sm:py-12">
+        <BackLink href={protocolOverviewHref()} label="Back to Protocol Overview" />
 
-        <nav aria-label="Breadcrumb" className="mt-4 text-sm text-white/50">
+        <nav aria-label="Breadcrumb" className="mt-2 text-sm text-white/50">
           <Link href={protocolOverviewHref()} className="hover:text-white transition-colors">
             Protocol Overview
           </Link>

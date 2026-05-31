@@ -1,36 +1,65 @@
 'use client';
 
 import { useEffect } from 'react';
+import { PWA_VERSION } from '@/lib/pwa-version';
 
+/**
+ * Registers the service worker in production only.
+ * Dev / local HMR: SW stays unregistered to avoid stale bundles on mobile.
+ */
 export default function ServiceWorkerRegister() {
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return;
 
-    // Never register a service worker during local dev — Safari (especially
-    // on iPhone) will aggressively cache via the SW and show stale pages.
-    if (process.env.NODE_ENV === 'development') {
-      navigator.serviceWorker.getRegistrations().then((regs) => {
-        regs.forEach((r) => r.unregister());
+    const isDev = process.env.NODE_ENV === 'development';
+
+    if (isDev) {
+      void navigator.serviceWorker.getRegistrations().then((regs) => {
+        regs.forEach((r) => void r.unregister());
       });
-      caches.keys().then((keys) => {
-        keys.forEach((k) => caches.delete(k));
-      });
+      if ('caches' in window) {
+        void caches.keys().then((keys) => {
+          keys.forEach((k) => void caches.delete(k));
+        });
+      }
       return;
     }
 
-    const register = () => {
-      navigator.serviceWorker
-        .register('/sw.js', { scope: '/', updateViaCache: 'none' })
-        .catch((err) => console.error('Service worker registration failed:', err));
+    let refreshing = false;
+    const onControllerChange = () => {
+      if (refreshing) return;
+      refreshing = true;
+      // Reload only after user taps Refresh in PwaUpdateBanner (skipWaiting posted there).
+      window.location.reload();
+    };
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+
+    const registerSw = () => {
+      if (!navigator.onLine) return;
+      void navigator.serviceWorker
+        .register(`/sw.js?${PWA_VERSION}`, { scope: '/', updateViaCache: 'none' })
+        .then((reg) => {
+          if (navigator.onLine) reg.update().catch(() => {});
+          reg.addEventListener('updatefound', () => {
+            const worker = reg.installing;
+            if (!worker) return;
+            worker.addEventListener('statechange', () => {
+              if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                window.dispatchEvent(new CustomEvent('fp-sw-update', { detail: reg.waiting ?? worker }));
+              }
+            });
+          });
+        })
+        .catch(() => {});
     };
 
-    if (document.readyState === 'complete') {
-      register();
-      return;
-    }
+    registerSw();
+    window.addEventListener('online', registerSw);
 
-    window.addEventListener('load', register);
-    return () => window.removeEventListener('load', register);
+    return () => {
+      navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+      window.removeEventListener('online', registerSw);
+    };
   }, []);
 
   return null;

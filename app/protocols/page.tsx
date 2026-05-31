@@ -1,12 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import BackLink from '@/app/components/BackLink';
 import { protocolDetailHref, tokenShopHref } from '../lib/routes';
 import { protocols } from './protocols';
 
 export default function ProtocolsPage() {
   return (
     <div className="min-h-screen bg-[#0A1428] text-white">
-      <div className="max-w-7xl mx-auto px-6 py-14">
+      <div className="max-w-7xl mx-auto px-6 py-8 sm:py-14">
+        <BackLink />
         {/* Header */}
         <header className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
@@ -38,7 +40,9 @@ export default function ProtocolsPage() {
             <Link
               key={p.slug}
               href={protocolDetailHref(p.slug)}
-              className="group w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] bg-[#16223C] rounded-3xl p-5 border border-white/10 hover:border-[#F5C242]/40 hover:bg-[#1B2A47] transition-colors flex flex-col"
+              prefetch={false}
+              className="group relative z-10 w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] bg-[#16223C] rounded-3xl p-5 border border-white/10 hover:border-[#F5C242]/40 hover:bg-[#1B2A47] active:border-[#F5C242]/60 transition-colors flex flex-col touch-manipulation min-h-[320px]"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               <div className="rounded-xl overflow-hidden">
                 <Image
@@ -70,7 +74,8 @@ export default function ProtocolsPage() {
           <p className="text-white/70 mb-4">Ready to purchase lifetime access?</p>
           <Link
             href={tokenShopHref()}
-            className="inline-block bg-[#F5C242] hover:bg-amber-300 text-black text-base font-bold px-10 py-4 rounded-full transition-colors"
+            prefetch={false}
+            className="inline-flex items-center justify-center min-h-[52px] bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 text-black text-base font-bold px-10 py-4 rounded-full transition-colors touch-manipulation"
           >
             Visit Token Shop →
           </Link>
