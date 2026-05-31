@@ -65,6 +65,7 @@ export default function PhotoBoothClient({
   const [bgProgress, setBgProgress] = useState('');
   const [bgError, setBgError] = useState('');
   const [cutoutApplied, setCutoutApplied] = useState(false);
+  const [petSelected, setPetSelected] = useState(false);
 
   const handleStickersChange = useCallback(
     (stickers: StickerListItem[], selectedId: number | null) => {
@@ -209,7 +210,7 @@ export default function PhotoBoothClient({
       setPhotoUrl(URL.createObjectURL(cutout));
       setCutoutApplied(true);
       setFrameId('none');
-      setShareMsg('Background removed — pick a background above!');
+      setShareMsg('Cutout ready — tap your pet on the photo to move and resize!');
       requestAnimationFrame(() => {
         themesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
@@ -452,8 +453,88 @@ export default function PhotoBoothClient({
                 cutoutApplied={cutoutApplied}
                 onReadyChange={setCanvasReady}
                 onStickersChange={handleStickersChange}
+                onPetSelectedChange={setPetSelected}
                 onError={setError}
               />
+              {canvasReady && cutoutApplied && (
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    onClick={() => canvasRef.current?.selectPet()}
+                    className={`w-full min-h-[44px] rounded-xl py-2.5 text-sm font-semibold touch-manipulation ${
+                      petSelected
+                        ? 'bg-amber-400 text-black'
+                        : 'border border-amber-400/50 text-amber-300'
+                    }`}
+                  >
+                    {petSelected ? '✓ Your pet selected — drag on photo to move' : 'Tap to select your pet & move it'}
+                  </button>
+                  {petSelected && (
+                    <div className="mt-3 flex flex-col items-center gap-2">
+                      <p className="text-[10px] text-white/40">Move &amp; resize your pet</p>
+                      <div className="grid grid-cols-3 gap-1">
+                        <span />
+                        <button
+                          type="button"
+                          aria-label="Nudge pet up"
+                          onClick={() => canvasRef.current?.nudgeSelected(0, -0.03)}
+                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
+                        >
+                          ↑
+                        </button>
+                        <span />
+                        <button
+                          type="button"
+                          aria-label="Nudge pet left"
+                          onClick={() => canvasRef.current?.nudgeSelected(-0.03, 0)}
+                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
+                        >
+                          ←
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Nudge pet down"
+                          onClick={() => canvasRef.current?.nudgeSelected(0, 0.03)}
+                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
+                        >
+                          ↓
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Nudge pet right"
+                          onClick={() => canvasRef.current?.nudgeSelected(0.03, 0)}
+                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
+                        >
+                          →
+                        </button>
+                      </div>
+                      <div className="flex w-full max-w-xs gap-2">
+                        <button
+                          type="button"
+                          onClick={() => canvasRef.current?.scaleSelected(0.9)}
+                          className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold"
+                        >
+                          − Smaller
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => canvasRef.current?.scaleSelected(1.1)}
+                          className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold"
+                        >
+                          + Bigger
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => canvasRef.current?.clearSelection()}
+                        className="w-full rounded-xl border border-amber-400/40 py-2 text-xs font-semibold text-amber-300"
+                      >
+                        Done — hide selection
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
               {canvasReady && editorActive && (
                 <>
                   <div className="mt-4 grid grid-cols-2 gap-3">
