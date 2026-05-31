@@ -5,7 +5,111 @@ export type MeAndMyPupVariant =
   | 'happy-birthday'
   | 'love-my-dog'
   | 'lives-whole'
-  | 'love-this-app';
+  | 'love-this-app'
+  | 'custom';
+
+export type MeAndMyPupFrameColorId = 'navy' | 'gold' | 'pink' | 'forest' | 'purple' | 'sky';
+
+export type MeAndMyPupFrameColor = {
+  id: MeAndMyPupFrameColorId;
+  name: string;
+  swatch: string;
+  bgTop: string;
+  bgBottom: string;
+  ring: string;
+  ringSelected: string;
+  title: string;
+  label: string;
+  paw: string;
+  border: string;
+};
+
+export const ME_AND_MY_PUP_FRAME_COLORS: MeAndMyPupFrameColor[] = [
+  {
+    id: 'navy',
+    name: 'Navy',
+    swatch: 'linear-gradient(135deg, #0A1625, #152642)',
+    bgTop: '#0A1625',
+    bgBottom: '#152642',
+    ring: '#F5C242',
+    ringSelected: '#FFE082',
+    title: '#F5C242',
+    label: 'rgba(255,255,255,0.75)',
+    paw: 'rgba(245, 194, 66, 0.85)',
+    border: '#F5C242',
+  },
+  {
+    id: 'gold',
+    name: 'Gold',
+    swatch: 'linear-gradient(135deg, #78350f, #F5C242)',
+    bgTop: '#451a03',
+    bgBottom: '#92400e',
+    ring: '#FFE082',
+    ringSelected: '#FFFFFF',
+    title: '#FFE082',
+    label: 'rgba(255,255,255,0.85)',
+    paw: 'rgba(255,255,255,0.75)',
+    border: '#FFE082',
+  },
+  {
+    id: 'pink',
+    name: 'Pink',
+    swatch: 'linear-gradient(135deg, #831843, #ec4899)',
+    bgTop: '#500724',
+    bgBottom: '#be185d',
+    ring: '#FFFFFF',
+    ringSelected: '#FFE082',
+    title: '#FFFFFF',
+    label: 'rgba(255,255,255,0.85)',
+    paw: 'rgba(255,255,255,0.75)',
+    border: '#FFFFFF',
+  },
+  {
+    id: 'forest',
+    name: 'Forest',
+    swatch: 'linear-gradient(135deg, #064e3b, #047857)',
+    bgTop: '#022c22',
+    bgBottom: '#065f46',
+    ring: '#6ee7b7',
+    ringSelected: '#FFFFFF',
+    title: '#6ee7b7',
+    label: 'rgba(255,255,255,0.8)',
+    paw: 'rgba(110, 231, 183, 0.85)',
+    border: '#6ee7b7',
+  },
+  {
+    id: 'purple',
+    name: 'Purple',
+    swatch: 'linear-gradient(135deg, #3b0764, #7c3aed)',
+    bgTop: '#2e1065',
+    bgBottom: '#6d28d9',
+    ring: '#E9D5FF',
+    ringSelected: '#FFFFFF',
+    title: '#E9D5FF',
+    label: 'rgba(255,255,255,0.8)',
+    paw: 'rgba(233, 213, 255, 0.85)',
+    border: '#E9D5FF',
+  },
+  {
+    id: 'sky',
+    name: 'Sky',
+    swatch: 'linear-gradient(135deg, #0c4a6e, #38bdf8)',
+    bgTop: '#082f49',
+    bgBottom: '#0284c7',
+    ring: '#FFFFFF',
+    ringSelected: '#FFE082',
+    title: '#FFFFFF',
+    label: 'rgba(255,255,255,0.85)',
+    paw: 'rgba(255,255,255,0.75)',
+    border: '#FFFFFF',
+  },
+];
+
+export function getFrameColor(id: MeAndMyPupFrameColorId): MeAndMyPupFrameColor {
+  return ME_AND_MY_PUP_FRAME_COLORS.find((c) => c.id === id) ?? ME_AND_MY_PUP_FRAME_COLORS[0];
+}
+
+export const CUSTOM_HEADLINE_MAX = 48;
 
 export type SlotId = 'dog' | 'owner';
 
@@ -32,6 +136,7 @@ export const ME_AND_MY_PUP_VARIANTS: { id: MeAndMyPupVariant; name: string; emoj
   { id: 'love-my-dog', name: 'I Love My Dog', emoji: '💕' },
   { id: 'lives-whole', name: 'Whole Lives', emoji: '🐾' },
   { id: 'love-this-app', name: 'I Love This App!', emoji: '📱' },
+  { id: 'custom', name: 'Make It Yours', emoji: '✏️' },
 ];
 
 type VariantCopy = {
@@ -44,7 +149,7 @@ type VariantCopy = {
   largeHeadline?: boolean;
 };
 
-const VARIANT_COPY: Record<MeAndMyPupVariant, VariantCopy> = {
+const VARIANT_COPY: Record<Exclude<MeAndMyPupVariant, 'custom'>, VariantCopy> = {
   classic: {
     lines: ['Me & My Pup'],
     subtitle: 'Best friends · Freedom Paws',
@@ -69,9 +174,7 @@ const VARIANT_COPY: Record<MeAndMyPupVariant, VariantCopy> = {
   },
   'love-this-app': {
     lines: ['I Love This App!'],
-    subtitle: 'Freedom Paws Wellness',
     titleColor: '#F5C242',
-    subtitleColor: 'rgba(255,255,255,0.9)',
     showLogo: true,
   },
 };
@@ -99,6 +202,13 @@ function layoutTune(variant: MeAndMyPupVariant): LayoutTune {
         slotCyRatio: 0.58,
         dogRadius: 0.255,
         ownerRadius: 0.198,
+      };
+    case 'custom':
+      return {
+        headerStartY: 0.06,
+        slotCyRatio: 0.6,
+        dogRadius: 0.252,
+        ownerRadius: 0.195,
       };
     default:
       return {
@@ -469,16 +579,77 @@ function drawLakeNightFallback(ctx: CanvasRenderingContext2D, w: number, h: numb
   }
 }
 
+function drawCustomBackground(ctx: CanvasRenderingContext2D, w: number, h: number, color: MeAndMyPupFrameColor) {
+  const grad = ctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, color.bgTop);
+  grad.addColorStop(1, color.bgBottom);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
+  for (let i = 0; i < 16; i += 1) {
+    const x = ((i * 149) % 1000) / 1000 * w;
+    const y = ((i * 83) % 1000) / 1000 * h;
+    ctx.beginPath();
+    ctx.arc(x, y, 1.5 + (i % 2), 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawColorBorderFrame(ctx: CanvasRenderingContext2D, w: number, h: number, borderColor: string) {
+  const bw = Math.max(10, w * 0.024);
+  ctx.strokeStyle = borderColor;
+  ctx.lineWidth = bw;
+  ctx.strokeRect(bw / 2, bw / 2, w - bw, h - bw);
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = Math.max(1, bw * 0.2);
+  ctx.strokeRect(bw * 1.2, bw * 1.2, w - bw * 2.4, h - bw * 2.4);
+}
+
+function wrapHeadlineLines(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number,
+  fontSize: number,
+  maxLines = 3
+): string[] {
+  const cleaned = text.trim().slice(0, CUSTOM_HEADLINE_MAX);
+  if (!cleaned) return ['Your message here'];
+
+  ctx.font = `800 ${fontSize}px system-ui, sans-serif`;
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let current = '';
+
+  for (const word of words) {
+    const test = current ? `${current} ${word}` : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+      if (lines.length >= maxLines) break;
+    } else {
+      current = test;
+    }
+  }
+  if (current && lines.length < maxLines) lines.push(current);
+  return lines.length ? lines : ['Your message here'];
+}
+
 export function drawMeAndMyPupBackground(
   ctx: CanvasRenderingContext2D,
   variant: MeAndMyPupVariant,
   w: number,
   h: number,
-  photoBg: HTMLImageElement | null
+  photoBg: HTMLImageElement | null,
+  frameColorId: MeAndMyPupFrameColorId = 'navy'
 ) {
   switch (variant) {
     case 'classic':
       drawClassicCardBg(ctx, w, h);
+      return;
+    case 'custom':
+      drawCustomBackground(ctx, w, h, getFrameColor(frameColorId));
       return;
     case 'love-my-dog':
       drawLoveMyDogBg(ctx, w, h);
@@ -549,12 +720,16 @@ function drawGoldRing(
   slot: CircleSlot,
   selected: boolean,
   label: string,
-  darkLabels = false
+  darkLabels = false,
+  ringColors?: Pick<MeAndMyPupFrameColor, 'ring' | 'ringSelected' | 'label'>
 ) {
   const lw = Math.max(2.5, slot.radius * 0.045);
+  const ringStroke = selected
+    ? (ringColors?.ringSelected ?? '#FFE082')
+    : (ringColors?.ring ?? (darkLabels ? '#5c4a2a' : '#F5C242'));
   ctx.beginPath();
   ctx.arc(slot.cx, slot.cy, slot.radius + lw * 0.6, 0, Math.PI * 2);
-  ctx.strokeStyle = selected ? '#FFE082' : darkLabels ? '#5c4a2a' : '#F5C242';
+  ctx.strokeStyle = ringStroke;
   ctx.lineWidth = selected ? lw * 1.35 : lw;
   ctx.stroke();
 
@@ -567,24 +742,20 @@ function drawGoldRing(
   const fontSize = Math.max(9, slot.radius * 0.19);
   ctx.font = `700 ${fontSize}px system-ui, sans-serif`;
   ctx.fillStyle = selected
-    ? darkLabels
-      ? '#1a1208'
-      : '#FFE082'
-    : darkLabels
-      ? 'rgba(26,18,8,0.75)'
-      : 'rgba(255,255,255,0.75)';
+    ? ringColors?.ringSelected ?? (darkLabels ? '#1a1208' : '#FFE082')
+    : ringColors?.label ?? (darkLabels ? 'rgba(26,18,8,0.75)' : 'rgba(255,255,255,0.75)');
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
   ctx.fillText(label, slot.cx, slot.cy + slot.radius + lw * 2.2);
 }
 
-function drawPawConnector(ctx: CanvasRenderingContext2D, layout: SlotLayout) {
+function drawPawConnector(ctx: CanvasRenderingContext2D, layout: SlotLayout, color = 'rgba(245, 194, 66, 0.85)') {
   const midX = (layout.dog.cx + layout.owner.cx) / 2;
   const y = layout.dog.cy + layout.dog.radius * 0.12;
   ctx.font = `${Math.max(14, layout.dog.radius * 0.35)}px system-ui, sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = 'rgba(245, 194, 66, 0.85)';
+  ctx.fillStyle = color;
   ctx.fillText('🐾', midX, y);
 }
 
@@ -597,8 +768,11 @@ function fitTitleSize(
 ): number {
   let size = startSize;
   const weight = italicBold ? 'italic 800' : '800';
+  const family = italicBold
+    ? 'Georgia, "Times New Roman", serif'
+    : 'system-ui, sans-serif';
   while (size > 9) {
-    ctx.font = `${weight} ${size}px Georgia, "Times New Roman", serif`;
+    ctx.font = `${weight} ${size}px ${family}`;
     const widest = Math.max(...lines.map((line) => ctx.measureText(line).width));
     if (widest <= maxWidth) return size;
     size -= 1;
@@ -611,56 +785,79 @@ function drawHeader(
   w: number,
   h: number,
   variant: MeAndMyPupVariant,
-  logoImg: HTMLImageElement | null
+  logoImg: HTMLImageElement | null,
+  customHeadline?: string,
+  frameColorId: MeAndMyPupFrameColorId = 'navy'
 ) {
-  const copy = VARIANT_COPY[variant];
   const tune = layoutTune(variant);
+  const isCustom = variant === 'custom';
+  const frameColor = isCustom ? getFrameColor(frameColorId) : null;
+  const copy = isCustom ? null : VARIANT_COPY[variant as Exclude<MeAndMyPupVariant, 'custom'>];
   const isLivesWhole = variant === 'lives-whole';
-  const isLargeHeadline = copy.largeHeadline === true;
-  const maxTextWidth = isLivesWhole ? w * 0.78 : w * 0.92;
-  const startSize = isLivesWhole
+  const isLargeHeadline = copy?.largeHeadline === true;
+  const maxTextWidth = isLivesWhole ? w * 0.78 : w * 0.9;
+  let titleSize = isLivesWhole
     ? h * 0.108
     : isLargeHeadline
       ? Math.max(20, w * 0.058)
-      : Math.max(14, w * 0.042);
-  const titleSize = isLivesWhole
-    ? fitTitleSize(ctx, copy.lines, maxTextWidth, startSize, true)
-    : copy.lines.length > 1
-      ? Math.max(11, w * 0.032)
-      : isLargeHeadline
-        ? Math.max(20, w * 0.058)
+      : isCustom
+        ? Math.max(16, w * 0.048)
         : Math.max(14, w * 0.042);
+
+  let lines: string[];
+  if (isCustom) {
+    titleSize = fitTitleSize(
+      ctx,
+      wrapHeadlineLines(ctx, customHeadline ?? '', maxTextWidth, titleSize),
+      maxTextWidth,
+      titleSize,
+      false
+    );
+    lines = wrapHeadlineLines(ctx, customHeadline ?? '', maxTextWidth, titleSize);
+  } else if (copy) {
+    titleSize = isLivesWhole
+      ? fitTitleSize(ctx, copy.lines, maxTextWidth, titleSize, true)
+      : copy.lines.length > 1
+        ? Math.max(11, w * 0.032)
+        : isLargeHeadline
+          ? Math.max(20, w * 0.058)
+          : Math.max(14, w * 0.042);
+    lines = copy.lines;
+  } else {
+    lines = ['Me & My Pup'];
+  }
+
   const lineHeight = titleSize * (isLivesWhole ? 1.2 : 1.12);
   const startY = h * tune.headerStartY;
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
-  ctx.fillStyle = copy.titleColor ?? '#F5C242';
+  ctx.fillStyle = isCustom ? frameColor!.title : (copy?.titleColor ?? '#F5C242');
 
-  copy.lines.forEach((line, i) => {
-    const weight = copy.italicBold ? 'italic 800' : '800';
-    const family = copy.italicBold
+  lines.forEach((line, i) => {
+    const weight = copy?.italicBold ? 'italic 800' : '800';
+    const family = copy?.italicBold
       ? 'Georgia, "Times New Roman", serif'
       : 'system-ui, sans-serif';
     ctx.font = `${weight} ${titleSize}px ${family}`;
     ctx.fillText(line, w / 2, startY + i * lineHeight);
   });
 
-  if (copy.subtitle) {
+  let belowTitleY = startY + lines.length * lineHeight + (isLargeHeadline ? 8 : 6);
+
+  if (copy?.showLogo && logoImg) {
+    const logoSize = Math.max(28, w * 0.09);
+    ctx.drawImage(logoImg, w / 2 - logoSize / 2, belowTitleY, logoSize, logoSize);
+    belowTitleY += logoSize + 4;
+  }
+
+  if (copy?.subtitle) {
     const subSize = isLargeHeadline
       ? Math.max(13, w * 0.036)
       : Math.max(10, w * 0.028);
     ctx.font = `600 ${subSize}px system-ui, sans-serif`;
     ctx.fillStyle = copy.subtitleColor ?? 'rgba(255,255,255,0.65)';
-    let subY = startY + copy.lines.length * lineHeight + (isLargeHeadline ? 8 : 6);
-
-    if (copy.showLogo && logoImg) {
-      const logoSize = Math.max(28, w * 0.09);
-      ctx.drawImage(logoImg, w / 2 - logoSize / 2, subY, logoSize, logoSize);
-      subY += logoSize + 4;
-    }
-
-    ctx.fillText(copy.subtitle, w / 2, subY);
+    ctx.fillText(copy.subtitle, w / 2, belowTitleY);
   }
 }
 
@@ -671,6 +868,8 @@ type DrawFrameOpts = {
   variant: MeAndMyPupVariant;
   photoBg: HTMLImageElement | null;
   logoImg?: HTMLImageElement | null;
+  customHeadline?: string;
+  frameColorId?: MeAndMyPupFrameColorId;
   dogImg: HTMLImageElement | null;
   ownerImg: HTMLImageElement | null;
   dogTransform: SlotTransform;
@@ -687,6 +886,8 @@ export function drawMeAndMyPupFrame(opts: DrawFrameOpts) {
     variant,
     photoBg,
     logoImg = null,
+    customHeadline = '',
+    frameColorId = 'navy',
     dogImg,
     ownerImg,
     dogTransform,
@@ -695,8 +896,10 @@ export function drawMeAndMyPupFrame(opts: DrawFrameOpts) {
     showWatermark = true,
   } = opts;
 
-  drawMeAndMyPupBackground(ctx, variant, cw, ch, photoBg);
-  drawHeader(ctx, cw, ch, variant, logoImg ?? null);
+  const frameColor = variant === 'custom' ? getFrameColor(frameColorId) : null;
+
+  drawMeAndMyPupBackground(ctx, variant, cw, ch, photoBg, frameColorId);
+  drawHeader(ctx, cw, ch, variant, logoImg ?? null, customHeadline, frameColorId);
 
   const layout = getSlotLayout(cw, ch, variant);
 
@@ -712,22 +915,39 @@ export function drawMeAndMyPupFrame(opts: DrawFrameOpts) {
     drawPlaceholder(ctx, layout.owner);
   }
 
-  drawPawConnector(ctx, layout);
+  drawPawConnector(ctx, layout, frameColor?.paw);
   const darkRings = variant === 'lives-whole';
-  drawGoldRing(ctx, layout.dog, selectedSlot === 'dog', 'MY PUP', darkRings);
-  drawGoldRing(ctx, layout.owner, selectedSlot === 'owner', 'ME', darkRings);
+  const ringPalette = frameColor
+    ? { ring: frameColor.ring, ringSelected: frameColor.ringSelected, label: frameColor.label }
+    : undefined;
+  drawGoldRing(ctx, layout.dog, selectedSlot === 'dog', 'MY PUP', darkRings, ringPalette);
+  drawGoldRing(ctx, layout.owner, selectedSlot === 'owner', 'ME', darkRings, ringPalette);
 
   if (variant === 'lives-whole') {
     drawBambooFrame(ctx, cw, ch);
   }
 
+  if (variant === 'custom' && frameColor) {
+    drawColorBorderFrame(ctx, cw, ch, frameColor.border);
+  }
+
   if (showWatermark) {
-    const fontSize = Math.max(9, cw * 0.024);
-    ctx.font = `${fontSize}px system-ui, sans-serif`;
-    ctx.fillStyle = variant === 'lives-whole' ? 'rgba(26,18,8,0.45)' : 'rgba(255,255,255,0.5)';
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'bottom';
-    ctx.fillText('Made with Freedom Paws', cw - 8, ch - 8);
+    if (variant === 'lives-whole') {
+      const inset = Math.max(12, cw * 0.028);
+      const fontSize = Math.max(11, cw * 0.03);
+      ctx.font = `600 ${fontSize}px system-ui, sans-serif`;
+      ctx.fillStyle = 'rgba(26,18,8,0.72)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('Freedom Paws Wellness', cw / 2, ch - inset - 8);
+    } else {
+      const fontSize = Math.max(9, cw * 0.024);
+      ctx.font = `${fontSize}px system-ui, sans-serif`;
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('Made with Freedom Paws', cw - 8, ch - 8);
+    }
   }
 }
 

@@ -17,7 +17,10 @@ import {
   type FrameStyleId,
 } from '@/lib/photobooth/frames';
 import {
+  CUSTOM_HEADLINE_MAX,
+  ME_AND_MY_PUP_FRAME_COLORS,
   ME_AND_MY_PUP_VARIANTS,
+  type MeAndMyPupFrameColorId,
   type MeAndMyPupVariant,
   type SlotId,
 } from '@/lib/photobooth/me-and-my-pup';
@@ -86,6 +89,8 @@ export default function PhotoBoothClient({
   const [petSelected, setPetSelected] = useState(false);
   const [ownerImageUrl, setOwnerImageUrl] = useState<string | null>(null);
   const [meMyPupVariant, setMeMyPupVariant] = useState<MeAndMyPupVariant>('classic');
+  const [meMyPupCustomText, setMeMyPupCustomText] = useState('Me & My Pup');
+  const [meMyPupFrameColor, setMeMyPupFrameColor] = useState<MeAndMyPupFrameColorId>('navy');
   const [selectedSlot, setSelectedSlot] = useState<SlotId | null>('dog');
 
   const handleStickersChange = useCallback(
@@ -392,7 +397,17 @@ export default function PhotoBoothClient({
           ← BACK TO HOME
         </Link>
 
-        <h1 className="text-3xl font-bold text-center">SuperBud Photo Booth</h1>
+        <div className="relative mb-1">
+          <Link
+            href="/photobooth/help"
+            className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border border-amber-400/50 bg-[#0F1E38] text-sm font-bold text-amber-300 touch-manipulation hover:bg-amber-400/15 active:bg-amber-400/25"
+            aria-label="Photo Booth how-to instructions"
+            title="How to use Photo Booth"
+          >
+            ?
+          </Link>
+          <h1 className="text-3xl font-bold text-center pr-10">SuperBud Photo Booth</h1>
+        </div>
         <p className="mt-2 text-center text-sm text-white/60">
           Upload · pick a background · share in seconds
         </p>
@@ -545,7 +560,7 @@ export default function PhotoBoothClient({
 
               <div className="mt-4">
                 <p className="text-xs font-semibold text-white/60 mb-2">Frame style</p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {ME_AND_MY_PUP_VARIANTS.map((v) => (
                     <button
                       key={v.id}
@@ -564,11 +579,58 @@ export default function PhotoBoothClient({
                 </div>
               </div>
 
+              {meMyPupVariant === 'custom' && (
+                <div className="mt-4 rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-4 space-y-4">
+                  <div>
+                    <label htmlFor="me-my-pup-headline" className="text-sm font-bold text-amber-400 block mb-2">
+                      Your headline
+                    </label>
+                    <input
+                      id="me-my-pup-headline"
+                      type="text"
+                      value={meMyPupCustomText}
+                      maxLength={CUSTOM_HEADLINE_MAX}
+                      onChange={(e) => setMeMyPupCustomText(e.target.value)}
+                      placeholder="Me & My Pup"
+                      className="w-full min-h-[48px] rounded-xl border border-white/20 bg-[#0A1625] px-4 py-3 text-base text-white placeholder:text-white/35 touch-manipulation"
+                    />
+                    <p className="mt-1.5 text-[10px] text-white/45 text-center">
+                      Shows above your photos · {meMyPupCustomText.length}/{CUSTOM_HEADLINE_MAX}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-amber-400 mb-2">Frame color</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {ME_AND_MY_PUP_FRAME_COLORS.map((color) => (
+                        <button
+                          key={color.id}
+                          type="button"
+                          onClick={() => setMeMyPupFrameColor(color.id)}
+                          className={`min-h-[44px] rounded-xl px-2 py-2 text-[10px] font-bold touch-manipulation ${
+                            meMyPupFrameColor === color.id
+                              ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-[#0F1E38]'
+                              : 'border border-white/15'
+                          }`}
+                        >
+                          <span
+                            className="block h-6 w-full rounded-md mb-1 border border-white/20"
+                            style={{ background: color.swatch }}
+                          />
+                          {color.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <MeAndMyPupCanvas
                 ref={meMyPupRef}
                 petImageUrl={petImageUrl}
                 ownerImageUrl={ownerImageUrl}
                 variant={meMyPupVariant}
+                customHeadline={meMyPupCustomText}
+                frameColorId={meMyPupFrameColor}
                 onReadyChange={setCanvasReady}
                 onSlotSelectedChange={setSelectedSlot}
                 onError={setError}

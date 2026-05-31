@@ -15,6 +15,7 @@ import {
   hitTestSlot,
   ME_AND_MY_PUP_LOGO_URL,
   type MeAndMyPupVariant,
+  type MeAndMyPupFrameColorId,
   type SlotId,
   type SlotTransform,
   variantBackgroundUrls,
@@ -37,6 +38,8 @@ type Props = {
   petImageUrl: string;
   ownerImageUrl: string | null;
   variant: MeAndMyPupVariant;
+  customHeadline?: string;
+  frameColorId?: MeAndMyPupFrameColorId;
   onReadyChange?: (ready: boolean) => void;
   onSlotSelectedChange?: (slot: SlotId | null) => void;
   onError?: (message: string) => void;
@@ -88,7 +91,16 @@ function canvasPoint(canvas: HTMLCanvasElement, clientX: number, clientY: number
 }
 
 const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAndMyPupCanvas(
-  { petImageUrl, ownerImageUrl, variant, onReadyChange, onSlotSelectedChange, onError },
+  {
+    petImageUrl,
+    ownerImageUrl,
+    variant,
+    customHeadline = '',
+    frameColorId = 'navy',
+    onReadyChange,
+    onSlotSelectedChange,
+    onError,
+  },
   ref
 ) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -106,10 +118,14 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
   );
   const dimsRef = useRef({ width: 360, height: 270 });
   const variantRef = useRef(variant);
+  const customHeadlineRef = useRef(customHeadline);
+  const frameColorIdRef = useRef(frameColorId);
   const loadGenRef = useRef(0);
   const [busy, setBusy] = useState(true);
 
   variantRef.current = variant;
+  customHeadlineRef.current = customHeadline;
+  frameColorIdRef.current = frameColorId;
 
   const getTransform = (slot: SlotId) =>
     slot === 'dog' ? dogTransformRef.current : ownerTransformRef.current;
@@ -138,6 +154,8 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
       variant: variantRef.current,
       photoBg: bgRef.current,
       logoImg: logoRef.current,
+      customHeadline: customHeadlineRef.current,
+      frameColorId: frameColorIdRef.current,
       dogImg: dogRef.current,
       ownerImg: ownerRef.current,
       dogTransform: dogTransformRef.current,
@@ -230,6 +248,10 @@ const MeAndMyPupCanvas = forwardRef<MeAndMyPupCanvasHandle, Props>(function MeAn
       cancelled = true;
     };
   }, [variant, busy]);
+
+  useEffect(() => {
+    if (!busy) paintRef.current();
+  }, [customHeadline, frameColorId, busy]);
 
   useEffect(() => {
     const wrap = wrapRef.current;
