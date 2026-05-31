@@ -10,7 +10,7 @@ const navLinks = [
   { label: 'SUPERBUD PHOTO BOOTH', href: '/photobooth' },
   { label: 'MY PETS', href: '/mypets' },
   { label: 'PROTOCOL OVERVIEW', href: '/protocols' },
-  { label: 'MONITOR MY DOG — COMING SOON', href: '/monitor' },
+  { label: 'MONITOR MY DOG', href: '/monitor' },
   { label: 'COMMUNITY DISCORD', href: '#' },
   { label: 'TOKEN SHOP', href: '/token-shop' },
 ];

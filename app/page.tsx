@@ -40,8 +40,8 @@ const cards = [
   {
     icon: '📡',
     title: 'Monitor My Dog',
-    desc: 'Real-time health & location monitoring',
-    cta: 'COMING SOON',
+    desc: 'Room camera live view while you\'re away — Wyze & off-the-shelf setup',
+    cta: 'OPEN →',
     href: '/monitor',
   },
 ];
