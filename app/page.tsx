@@ -68,8 +68,8 @@ export default function Home() {
             <div className="flex justify-center mb-8">
               <div className="rounded-2xl border-2 border-amber-400 overflow-hidden shadow-2xl shadow-black/50">
                 <Image
-                  src="/images/superbud-hero.png"
-                  alt="SuperBud in a superhero cape with a group of happy dogs by a lake at sunset"
+                  src="/images/welcome-hero.jpg"
+                  alt="SuperBud and a group of happy dogs by a lake — Wellness, Freedom, Community"
                   width={1024}
                   height={771}
                   quality={80}
