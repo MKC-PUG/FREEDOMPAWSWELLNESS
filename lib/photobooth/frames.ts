@@ -36,20 +36,24 @@ export function computePetRect(
   petImg: HTMLImageElement,
   cw: number,
   ch: number,
-  widthFrac: number,
-  centerY = 0.52
+  maxWidthFrac = 0.85,
+  maxHeightFrac = 0.88,
+  centerY = 0.54
 ): PetRect {
-  const targetW = cw * widthFrac;
   const iw = petImg.naturalWidth || petImg.width;
   const ih = petImg.naturalHeight || petImg.height;
-  const dh = ih * (targetW / iw);
+  const maxW = cw * maxWidthFrac;
+  const maxH = ch * maxHeightFrac;
+  const scale = Math.min(maxW / iw, maxH / ih);
+  const width = iw * scale;
+  const height = ih * scale;
   const cx = cw / 2;
   const cy = ch * centerY;
   return {
-    left: cx - targetW / 2,
-    top: cy - dh / 2,
-    width: targetW,
-    height: dh,
+    left: cx - width / 2,
+    top: cy - height / 2,
+    width,
+    height,
   };
 }
 

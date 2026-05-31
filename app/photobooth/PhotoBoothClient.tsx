@@ -47,6 +47,7 @@ export default function PhotoBoothClient({
   const canvasRef = useRef<PhotoBoothCanvasHandle>(null);
   const blobUrlRef = useRef<string | null>(null);
   const originalPhotoUrlRef = useRef<string | null>(null);
+  const themesRef = useRef<HTMLElement>(null);
 
   const [petImageUrl, setPetImageUrl] = useState<string | null>(null);
   const [loadingPhoto, setLoadingPhoto] = useState(Boolean(initialUploadId));
@@ -212,7 +213,10 @@ export default function PhotoBoothClient({
       }
       setPhotoUrl(URL.createObjectURL(cutout));
       setCutoutApplied(true);
-      setShareMsg('Background removed — tap a theme below!');
+      setShareMsg('Background removed — pick a background above!');
+      requestAnimationFrame(() => {
+        themesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     } catch (e) {
       const msg =
         e instanceof Error ? e.message : 'Background removal failed';
@@ -269,6 +273,42 @@ export default function PhotoBoothClient({
 
   const displayError = uploadError && !petImageUrl && !loadingPhoto ? uploadError : localUploadError;
 
+  const themePicker = (
+    <section
+      ref={themesRef}
+      className={
+        editorActive
+          ? 'sticky z-20 -mx-4 px-4 py-3 mb-4 bg-[#0A1625]/95 backdrop-blur-md border-b border-amber-400/20'
+          : 'mt-4 mb-4'
+      }
+      style={editorActive ? { top: 'var(--nav-total-height)' } : undefined}
+    >
+      <p className="text-base font-bold text-amber-400 mb-1">
+        {editorActive ? 'Change background' : 'Step 2 — Choose a background'}
+      </p>
+      <p className="text-[11px] text-white/45 mb-3 leading-relaxed">
+        Tap any theme to dress up your pet. Scroll here anytime to switch backgrounds.
+      </p>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {PHOTO_BOOTH_THEMES.map((theme) => (
+          <button
+            key={theme.id}
+            type="button"
+            onClick={() => pickTheme(theme.id)}
+            className={`min-h-[56px] rounded-xl px-2 py-2.5 text-xs font-bold transition touch-manipulation ${
+              themeId === theme.id && editorActive
+                ? 'bg-amber-400 text-black ring-2 ring-amber-200'
+                : 'bg-[#0F1E38] border border-white/15 text-white'
+            }`}
+          >
+            <span className="text-xl block mb-0.5">{theme.emoji}</span>
+            {theme.name}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+
   return (
     <div className="min-h-screen bg-[#0A1625] text-white">
       <div className="max-w-lg mx-auto px-4 py-6 pb-16">
@@ -301,7 +341,7 @@ export default function PhotoBoothClient({
             <p className="mb-3 text-center text-xs text-white/50 leading-relaxed">
               Tap <strong className="text-white">Choose Photo</strong> below — upload starts automatically.
               <br />
-              After upload, tap <strong className="text-amber-300">Frame Only</strong> or a theme below.
+              After upload, choose a <strong className="text-amber-300">background</strong> at the top.
             </p>
             <PhotoUploadZone
               onSelect={() => {}}
@@ -319,9 +359,11 @@ export default function PhotoBoothClient({
 
         {petImageUrl && (
           <>
+            {themePicker}
+
             {uploadSuccess && (
-              <div className="mt-4 rounded-2xl border border-green-500/40 bg-green-900/20 p-3 text-center text-sm text-green-400">
-                ✓ Photo ready — tap a theme below
+              <div className="rounded-2xl border border-green-500/40 bg-green-900/20 p-3 text-center text-sm text-green-400">
+                ✓ Photo ready — choose a background above
               </div>
             )}
 
@@ -339,7 +381,7 @@ export default function PhotoBoothClient({
                   <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4 text-center">
                     <p className="text-base font-bold text-amber-400">Removing background…</p>
                     <p className="mt-2 text-sm text-white/70">{bgProgress || 'Please wait'}</p>
-                    <p className="mt-2 text-xs text-white/45">First time downloads ~40MB on Wi‑Fi (15–45 sec)</p>
+                    <p className="mt-2 text-xs text-white/45">First time downloads ~80MB on Wi‑Fi (30–60 sec)</p>
                   </div>
                 )}
                 {bgError && (
@@ -367,7 +409,8 @@ export default function PhotoBoothClient({
                   </button>
                 )}
                 <p className="text-center text-[11px] text-white/45 leading-relaxed px-2">
-                  Cutout runs on your phone — first time may take 15–30 seconds. Works best with one clear pet photo.
+                  Higher quality cutout (~80MB first download on Wi‑Fi). If a leg looks cut off, tap{' '}
+                  <strong className="text-white/70">Restore original</strong> and use a theme without cutout.
                 </p>
               </div>
             )}
@@ -377,7 +420,13 @@ export default function PhotoBoothClient({
         <div className="mt-5">
           {petImageUrl && !editorActive && (
             <div className="overflow-hidden rounded-2xl border border-white/15 bg-[#0F1E38]/60">
-              <div className="flex aspect-[4/3] items-center justify-center p-2">
+              <div
+                className={`flex aspect-[4/3] items-center justify-center p-2 ${
+                  cutoutApplied
+                    ? 'bg-[length:16px_16px] bg-[position:0_0,8px_8px] bg-[image:linear-gradient(45deg,#1a2a44_25%,transparent_25%),linear-gradient(-45deg,#1a2a44_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#1a2a44_75%),linear-gradient(-45deg,transparent_75%,#1a2a44_75%)]'
+                    : ''
+                }`}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={petImageUrl}
@@ -386,15 +435,8 @@ export default function PhotoBoothClient({
                 />
               </div>
               <p className="border-t border-white/10 py-3 text-center text-xs text-amber-300/90">
-                ↑ Your photo · Tap <strong>Frame Only</strong> or a theme below
+                ↑ Preview · pick a <strong>background</strong> at the top
               </p>
-              <button
-                type="button"
-                onClick={startFrameOnly}
-                className="mx-4 mb-4 w-[calc(100%-2rem)] rounded-xl bg-amber-400 py-3 text-sm font-bold text-black"
-              >
-                🖼️ Frame Only — no background theme
-              </button>
             </div>
           )}
 
@@ -540,6 +582,29 @@ export default function PhotoBoothClient({
                   <div className="flex w-full max-w-xs gap-2">
                     <button
                       type="button"
+                      aria-label="Smaller"
+                      disabled={selectedStickerId === null}
+                      onClick={() => canvasRef.current?.scaleSelected(0.9)}
+                      className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold disabled:opacity-30"
+                    >
+                      − Smaller
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Bigger"
+                      disabled={selectedStickerId === null}
+                      onClick={() => canvasRef.current?.scaleSelected(1.1)}
+                      className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold disabled:opacity-30"
+                    >
+                      + Bigger
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-white/40 text-center">
+                    Or pinch with two fingers on the selected accessory
+                  </p>
+                  <div className="flex w-full max-w-xs gap-2">
+                    <button
+                      type="button"
                       aria-label="Tilt left"
                       disabled={selectedStickerId === null}
                       onClick={() => canvasRef.current?.tiltSelected(-1)}
@@ -559,6 +624,83 @@ export default function PhotoBoothClient({
                   </div>
                 </div>
               )}
+              {canvasReady && editorActive && (
+                <>
+                  {themeId === 'frame-only' && (
+                    <p className="mt-3 text-center text-xs text-white/45">
+                      Plain studio backdrop · pick a frame above · no stickers required
+                    </p>
+                  )}
+                  {themeId === 'accessories-only' && (
+                    <p className="mt-3 text-center text-xs text-white/45">
+                      Checkerboard = no background. Tap <strong className="text-amber-300">Customize</strong> below to add hats &amp; glasses.
+                    </p>
+                  )}
+                  {themeId !== 'accessories-only' && themeId !== 'frame-only' && canvasStickers.length > 0 && (
+                    <p className="mt-3 text-center text-xs text-white/45">
+                      Tap a sticker name above, then drag or use the arrow buttons.
+                    </p>
+                  )}
+
+                  <div className="mt-5 grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      disabled={!canvasReady}
+                      onClick={() => void sharePhoto()}
+                      className="rounded-2xl bg-amber-400 py-4 font-bold text-black disabled:opacity-40"
+                    >
+                      📤 Share
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!canvasReady}
+                      onClick={() => void savePhoto()}
+                      className="rounded-2xl border border-amber-400/60 py-4 font-bold text-amber-300 disabled:opacity-40"
+                    >
+                      💾 Save
+                    </button>
+                  </div>
+
+                  {shareMsg && (
+                    <p className="mt-3 text-center text-sm text-green-400">{shareMsg}</p>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => setCustomizeOpen((o) => !o)}
+                    className="mt-4 w-full text-sm text-white/50 underline"
+                  >
+                    {customizeOpen ? 'Hide customize' : 'Customize — add or remove stickers'}
+                  </button>
+
+                  {customizeOpen && (
+                    <div className="mt-4 rounded-2xl border border-white/10 bg-[#0F1E38]/80 p-4">
+                      <p className="text-xs text-white/50 mb-3">
+                        Tap a sticker to add · touch &amp; drag on photo to move · gold box = selected
+                      </p>
+                      <div className="grid grid-cols-4 gap-2">
+                        {EXTRA_STICKERS.map((sticker) => (
+                          <button
+                            key={sticker.src}
+                            type="button"
+                            onClick={() => void canvasRef.current?.addSticker(sticker)}
+                            className="rounded-xl bg-black/30 border border-white/10 py-2 px-1 text-[10px] leading-tight hover:border-amber-400/40"
+                          >
+                            {sticker.label}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => canvasRef.current?.removeSelected()}
+                        className="mt-3 w-full rounded-xl border border-red-500/40 py-2 text-sm text-red-300"
+                      >
+                        Remove selected sticker
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </>
           )}
 
@@ -568,115 +710,6 @@ export default function PhotoBoothClient({
             </div>
           )}
         </div>
-
-        {petImageUrl && (
-          <>
-            <p className="mt-6 mb-3 text-sm font-semibold text-amber-400">Choose a theme</p>
-            <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory">
-              {PHOTO_BOOTH_THEMES.map((theme) => (
-                <button
-                  key={theme.id}
-                  type="button"
-                  onClick={() => pickTheme(theme.id)}
-                  className={`shrink-0 snap-start rounded-2xl px-4 py-3 text-sm font-bold transition ${
-                    themeId === theme.id && editorActive
-                      ? 'bg-amber-400 text-black'
-                      : 'bg-[#0F1E38] border border-white/15 text-white'
-                  }`}
-                >
-                  <span className="text-xl block mb-1">{theme.emoji}</span>
-                  {theme.name}
-                </button>
-              ))}
-            </div>
-
-            {editorActive && themeId === 'frame-only' && (
-              <p className="mt-2 text-center text-xs text-white/45">
-                Plain studio backdrop · pick a frame above the canvas · no stickers required
-              </p>
-            )}
-
-            {editorActive && themeId === 'accessories-only' && (
-              <p className="mt-2 text-center text-xs text-white/45">
-                Checkerboard = no background. Tap <strong className="text-amber-300">Customize</strong> below to add hats &amp; glasses.
-              </p>
-            )}
-
-            {editorActive && themeId !== 'accessories-only' && (
-              <p className="mt-2 text-center text-xs text-white/45">
-                Tap a sticker name below, then drag or use arrow buttons.
-              </p>
-            )}
-
-            {!editorActive && (
-              <p className="mt-3 text-center text-xs text-white/45">
-                Tap a theme — lightweight editor (no heavy app download).
-              </p>
-            )}
-
-            {editorActive && (
-              <>
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    disabled={!canvasReady}
-                    onClick={() => void sharePhoto()}
-                    className="rounded-2xl bg-amber-400 py-4 font-bold text-black disabled:opacity-40"
-                  >
-                    📤 Share
-                  </button>
-                  <button
-                    type="button"
-                    disabled={!canvasReady}
-                    onClick={() => void savePhoto()}
-                    className="rounded-2xl border border-amber-400/60 py-4 font-bold text-amber-300 disabled:opacity-40"
-                  >
-                    💾 Save
-                  </button>
-                </div>
-
-                {shareMsg && (
-                  <p className="mt-3 text-center text-sm text-green-400">{shareMsg}</p>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => setCustomizeOpen((o) => !o)}
-                  className="mt-4 w-full text-sm text-white/50 underline"
-                >
-                  {customizeOpen ? 'Hide customize' : 'Customize — add or remove stickers'}
-                </button>
-
-                {customizeOpen && (
-                  <div className="mt-4 rounded-2xl border border-white/10 bg-[#0F1E38]/80 p-4">
-                <p className="text-xs text-white/50 mb-3">
-                  Tap a sticker to add · touch &amp; drag on photo to move · gold box = selected
-                </p>
-                    <div className="grid grid-cols-4 gap-2">
-                      {EXTRA_STICKERS.map((sticker) => (
-                        <button
-                          key={sticker.src}
-                          type="button"
-                          onClick={() => void canvasRef.current?.addSticker(sticker)}
-                          className="rounded-xl bg-black/30 border border-white/10 py-2 px-1 text-[10px] leading-tight hover:border-amber-400/40"
-                        >
-                          {sticker.label}
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => canvasRef.current?.removeSelected()}
-                      className="mt-3 w-full rounded-xl border border-red-500/40 py-2 text-sm text-red-300"
-                    >
-                      Remove selected sticker
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
-          </>
-        )}
 
         {error && <p className="mt-4 text-center text-sm text-red-400">{error}</p>}
       </div>

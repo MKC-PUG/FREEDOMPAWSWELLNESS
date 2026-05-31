@@ -41,6 +41,7 @@ export type PhotoBoothCanvasHandle = {
   removeSelected: () => void;
   nudgeSelected: (dx: number, dy: number) => void;
   tiltSelected: (direction: -1 | 1) => void;
+  scaleSelected: (factor: number) => void;
   selectSticker: (id: number) => void;
   clearSelection: () => void;
   listStickers: () => StickerListItem[];
@@ -218,6 +219,12 @@ function drawCenteredWidth(
   ctx.restore();
 }
 
+function touchDistance(t1: Touch, t2: Touch) {
+  const dx = t1.clientX - t2.clientX;
+  const dy = t1.clientY - t2.clientY;
+  return Math.hypot(dx, dy);
+}
+
 function canvasPoint(canvas: HTMLCanvasElement, clientX: number, clientY: number) {
   const rect = canvas.getBoundingClientRect();
   const scaleX = canvas.width / rect.width;
@@ -266,6 +273,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   const applyGenRef = useRef(0);
   const dimsRef = useRef({ width: 360, height: 270 });
   const dragRef = useRef<{ index: number; grabDx: number; grabDy: number } | null>(null);
+  const pinchRef = useRef<{ initialDistance: number; initialScale: number } | null>(null);
   const busyRef = useRef(false);
   const selectedIdRef = useRef<number | null>(null);
   const frameIdRef = useRef<FrameStyleId>(frameId);
@@ -316,9 +324,9 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     let frameLayout: ReturnType<typeof computeFrameRects> | null = null;
 
     if (petRef.current) {
-      const widthFrac =
-        frameOnlyRef.current || accessoriesOnlyRef.current ? 0.78 : 0.72;
-      const photo = computePetRect(petRef.current, cw, ch, widthFrac);
+      const maxW = frameOnlyRef.current || accessoriesOnlyRef.current ? 0.82 : 0.88;
+      const maxH = frameOnlyRef.current || accessoriesOnlyRef.current ? 0.85 : 0.9;
+      const photo = computePetRect(petRef.current, cw, ch, maxW, maxH, 0.54);
       const styleId = frameIdRef.current;
       const widthNorm = frameWidthRef.current;
 
@@ -328,13 +336,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
         drawFrameMat(ctx, frameLayout.mat);
       }
 
-      drawCenteredWidth(
-        ctx,
-        petRef.current,
-        cw / 2,
-        ch * 0.52,
-        cw * widthFrac
-      );
+      ctx.drawImage(petRef.current, photo.left, photo.top, photo.width, photo.height);
     }
 
     for (const layer of stickersRef.current) {
@@ -450,6 +452,19 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     if (!canvas || !wrap) return;
 
     const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2 && selectedIdRef.current !== null) {
+        const layer = stickersRef.current.find((s) => s.id === selectedIdRef.current);
+        if (layer) {
+          pinchRef.current = {
+            initialDistance: touchDistance(e.touches[0], e.touches[1]),
+            initialScale: layer.scale,
+          };
+          dragRef.current = null;
+          e.preventDefault();
+          return;
+        }
+      }
+      pinchRef.current = null;
       const touch = e.touches[0];
       if (!touch) return;
       if (beginDrag(touch.clientX, touch.clientY)) {
@@ -458,6 +473,17 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     };
 
     const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 2 && pinchRef.current && selectedIdRef.current !== null) {
+        const layer = stickersRef.current.find((s) => s.id === selectedIdRef.current);
+        if (layer) {
+          const dist = touchDistance(e.touches[0], e.touches[1]);
+          const ratio = dist / pinchRef.current.initialDistance;
+          layer.scale = Math.min(0.95, Math.max(0.06, pinchRef.current.initialScale * ratio));
+          paintRef.current();
+          e.preventDefault();
+        }
+        return;
+      }
       if (!dragRef.current) return;
       const touch = e.touches[0];
       if (!touch) return;
@@ -465,7 +491,10 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       e.preventDefault();
     };
 
-    const onTouchEnd = () => endDrag();
+    const onTouchEnd = (e: TouchEvent) => {
+      if (e.touches.length < 2) pinchRef.current = null;
+      if (e.touches.length === 0) endDrag();
+    };
 
     const blockContextMenu = (e: Event) => e.preventDefault();
     const blockSelect = (e: Event) => e.preventDefault();
@@ -661,6 +690,15 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     paintRef.current();
   }, []);
 
+  const scaleSelected = useCallback((factor: number) => {
+    const selectedId = selectedIdRef.current;
+    if (selectedId === null) return;
+    const layer = stickersRef.current.find((s) => s.id === selectedId);
+    if (!layer) return;
+    layer.scale = Math.min(0.95, Math.max(0.06, layer.scale * factor));
+    paintRef.current();
+  }, []);
+
   const selectSticker = useCallback(
     (id: number) => {
       if (!stickersRef.current.some((s) => s.id === id)) return;
@@ -708,12 +746,13 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       removeSelected,
       nudgeSelected,
       tiltSelected,
+      scaleSelected,
       selectSticker,
       clearSelection,
       listStickers,
       exportBlob,
     }),
-    [addSticker, removeSelected, nudgeSelected, tiltSelected, selectSticker, clearSelection, listStickers, exportBlob]
+    [addSticker, removeSelected, nudgeSelected, tiltSelected, scaleSelected, selectSticker, clearSelection, listStickers, exportBlob]
   );
 
   return (

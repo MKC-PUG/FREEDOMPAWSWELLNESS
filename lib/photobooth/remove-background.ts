@@ -39,7 +39,7 @@ export async function removePetBackground(
 
   const blob = await removeBackground(imageSource, {
     publicPath,
-    model: 'isnet_quint8',
+    model: 'isnet_fp16',
     device: 'cpu',
     output: { format: 'image/png', quality: 0.92 },
     progress: (key, current, total) => {
