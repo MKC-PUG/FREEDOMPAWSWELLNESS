@@ -1,11 +1,12 @@
 # Freedom Paws PWA — Phase 1 Setup & Checklist
 
 **Last updated:** May 31, 2026  
-**Current version:** `v13` (edit `lib/pwa-version.ts` — build syncs `public/sw.js` automatically)
+**Current version:** `v31` (edit `lib/pwa-version.ts` — build syncs `public/sw.js` automatically)  
+**Phase 1 status:** ✅ **Complete** — preview PWA live on Vercel HTTPS, installed on iPhone
 
 ---
 
-## Phase 1 status — where we left off
+## Phase 1 — signed off
 
 | Area | Status |
 |------|--------|
@@ -15,32 +16,55 @@
 | CSS network-first (fixes unstyled nav after updates) | ✅ Done |
 | Offline banner + `/offline.html` fallback | ✅ Done |
 | Install banner (Android + iOS Safari hint) | ✅ Done |
-| **Update banner** (“Refresh now” when new version) | ✅ Done |
+| Update banner (“Refresh now” when new version) | ✅ Done |
 | Preview mode (`NEXT_PUBLIC_SITE_MODE=preview`) | ✅ Done |
 | robots.txt blocks crawlers in preview | ✅ Done |
-| LAN iPhone testing (`npm run start:mobile`) | ✅ You confirmed working |
-| **HTTPS preview deploy** (Vercel / host) | ⏳ **Next step** |
-| Public launch (`SITE_MODE=public` + domain) | ⏳ After LLC/trademark |
+| LAN iPhone testing (`npm run start:mobile`) | ✅ Signed off |
+| HTTPS preview deploy (Vercel) | ✅ Signed off |
+| iPhone home-screen install from HTTPS URL | ✅ Signed off |
+| Photo Booth + Me & My Pup on installed PWA | ✅ Signed off |
+| **Public launch** (`SITE_MODE=public` + domain) | ⏳ Phase 2 — after LLC/trademark |
+
+---
+
+## HTTPS smoke test — signed off
+
+Run again after major changes or a new phone install.
+
+| # | Test | Signed off |
+|---|------|------------|
+| 1 | Install + standalone — opens from icon, no Safari bar | ✅ |
+| 2 | Photo Booth — upload, themes, Me & My Pup, share/save | ✅ |
+| 3 | ViT Diagnostics — upload works | ✅ |
+| 4 | Offline banner — airplane on while app open → gold banner | ✅ |
+| 5 | Back online — airplane off → banner gone | ✅ |
+| 6 | Nav + Token Shop — menu works; pages load | ✅ |
+| 7 | Update banner — after redeploy + revisit, “Refresh now” appears | ✅ |
+| 8 | Preview protection — footer ©, SuperBud™, private preview banner | ✅ |
+
+**iOS note:** System *“Turn off Airplane Mode…”* on cold start is normal. Tap OK; test offline with the in-app gold banner while the app is already open.
 
 ---
 
 ## What Phase 1 means
 
-**Goal:** Install Freedom Paws on your iPhone from a **real HTTPS URL** in **preview mode** — not indexed by Google, not public marketing — while LLC and SuperBud™ trademarks proceed.
+**Goal (achieved):** Install Freedom Paws on your iPhone from a **real HTTPS URL** in **preview mode** — not indexed by Google, not public marketing — while LLC and SuperBud™ trademarks proceed.
 
 **Not Phase 1:** App Store submission, public domain marketing, crypto checkout live.
 
 ---
 
-## One version bump on every deploy
+## Ongoing — bump version on every deploy
 
 Edit **only** `lib/pwa-version.ts`:
 
 ```ts
-export const PWA_VERSION = 'v13'; // increment each release
+export const PWA_VERSION = 'v31'; // increment each release
 ```
 
 Run `npm run build` — `scripts/sync-pwa-version.mjs` updates `CACHE_NAME` in `public/sw.js`.
+
+Push to `main` → Vercel auto-deploys → users see **“Refresh now”** or reinstall to pick up the new build.
 
 ---
 
@@ -65,7 +89,7 @@ Run `npm run build` — `scripts/sync-pwa-version.mjs` updates `CACHE_NAME` in `
 
 ---
 
-## Test on iPhone — LAN (you already did this)
+## Local testing (optional)
 
 ```bash
 npm run start:mobile
@@ -73,51 +97,22 @@ npm run start:mobile
 
 Safari → `http://<lan-ip>:3000` → Share → **Add to Home Screen**
 
-### Pass criteria
-
-| # | Test | Pass |
-|---|------|------|
-| 1 | Install + standalone | Opens from icon, no Safari bar |
-| 2 | Photo Booth | Upload, themes, frames, share |
-| 3 | ViT Diagnostics | Upload works |
-| 4 | Offline banner | Airplane on while app open → gold banner |
-| 5 | Back online | Airplane off → banner gone |
-| 6 | Nav + Token Shop | Menu works; Token Shop header image loads |
-| 7 | Update banner | After redeploy + revisit, “Refresh now” appears (optional) |
-
-**iOS note:** System *“Turn off Airplane Mode…”* on cold start is normal on LAN. Tap OK; test offline with the in-app gold banner.
+Service worker is **disabled in development** — use a production build or the Vercel HTTPS URL to test SW, install banner, and update flow.
 
 ---
 
-## Phase 1 next step — HTTPS preview deploy
+## Phase 2 — public launch (when LLC/trademark ready)
 
-See **`Deploy-and-Brand-Protection.md`** for full detail. Summary:
+See **`Deploy-and-Brand-Protection.md`** for full detail.
 
-### 1. Push to GitHub (private repo recommended)
+1. Attorney confirms you can use SuperBud™ / Freedom Paws™ publicly  
+2. Set `NEXT_PUBLIC_SITE_MODE` = **`public`** in Vercel env  
+3. Redeploy and bump `PWA_VERSION`  
+4. Connect your domain DNS to Vercel  
+5. Remove Vercel password protection if used  
+6. Announce when you choose  
 
-### 2. Vercel (easiest)
-
-1. [vercel.com](https://vercel.com) → Import project  
-2. Environment variables (from `.env.example`):
-   - `NEXT_PUBLIC_SITE_MODE` = **`preview`**
-   - `ADMIN_PASSWORD` = strong password  
-3. Deploy → you get `https://your-project.vercel.app`  
-4. Optional: **Deployment Protection → Password protect**
-
-### 3. After deploy
-
-1. Bump `PWA_VERSION` to `v14` (or next) and redeploy  
-2. iPhone Safari → **HTTPS preview URL** → Share → Add to Home Screen  
-3. Re-run tests 1–6 above on HTTPS  
-4. Confirm footer © + SuperBud™ + private preview banner  
-5. Google `site:your-preview-url.vercel.app` → should show **nothing**
-
-### 4. When LLC/trademark ready (Phase 2 launch)
-
-1. Set `NEXT_PUBLIC_SITE_MODE=public`  
-2. Connect your domain  
-3. Remove password protection  
-4. Announce when you choose  
+**Optional before launch:** verify real social URLs in `lib/social-links.ts` (or `NEXT_PUBLIC_SOCIAL_*` env vars).
 
 ---
 
@@ -127,6 +122,8 @@ See **`Deploy-and-Brand-Protection.md`** for full detail. Summary:
 2. Look for gold **“Update ready — Refresh now”** banner and tap it  
 3. Or: remove from Home Screen → Safari → Add to Home Screen again  
 4. Or: bump `PWA_VERSION` and redeploy  
+
+Confirm the build: Photo Booth **?** help page or install/update banner should reflect the latest version after deploy.
 
 ---
 

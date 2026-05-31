@@ -37,6 +37,10 @@ const accessoryTips = [
 
 const optionalTips = [
   {
+    title: 'Adjust your pet (any background)',
+    body: 'Tap your pet on the canvas to select it, then drag to pan and pinch (or use the arrow and ± buttons) to zoom — no cutout required.',
+  },
+  {
     title: 'Magic cutout (optional)',
     body: 'Try magic cutout if your pet is on a plain background. Most people skip this and use a themed background with the full photo — it still looks great.',
   },

@@ -438,12 +438,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   const getCurrentPetRect = useCallback((): PetRect | null => {
     if (!petRef.current) return null;
     const { width: cw, height: ch } = dimsRef.current;
-    if (cutoutAppliedRef.current) {
-      return petRectFromTransform(petTransformRef.current, petRef.current, cw, ch);
-    }
-    const maxW = frameOnlyRef.current || accessoriesOnlyRef.current ? 0.82 : 0.88;
-    const maxH = frameOnlyRef.current || accessoriesOnlyRef.current ? 0.85 : 0.9;
-    return computePetRect(petRef.current, cw, ch, maxW, maxH, 0.54);
+    return petRectFromTransform(petTransformRef.current, petRef.current, cw, ch);
   }, []);
 
   const paint = useCallback(() => {
@@ -488,7 +483,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
 
       ctx.drawImage(petRef.current, photo.left, photo.top, photo.width, photo.height);
 
-      if (cutoutAppliedRef.current && petSelectedRef.current) {
+      if (petSelectedRef.current) {
         ctx.strokeStyle = '#F5C242';
         ctx.lineWidth = Math.max(2, cw * 0.006);
         ctx.setLineDash([6, 4]);
@@ -585,7 +580,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       const { width: cw, height: ch } = dimsRef.current;
       const hitR = handleHitRadius(canvas);
 
-      if (petSelectedRef.current && cutoutAppliedRef.current) {
+      if (petSelectedRef.current) {
         const photo = getCurrentPetRect();
         if (photo) {
           for (const c of petCornersFromRect(photo)) {
@@ -656,7 +651,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
         return true;
       }
 
-      if (cutoutAppliedRef.current && petRef.current) {
+      if (petRef.current) {
         const photo = getCurrentPetRect();
         if (photo && hitTestRect(pt.x, pt.y, photo)) {
           lastTapRef.current = null;
@@ -744,7 +739,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
 
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 2) {
-        if (petSelectedRef.current && cutoutAppliedRef.current) {
+        if (petSelectedRef.current) {
           pinchRef.current = {
             initialDistance: touchDistance(e.touches[0], e.touches[1]),
             initialScale: petTransformRef.current.scale,
@@ -920,11 +915,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       if (generation !== applyGenRef.current) return;
 
       syncPetTransformFromFit();
-      if (cutoutAppliedRef.current) {
-        setPetSelected(true);
-      } else {
-        setPetSelected(false);
-      }
+      setPetSelected(true);
 
       paintRef.current();
       notifyStickers();
@@ -955,8 +946,9 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
 
   useEffect(() => {
     if (!petImageUrl || busy) return;
+    if (petRef.current) syncPetTransformFromFit();
     paintRef.current();
-  }, [frameId, frameWidth, cutoutApplied, petImageUrl, busy]);
+  }, [frameId, frameWidth, cutoutApplied, petImageUrl, busy, syncPetTransformFromFit]);
 
   const addSticker = useCallback(
     async (placement: StickerPlacement) => {
@@ -1002,7 +994,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   );
 
   const nudgeSelected = useCallback((dx: number, dy: number) => {
-    if (petSelectedRef.current && cutoutAppliedRef.current) {
+    if (petSelectedRef.current) {
       petTransformRef.current.x = Math.min(
         1.15,
         Math.max(-0.15, petTransformRef.current.x + dx)
@@ -1024,7 +1016,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   }, []);
 
   const scaleSelected = useCallback((factor: number) => {
-    if (petSelectedRef.current && cutoutAppliedRef.current) {
+    if (petSelectedRef.current) {
       petTransformRef.current.scale = Math.min(
         PET_SCALE_MAX,
         Math.max(PET_SCALE_MIN, petTransformRef.current.scale * factor)
@@ -1053,7 +1045,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   }, []);
 
   const selectPet = useCallback(() => {
-    if (!cutoutAppliedRef.current || !petRef.current) return;
+    if (!petRef.current) return;
     if (petSelectedRef.current) {
       setPetSelected(false);
     } else {
@@ -1135,9 +1127,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
         </div>
       )}
       <p className="mb-2 text-center text-[11px] text-amber-300/80 leading-relaxed">
-        {cutoutApplied
-          ? 'Tap your pet to move · gold corners to resize · double-tap accessories to remove'
-          : 'Drag accessories to move · gold corners to resize · double-tap to remove'}
+        Tap your pet to move · pinch or ± to zoom · double-tap accessories to remove
       </p>
       <canvas
         ref={canvasRef}

@@ -1,54 +1,21 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import PhotoUploadZone from '@/app/components/PhotoUploadZone';
 import { clearPhotoFromDb } from '@/lib/photo-db';
 import { clearPhotoPreview } from '@/lib/photo-storage';
+import { ACCESSORY_STICKERS, PHOTO_BOOTH_THEMES } from '@/lib/photobooth/themes';
+import { type FrameStyleId } from '@/lib/photobooth/frames';
 import {
-  ACCESSORY_STICKERS,
-  PHOTO_BOOTH_THEMES,
-} from '@/lib/photobooth/themes';
-import {
-  FRAME_STYLES,
-  FRAME_WIDTH_MAX,
-  FRAME_WIDTH_MIN,
-  type FrameStyleId,
-} from '@/lib/photobooth/frames';
-import {
-  CUSTOM_HEADLINE_MAX,
-  CUSTOM_HEADLINE_OFFSET_MAX,
-  CUSTOM_HEADLINE_OFFSET_MIN,
-  CUSTOM_HEADLINE_OFFSET_STEP,
-  ME_AND_MY_PUP_FRAME_COLORS,
-  ME_AND_MY_PUP_SCENE_BACKGROUNDS,
-  ME_AND_MY_PUP_VARIANTS,
   type MeAndMyPupCustomBackgroundId,
   type MeAndMyPupFrameColorId,
   type MeAndMyPupVariant,
   type SlotId,
 } from '@/lib/photobooth/me-and-my-pup';
+import PhotoBoothUnifiedEditor from './PhotoBoothUnifiedEditor';
 import type { MeAndMyPupCanvasHandle } from './MeAndMyPupCanvas';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
-
-const PhotoBoothCanvas = dynamic(() => import('./PhotoBoothCanvas'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-white/15 bg-[#0F1E38]/50 text-sm text-amber-300">
-      Loading editor…
-    </div>
-  ),
-});
-
-const MeAndMyPupCanvas = dynamic(() => import('./MeAndMyPupCanvas'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-amber-400/30 bg-[#0F1E38]/50 text-sm text-amber-300">
-      Loading Me &amp; My Pup…
-    </div>
-  ),
-});
 
 type Props = {
   initialUploadId: string | null;
@@ -113,7 +80,7 @@ export default function PhotoBoothClient({
     void clearPhotoFromDb('photobooth');
   }, []);
 
-  const setPhotoUrl = useCallback((url: string | null) => {
+  const setPhotoUrl = useCallback((url: string | null, options?: { keepEditor?: boolean }) => {
     if (
       blobUrlRef.current?.startsWith('blob:') &&
       blobUrlRef.current !== originalPhotoUrlRef.current
@@ -125,7 +92,9 @@ export default function PhotoBoothClient({
       blobUrlRef.current = url;
     }
     setPetImageUrl(url);
-    setEditorActive(false);
+    if (!options?.keepEditor) {
+      setEditorActive(false);
+    }
     setCanvasReady(false);
   }, []);
 
@@ -173,7 +142,7 @@ export default function PhotoBoothClient({
     if (id === 'me-and-my-pup') {
       setShareMsg('Add your photo · drag each circle to adjust · then Share!');
     } else {
-      setShareMsg('Looking good! Share below — or add an accessory if you want.');
+      setShareMsg('Drag to adjust your pet on the photo · share below when ready!');
     }
     if (cutoutApplied && id !== 'frame-only') {
       setFrameId('none');
@@ -263,10 +232,11 @@ export default function PhotoBoothClient({
       if (!originalPhotoUrlRef.current) {
         originalPhotoUrlRef.current = petImageUrl;
       }
-      setPhotoUrl(URL.createObjectURL(cutout));
+      setPhotoUrl(URL.createObjectURL(cutout), { keepEditor: true });
       setCutoutApplied(true);
       setFrameId('none');
-      setShareMsg('Cutout ready — tap your pet on the photo to move and resize!');
+      setEditorActive(true);
+      setShareMsg('Cutout ready — drag your pet to reposition!');
       requestAnimationFrame(() => {
         themesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
@@ -284,7 +254,7 @@ export default function PhotoBoothClient({
 
   const handleRestoreOriginal = useCallback(() => {
     if (!originalPhotoUrlRef.current) return;
-    setPhotoUrl(originalPhotoUrlRef.current);
+    setPhotoUrl(originalPhotoUrlRef.current, { keepEditor: true });
     setCutoutApplied(false);
     setShareMsg('Original photo restored.');
   }, [setPhotoUrl]);
@@ -372,7 +342,9 @@ export default function PhotoBoothClient({
       <p className="text-[11px] text-white/45 mb-3 leading-relaxed">
         {editorActive && themeId === 'me-and-my-pup'
           ? 'You + your pup in gold circles — great for sharing with family.'
-          : 'Tap a background — your full photo looks great. Try 💞 Me & My Pup for a duo card.'}
+          : editorActive
+            ? 'Drag to adjust your pet · add accessories or try Me & My Pup anytime.'
+            : 'Tap a background — drag to adjust your pet after. Try 💞 Me & My Pup for a duo card.'}
       </p>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {PHOTO_BOOTH_THEMES.map((theme) => (
@@ -540,651 +512,53 @@ export default function PhotoBoothClient({
             </div>
           )}
 
-          {petImageUrl && editorActive && themeId === 'me-and-my-pup' && (
-            <>
-              <input
-                ref={ownerInputRef}
-                type="file"
-                accept="image/*"
-                capture="user"
-                className="sr-only"
-                aria-hidden
-                onChange={handleOwnerFile}
-              />
-              <div className="mt-4 rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-4">
-                <p className="text-sm font-bold text-amber-400 mb-2">Step 1 — Add your photo</p>
-                <button
-                  type="button"
-                  onClick={() => ownerInputRef.current?.click()}
-                  className="w-full min-h-[52px] rounded-xl bg-amber-400 py-3 text-sm font-bold text-black touch-manipulation"
-                >
-                  {ownerImageUrl ? '📷 Change my photo' : '📷 Add my photo (selfie)'}
-                </button>
-                <p className="mt-2 text-[10px] text-white/45 text-center">
-                  Stays on your phone until you share — not uploaded to our server.
-                </p>
-              </div>
-
-              <div className="mt-4">
-                <p className="text-xs font-semibold text-white/60 mb-2">Frame style</p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {ME_AND_MY_PUP_VARIANTS.map((v) => (
-                    <button
-                      key={v.id}
-                      type="button"
-                      onClick={() => setMeMyPupVariant(v.id)}
-                      className={`min-h-[44px] rounded-xl px-2 py-2 text-xs font-bold touch-manipulation ${
-                        meMyPupVariant === v.id
-                          ? 'bg-amber-400 text-black'
-                          : 'bg-[#0F1E38] border border-white/15 text-white'
-                      }`}
-                    >
-                      <span className="text-lg block">{v.emoji}</span>
-                      {v.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {meMyPupVariant === 'custom' && (
-                <div className="mt-4 rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-4 space-y-4">
-                  <div>
-                    <label htmlFor="me-my-pup-headline" className="text-sm font-bold text-amber-400 block mb-2">
-                      Your headline
-                    </label>
-                    <input
-                      id="me-my-pup-headline"
-                      type="text"
-                      value={meMyPupCustomText}
-                      maxLength={CUSTOM_HEADLINE_MAX}
-                      onChange={(e) => setMeMyPupCustomText(e.target.value)}
-                      placeholder="Me & My Pup"
-                      className="w-full min-h-[48px] rounded-xl border border-white/20 bg-[#0A1625] px-4 py-3 text-base text-white placeholder:text-white/35 touch-manipulation"
-                    />
-                    <p className="mt-1.5 text-[10px] text-white/45 text-center">
-                      Shows above your photos · {meMyPupCustomText.length}/{CUSTOM_HEADLINE_MAX}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-amber-400 mb-2">Headline position</p>
-                    <div className="flex items-center justify-center gap-3">
-                      <button
-                        type="button"
-                        aria-label="Move headline up"
-                        disabled={meMyPupHeadlineOffset <= CUSTOM_HEADLINE_OFFSET_MIN}
-                        onClick={() =>
-                          setMeMyPupHeadlineOffset((y) =>
-                            Math.max(CUSTOM_HEADLINE_OFFSET_MIN, y - CUSTOM_HEADLINE_OFFSET_STEP)
-                          )
-                        }
-                        className="min-h-[44px] min-w-[52px] rounded-xl border border-white/20 bg-[#0A1625] text-lg font-bold disabled:opacity-30 touch-manipulation"
-                      >
-                        ↑
-                      </button>
-                      <span className="text-xs text-white/55 min-w-[5.5rem] text-center">
-                        {meMyPupHeadlineOffset === 0
-                          ? 'Default'
-                          : meMyPupHeadlineOffset < 0
-                            ? 'Higher'
-                            : 'Lower'}
-                      </span>
-                      <button
-                        type="button"
-                        aria-label="Move headline down"
-                        disabled={meMyPupHeadlineOffset >= CUSTOM_HEADLINE_OFFSET_MAX}
-                        onClick={() =>
-                          setMeMyPupHeadlineOffset((y) =>
-                            Math.min(CUSTOM_HEADLINE_OFFSET_MAX, y + CUSTOM_HEADLINE_OFFSET_STEP)
-                          )
-                        }
-                        className="min-h-[44px] min-w-[52px] rounded-xl border border-white/20 bg-[#0A1625] text-lg font-bold disabled:opacity-30 touch-manipulation"
-                      >
-                        ↓
-                      </button>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-amber-400 mb-2">Background</p>
-                    <p className="text-[10px] text-white/45 mb-2">Solid colors</p>
-                    <div className="grid grid-cols-3 gap-2 mb-3">
-                      {ME_AND_MY_PUP_FRAME_COLORS.map((color) => (
-                        <button
-                          key={color.id}
-                          type="button"
-                          onClick={() => setMeMyPupCustomBg(color.id)}
-                          className={`min-h-[44px] rounded-xl px-2 py-2 text-[10px] font-bold touch-manipulation ${
-                            meMyPupCustomBg === color.id
-                              ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-[#0F1E38]'
-                              : 'border border-white/15'
-                          }`}
-                        >
-                          <span
-                            className="block h-6 w-full rounded-md mb-1 border border-white/20"
-                            style={{ background: color.swatch }}
-                          />
-                          {color.name}
-                        </button>
-                      ))}
-                    </div>
-                    <p className="text-[10px] text-white/45 mb-2">Photo Booth scenes · swipe for more</p>
-                    <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
-                      {ME_AND_MY_PUP_SCENE_BACKGROUNDS.map((scene) => (
-                        <button
-                          key={scene.id}
-                          type="button"
-                          onClick={() => setMeMyPupCustomBg(scene.id)}
-                          className={`min-h-[72px] min-w-[5.5rem] shrink-0 snap-start rounded-xl px-2 py-2 text-[10px] font-bold touch-manipulation ${
-                            meMyPupCustomBg === scene.id
-                              ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-[#0F1E38]'
-                              : 'border border-white/15'
-                          }`}
-                        >
-                          <span
-                            className="block h-10 w-full rounded-md mb-1 border border-white/20 bg-[#0A1625]"
-                            style={
-                              scene.urls?.[0]
-                                ? {
-                                    backgroundImage: `url(${scene.urls[0]})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                  }
-                                : { background: scene.swatch }
-                            }
-                          />
-                          <span className="text-sm block">{scene.emoji}</span>
-                          {scene.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-amber-400 mb-2">Ring &amp; text color</p>
-                    <div className="grid grid-cols-3 gap-2">
-                      {ME_AND_MY_PUP_FRAME_COLORS.map((color) => (
-                        <button
-                          key={color.id}
-                          type="button"
-                          onClick={() => setMeMyPupFrameColor(color.id)}
-                          className={`min-h-[44px] rounded-xl px-2 py-2 text-[10px] font-bold touch-manipulation ${
-                            meMyPupFrameColor === color.id
-                              ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-[#0F1E38]'
-                              : 'border border-white/15'
-                          }`}
-                        >
-                          <span
-                            className="block h-6 w-full rounded-md mb-1 border border-white/20"
-                            style={{ background: color.swatch }}
-                          />
-                          {color.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <MeAndMyPupCanvas
-                ref={meMyPupRef}
-                petImageUrl={petImageUrl}
-                ownerImageUrl={ownerImageUrl}
-                variant={meMyPupVariant}
-                customHeadline={meMyPupCustomText}
-                frameColorId={meMyPupFrameColor}
-                customBackgroundId={meMyPupCustomBg}
-                customHeadlineOffsetY={meMyPupHeadlineOffset}
-                onReadyChange={setCanvasReady}
-                onSlotSelectedChange={setSelectedSlot}
-                onError={setError}
-              />
-
-              {canvasReady && (
-                <>
-                  <div className="mt-3 flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => meMyPupRef.current?.selectSlot('dog')}
-                      className={`flex-1 min-h-[44px] rounded-xl py-2 text-xs font-bold touch-manipulation ${
-                        selectedSlot === 'dog'
-                          ? 'bg-amber-400 text-black'
-                          : 'border border-white/20 text-white/80'
-                      }`}
-                    >
-                      🐾 MY PUP
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!ownerImageUrl) {
-                          ownerInputRef.current?.click();
-                          return;
-                        }
-                        meMyPupRef.current?.selectSlot('owner');
-                      }}
-                      className={`flex-1 min-h-[44px] rounded-xl py-2 text-xs font-bold touch-manipulation ${
-                        selectedSlot === 'owner'
-                          ? 'bg-amber-400 text-black'
-                          : 'border border-white/20 text-white/80'
-                      }`}
-                    >
-                      🙂 ME
-                    </button>
-                  </div>
-
-                  {selectedSlot && (
-                    <div className="mt-3 flex flex-col items-center gap-2">
-                      <p className="text-[10px] text-white/40">
-                        Adjust {selectedSlot === 'dog' ? 'your pup' : 'your face'} in the circle
-                      </p>
-                      <div className="grid grid-cols-3 gap-1">
-                        <span />
-                        <button
-                          type="button"
-                          onClick={() => meMyPupRef.current?.nudgeSelected(0, -0.08)}
-                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
-                        >
-                          ↑
-                        </button>
-                        <span />
-                        <button
-                          type="button"
-                          onClick={() => meMyPupRef.current?.nudgeSelected(-0.08, 0)}
-                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
-                        >
-                          ←
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => meMyPupRef.current?.nudgeSelected(0, 0.08)}
-                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
-                        >
-                          ↓
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => meMyPupRef.current?.nudgeSelected(0.08, 0)}
-                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
-                        >
-                          →
-                        </button>
-                      </div>
-                      <div className="flex w-full max-w-xs gap-2">
-                        <button
-                          type="button"
-                          onClick={() => meMyPupRef.current?.scaleSelected(0.9)}
-                          className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold"
-                        >
-                          − Zoom out
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => meMyPupRef.current?.scaleSelected(1.1)}
-                          className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold"
-                        >
-                          + Zoom in
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="mt-5 grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      disabled={!ownerImageUrl}
-                      onClick={() => void sharePhoto()}
-                      className="rounded-2xl bg-amber-400 py-4 text-base font-bold text-black touch-manipulation disabled:opacity-40"
-                    >
-                      📤 Share
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!ownerImageUrl}
-                      onClick={() => void savePhoto()}
-                      className="rounded-2xl border border-amber-400/60 py-4 text-base font-bold text-amber-300 touch-manipulation disabled:opacity-40"
-                    >
-                      💾 Save
-                    </button>
-                  </div>
-                  {!ownerImageUrl && (
-                    <p className="mt-2 text-center text-xs text-amber-300/80">
-                      Add your photo above to enable Share &amp; Save
-                    </p>
-                  )}
-                  {shareMsg && (
-                    <p className="mt-2 text-center text-sm text-green-400">{shareMsg}</p>
-                  )}
-                </>
-              )}
-            </>
+          {petImageUrl && editorActive && (
+            <PhotoBoothUnifiedEditor
+              themeId={themeId}
+              isDuoMode={themeId === 'me-and-my-pup'}
+              petImageUrl={petImageUrl}
+              ownerImageUrl={ownerImageUrl}
+              ownerInputRef={ownerInputRef}
+              canvasRef={canvasRef}
+              meMyPupRef={meMyPupRef}
+              canvasReady={canvasReady}
+              frameId={frameId}
+              frameWidth={frameWidth}
+              cutoutApplied={cutoutApplied}
+              bgRemoving={bgRemoving}
+              bgProgress={bgProgress}
+              bgError={bgError}
+              petSelected={petSelected}
+              selectedSlot={selectedSlot}
+              selectedStickerId={selectedStickerId}
+              canvasStickers={canvasStickers}
+              meMyPupVariant={meMyPupVariant}
+              meMyPupCustomText={meMyPupCustomText}
+              meMyPupFrameColor={meMyPupFrameColor}
+              meMyPupCustomBg={meMyPupCustomBg}
+              meMyPupHeadlineOffset={meMyPupHeadlineOffset}
+              shareMsg={shareMsg}
+              onOwnerFile={handleOwnerFile}
+              onReadyChange={setCanvasReady}
+              onSlotSelectedChange={setSelectedSlot}
+              onPetSelectedChange={setPetSelected}
+              onStickersChange={handleStickersChange}
+              onError={setError}
+              onMeMyPupVariant={setMeMyPupVariant}
+              onMeMyPupCustomText={setMeMyPupCustomText}
+              onMeMyPupFrameColor={setMeMyPupFrameColor}
+              onMeMyPupCustomBg={setMeMyPupCustomBg}
+              onMeMyPupHeadlineOffset={setMeMyPupHeadlineOffset}
+              onFrameStyle={pickFrameStyle}
+              onFrameWidth={setFrameWidth}
+              onAddAccessory={addAccessory}
+              onRemoveBackground={() => void handleRemoveBackground()}
+              onRestoreOriginal={handleRestoreOriginal}
+              onShare={() => void sharePhoto()}
+              onSave={() => void savePhoto()}
+            />
           )}
 
-          {petImageUrl && editorActive && themeId !== 'me-and-my-pup' && (
-            <>
-              <PhotoBoothCanvas
-                ref={canvasRef}
-                petImageUrl={petImageUrl}
-                themeId={themeId}
-                frameId={frameId}
-                frameWidth={frameWidth}
-                cutoutApplied={cutoutApplied}
-                onReadyChange={setCanvasReady}
-                onStickersChange={handleStickersChange}
-                onPetSelectedChange={setPetSelected}
-                onError={setError}
-              />
-              {canvasReady && cutoutApplied && (
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    onClick={() => canvasRef.current?.selectPet()}
-                    className={`w-full min-h-[44px] rounded-xl py-2.5 text-sm font-semibold touch-manipulation ${
-                      petSelected
-                        ? 'bg-amber-400 text-black'
-                        : 'border border-amber-400/50 text-amber-300'
-                    }`}
-                  >
-                    {petSelected ? '✓ Your pet selected — drag on photo to move' : 'Tap to select your pet & move it'}
-                  </button>
-                  {petSelected && (
-                    <div className="mt-3 flex flex-col items-center gap-2">
-                      <p className="text-[10px] text-white/40">Move &amp; resize your pet</p>
-                      <div className="grid grid-cols-3 gap-1">
-                        <span />
-                        <button
-                          type="button"
-                          aria-label="Nudge pet up"
-                          onClick={() => canvasRef.current?.nudgeSelected(0, -0.03)}
-                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
-                        >
-                          ↑
-                        </button>
-                        <span />
-                        <button
-                          type="button"
-                          aria-label="Nudge pet left"
-                          onClick={() => canvasRef.current?.nudgeSelected(-0.03, 0)}
-                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
-                        >
-                          ←
-                        </button>
-                        <button
-                          type="button"
-                          aria-label="Nudge pet down"
-                          onClick={() => canvasRef.current?.nudgeSelected(0, 0.03)}
-                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
-                        >
-                          ↓
-                        </button>
-                        <button
-                          type="button"
-                          aria-label="Nudge pet right"
-                          onClick={() => canvasRef.current?.nudgeSelected(0.03, 0)}
-                          className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm"
-                        >
-                          →
-                        </button>
-                      </div>
-                      <div className="flex w-full max-w-xs gap-2">
-                        <button
-                          type="button"
-                          onClick={() => canvasRef.current?.scaleSelected(0.9)}
-                          className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold"
-                        >
-                          − Smaller
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => canvasRef.current?.scaleSelected(1.1)}
-                          className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold"
-                        >
-                          + Bigger
-                        </button>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => canvasRef.current?.clearSelection()}
-                        className="w-full rounded-xl border border-amber-400/40 py-2 text-xs font-semibold text-amber-300"
-                      >
-                        Done — hide selection
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-              {canvasReady && editorActive && (
-                <>
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => void sharePhoto()}
-                      className="rounded-2xl bg-amber-400 py-4 text-base font-bold text-black touch-manipulation"
-                    >
-                      📤 Share
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void savePhoto()}
-                      className="rounded-2xl border border-amber-400/60 py-4 text-base font-bold text-amber-300 touch-manipulation"
-                    >
-                      💾 Save
-                    </button>
-                  </div>
-                  {shareMsg && (
-                    <p className="mt-2 text-center text-sm text-green-400">{shareMsg}</p>
-                  )}
-
-                  <div className="mt-4 rounded-2xl border border-white/15 bg-[#0F1E38]/90 p-4">
-                    <p className="text-sm font-bold text-amber-400 mb-1">Add accessory (optional)</p>
-                    <p className="text-[10px] text-white/45 mb-3 leading-relaxed">
-                      Tap to add · drag on photo to move · gold corners to resize · double-tap to remove
-                    </p>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                      {ACCESSORY_STICKERS.map((sticker) => (
-                        <button
-                          key={sticker.src}
-                          type="button"
-                          onClick={() => addAccessory(sticker)}
-                          className="min-h-[44px] rounded-xl bg-black/30 border border-white/15 py-2.5 px-2 text-xs font-semibold leading-tight touch-manipulation hover:border-amber-400/50 active:bg-amber-400/10"
-                        >
-                          + {sticker.label}
-                        </button>
-                      ))}
-                    </div>
-                    {canvasStickers.length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => canvasRef.current?.removeSelected()}
-                        className="mt-3 w-full min-h-[44px] rounded-xl border border-red-500/40 py-2.5 text-sm text-red-300 touch-manipulation"
-                      >
-                        Remove selected accessory
-                      </button>
-                    )}
-                  </div>
-
-                  {themeId === 'accessories-only' && (
-                    <p className="mt-2 text-center text-xs text-white/45">
-                      Checkerboard = no background
-                    </p>
-                  )}
-                </>
-              )}
-              {canvasReady && (
-                <div className="mt-4 rounded-2xl border border-white/10 bg-[#0F1E38]/60 p-4">
-                  <p className="text-sm font-semibold text-white/70 mb-1">Picture frame (optional)</p>
-                  <p className="text-[10px] text-white/45 mb-3">
-                    {cutoutApplied && themeId !== 'frame-only'
-                      ? 'After background removal, use Frame Only for a mat & border — themes show your pet directly on the scene.'
-                      : 'Works on any theme · drag slider for thin → thick'}
-                  </p>
-                  <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory">
-                    {FRAME_STYLES.map((frame) => (
-                      <button
-                        key={frame.id}
-                        type="button"
-                        onClick={() => pickFrameStyle(frame.id)}
-                        className={`shrink-0 snap-start flex flex-col items-center gap-1.5 rounded-xl px-3 py-2.5 min-w-[4.25rem] transition ${
-                          frameId === frame.id
-                            ? 'bg-amber-400/15 border-2 border-amber-400'
-                            : 'bg-black/30 border border-white/10'
-                        }`}
-                      >
-                        <span
-                          className="block h-8 w-8 rounded-md border border-white/25 shadow-inner"
-                          style={{
-                            background:
-                              frame.id === 'none'
-                                ? 'linear-gradient(135deg, #3d4554 50%, #2c3442 50%)'
-                                : frame.swatch,
-                          }}
-                        />
-                        <span className="text-[10px] font-semibold text-white/90">{frame.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                  {frameId !== 'none' && (
-                    <div className="mt-4">
-                      <div className="flex justify-between text-[10px] text-white/45 mb-1.5">
-                        <span>Thin</span>
-                        <span className="text-amber-300/80">Thickness</span>
-                        <span>Thick</span>
-                      </div>
-                      <input
-                        type="range"
-                        min={FRAME_WIDTH_MIN}
-                        max={FRAME_WIDTH_MAX}
-                        step={0.02}
-                        value={frameWidth}
-                        onChange={(e) => setFrameWidth(Number(e.target.value))}
-                        className="photobooth-frame-slider w-full touch-none"
-                        aria-label="Frame thickness"
-                      />
-                    </div>
-                  )}
-                </div>
-              )}
-              {canvasReady && canvasStickers.length > 0 && (
-                <div className="mt-3">
-                  <p className="mb-2 text-center text-[10px] text-white/45">
-                    Tap a name to select · <strong className="text-amber-300/90">double-tap</strong>{' '}
-                    the accessory on the photo to remove it
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {canvasStickers.map((sticker) => (
-                      <button
-                        key={sticker.id}
-                        type="button"
-                        onClick={() => canvasRef.current?.selectSticker(sticker.id)}
-                        className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                          selectedStickerId === sticker.id
-                            ? 'bg-amber-400 text-black'
-                            : 'bg-[#0F1E38] border border-white/15 text-white/80'
-                        }`}
-                      >
-                        {sticker.label}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedStickerId !== null && (
-                    <button
-                      type="button"
-                      onClick={() => canvasRef.current?.clearSelection()}
-                      className="mt-2 w-full rounded-xl border border-amber-400/40 py-2 text-xs font-semibold text-amber-300"
-                    >
-                      Done — hide selection frame
-                    </button>
-                  )}
-                </div>
-              )}
-              {canvasReady && canvasStickers.length > 0 && (
-                <div className="mt-3 flex flex-col items-center gap-2">
-                  <p className="text-[10px] text-white/40">Move &amp; tilt the selected accessory</p>
-                  <div className="grid grid-cols-3 gap-1">
-                    <span />
-                    <button
-                      type="button"
-                      aria-label="Nudge up"
-                      disabled={selectedStickerId === null}
-                      onClick={() => canvasRef.current?.nudgeSelected(0, -0.03)}
-                      className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm disabled:opacity-30"
-                    >
-                      ↑
-                    </button>
-                    <span />
-                    <button
-                      type="button"
-                      aria-label="Nudge left"
-                      disabled={selectedStickerId === null}
-                      onClick={() => canvasRef.current?.nudgeSelected(-0.03, 0)}
-                      className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm disabled:opacity-30"
-                    >
-                      ←
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Nudge down"
-                      disabled={selectedStickerId === null}
-                      onClick={() => canvasRef.current?.nudgeSelected(0, 0.03)}
-                      className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm disabled:opacity-30"
-                    >
-                      ↓
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Nudge right"
-                      disabled={selectedStickerId === null}
-                      onClick={() => canvasRef.current?.nudgeSelected(0.03, 0)}
-                      className="rounded-lg bg-[#0F1E38] border border-white/15 px-4 py-2 text-sm disabled:opacity-30"
-                    >
-                      →
-                    </button>
-                  </div>
-                  <div className="flex w-full max-w-xs gap-2">
-                    <button
-                      type="button"
-                      aria-label="Smaller"
-                      disabled={selectedStickerId === null}
-                      onClick={() => canvasRef.current?.scaleSelected(0.9)}
-                      className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold disabled:opacity-30"
-                    >
-                      − Smaller
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Bigger"
-                      disabled={selectedStickerId === null}
-                      onClick={() => canvasRef.current?.scaleSelected(1.1)}
-                      className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold disabled:opacity-30"
-                    >
-                      + Bigger
-                    </button>
-                  </div>
-                  <p className="text-[10px] text-white/40 text-center leading-relaxed">
-                    Drag the <strong className="text-amber-300/90">gold corner dots</strong> to push
-                    or pull bigger/smaller · or pinch with two fingers
-                  </p>
-                  <div className="flex w-full max-w-xs gap-2">
-                    <button
-                      type="button"
-                      aria-label="Tilt left"
-                      disabled={selectedStickerId === null}
-                      onClick={() => canvasRef.current?.tiltSelected(-1)}
-                      className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold disabled:opacity-30"
-                    >
-                      ↺ Tilt left
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Tilt right"
-                      disabled={selectedStickerId === null}
-                      onClick={() => canvasRef.current?.tiltSelected(1)}
-                      className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold disabled:opacity-30"
-                    >
-                      Tilt right ↻
-                    </button>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
 
           {!petImageUrl && (
             <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-dashed border-white/15 bg-[#0F1E38]/40 px-4 text-center text-xs text-white/40">
