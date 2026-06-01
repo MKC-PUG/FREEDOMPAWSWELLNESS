@@ -180,7 +180,8 @@ Add to Vercel → Project → Settings → Environment Variables (Preview + Prod
 
 | Test | Expected |
 |------|----------|
-| Symptoms: `senior dog pacing at night confused` | #1 Patriot Defender · #2 Freedom Calm |
+| Symptoms: `senior dog pacing at night confused` | #1 Patriot Defender · #2 Freedom Calm · green "Symptom lexicon matched" box |
+| Local check | `npm run symptom:test -- "your text"` |
 | Symptoms: `cloudy eye squinting` | #1 Clear Vision Defender · #2 if overlap |
 | Photo + symptoms with API key | `visualFindings` populated, `usedVision: true` |
 | No API key | Lexicon-only, `usedVision: false` |

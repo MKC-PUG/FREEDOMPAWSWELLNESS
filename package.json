@@ -9,6 +9,7 @@
     "start:mobile": "npm run build && npm run stop:mobile && next start -H 0.0.0.0 -p 3000",
     "stop:mobile": "lsof -ti:3000 | xargs kill 2>/dev/null || true",
     "symptom:merge": "node scripts/merge-approved-symptoms.mjs",
+    "symptom:test": "npx tsx scripts/test-symptom-lexicon.ts",
     "lint": "eslint"
   },
   "dependencies": {

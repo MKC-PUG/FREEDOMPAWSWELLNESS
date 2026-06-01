@@ -32,6 +32,18 @@ function uniqueProtocolsOrdered(
   return ordered;
 }
 
+function findOverlapPair(
+  matches: SymptomMatch[]
+): { primary: string; secondary: string } | null {
+  /** Entries with forcedSecondary define a fixed #1 / #2 supplement pair (e.g. senior cognitive). */
+  for (const { entry } of matches) {
+    if (entry.forcedSecondary && entry.forcedSecondary !== entry.protocol) {
+      return { primary: entry.protocol, secondary: entry.forcedSecondary };
+    }
+  }
+  return null;
+}
+
 function findForcedSecondary(matches: SymptomMatch[], primaryTitle: string): string | null {
   for (const { entry } of matches) {
     if (entry.protocol === primaryTitle && entry.forcedSecondary) {
@@ -89,6 +101,22 @@ export function rankTopTwoProtocols(options: {
   const visionExtras = [visionPrimary, visionSecondary].filter(
     (t): t is string => Boolean(t)
   );
+
+  const overlapPair = findOverlapPair(matches);
+  if (overlapPair) {
+    const primaryConf = primaryConfidence(
+      usedFallback,
+      unknownPhrases.length,
+      matches.length,
+      visionConfidenceBoost
+    );
+    const secondaryConf = secondaryConfidence(primaryConf, true, true);
+    return {
+      primary: toRecommendation(overlapPair.primary, primaryConf),
+      secondary: toRecommendation(overlapPair.secondary, secondaryConf),
+      forcedPairUsed: true,
+    };
+  }
 
   let ordered = uniqueProtocolsOrdered(matches, [...protocolTitles, ...visionExtras]);
 

@@ -303,6 +303,17 @@ export default function ViTDiagnosticsClient({
                   <p className="text-center text-[10px] text-white/35 leading-relaxed">{result.disclaimer}</p>
                 )}
 
+                {result.matchedTerms && result.matchedTerms.length > 0 && (
+                  <div className="rounded-xl border border-green-500/30 bg-green-950/20 p-4">
+                    <p className="text-xs font-semibold text-green-400 mb-2">Symptom lexicon matched</p>
+                    <ul className="text-sm text-white/80 list-disc pl-5 space-y-1">
+                      {result.matchedTerms.map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 {(result.unknownPhrases?.length ?? 0) > 0 && (
                   <p className="text-center text-xs text-amber-400/80">
                     New phrases queued for review: {result.unknownPhrases!.join(', ')}

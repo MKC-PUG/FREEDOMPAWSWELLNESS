@@ -419,7 +419,6 @@ export const SYMPTOM_LEXICON: SymptomEntry[] = [
     aliases: [
       'restless',
       'restlessness',
-      'pacing',
       'cant settle',
       "can't settle",
       'hyper',
@@ -481,7 +480,9 @@ export const SYMPTOM_LEXICON: SymptomEntry[] = [
       'confusion',
       'circling',
       'head tilt',
+      'pacing',
       'pacing at night',
+      'night pacing',
       'sundowning',
       'sundown',
       'staring at wall',
