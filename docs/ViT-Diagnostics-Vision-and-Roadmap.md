@@ -127,7 +127,7 @@ JSON: primary + secondary (spec + branded + slug + confidence)
 - [x] `protocol-registry.ts` — spec + branded metadata  
 - [x] Top-2 ranking with `forcedSecondary` (cognitive/senior → Immune + Calm)  
 - [x] Results UI — dual labels + protocol links  
-- [ ] Expand lexicon with all 10 spec example phrases  
+- [x] Expand lexicon with all 10 spec example phrases  
 
 ### 🔄 Phase 2a — Photo vision (started)
 
@@ -182,6 +182,7 @@ Add to Vercel → Project → Settings → Environment Variables (Preview + Prod
 |------|----------|
 | Symptoms: `senior dog pacing at night confused` | #1 Patriot Defender · #2 Freedom Calm · green "Symptom lexicon matched" box |
 | Local check | `npm run symptom:test -- "your text"` |
+| All 10 categories | `npm run symptom:test:all` |
 | Symptoms: `cloudy eye squinting` | #1 Clear Vision Defender · #2 if overlap |
 | Photo + symptoms with API key | `visualFindings` populated, `usedVision: true` |
 | No API key | Lexicon-only, `usedVision: false` |

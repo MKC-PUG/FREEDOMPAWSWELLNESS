@@ -10,6 +10,7 @@
     "stop:mobile": "lsof -ti:3000 | xargs kill 2>/dev/null || true",
     "symptom:merge": "node scripts/merge-approved-symptoms.mjs",
     "symptom:test": "npx tsx scripts/test-symptom-lexicon.ts",
+    "symptom:test:all": "npx tsx scripts/test-lexicon-categories.ts",
     "lint": "eslint"
   },
   "dependencies": {
