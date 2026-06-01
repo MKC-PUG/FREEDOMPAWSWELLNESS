@@ -1,7 +1,7 @@
 # Freedom Paws Wellness — ViT Diagnostics Vision & Roadmap
 
-**Version 1.1 | May 31, 2026**  
-**Status:** Phase 0 + Phase 2a (photo vision) **in progress** — lexicon + top-2 supplements live; OpenAI vision when `OPENAI_API_KEY` set
+**Version 1.2 | May 31, 2026**  
+**Status:** Phase 0 complete · Phase 2a/2b live — lexicon + photo/video vision + premium results UI
 
 ---
 
@@ -134,19 +134,18 @@ JSON: primary + secondary (spec + branded + slug + confidence)
 - [x] `vision-analyze.ts` — OpenAI integration  
 - [x] Fusion in `analyzeDogImage()`  
 - [x] Vet urgency banner in UI  
+- [x] Premium results polish (confidence bars, token shop CTAs, collapsible reasoning)  
 - [ ] Set `OPENAI_API_KEY` on Vercel  
-- [ ] Premium results polish (confidence bars, copy tuning)  
 
 ### Phase 1 — Premium UX (next)
 
 - [ ] Image quality gate before analyze  
-- [ ] Token shop CTA from results  
 - [ ] Member-facing “how ViT works” on diagnostics page  
 
 ### Phase 2b — Video (after photos stable)
 
-- [ ] Short video upload (10–15 sec)  
-- [ ] Extract 3–5 frames → same vision pipeline  
+- [x] Short video upload (10–15 sec) — client-side frame extraction  
+- [x] Extract 3–5 frames → same vision pipeline  
 
 ### Phase 3 — Scale & rigor
 
@@ -206,6 +205,9 @@ High-risk visual/report combinations trigger **veterinary attention recommended*
 | File | Purpose |
 |------|---------|
 | `app/diagnostics/ViTDiagnosticsClient.tsx` | Member UI |
+| `app/diagnostics/ViTResultsPanel.tsx` | Premium results cards + confidence bars |
+| `app/diagnostics/ViTMediaUpload.tsx` | Photo + short video upload |
+| `lib/vit/extract-video-frames.ts` | Client-side video → JPEG frames |
 | `app/api/analyze/route.ts` | Analyze API |
 | `lib/ai/diagnostics.ts` | Fusion orchestration |
 | `lib/ai/symptom-lexicon.ts` | Symptom → protocol map |

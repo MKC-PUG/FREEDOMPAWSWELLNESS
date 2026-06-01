@@ -3,7 +3,14 @@ import { rankTopTwoProtocols } from './rank-protocols';
 import { formatDualLabel } from './protocol-registry';
 import type { ApprovedAlias } from '../symptom-feedback-store';
 import { AnalysisResponse } from './types';
-import { analyzePhotoVision } from './vision-analyze';
+import { analyzeVisionFrames } from './vision-analyze';
+
+export type VitMediaInput = {
+  symptoms?: string;
+  mediaType?: 'photo' | 'video';
+  /** Still frames for vision (1 photo or 3–5 video frames) */
+  frames: File[];
+};
 
 export type SymptomAnalysisResult = NonNullable<AnalysisResponse['data']> & {
   analysisMeta: {
@@ -14,17 +21,20 @@ export type SymptomAnalysisResult = NonNullable<AnalysisResponse['data']> & {
     usedVision: boolean;
     visualFindings: string[];
     vetUrgent: boolean;
+    mediaType: 'photo' | 'video';
+    frameCount: number;
   };
 };
 
-export async function analyzeDogImage(
-  file: File,
-  petContext?: { symptoms?: string },
+export async function analyzeDogMedia(
+  input: VitMediaInput,
   approved: ApprovedAlias[] = []
 ): Promise<AnalysisResponse & { analysisMeta?: SymptomAnalysisResult['analysisMeta'] }> {
-  const symptoms = petContext?.symptoms || '';
+  const symptoms = input.symptoms || '';
+  const mediaType = input.mediaType ?? 'photo';
+  const frames = input.frames.filter((f) => f.size > 0);
   const parsed = normalizeSymptoms(symptoms, approved);
-  const vision = await analyzePhotoVision(file, symptoms);
+  const vision = await analyzeVisionFrames(frames, symptoms, mediaType);
 
   const ranked = rankTopTwoProtocols({
     matches: parsed.matches,
@@ -48,7 +58,11 @@ export async function analyzeDogImage(
       : `Matched: ${termSummary}.`;
 
   if (vision.usedVision && vision.reasoning) {
-    reasoning += ` Visual analysis: ${vision.reasoning}`;
+    const frameNote =
+      mediaType === 'video' && vision.frameCount > 1
+        ? ` (${vision.frameCount} video frames)`
+        : '';
+    reasoning += ` Visual analysis${frameNote}: ${vision.reasoning}`;
   }
   if (vision.visualFindings.length > 0) {
     reasoning += ` Observed: ${vision.visualFindings.join('; ')}.`;
@@ -74,6 +88,8 @@ export async function analyzeDogImage(
     usedVision: vision.usedVision,
     visualFindings: vision.visualFindings,
     vetUrgent: vision.vetUrgent,
+    mediaType,
+    frameCount: vision.frameCount || frames.length,
   };
 
   return {
@@ -103,7 +119,21 @@ export async function analyzeDogImage(
       vetUrgentReason: vision.vetUrgentReason,
       visualFindings: vision.visualFindings,
       usedVision: vision.usedVision,
+      mediaType,
+      frameCount: analysisMeta.frameCount,
     },
     analysisMeta,
   };
+}
+
+/** @deprecated Use analyzeDogMedia */
+export async function analyzeDogImage(
+  file: File,
+  petContext?: { symptoms?: string },
+  approved: ApprovedAlias[] = []
+): Promise<AnalysisResponse & { analysisMeta?: SymptomAnalysisResult['analysisMeta'] }> {
+  return analyzeDogMedia(
+    { symptoms: petContext?.symptoms, mediaType: 'photo', frames: [file] },
+    approved
+  );
 }

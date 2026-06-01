@@ -1,7 +1,10 @@
 import { randomUUID } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
-import { analyzeDogImage } from '@/lib/ai/diagnostics';
-import { isValidImageFile } from '@/lib/ai/image-utils';
+import { analyzeDogMedia } from '@/lib/ai/diagnostics';
+import {
+  collectAnalyzeFrameFiles,
+  isValidAnalyzeImage,
+} from '@/lib/ai/media-utils';
 import { toAnalyzeApiResponse } from '@/lib/ai/types';
 import { getApprovedAliases, recordAnalysis } from '@/lib/symptom-feedback-store';
 
@@ -10,19 +13,35 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const image = formData.get('image');
     const symptoms = (formData.get('symptoms') || '').toString().trim();
+    const mediaTypeRaw = (formData.get('mediaType') || 'photo').toString();
+    const mediaType = mediaTypeRaw === 'video' ? 'video' : 'photo';
 
-    if (!(image instanceof File) || image.size === 0) {
+    const extraFrames = collectAnalyzeFrameFiles(formData);
+    const frames: File[] = [];
+
+    if (image instanceof File && image.size > 0) {
+      frames.push(image);
+    }
+    for (const f of extraFrames) {
+      if (!frames.some((x) => x.name === f.name && x.size === f.size)) {
+        frames.push(f);
+      }
+    }
+
+    if (frames.length === 0) {
       return NextResponse.json(
-        { success: false, error: 'Please upload a photo before analyzing.' },
+        { success: false, error: 'Please upload a photo or short video before analyzing.' },
         { status: 400 }
       );
     }
 
-    if (!isValidImageFile(image)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid image. Use JPG, PNG, or HEIC under 15MB.' },
-        { status: 400 }
-      );
+    for (const frame of frames) {
+      if (!isValidAnalyzeImage(frame)) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid image. Use JPG or PNG under 15MB per frame.' },
+          { status: 400 }
+        );
+      }
     }
 
     if (!symptoms) {
@@ -33,7 +52,10 @@ export async function POST(request: NextRequest) {
     }
 
     const approved = await getApprovedAliases();
-    const analysis = await analyzeDogImage(image, { symptoms }, approved);
+    const analysis = await analyzeDogMedia(
+      { symptoms, mediaType, frames },
+      approved
+    );
 
     if (!analysis.success || !analysis.data) {
       return NextResponse.json({

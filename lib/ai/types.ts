@@ -18,6 +18,8 @@ export interface AnalysisResponse {
     vetUrgentReason?: string | null;
     visualFindings?: string[];
     usedVision?: boolean;
+    mediaType?: 'photo' | 'video';
+    frameCount?: number;
   };
   error?: string;
 }
@@ -53,6 +55,9 @@ export type AnalyzeApiResponse = {
   vetUrgentReason?: string | null;
   visualFindings?: string[];
   usedVision?: boolean;
+  mediaType?: 'photo' | 'video';
+  frameCount?: number;
+  analyzedAt?: string;
   disclaimer?: string;
 };
 
@@ -89,6 +94,9 @@ export function toAnalyzeApiResponse(
     vetUrgentReason: data.vetUrgentReason,
     visualFindings: data.visualFindings,
     usedVision: data.usedVision,
+    mediaType: data.mediaType,
+    frameCount: data.frameCount,
+    analyzedAt: data.analyzedAt,
     disclaimer: data.disclaimer,
   };
 }

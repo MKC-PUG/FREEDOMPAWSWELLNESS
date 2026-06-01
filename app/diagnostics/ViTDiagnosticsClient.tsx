@@ -1,15 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import { protocols } from '@/app/protocols/protocols';
 import { compressFileToUpload } from '@/lib/compress-image';
-import PhotoUploadZone, { PHOTO_UPLOAD_BUILD } from '@/app/components/PhotoUploadZone';
 import { PWA_VERSION } from '@/lib/pwa-version';
 import BackLink from '@/app/components/BackLink';
-import { protocolDisplayName } from '@/lib/ai/symptom-lexicon';
 import type { AnalyzeApiResponse } from '@/lib/ai/types';
-import type { ImageSelection } from '@/lib/read-image-file';
+import ViTMediaUpload, { type VitMediaSelection } from './ViTMediaUpload';
+import ViTResultsPanel from './ViTResultsPanel';
+import { PHOTO_UPLOAD_BUILD } from '@/app/components/PhotoUploadZone';
 
 type Props = {
   initialPhoto: string | null;
@@ -31,7 +30,7 @@ export default function ViTDiagnosticsClient({
   uploadSuccess,
 }: Props) {
   const symptomsRef = useRef<HTMLTextAreaElement>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [media, setMedia] = useState<VitMediaSelection | null>(null);
   const [result, setResult] = useState<AnalyzeApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -40,33 +39,34 @@ export default function ViTDiagnosticsClient({
   const [wrongProtocol, setWrongProtocol] = useState(protocols[0]?.title ?? '');
 
   useEffect(() => {
-    if (!initialPhoto) return;
-    void dataUrlToFile(initialPhoto, initialFileName).then(setImageFile);
-  }, [initialPhoto, initialFileName]);
+    if (!initialPhoto || media) return;
+    void dataUrlToFile(initialPhoto, initialFileName).then((file) => {
+      setMedia({ kind: 'photo', file, previewUrl: initialPhoto });
+    });
+  }, [initialPhoto, initialFileName, media]);
 
-  const handlePhotoSelect = (selection: ImageSelection) => {
-    setLocalUploadError('');
-    setError('');
-    setImageFile(selection.file);
+  const hasMedia = Boolean(media || (uploadSuccess && initialPhoto));
+
+  const resetAnalysis = () => {
     setResult(null);
+    setError('');
     setFeedbackSent(null);
-    if (typeof window !== 'undefined' && window.location.search) {
-      window.history.replaceState({}, '', '/diagnostics');
-    }
+    if (symptomsRef.current) symptomsRef.current.value = '';
   };
 
-  const clearPhoto = async () => {
+  const clearMedia = async () => {
     await fetch('/api/clear-upload', { method: 'POST' }).catch(() => {});
-    setImageFile(null);
+    setMedia(null);
     setLocalUploadError('');
+    setResult(null);
     window.location.href = '/diagnostics';
   };
 
-  const analyzeImage = async () => {
+  const analyze = async () => {
     const symptoms = symptomsRef.current?.value ?? '';
 
-    if (!imageFile && !initialPhoto) {
-      setError('Please upload a photo first.');
+    if (!media && !initialPhoto) {
+      setError('Please upload a photo or short video first.');
       return;
     }
 
@@ -79,25 +79,34 @@ export default function ViTDiagnosticsClient({
     setError('');
     setResult(null);
     setFeedbackSent(null);
-    setFeedbackSent(null);
 
     try {
-      let file = imageFile;
-      if (!file && initialPhoto) {
-        file = await dataUrlToFile(initialPhoto, initialFileName);
+      let selection = media;
+      if (!selection && initialPhoto) {
+        const file = await dataUrlToFile(initialPhoto, initialFileName);
+        selection = { kind: 'photo', file, previewUrl: initialPhoto };
       }
-      if (!file) {
-        setError('Please upload a photo first.');
+      if (!selection) {
+        setError('Please upload a photo or short video first.');
         return;
       }
 
-      if (file.size > 2 * 1024 * 1024) {
-        file = await compressFileToUpload(file);
-      }
-
       const formData = new FormData();
-      formData.append('image', file, file.name || 'dog-photo.jpg');
       formData.append('symptoms', symptoms);
+
+      if (selection.kind === 'video') {
+        formData.append('mediaType', 'video');
+        selection.frames.forEach((frame, i) => {
+          formData.append(i === 0 ? 'image' : `frame_${i}`, frame, frame.name);
+        });
+      } else {
+        formData.append('mediaType', 'photo');
+        let file = selection.file;
+        if (file.size > 2 * 1024 * 1024) {
+          file = await compressFileToUpload(file);
+        }
+        formData.append('image', file, file.name || 'dog-photo.jpg');
+      }
 
       const response = await fetch('/api/analyze', {
         method: 'POST',
@@ -131,38 +140,35 @@ export default function ViTDiagnosticsClient({
     setFeedbackSent(feedback);
   };
 
-  const hasPhoto = Boolean(initialPhoto || imageFile);
-  const displayError = uploadError && !hasPhoto ? uploadError : localUploadError;
+  const displayError = uploadError && !hasMedia ? uploadError : localUploadError;
 
   return (
     <div className="min-h-screen bg-[#0A1428] text-white p-6 sm:p-8">
       <div className="max-w-5xl mx-auto">
         <BackLink />
         <h1 className="text-5xl font-bold text-center mb-2">ViT Diagnostics</h1>
-        <p className="text-center text-[#F5C242] mb-2">Upload photo + symptoms for AI protocol recommendation</p>
+        <p className="text-center text-[#F5C242] mb-2">
+          Upload photo or short video + symptoms for AI protocol recommendation
+        </p>
         <p className="text-center text-sm font-semibold text-[#F5C242] mb-1">
           App release {PWA_VERSION}
         </p>
-        <p className="text-center text-xs text-white/40 mb-2">
-          Upload module {PHOTO_UPLOAD_BUILD} · Server upload mode
-        </p>
-        <p className="text-center text-xs text-amber-400/80 mb-4">
-          iPhone: use production server (npm run start:mobile) — dev mode reloads every ~1 min
-        </p>
-        <p className="text-center text-xs mb-4">
-          <a href="/vit-upload.html" className="text-[#F5C242] underline">
-            Open backup upload page (recommended if photo clears after Send anyway)
-          </a>
-          {' · '}
-          <a href="/admin/symptoms" className="text-[#F5C242] underline">
-            Review symptom queue
-          </a>
+        <p className="text-center text-xs text-white/40 mb-4">
+          Upload module {PHOTO_UPLOAD_BUILD} · Photo + video (Phase 2b)
         </p>
 
-        {hasPhoto && !uploadSuccess && (
+        {hasMedia && !uploadSuccess && media?.kind !== 'video' && (
           <div className="mb-6 rounded-2xl border-2 border-green-500/50 bg-green-900/20 p-4 text-center">
             <p className="text-green-400 font-semibold">
-              ✓ Photo ready — scroll down, describe symptoms, tap Get AI Recommendation
+              ✓ Media ready — describe symptoms, tap Get AI Recommendation
+            </p>
+          </div>
+        )}
+
+        {media?.kind === 'video' && (
+          <div className="mb-6 rounded-2xl border-2 border-green-500/50 bg-green-900/20 p-4 text-center">
+            <p className="text-green-400 font-semibold">
+              ✓ Video frames ready ({media.frames.length}) — add symptoms below
             </p>
           </div>
         )}
@@ -175,43 +181,25 @@ export default function ViTDiagnosticsClient({
 
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-[#1F2A44] rounded-3xl p-8">
-            <h3 className="text-xl font-semibold mb-4">1. Upload Photo</h3>
+            <h3 className="text-xl font-semibold mb-4">1. Upload Photo or Video</h3>
 
-            {uploadSuccess && initialPhoto && (
-              <div className="mb-5 rounded-2xl border-2 border-green-500/50 bg-green-900/20 p-4">
-                <p className="text-green-400 font-semibold mb-3">✓ Photo saved on server</p>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={initialPhoto}
-                  alt="Uploaded dog"
-                  className="max-h-72 w-full object-contain rounded-2xl border border-[#F5C242]/40"
-                />
-              </div>
-            )}
-
-            {!uploadSuccess && (
-              <PhotoUploadZone
-                onSelect={handlePhotoSelect}
-                onClear={() => void clearPhoto()}
-                onError={setLocalUploadError}
-                storageKey="vit-diagnostics"
-                returnTo="/diagnostics"
-              />
-            )}
-
-            {uploadSuccess && (
-              <button
-                type="button"
-                onClick={() => void clearPhoto()}
-                className="w-full rounded-2xl border border-white/20 py-3 text-sm text-white/70"
-              >
-                Upload a Different Photo
-              </button>
-            )}
-
-            {displayError && (
-              <p className="text-red-400 mt-4 text-center text-sm font-medium">{displayError}</p>
-            )}
+            <ViTMediaUpload
+              onSelect={(sel) => {
+                setLocalUploadError('');
+                setError('');
+                setMedia(sel);
+                setResult(null);
+                setFeedbackSent(null);
+                if (typeof window !== 'undefined' && window.location.search) {
+                  window.history.replaceState({}, '', '/diagnostics');
+                }
+              }}
+              onClear={() => void clearMedia()}
+              onError={setLocalUploadError}
+              uploadSuccess={uploadSuccess}
+              initialPhoto={initialPhoto}
+              selection={media}
+            />
           </div>
 
           <div className="bg-[#1F2A44] rounded-3xl p-8 flex flex-col">
@@ -220,149 +208,34 @@ export default function ViTDiagnosticsClient({
               ref={symptomsRef}
               name="symptoms"
               defaultValue=""
-              placeholder="e.g. painful joints, constipation, red eyes, fatigue..."
+              placeholder="e.g. limping on walks, sneezing, senior pacing at night..."
               className="w-full h-40 bg-[#0A1428] border border-[#F5C242]/30 rounded-2xl p-6 text-white resize-y focus:outline-none focus:border-[#F5C242]"
             />
 
             <button
               type="button"
-              onClick={() => void analyzeImage()}
-              disabled={loading || !hasPhoto}
+              onClick={() => void analyze()}
+              disabled={loading || !hasMedia}
               className="mt-6 bg-[#F5C242] hover:bg-[#F5C242]/90 disabled:opacity-50 text-black font-bold py-4 rounded-2xl text-xl transition"
             >
-              {loading ? 'Analyzing...' : 'Get AI Recommendation'}
+              {loading ? 'Analyzing…' : 'Get AI Recommendation'}
             </button>
 
-            {!hasPhoto && (
+            {!hasMedia && (
               <p className="mt-3 text-center text-xs text-white/45">
-                Upload a photo first — then this button activates
+                Upload a photo or video first — then this button activates
               </p>
             )}
 
             {result && (
-              <div className="mt-8 space-y-6">
-                {result.vetUrgent && (
-                  <div className="rounded-2xl border-2 border-red-500 bg-red-950/50 p-5">
-                    <p className="text-red-300 font-bold text-sm">⚠️ VETERINARY ATTENTION RECOMMENDED</p>
-                    <p className="text-red-200/90 text-sm mt-2 leading-relaxed">
-                      {result.vetUrgentReason ||
-                        'Visible or reported signs may need prompt professional evaluation.'}
-                    </p>
-                  </div>
-                )}
-
-                {result.primary && (
-                  <div className="bg-green-900/30 border border-green-500/50 rounded-2xl p-6">
-                    <h4 className="text-green-400 text-sm font-medium">#1 SUPPLEMENT PROTOCOL</h4>
-                    <p className="text-lg text-amber-300/90 mt-1 font-semibold">{result.primary.specCategory}</p>
-                    <p className="text-2xl font-bold mt-2">{result.primary.brandedTitle}</p>
-                    <p className="text-green-400 mt-2">Confidence: {result.primary.confidence}</p>
-                    {result.primary.slug && (
-                      <Link
-                        href={`/protocols/${result.primary.slug}`}
-                        className="inline-block mt-3 text-sm text-[#F5C242] underline"
-                      >
-                        View protocol details →
-                      </Link>
-                    )}
-                  </div>
-                )}
-
-                {result.secondary && (
-                  <div className="bg-blue-900/30 border border-blue-500/50 rounded-2xl p-6">
-                    <h4 className="text-blue-400 text-sm font-medium">#2 SUPPLEMENT PROTOCOL</h4>
-                    <p className="text-lg text-amber-300/90 mt-1 font-semibold">{result.secondary.specCategory}</p>
-                    <p className="text-2xl font-bold mt-2">{result.secondary.brandedTitle}</p>
-                    <p className="text-blue-400 mt-2">Confidence: {result.secondary.confidence}</p>
-                    {result.secondary.slug && (
-                      <Link
-                        href={`/protocols/${result.secondary.slug}`}
-                        className="inline-block mt-3 text-sm text-[#F5C242] underline"
-                      >
-                        View protocol details →
-                      </Link>
-                    )}
-                  </div>
-                )}
-
-                {result.visualFindings && result.visualFindings.length > 0 && (
-                  <div className="rounded-xl border border-white/10 bg-[#0A1428]/60 p-4">
-                    <p className="text-xs font-semibold text-white/50 mb-2">Visual observations</p>
-                    <ul className="text-sm text-white/75 list-disc pl-5 space-y-1">
-                      {result.visualFindings.map((f) => (
-                        <li key={f}>{f}</li>
-                      ))}
-                    </ul>
-                    {result.usedVision && (
-                      <p className="text-[10px] text-white/35 mt-2">Photo analyzed with AI vision + symptom matching</p>
-                    )}
-                  </div>
-                )}
-
-                {result.reasoning && (
-                  <p className="text-center text-xs text-white/45 leading-relaxed">{result.reasoning}</p>
-                )}
-
-                {result.disclaimer && (
-                  <p className="text-center text-[10px] text-white/35 leading-relaxed">{result.disclaimer}</p>
-                )}
-
-                {result.matchedTerms && result.matchedTerms.length > 0 && (
-                  <div className="rounded-xl border border-green-500/30 bg-green-950/20 p-4">
-                    <p className="text-xs font-semibold text-green-400 mb-2">Symptom lexicon matched</p>
-                    <ul className="text-sm text-white/80 list-disc pl-5 space-y-1">
-                      {result.matchedTerms.map((t) => (
-                        <li key={t}>{t}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {(result.unknownPhrases?.length ?? 0) > 0 && (
-                  <p className="text-center text-xs text-amber-400/80">
-                    New phrases queued for review: {result.unknownPhrases!.join(', ')}
-                  </p>
-                )}
-
-                {result.analysisId && !feedbackSent && (
-                  <div className="rounded-2xl border border-white/10 bg-[#0A1428]/60 p-4 space-y-3">
-                    <p className="text-sm text-center text-white/70">Was this recommendation right?</p>
-                    <div className="flex gap-3 justify-center">
-                      <button
-                        type="button"
-                        onClick={() => void sendFeedback('helpful')}
-                        className="rounded-xl bg-green-700/80 px-4 py-2 text-sm font-semibold"
-                      >
-                        Yes
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => void sendFeedback('wrong')}
-                        className="rounded-xl border border-red-500/50 px-4 py-2 text-sm text-red-300"
-                      >
-                        No — queue for review
-                      </button>
-                    </div>
-                    <select
-                      value={wrongProtocol}
-                      onChange={(e) => setWrongProtocol(e.target.value)}
-                      className="w-full rounded-xl bg-[#0A1428] border border-white/20 px-3 py-2 text-xs"
-                    >
-                      {protocols.map((p) => (
-                        <option key={p.slug} value={p.title}>
-                          If wrong, suggest: {protocolDisplayName(p.title)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {feedbackSent && (
-                  <p className="text-center text-sm text-green-400">
-                    Thanks — feedback recorded for lexicon review.
-                  </p>
-                )}
-              </div>
+              <ViTResultsPanel
+                result={result}
+                feedbackSent={feedbackSent}
+                wrongProtocol={wrongProtocol}
+                onWrongProtocolChange={setWrongProtocol}
+                onFeedback={(f) => void sendFeedback(f)}
+                onTryAnother={resetAnalysis}
+              />
             )}
 
             {error && <p className="text-red-400 mt-6 text-center">{error}</p>}
