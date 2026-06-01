@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { protocols } from '@/app/protocols/protocols';
 import { compressFileToUpload } from '@/lib/compress-image';
 import PhotoUploadZone, { PHOTO_UPLOAD_BUILD } from '@/app/components/PhotoUploadZone';
+import { PWA_VERSION } from '@/lib/pwa-version';
 import BackLink from '@/app/components/BackLink';
 import { protocolDisplayName } from '@/lib/ai/symptom-lexicon';
 import type { AnalyzeApiResponse } from '@/lib/ai/types';
@@ -139,8 +140,11 @@ export default function ViTDiagnosticsClient({
         <BackLink />
         <h1 className="text-5xl font-bold text-center mb-2">ViT Diagnostics</h1>
         <p className="text-center text-[#F5C242] mb-2">Upload photo + symptoms for AI protocol recommendation</p>
+        <p className="text-center text-sm font-semibold text-[#F5C242] mb-1">
+          App release {PWA_VERSION}
+        </p>
         <p className="text-center text-xs text-white/40 mb-2">
-          Build {PHOTO_UPLOAD_BUILD} · Server upload mode
+          Upload module {PHOTO_UPLOAD_BUILD} · Server upload mode
         </p>
         <p className="text-center text-xs text-amber-400/80 mb-4">
           iPhone: use production server (npm run start:mobile) — dev mode reloads every ~1 min

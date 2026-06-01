@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { analyzeDogImage } from '@/lib/ai/diagnostics';
 import { isValidImageFile } from '@/lib/ai/image-utils';
@@ -43,25 +44,35 @@ export async function POST(request: NextRequest) {
 
     const { data, analysisMeta } = analysis;
 
-    const saved = await recordAnalysis({
-      symptoms,
-      normalized: analysisMeta?.normalized ?? symptoms.toLowerCase(),
-      primaryProtocol: data.primaryProtocol,
-      secondaryProtocol: data.secondaryProtocol,
-      confidence: data.confidence,
-      matchedTerms: analysisMeta?.matchedTerms ?? [],
-      unknownPhrases: analysisMeta?.unknownPhrases ?? [],
-      usedFallback: analysisMeta?.usedFallback ?? false,
-    });
+    let analysisId: string = randomUUID();
+    try {
+      const saved = await recordAnalysis({
+        symptoms,
+        normalized: analysisMeta?.normalized ?? symptoms.toLowerCase(),
+        primaryProtocol: data.primaryProtocol,
+        secondaryProtocol: data.secondaryProtocol,
+        confidence: data.confidence,
+        matchedTerms: analysisMeta?.matchedTerms ?? [],
+        unknownPhrases: analysisMeta?.unknownPhrases ?? [],
+        usedFallback: analysisMeta?.usedFallback ?? false,
+      });
+      analysisId = saved.id;
+    } catch (persistErr) {
+      console.warn('Analysis record not persisted (continuing):', persistErr);
+    }
 
     return NextResponse.json(
-      toAnalyzeApiResponse(saved.id, data, {
+      toAnalyzeApiResponse(analysisId, data, {
         matchedTerms: analysisMeta?.matchedTerms ?? [],
         unknownPhrases: analysisMeta?.unknownPhrases ?? [],
       })
     );
   } catch (error) {
     console.error('Analysis error:', error);
-    return NextResponse.json({ success: false, error: 'Analysis failed' });
+    const detail = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({
+      success: false,
+      error: process.env.NODE_ENV === 'development' ? detail : 'Analysis failed',
+    });
   }
 }

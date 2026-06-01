@@ -47,22 +47,45 @@ type FeedbackDb = {
   approvedAliases: ApprovedAlias[];
 };
 
-const dataDir = path.join(process.cwd(), 'data', 'symptom-feedback');
-const dbPath = path.join(dataDir, 'feedback.json');
+const EMPTY_DB: FeedbackDb = { analyses: [], pendingPhrases: [], approvedAliases: [] };
+
+/** Vercel/serverless has a read-only project dir — persist under /tmp instead. */
+function resolveDbPath(): string {
+  const onServerless =
+    process.env.VERCEL === '1' ||
+    Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME) ||
+    process.env.SYMPTOM_FEEDBACK_USE_TMP === '1';
+
+  if (onServerless) {
+    return path.join('/tmp', 'freedompaws-symptom-feedback', 'feedback.json');
+  }
+  return path.join(process.cwd(), 'data', 'symptom-feedback', 'feedback.json');
+}
 
 async function ensureDb(): Promise<FeedbackDb> {
-  await mkdir(dataDir, { recursive: true });
+  const dbPath = resolveDbPath();
   try {
+    await mkdir(path.dirname(dbPath), { recursive: true });
     const raw = await readFile(dbPath, 'utf8');
     return JSON.parse(raw) as FeedbackDb;
-  } catch {
-    return { analyses: [], pendingPhrases: [], approvedAliases: [] };
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException)?.code;
+    if (code === 'ENOENT') return { ...EMPTY_DB };
+    console.warn('[symptom-feedback-store] ensureDb failed, using empty db:', err);
+    return { ...EMPTY_DB };
   }
 }
 
-async function saveDb(db: FeedbackDb) {
-  await mkdir(dataDir, { recursive: true });
-  await writeFile(dbPath, JSON.stringify(db, null, 2), 'utf8');
+async function saveDb(db: FeedbackDb): Promise<boolean> {
+  const dbPath = resolveDbPath();
+  try {
+    await mkdir(path.dirname(dbPath), { recursive: true });
+    await writeFile(dbPath, JSON.stringify(db, null, 2), 'utf8');
+    return true;
+  } catch (err) {
+    console.warn('[symptom-feedback-store] saveDb failed:', err);
+    return false;
+  }
 }
 
 export async function getApprovedAliases(): Promise<ApprovedAlias[]> {
