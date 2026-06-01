@@ -9,7 +9,7 @@ import type { AnalyzeApiResponse } from '@/lib/ai/types';
 import ViTMediaUpload, { type VitMediaSelection } from './ViTMediaUpload';
 import ViTResultsPanel from './ViTResultsPanel';
 import ViTQualityGate from './ViTQualityGate';
-import { PHOTO_UPLOAD_BUILD } from '@/app/components/PhotoUploadZone';
+import ViTHowItWorks from './ViTHowItWorks';
 import {
   assessPhotoForVit,
   assessVideoFramesForVit,
@@ -206,8 +206,10 @@ export default function ViTDiagnosticsClient({
           App release {PWA_VERSION}
         </p>
         <p className="text-center text-xs text-white/40 mb-4">
-          Upload module {PHOTO_UPLOAD_BUILD} · Photo + video (Phase 2b)
+          Photo · short video · symptom matching · AI vision
         </p>
+
+        <ViTHowItWorks />
 
         {hasMedia && canAnalyze && mediaQuality?.status === 'pass' && (
           <div className="mb-6 rounded-2xl border-2 border-green-500/50 bg-green-900/20 p-4 text-center">
