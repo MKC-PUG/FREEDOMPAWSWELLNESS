@@ -139,7 +139,7 @@ JSON: primary + secondary (spec + branded + slug + confidence)
 
 ### Phase 1 — Premium UX (next)
 
-- [ ] Image quality gate before analyze  
+- [x] Image quality gate before analyze  
 - [ ] Member-facing “how ViT works” on diagnostics page  
 
 ### Phase 2b — Video (after photos stable)
@@ -208,6 +208,8 @@ High-risk visual/report combinations trigger **veterinary attention recommended*
 | `app/diagnostics/ViTResultsPanel.tsx` | Premium results cards + confidence bars |
 | `app/diagnostics/ViTMediaUpload.tsx` | Photo + short video upload |
 | `lib/vit/extract-video-frames.ts` | Client-side video → JPEG frames |
+| `lib/vit/media-quality-gate.ts` | Photo/video quality check before analyze |
+| `app/diagnostics/ViTQualityGate.tsx` | Quality score UI |
 | `app/api/analyze/route.ts` | Analyze API |
 | `lib/ai/diagnostics.ts` | Fusion orchestration |
 | `lib/ai/symptom-lexicon.ts` | Symptom → protocol map |

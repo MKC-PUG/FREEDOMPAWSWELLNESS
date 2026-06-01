@@ -8,7 +8,13 @@ import BackLink from '@/app/components/BackLink';
 import type { AnalyzeApiResponse } from '@/lib/ai/types';
 import ViTMediaUpload, { type VitMediaSelection } from './ViTMediaUpload';
 import ViTResultsPanel from './ViTResultsPanel';
+import ViTQualityGate from './ViTQualityGate';
 import { PHOTO_UPLOAD_BUILD } from '@/app/components/PhotoUploadZone';
+import {
+  assessPhotoForVit,
+  assessVideoFramesForVit,
+  type VitMediaQuality,
+} from '@/lib/vit/media-quality-gate';
 
 type Props = {
   initialPhoto: string | null;
@@ -37,11 +43,40 @@ export default function ViTDiagnosticsClient({
   const [localUploadError, setLocalUploadError] = useState('');
   const [feedbackSent, setFeedbackSent] = useState<'helpful' | 'wrong' | null>(null);
   const [wrongProtocol, setWrongProtocol] = useState(protocols[0]?.title ?? '');
+  const [mediaQuality, setMediaQuality] = useState<VitMediaQuality | null>(null);
+  const [qualityChecking, setQualityChecking] = useState(false);
+
+  const runQualityCheck = async (selection: VitMediaSelection) => {
+    setQualityChecking(true);
+    setMediaQuality(null);
+    try {
+      const quality =
+        selection.kind === 'video'
+          ? await assessVideoFramesForVit(selection.frames)
+          : await assessPhotoForVit(selection.file);
+      setMediaQuality(quality);
+      if (!quality.canAnalyze) {
+        setError('Media quality is too low for reliable AI analysis. See tips below.');
+      }
+    } catch {
+      setMediaQuality({
+        status: 'warn',
+        score: 60,
+        issues: [],
+        suggestions: ['Could not verify quality — you may still try analyzing'],
+        canAnalyze: true,
+      });
+    } finally {
+      setQualityChecking(false);
+    }
+  };
 
   useEffect(() => {
     if (!initialPhoto || media) return;
-    void dataUrlToFile(initialPhoto, initialFileName).then((file) => {
-      setMedia({ kind: 'photo', file, previewUrl: initialPhoto });
+    void dataUrlToFile(initialPhoto, initialFileName).then(async (file) => {
+      const sel: VitMediaSelection = { kind: 'photo', file, previewUrl: initialPhoto };
+      setMedia(sel);
+      await runQualityCheck(sel);
     });
   }, [initialPhoto, initialFileName, media]);
 
@@ -57,6 +92,7 @@ export default function ViTDiagnosticsClient({
   const clearMedia = async () => {
     await fetch('/api/clear-upload', { method: 'POST' }).catch(() => {});
     setMedia(null);
+    setMediaQuality(null);
     setLocalUploadError('');
     setResult(null);
     window.location.href = '/diagnostics';
@@ -96,6 +132,12 @@ export default function ViTDiagnosticsClient({
 
       if (selection.kind === 'video') {
         formData.append('mediaType', 'video');
+        const vq = await assessVideoFramesForVit(selection.frames);
+        setMediaQuality(vq);
+        if (!vq.canAnalyze) {
+          setError('Video quality is too low. Retake in brighter light with the dog centered.');
+          return;
+        }
         selection.frames.forEach((frame, i) => {
           formData.append(i === 0 ? 'image' : `frame_${i}`, frame, frame.name);
         });
@@ -104,6 +146,12 @@ export default function ViTDiagnosticsClient({
         let file = selection.file;
         if (file.size > 2 * 1024 * 1024) {
           file = await compressFileToUpload(file);
+        }
+        const pq = await assessPhotoForVit(file);
+        setMediaQuality(pq);
+        if (!pq.canAnalyze) {
+          setError('Photo quality is too low. Retake with the dog in frame and good lighting.');
+          return;
         }
         formData.append('image', file, file.name || 'dog-photo.jpg');
       }
@@ -141,6 +189,10 @@ export default function ViTDiagnosticsClient({
   };
 
   const displayError = uploadError && !hasMedia ? uploadError : localUploadError;
+  const canAnalyze =
+    hasMedia &&
+    !qualityChecking &&
+    (mediaQuality === null || mediaQuality.canAnalyze);
 
   return (
     <div className="min-h-screen bg-[#0A1428] text-white p-6 sm:p-8">
@@ -157,18 +209,10 @@ export default function ViTDiagnosticsClient({
           Upload module {PHOTO_UPLOAD_BUILD} · Photo + video (Phase 2b)
         </p>
 
-        {hasMedia && !uploadSuccess && media?.kind !== 'video' && (
+        {hasMedia && canAnalyze && mediaQuality?.status === 'pass' && (
           <div className="mb-6 rounded-2xl border-2 border-green-500/50 bg-green-900/20 p-4 text-center">
             <p className="text-green-400 font-semibold">
-              ✓ Media ready — describe symptoms, tap Get AI Recommendation
-            </p>
-          </div>
-        )}
-
-        {media?.kind === 'video' && (
-          <div className="mb-6 rounded-2xl border-2 border-green-500/50 bg-green-900/20 p-4 text-center">
-            <p className="text-green-400 font-semibold">
-              ✓ Video frames ready ({media.frames.length}) — add symptoms below
+              ✓ Media quality looks good — describe symptoms, tap Get AI Recommendation
             </p>
           </div>
         )}
@@ -190,6 +234,7 @@ export default function ViTDiagnosticsClient({
                 setMedia(sel);
                 setResult(null);
                 setFeedbackSent(null);
+                void runQualityCheck(sel);
                 if (typeof window !== 'undefined' && window.location.search) {
                   window.history.replaceState({}, '', '/diagnostics');
                 }
@@ -200,6 +245,14 @@ export default function ViTDiagnosticsClient({
               initialPhoto={initialPhoto}
               selection={media}
             />
+
+            <div className="mt-4">
+              <ViTQualityGate
+                quality={mediaQuality}
+                checking={qualityChecking}
+                mediaKind={media?.kind ?? null}
+              />
+            </div>
           </div>
 
           <div className="bg-[#1F2A44] rounded-3xl p-8 flex flex-col">
@@ -215,7 +268,7 @@ export default function ViTDiagnosticsClient({
             <button
               type="button"
               onClick={() => void analyze()}
-              disabled={loading || !hasMedia}
+              disabled={loading || !canAnalyze}
               className="mt-6 bg-[#F5C242] hover:bg-[#F5C242]/90 disabled:opacity-50 text-black font-bold py-4 rounded-2xl text-xl transition"
             >
               {loading ? 'Analyzing…' : 'Get AI Recommendation'}
@@ -224,6 +277,16 @@ export default function ViTDiagnosticsClient({
             {!hasMedia && (
               <p className="mt-3 text-center text-xs text-white/45">
                 Upload a photo or video first — then this button activates
+              </p>
+            )}
+            {hasMedia && !qualityChecking && mediaQuality && !mediaQuality.canAnalyze && (
+              <p className="mt-3 text-center text-xs text-red-400/90">
+                Improve photo or video quality above to unlock analysis
+              </p>
+            )}
+            {hasMedia && mediaQuality?.status === 'warn' && mediaQuality.canAnalyze && (
+              <p className="mt-3 text-center text-xs text-amber-400/80">
+                Quality is OK — a brighter, closer shot may improve results
               </p>
             )}
 
