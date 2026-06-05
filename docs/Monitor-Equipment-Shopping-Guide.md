@@ -3,7 +3,7 @@
 
 **Document purpose:** Everything you need to order and set up **Monitor My Dog** beta testing at home — camera, relay, software, and what to skip.
 
-**Last updated:** May 31, 2026  
+**Last updated:** June 1, 2026  
 **Project folder:** `freedompaws-app`  
 **App route:** `/monitor`  
 **Related:** `Pet-Monitor-MVP-Roadmap.md`, `Freedom-Paws-Master-Business-Plan-and-Roadmap.md`
@@ -29,7 +29,7 @@
 Print or check off:
 
 ```
-☐ Wyze Cam v4 (preferred) OR Wyze Cam v3
+☐ Wyze Cam v3 (required for Freedom Paws Monitor beta — RTSP in app)
 ☐ Buy from wyze.com, Amazon (Wyze official seller), Best Buy, or Home Depot
 ☐ Install free Wyze app on iPhone (Wi‑Fi setup + RTSP)
 ☐ Relay device: old laptop/Mac you own OR Raspberry Pi 4 (2GB+) + 32GB microSD + power
@@ -42,8 +42,7 @@ Print or check off:
 
 | Setup | Approx. cost |
 |-------|----------------|
-| Wyze Cam v4 only + use existing laptop as relay | **~$35** |
-| Wyze Cam v3 + use existing laptop | **~$25–30** |
+| Wyze Cam v3 + use existing laptop as relay | **~$25–30** |
 | Wyze Cam + Raspberry Pi 4 kit as dedicated relay | **~$70–110** |
 
 ---
@@ -183,7 +182,7 @@ When home Wi‑Fi test works, **Monitor Phase 2** adds:
 
 | Question | Answer |
 |----------|--------|
-| Best camera? | Wyze Cam **v4** (or **v3**) |
+| Best camera? | Wyze Cam **v3** (not v4 / Pan v4 until Wyze ships RTSP) |
 | Best seller? | **wyze.com** or Amazon (Wyze official) |
 | Only buy camera? | **No** — need relay device + free software |
 | Cheapest test? | Wyze v3 + old laptop + go2rtc |

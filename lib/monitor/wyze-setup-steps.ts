@@ -5,8 +5,9 @@ export type SetupStep = {
 
 export const wyzeSetupSteps: SetupStep[] = [
   {
-    title: '1. Get a Wyze Cam v3 or v4',
+    title: '1. Get a Wyze Cam v3',
     body: [
+      'Use Wyze Cam v3 for Monitor beta — v4 and Pan v4 do not show RTSP in the app yet.',
       'Mount the camera where your dog rests — crate, bed, or main room.',
       'Connect it to your home Wi‑Fi using the Wyze app first.',
     ],

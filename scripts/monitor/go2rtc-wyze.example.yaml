@@ -1,0 +1,11 @@
+# Copy to ~/freedompaws-monitor/go2rtc.yaml
+# Replace the stream line with the RTSP URL from Wyze app:
+#   Settings → Advanced Settings → RTSP → copy full URL
+
+streams:
+  wyze: rtsp://USERNAME:PASSWORD@192.168.1.XXX:554/live
+
+# HLS for Freedom Paws (iPhone) — use your Mac's LAN IP, not localhost:
+#   http://192.168.1.10:1984/api/stream.m3u8?src=wyze
+#
+# Start: cd ~/freedompaws-monitor && ./go2rtc  (or: go2rtc if brew installed)

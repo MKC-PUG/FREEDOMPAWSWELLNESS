@@ -67,6 +67,10 @@ export default function MonitorClient() {
   }, []);
 
   const activeUrl = config?.streamUrl?.trim();
+  const isGo2rtcPlayer = !!activeUrl && activeUrl.includes('stream.html');
+  const isMjpeg =
+    !!activeUrl &&
+    (activeUrl.includes('mjpeg') || activeUrl.includes('frame.jpeg'));
 
   return (
     <div className="min-h-screen bg-[#0A1428] text-white">
@@ -87,8 +91,23 @@ export default function MonitorClient() {
 
         <p className="mt-4 text-sm text-white/55 leading-relaxed max-w-2xl">
           Live view only. No cloud recording. You own the camera — Freedom Paws shows your stream
-          when you provide an HLS link from your home setup.
+          when you provide a go2rtc link from your home Mac relay.
         </p>
+
+        <div className="mt-4 rounded-2xl border border-[#F5C242]/40 bg-[#16223C] px-4 py-4 text-sm text-white/75 leading-relaxed">
+          <p className="font-semibold text-[#F5C242]">Home beta — how to watch on iPhone</p>
+          <p className="mt-2">
+            Use <strong className="text-white/90">Safari</strong> at your Mac&apos;s local address
+            (example: <code className="text-[#F5C242]">http://192.168.1.51:3000/monitor</code>), not
+            the installed home-screen app from Vercel. HTTPS blocks your local camera stream until
+            Monitor Phase 2.
+          </p>
+          <p className="mt-2">
+            Stream URL: go2rtc → wyze → links →{' '}
+            <strong className="text-white/90">stream.html</strong> (WebRTC). Pan/tilt stays in the
+            Wyze app.
+          </p>
+        </div>
 
         <div className="mt-8 flex gap-2">
           {(['setup', 'live'] as const).map((t) => (
@@ -129,7 +148,8 @@ export default function MonitorClient() {
             <section className="bg-[#16223C] rounded-3xl p-6 sm:p-8 border border-[#F5C242]/30">
               <h2 className="text-xl font-bold">Save your camera</h2>
               <p className="mt-2 text-sm text-white/60">
-                Beta: paste an HLS stream URL (.m3u8) from your home relay.
+                Beta: from go2rtc → wyze → links, paste the{' '}
+                <strong className="text-white/80">stream.html</strong> URL (best on iPhone).
               </p>
 
               <label className="block mt-6 text-sm font-semibold text-white/80">
@@ -144,13 +164,13 @@ export default function MonitorClient() {
               </label>
 
               <label className="block mt-4 text-sm font-semibold text-white/80">
-                HLS stream URL (.m3u8)
+                Stream URL (go2rtc)
                 <input
                   type="url"
                   value={streamUrl}
                   onChange={(e) => setStreamUrl(e.target.value)}
                   className="mt-2 w-full min-h-[48px] rounded-xl bg-[#0A1428] border border-white/15 px-4 text-white text-base"
-                  placeholder="http://192.168.1.10:1984/api/stream.m3u8?src=wyze"
+                  placeholder="http://192.168.1.51:1984/stream.html?src=wyze"
                   autoCapitalize="off"
                   autoCorrect="off"
                 />
@@ -217,17 +237,38 @@ export default function MonitorClient() {
                 </div>
 
                 <div className="rounded-2xl overflow-hidden border border-white/10 bg-black aspect-video">
-                  <video
-                    key={activeUrl}
-                    src={activeUrl}
-                    controls
-                    playsInline
-                    autoPlay
-                    muted
-                    className="w-full h-full object-contain"
-                    onError={() => setVideoError(true)}
-                    onLoadedData={() => setVideoError(false)}
-                  />
+                  {isGo2rtcPlayer ? (
+                    <iframe
+                      key={activeUrl}
+                      src={activeUrl}
+                      title={`Live view: ${config?.label ?? 'camera'}`}
+                      className="w-full h-full border-0"
+                      allow="autoplay; fullscreen"
+                      onLoad={() => setVideoError(false)}
+                    />
+                  ) : isMjpeg ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={activeUrl}
+                      src={activeUrl}
+                      alt={`Live view: ${config?.label ?? 'camera'}`}
+                      className="w-full h-full object-contain"
+                      onError={() => setVideoError(true)}
+                      onLoad={() => setVideoError(false)}
+                    />
+                  ) : (
+                    <video
+                      key={activeUrl}
+                      src={activeUrl}
+                      controls
+                      playsInline
+                      autoPlay
+                      muted
+                      className="w-full h-full object-contain"
+                      onError={() => setVideoError(true)}
+                      onLoadedData={() => setVideoError(false)}
+                    />
+                  )}
                 </div>
 
                 <p className="text-xs text-white/45 leading-relaxed">
