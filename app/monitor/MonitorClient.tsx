@@ -1,7 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import BackLink from '@/app/components/BackLink';
+import { monitorPrivacyNote } from '@/lib/monitor/help-content';
 import {
   MONITOR_STORAGE_KEY,
   type MonitorCameraConfig,
@@ -71,6 +73,7 @@ export default function MonitorClient() {
   const isMjpeg =
     !!activeUrl &&
     (activeUrl.includes('mjpeg') || activeUrl.includes('frame.jpeg'));
+  const isTunnelStream = !!activeUrl && activeUrl.startsWith('https://');
 
   return (
     <div className="min-h-screen bg-[#0A1428] text-white">
@@ -95,18 +98,43 @@ export default function MonitorClient() {
         </p>
 
         <div className="mt-4 rounded-2xl border border-[#F5C242]/40 bg-[#16223C] px-4 py-4 text-sm text-white/75 leading-relaxed">
-          <p className="font-semibold text-[#F5C242]">Home beta — how to watch on iPhone</p>
+          {isTunnelStream ? (
+            <>
+              <p className="font-semibold text-[#F5C242]">Away mode — HTTPS tunnel active</p>
+              <p className="mt-2">
+                Your saved stream uses <strong className="text-white/90">https://</strong> — the
+                installed Freedom Paws app icon works from cellular or work Wi‑Fi. Keep go2rtc +
+                tunnel running on your Mac at home.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="font-semibold text-[#F5C242]">Home Wi‑Fi — use Safari</p>
+              <p className="mt-2">
+                Local streams use <code className="text-[#F5C242]">http://</code> — open{' '}
+                <code className="text-[#F5C242]">http://YOUR_MAC_IP:3000/monitor</code> in{' '}
+                <strong className="text-white/90">Safari</strong>, not the home-screen PWA icon.
+              </p>
+              <p className="mt-2">
+                Away from home? Run <code className="text-[#F5C242]">start-tunnel.sh</code>, save an{' '}
+                <strong className="text-white/90">https://</strong> stream.html URL — then the app
+                icon works. See <Link href="/monitor/help" className="text-[#F5C242] underline">Help</Link>.
+              </p>
+            </>
+          )}
           <p className="mt-2">
-            Use <strong className="text-white/90">Safari</strong> at your Mac&apos;s local address
-            (example: <code className="text-[#F5C242]">http://192.168.1.51:3000/monitor</code>), not
-            the installed home-screen app from Vercel. HTTPS blocks your local camera stream until
-            Monitor Phase 2.
+            Stream: go2rtc → wyze → links → <strong className="text-white/90">stream.html</strong>.
+            Pan/tilt: Wyze app.
           </p>
-          <p className="mt-2">
-            Stream URL: go2rtc → wyze → links →{' '}
-            <strong className="text-white/90">stream.html</strong> (WebRTC). Pan/tilt stays in the
-            Wyze app.
-          </p>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link
+            href="/monitor/help"
+            className="min-h-[44px] inline-flex items-center rounded-xl border border-white/20 px-5 text-sm font-semibold text-[#F5C242] touch-manipulation"
+          >
+            Help &amp; troubleshooting →
+          </Link>
         </div>
 
         <div className="mt-8 flex gap-2">
@@ -271,11 +299,7 @@ export default function MonitorClient() {
                   )}
                 </div>
 
-                <p className="text-xs text-white/45 leading-relaxed">
-                  Stream stays on your network. If video fails, confirm your phone is on the same
-                  Wi‑Fi as your relay, or that your secure tunnel is running. Not a substitute for
-                  a pet sitter or emergency vet care.
-                </p>
+                <p className="text-xs text-white/45 leading-relaxed">{monitorPrivacyNote}</p>
 
                 <button
                   type="button"

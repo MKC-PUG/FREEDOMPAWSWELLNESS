@@ -3,9 +3,11 @@
 
 **Document purpose:** Simple plan for members to use **off-the-shelf Wi‑Fi cameras** to watch pets in the room they stay in while members are away. Build this module **after PWA preview deploy (Week 1)** and **before public marketing launch**.
 
-**Last updated:** May 30, 2026  
+**Last updated:** June 5, 2026  
 **Project folder:** `freedompaws-app`  
-**App route:** `/monitor` (currently “Coming Soon”)  
+**App route:** `/monitor` (home beta live — PWA v40)  
+**Help:** `/monitor/help`  
+**Phase 2 tunnel:** `docs/Monitor-Phase-2-Relay-Guide.md`  
 **Related:** `Freedom-Paws-Master-Business-Plan-and-Roadmap.md`
 
 ---
@@ -92,13 +94,13 @@ Camera (RTSP)  →  Bridge/Relay  →  HLS or WebRTC  →  Freedom Paws app
 
 ## 5. MVP scope — what we build first
 
-- [ ] Setup wizard (Wyze RTSP path)
-- [ ] Live HLS player in `/monitor`
-- [ ] Connection status (online / offline / retry)
-- [ ] Help page with troubleshooting
-- [ ] **Core membership** gate (free tier sees setup guide only)
-- [ ] Works in **installed PWA on iPhone**
-- [ ] One camera per account
+- [x] Setup wizard (Wyze v3 RTSP + go2rtc stream.html path)
+- [x] Live player in `/monitor` (stream.html iframe, MJPEG, HLS fallback)
+- [x] Connection status (online / offline)
+- [x] Help page (`/monitor/help`) with troubleshooting
+- [ ] **Core membership** gate (free tier sees setup guide only) — post-launch
+- [x] Works in **installed PWA on iPhone** — via HTTPS tunnel (Phase 2 beta)
+- [x] One camera per phone (localStorage beta)
 
 ---
 
@@ -124,10 +126,16 @@ Camera (RTSP)  →  Bridge/Relay  →  HLS or WebRTC  →  Freedom Paws app
 
 ### Frontend (`app/monitor/`)
 
-- [ ] Replace “Coming Soon” with wizard + player
-- [ ] Mobile-first layout (large tap targets)
-- [ ] Offline message if no network
-- [ ] Link from homepage “Monitor My Dog” card
+- [x] Wizard + player (not “Coming Soon”)
+- [x] Mobile-first layout (large tap targets)
+- [x] Offline message + help link
+- [x] Link from homepage “Monitor My Dog” card
+
+### Phase 2 relay (beta — June 2026)
+
+- [x] Document HTTPS tunnel (`start-tunnel.sh` + Cloudflare quick tunnel)
+- [x] App detects `https://` stream URL → PWA away mode
+- [ ] Freedom Paws hosted relay with member auth (production)
 
 ### Ops
 

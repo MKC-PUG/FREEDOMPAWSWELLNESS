@@ -1,6 +1,6 @@
 export type MonitorCameraConfig = {
   label: string;
-  /** HLS playlist URL (.m3u8) — from Wyze RTSP bridge or home relay */
+  /** go2rtc stream.html, mjpeg, or HLS — http:// home or https:// tunnel */
   streamUrl: string;
   cameraType: 'wyze' | 'onvif' | 'other';
   updatedAt: number;
