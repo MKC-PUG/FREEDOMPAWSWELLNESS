@@ -126,29 +126,28 @@ export async function createProtocolPaymentPayload(
 
   try {
     // Second arg `true` forces SDK to throw with the real XUMM API error instead of null.
-    let created: {
+    type CreatedPayload = {
       uuid?: string;
       next?: { always?: string };
       refs?: { qr_png?: string };
-    } | null = null;
+    };
+    let created: CreatedPayload | null = null;
 
-    try {
-      created = (await sdk.payload.create(buildPayload(true), true)) as typeof created;
-    } catch (firstErr) {
-      const firstMsg = firstErr instanceof Error ? firstErr.message : '';
-      if (firstMsg.includes('603')) {
-        console.warn('[xumm/create] 603 with return_url — retrying minimal payload');
-        created = (await sdk.payload.create(buildPayload(false), true)) as typeof created;
-      } else {
-        throw firstErr;
+    const attempts = [buildPayload(true), buildPayload(false), { txjson, options: { submit: true, expire: 15 } }];
+
+    let lastErr: unknown;
+    for (let i = 0; i < attempts.length; i++) {
+      try {
+        created = (await sdk.payload.create(attempts[i]!, true)) as CreatedPayload;
+        if (created?.uuid) break;
+      } catch (err) {
+        lastErr = err;
+        const msg = err instanceof Error ? err.message : '';
+        if (!msg.includes('603') || i === attempts.length - 1) throw err;
+        console.warn(`[xumm/create] 603 on attempt ${i + 1} — retrying simpler payload`);
       }
     }
-
-    created = created as {
-      uuid?: string;
-      next?: { always?: string };
-      refs?: { qr_png?: string };
-    } | null;
+    if (!created?.uuid && lastErr) throw lastErr;
 
     if (!created?.uuid) {
       return {

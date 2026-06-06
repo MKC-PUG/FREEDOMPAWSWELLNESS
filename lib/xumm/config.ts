@@ -1,3 +1,4 @@
+import { isValidClassicAddress } from 'ripple-address-codec';
 import { appOrigin, appPath } from '@/lib/site-urls';
 
 export type ShopCurrency = 'xrp' | 'rlusd';
@@ -48,12 +49,12 @@ export function validateTreasuryAddress():
         'XRPL_TREASURY_ADDRESS is an X-address (starts with X). Xaman requires a classic r-address. In Xaman → Receive → switch to classic address, then update Vercel.',
     };
   }
-  if (!CLASSIC_R_ADDRESS.test(addr)) {
+  if (!CLASSIC_R_ADDRESS.test(addr) || !isValidClassicAddress(addr)) {
     return {
       ok: false,
       code: 'INVALID',
       message:
-        'XRPL_TREASURY_ADDRESS must be a valid classic XRPL r-address (base58, no spaces or quotes). Copy again from Xaman → Receive → classic address.',
+        'XRPL_TREASURY_ADDRESS failed XRPL checksum validation. In Xaman → Receive, switch to classic r-address, copy it again, and replace the Vercel value (no spaces or quotes).',
     };
   }
   return { ok: true, address: addr };

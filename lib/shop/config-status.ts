@@ -9,6 +9,7 @@ export type ShopConfigStatus = {
   treasuryPreview: string | null;
   treasuryLength: number | null;
   treasuryHasQuotes: boolean;
+  treasuryChecksumValid: boolean;
   rlusdIssuer: boolean;
   rlusdIssuerPreview: string | null;
   stripeSecret: boolean;
@@ -58,6 +59,7 @@ export function getShopConfigStatus(): ShopConfigStatus {
     treasuryPreview: treasury ? `${treasury.slice(0, 6)}…${treasury.slice(-4)}` : null,
     treasuryLength: treasury ? treasury.length : null,
     treasuryHasQuotes: /^["']|["']$/.test(treasuryRaw.trim()),
+    treasuryChecksumValid: treasuryCheck.ok,
     rlusdIssuer: Boolean(rlusdIssuer),
     rlusdIssuerPreview: rlusdIssuer ? `${rlusdIssuer.slice(0, 6)}…${rlusdIssuer.slice(-4)}` : null,
     stripeSecret,
