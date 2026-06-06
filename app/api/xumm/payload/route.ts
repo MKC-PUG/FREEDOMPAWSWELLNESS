@@ -4,9 +4,15 @@ import type { ShopCurrency } from '@/lib/xumm/config';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as { slug?: string; currency?: ShopCurrency };
+    const body = (await request.json()) as {
+      slug?: string;
+      currency?: ShopCurrency;
+      xrpAmount?: number;
+    };
     const slug = body.slug?.trim();
     const currency = body.currency === 'rlusd' ? 'rlusd' : 'xrp';
+    const xrpAmount =
+      typeof body.xrpAmount === 'number' && body.xrpAmount > 0 ? body.xrpAmount : undefined;
 
     if (!slug) {
       return NextResponse.json(
@@ -15,7 +21,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await createProtocolPaymentPayload({ slug, currency });
+    const result = await createProtocolPaymentPayload({ slug, currency, xrpAmount });
     if (!result.ok) {
       const status =
         result.code === 'INVALID_PROTOCOL' ? 404 : result.code === 'XUMM_NOT_CONFIGURED' ? 503 : 400;

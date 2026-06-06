@@ -13,10 +13,12 @@ When prices or names change, update **code first**, then this doc and `Protocol-
 
 | Field | Value |
 |-------|-------|
-| Price (XRP) | **25** |
-| Price (RLUSD) | **18** |
-| Payment rail (primary) | Xaman / XRPL |
-| Payment rail (secondary) | Stripe — not live yet |
+| **Canonical price (RLUSD)** | **18 RLUSD** |
+| **Fiat equivalent (display)** | **≈ $18 USD** |
+| **XRP at checkout** | **Live conversion** from USD via CoinGecko (refreshes ~2 min) |
+| **XRP fallback** | **25 XRP** if live rate API unavailable |
+| Payment rail #1 | Xaman — **RLUSD** or **live XRP** |
+| Payment rail #2 | **Stripe** card — $18 USD (alternative) |
 
 ---
 

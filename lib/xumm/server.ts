@@ -25,6 +25,8 @@ export function getXummSdk(): XummSdk | null {
 export type CreatePayloadInput = {
   slug: string;
   currency: ShopCurrency;
+  /** Live XRP amount (from RLUSD/USD equivalent). Falls back to SHOP_PRICE.xrp. */
+  xrpAmount?: number;
 };
 
 export type CreatePayloadResult =
@@ -87,8 +89,12 @@ export async function createProtocolPaymentPayload(
     };
     amountLabel = `${SHOP_PRICE.rlusd} ${currency}`;
   } else {
-    amount = xrpToDrops(SHOP_PRICE.xrp);
-    amountLabel = `${SHOP_PRICE.xrp} XRP`;
+    const xrp =
+      typeof input.xrpAmount === 'number' && input.xrpAmount > 0
+        ? input.xrpAmount
+        : SHOP_PRICE.xrp;
+    amount = xrpToDrops(xrp);
+    amountLabel = `${xrp} XRP`;
   }
 
   try {

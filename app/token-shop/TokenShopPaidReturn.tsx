@@ -9,11 +9,12 @@ export default function TokenShopPaidReturn() {
   const searchParams = useSearchParams();
   const protocol = searchParams.get('protocol');
   const paid = searchParams.get('paid') === '1';
+  const stripe = searchParams.get('stripe') === '1';
 
   useEffect(() => {
-    if (!paid || !protocol) return;
-    unlockProtocol(protocol);
-  }, [paid, protocol]);
+    if (!protocol) return;
+    if (paid || stripe) unlockProtocol(protocol);
+  }, [paid, stripe, protocol]);
 
   return null;
 }

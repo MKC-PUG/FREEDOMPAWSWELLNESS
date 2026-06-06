@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import BackLink from '@/app/components/BackLink';
 import { protocolDetailHref } from '../lib/routes';
-import TokenShopBuyButton from './TokenShopBuyButton';
+import TokenShopCheckout from './TokenShopCheckout';
 import TokenShopFocus from './TokenShopFocus';
 import TokenShopPaidReturn from './TokenShopPaidReturn';
 import { SHOP_PRICE, tokenShopItems } from './shop-items';
@@ -77,19 +77,13 @@ function TokenShopCard({ item }: { item: (typeof tokenShopItems)[number] }) {
           ))}
         </ul>
 
-        <div className="mt-6 text-center">
-          <p className="text-2xl font-bold text-white">{SHOP_PRICE.xrp} XRP</p>
-          <p className="text-sm text-white/60 my-1">or</p>
-          <p className="text-2xl font-bold text-white">{SHOP_PRICE.rlusd} RLUSD</p>
-        </div>
-
         <p className="mt-5 text-center text-[11px] leading-relaxed text-white/50">
           Lifetime access • Educational utility token
           <br />
           Supports no-kill shelters &amp; veteran programs
         </p>
 
-        <TokenShopBuyButton slug={item.slug} cardTitle={item.cardTitle} />
+        <TokenShopCheckout slug={item.slug} cardTitle={item.cardTitle} />
       </div>
     </article>
   );
@@ -148,7 +142,7 @@ export default function TokenShopPage() {
             </p>
             <p>
               Every purchase directly funds no-kill animal shelters and patriotic veteran-dog lake meetups.
-              Prices start at just {SHOP_PRICE.xrp} XRP or {SHOP_PRICE.rlusd} RLUSD.
+              Prices start at {SHOP_PRICE.rlusd} RLUSD (≈ ${SHOP_PRICE.rlusd} USD) with a live XRP equivalent at checkout.
             </p>
           </div>
         </div>
