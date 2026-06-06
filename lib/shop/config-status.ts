@@ -7,6 +7,8 @@ export type ShopConfigStatus = {
   xummReady: boolean;
   treasuryAddress: boolean;
   treasuryPreview: string | null;
+  treasuryLength: number | null;
+  treasuryHasQuotes: boolean;
   rlusdIssuer: boolean;
   rlusdIssuerPreview: string | null;
   stripeSecret: boolean;
@@ -21,6 +23,7 @@ export type ShopConfigStatus = {
 
 export function getShopConfigStatus(): ShopConfigStatus {
   const creds = getXummCredentials();
+  const treasuryRaw = process.env.XRPL_TREASURY_ADDRESS ?? '';
   const treasuryCheck = validateTreasuryAddress();
   const treasury = treasuryCheck.ok ? treasuryCheck.address : null;
   const rlusdIssuer = getRlusdIssuer();
@@ -53,6 +56,8 @@ export function getShopConfigStatus(): ShopConfigStatus {
     xummReady: Boolean(creds && treasury && appOrigin()),
     treasuryAddress: Boolean(treasury),
     treasuryPreview: treasury ? `${treasury.slice(0, 6)}…${treasury.slice(-4)}` : null,
+    treasuryLength: treasury ? treasury.length : null,
+    treasuryHasQuotes: /^["']|["']$/.test(treasuryRaw.trim()),
     rlusdIssuer: Boolean(rlusdIssuer),
     rlusdIssuerPreview: rlusdIssuer ? `${rlusdIssuer.slice(0, 6)}…${rlusdIssuer.slice(-4)}` : null,
     stripeSecret,

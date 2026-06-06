@@ -97,32 +97,54 @@ export async function createProtocolPaymentPayload(
     amountLabel = `${xrp} XRP`;
   }
 
+  const txjson = {
+    TransactionType: 'Payment' as const,
+    Account: '{{user}}',
+    Destination: treasury,
+    Amount: amount,
+  };
+
+  const buildPayload = (withReturnUrl: boolean) => ({
+    txjson,
+    custom_meta: {
+      identifier: `fp-protocol-${row.slug}`,
+      instruction: `Freedom Paws protocol ${row.slug} — ${amountLabel}`,
+    },
+    options: {
+      submit: true,
+      expire: 15,
+      ...(withReturnUrl
+        ? {
+            return_url: {
+              app: tokenShopReturnUrl(row.slug, true),
+              web: tokenShopReturnUrl(row.slug, true),
+            },
+          }
+        : {}),
+    },
+  });
+
   try {
-    const returnUrl = tokenShopReturnUrl(row.slug, true);
     // Second arg `true` forces SDK to throw with the real XUMM API error instead of null.
-    const created = (await sdk.payload.create(
-      {
-        txjson: {
-          TransactionType: 'Payment',
-          Account: '{{user}}',
-          Destination: treasury,
-          Amount: amount,
-        },
-        custom_meta: {
-          identifier: `fp-protocol-${row.slug}`,
-          instruction: `Freedom Paws protocol ${row.slug} — ${amountLabel}`,
-        },
-        options: {
-          submit: true,
-          expire: 15,
-          return_url: {
-            app: returnUrl,
-            web: returnUrl,
-          },
-        },
-      },
-      true
-    )) as {
+    let created: {
+      uuid?: string;
+      next?: { always?: string };
+      refs?: { qr_png?: string };
+    } | null = null;
+
+    try {
+      created = (await sdk.payload.create(buildPayload(true), true)) as typeof created;
+    } catch (firstErr) {
+      const firstMsg = firstErr instanceof Error ? firstErr.message : '';
+      if (firstMsg.includes('603')) {
+        console.warn('[xumm/create] 603 with return_url — retrying minimal payload');
+        created = (await sdk.payload.create(buildPayload(false), true)) as typeof created;
+      } else {
+        throw firstErr;
+      }
+    }
+
+    created = created as {
       uuid?: string;
       next?: { always?: string };
       refs?: { qr_png?: string };

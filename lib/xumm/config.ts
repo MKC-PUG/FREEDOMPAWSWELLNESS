@@ -17,11 +17,22 @@ export function getTreasuryAddress(): string | null {
   return v.ok ? v.address : null;
 }
 
+/** Ripple base58 alphabet — rejects 0, O, I, l and hidden Unicode. */
+const CLASSIC_R_ADDRESS = /^r[1-9A-HJ-NP-Za-km-z]{24,34}$/;
+
+export function normalizeClassicAddress(raw: string): string {
+  return raw
+    .trim()
+    .replace(/^["']|["']$/g, '')
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .trim();
+}
+
 /** XUMM rejects X-addresses (error 603) — treasury must be classic r-address. */
 export function validateTreasuryAddress():
   | { ok: true; address: string }
   | { ok: false; code: 'MISSING' | 'X_ADDRESS' | 'INVALID'; message: string } {
-  const addr = process.env.XRPL_TREASURY_ADDRESS?.trim();
+  const addr = normalizeClassicAddress(process.env.XRPL_TREASURY_ADDRESS ?? '');
   if (!addr) {
     return {
       ok: false,
@@ -37,11 +48,12 @@ export function validateTreasuryAddress():
         'XRPL_TREASURY_ADDRESS is an X-address (starts with X). Xaman requires a classic r-address. In Xaman → Receive → switch to classic address, then update Vercel.',
     };
   }
-  if (!addr.startsWith('r') || addr.length < 25) {
+  if (!CLASSIC_R_ADDRESS.test(addr)) {
     return {
       ok: false,
       code: 'INVALID',
-      message: 'XRPL_TREASURY_ADDRESS must be a valid classic XRPL r-address.',
+      message:
+        'XRPL_TREASURY_ADDRESS must be a valid classic XRPL r-address (base58, no spaces or quotes). Copy again from Xaman → Receive → classic address.',
     };
   }
   return { ok: true, address: addr };
