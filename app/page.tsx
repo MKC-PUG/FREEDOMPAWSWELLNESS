@@ -69,11 +69,11 @@ export default function Home() {
             <div className="flex justify-center mb-8">
               <div className="rounded-2xl border-2 border-amber-400 overflow-hidden shadow-2xl shadow-black/50">
                 <Image
-                  src="/images/welcome-hero.jpg"
-                  alt="SuperBud and a group of happy dogs by a lake — Wellness, Freedom, Community"
+                  src="/images/welcome-hero.png"
+                  alt="SuperBud in a patriotic cape with happy dogs in a mountain valley — Wellness, Freedom, Community"
                   width={1024}
-                  height={771}
-                  quality={80}
+                  height={587}
+                  quality={85}
                   sizes="(max-width: 768px) 100vw, 720px"
                   priority
                   className="block h-auto w-full max-w-[420px] md:max-w-[720px]"
