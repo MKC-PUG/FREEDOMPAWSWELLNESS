@@ -13,8 +13,38 @@ export function getXummCredentials(): { apiKey: string; apiSecret: string } | nu
 }
 
 export function getTreasuryAddress(): string | null {
+  const v = validateTreasuryAddress();
+  return v.ok ? v.address : null;
+}
+
+/** XUMM rejects X-addresses (error 603) — treasury must be classic r-address. */
+export function validateTreasuryAddress():
+  | { ok: true; address: string }
+  | { ok: false; code: 'MISSING' | 'X_ADDRESS' | 'INVALID'; message: string } {
   const addr = process.env.XRPL_TREASURY_ADDRESS?.trim();
-  return addr && addr.startsWith('r') ? addr : null;
+  if (!addr) {
+    return {
+      ok: false,
+      code: 'MISSING',
+      message: 'Set XRPL_TREASURY_ADDRESS (classic r-address) in Vercel.',
+    };
+  }
+  if (addr.startsWith('X')) {
+    return {
+      ok: false,
+      code: 'X_ADDRESS',
+      message:
+        'XRPL_TREASURY_ADDRESS is an X-address (starts with X). Xaman requires a classic r-address. In Xaman → Receive → switch to classic address, then update Vercel.',
+    };
+  }
+  if (!addr.startsWith('r') || addr.length < 25) {
+    return {
+      ok: false,
+      code: 'INVALID',
+      message: 'XRPL_TREASURY_ADDRESS must be a valid classic XRPL r-address.',
+    };
+  }
+  return { ok: true, address: addr };
 }
 
 export function getRlusdIssuer(): string | null {

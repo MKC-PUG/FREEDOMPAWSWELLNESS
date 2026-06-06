@@ -4,10 +4,10 @@ import { getCatalogBySlug } from '@/lib/shop/protocol-catalog';
 import {
   getRlusdCurrencyCode,
   getRlusdIssuer,
-  getTreasuryAddress,
   getXummCredentials,
   type ShopCurrency,
   tokenShopReturnUrl,
+  validateTreasuryAddress,
   xrpToDrops,
 } from './config';
 
@@ -54,14 +54,15 @@ export async function createProtocolPaymentPayload(
     };
   }
 
-  const treasury = getTreasuryAddress();
-  if (!treasury) {
+  const treasuryCheck = validateTreasuryAddress();
+  if (!treasuryCheck.ok) {
     return {
       ok: false,
-      code: 'TREASURY_NOT_CONFIGURED',
-      error: 'Set XRPL_TREASURY_ADDRESS (your r-address) in Vercel environment variables.',
+      code: treasuryCheck.code === 'X_ADDRESS' ? 'TREASURY_X_ADDRESS' : 'TREASURY_NOT_CONFIGURED',
+      error: treasuryCheck.message,
     };
   }
+  const treasury = treasuryCheck.address;
 
   const row = getCatalogBySlug(input.slug);
   if (!row) {
@@ -159,10 +160,14 @@ export async function createProtocolPaymentPayload(
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Xaman payload creation failed';
     console.error('[xumm/create]', msg, err);
-    const hint =
-      msg.toLowerCase().includes('credential') || msg.toLowerCase().includes('unauthorized')
-        ? ' Verify API Key and API Secret are from the same app at apps.xumm.dev.'
-        : '';
+    const lower = msg.toLowerCase();
+    let hint = '';
+    if (lower.includes('603') || lower.includes('invalid hex')) {
+      hint =
+        ' This usually means XRPL_TREASURY_ADDRESS is an X-address. Use a classic r-address from Xaman Receive.';
+    } else if (lower.includes('credential') || lower.includes('unauthorized')) {
+      hint = ' Verify API Key and API Secret are from the same app at apps.xumm.dev.';
+    }
     return { ok: false, code: 'XUMM_ERROR', error: `${msg}${hint}` };
   }
 }
