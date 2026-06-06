@@ -31,6 +31,8 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
   const [configReady, setConfigReady] = useState<boolean | null>(null);
   const [rlusdReady, setRlusdReady] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pendingUuidRef = useRef<string | null>(null);
+  const PENDING_KEY = `fp-xumm-pending-${slug}`;
 
   const loadQuote = useCallback(async () => {
     try {
@@ -49,23 +51,6 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
     }
   }, []);
 
-  useEffect(() => {
-    setUnlocked(isProtocolUnlocked(slug));
-    loadQuote();
-    fetch('/api/shop/config-status')
-      .then((r) => r.json())
-      .then((d) => {
-        setConfigReady(Boolean(d.readyForXamanTest));
-        setRlusdReady(Boolean(d.rlusdIssuer));
-      })
-      .catch(() => setConfigReady(null));
-    const interval = setInterval(loadQuote, 2 * 60 * 1000);
-    return () => {
-      clearInterval(interval);
-      if (pollRef.current) clearInterval(pollRef.current);
-    };
-  }, [slug, loadQuote]);
-
   const stopPolling = useCallback(() => {
     if (pollRef.current) {
       clearInterval(pollRef.current);
@@ -81,34 +66,84 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
     stopPolling();
   }, [slug, stopPolling]);
 
+  const checkStatusOnce = useCallback(
+    async (uuid: string) => {
+      const res = await fetch(`/api/xumm/status?uuid=${encodeURIComponent(uuid)}`);
+      const data = await res.json();
+      if (!data.ok) return false;
+      if (data.resolved && data.signed) {
+        sessionStorage.removeItem(PENDING_KEY);
+        pendingUuidRef.current = null;
+        markUnlocked();
+        return true;
+      }
+      if (data.cancelled || data.expired) {
+        sessionStorage.removeItem(PENDING_KEY);
+        pendingUuidRef.current = null;
+        setPhase('error');
+        setMessage(
+          data.cancelled
+            ? 'Payment cancelled in Xaman.'
+            : 'Payment request expired — tap Buy again.'
+        );
+        stopPolling();
+        return true;
+      }
+      return false;
+    },
+    [PENDING_KEY, markUnlocked, stopPolling]
+  );
+
   const pollStatus = useCallback(
     (uuid: string) => {
+      pendingUuidRef.current = uuid;
+      sessionStorage.setItem(PENDING_KEY, uuid);
       stopPolling();
-      pollRef.current = setInterval(async () => {
-        try {
-          const res = await fetch(`/api/xumm/status?uuid=${encodeURIComponent(uuid)}`);
-          const data = await res.json();
-          if (!data.ok) return;
-          if (data.resolved && data.signed) {
-            markUnlocked();
-            return;
-          }
-          if (data.cancelled || data.expired) {
-            setPhase('error');
-            setMessage(
-              data.cancelled
-                ? 'Payment cancelled in Xaman.'
-                : 'Payment request expired — tap Buy again.'
-            );
-            stopPolling();
-          }
-        } catch {
-          /* keep polling */
-        }
+      void checkStatusOnce(uuid);
+      pollRef.current = setInterval(() => {
+        void checkStatusOnce(uuid);
       }, 2500);
     },
-    [markUnlocked, stopPolling]
+    [PENDING_KEY, checkStatusOnce, stopPolling]
   );
+
+  const resumePendingPayment = useCallback(async () => {
+    const uuid = pendingUuidRef.current ?? sessionStorage.getItem(PENDING_KEY);
+    if (!uuid || unlocked) return;
+    setPhase('waiting');
+    setMessage('Checking Xaman payment status…');
+    const done = await checkStatusOnce(uuid);
+    if (!done) pollStatus(uuid);
+  }, [PENDING_KEY, unlocked, checkStatusOnce, pollStatus]);
+
+  useEffect(() => {
+    setUnlocked(isProtocolUnlocked(slug));
+    loadQuote();
+    fetch('/api/shop/config-status')
+      .then((r) => r.json())
+      .then((d) => {
+        setConfigReady(Boolean(d.readyForXamanTest));
+        setRlusdReady(Boolean(d.rlusdIssuer));
+      })
+      .catch(() => setConfigReady(null));
+    const pending = sessionStorage.getItem(PENDING_KEY);
+    if (pending && !isProtocolUnlocked(slug)) {
+      pendingUuidRef.current = pending;
+      pollStatus(pending);
+    }
+    const interval = setInterval(loadQuote, 2 * 60 * 1000);
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') void resumePendingPayment();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('pageshow', onVisible);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('pageshow', onVisible);
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, [slug, loadQuote, PENDING_KEY, pollStatus, resumePendingPayment]);
 
   const startXaman = async (currency: 'xrp' | 'rlusd') => {
     setPhase('creating');
