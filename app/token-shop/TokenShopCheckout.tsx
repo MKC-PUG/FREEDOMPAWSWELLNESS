@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { CANONICAL_RLUSD, CANONICAL_USD, FALLBACK_XRP } from '@/lib/shop/pricing';
+import { CANONICAL_USD, FALLBACK_XRP } from '@/lib/shop/pricing';
 import { isProtocolUnlocked, unlockProtocol } from '@/lib/shop/unlocks';
 
 type LiveQuote = {
@@ -29,8 +29,6 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
   const [message, setMessage] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(false);
   const [configReady, setConfigReady] = useState<boolean | null>(null);
-  const [rlusdReady, setRlusdReady] = useState(false);
-  const [xamanSheetOpen, setXamanSheetOpen] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pendingUuidRef = useRef<string | null>(null);
   const PENDING_KEY = `fp-xumm-pending-${slug}`;
@@ -122,10 +120,7 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
     loadQuote();
     fetch('/api/shop/config-status')
       .then((r) => r.json())
-      .then((d) => {
-        setConfigReady(Boolean(d.readyForXamanTest));
-        setRlusdReady(Boolean(d.rlusdIssuer));
-      })
+      .then((d) => setConfigReady(Boolean(d.readyForXamanTest)))
       .catch(() => setConfigReady(null));
     const pending = sessionStorage.getItem(PENDING_KEY);
     if (pending && !isProtocolUnlocked(slug)) {
@@ -146,15 +141,13 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
     };
   }, [slug, loadQuote, PENDING_KEY, pollStatus, resumePendingPayment]);
 
-  const startXaman = async (currency: 'xrp' | 'rlusd') => {
-    setXamanSheetOpen(false);
+  const startXaman = async () => {
     setPhase('creating');
     setMessage(null);
     stopPolling();
 
     try {
-      const body: { slug: string; currency: string; xrpAmount?: number } = { slug, currency };
-      if (currency === 'xrp') body.xrpAmount = quote.xrp;
+      const body = { slug, currency: 'xrp' as const, xrpAmount: quote.xrp };
 
       const res = await fetch('/api/xumm/payload', {
         method: 'POST',
@@ -206,20 +199,9 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
     }
   };
 
-  const xrpLabel = quote.xrpIsLive
-    ? `≈ ${quote.xrp.toFixed(2)} XRP`
-    : `≈ ${quote.xrp.toFixed(2)} XRP (estimate)`;
-
   const xamanBusy = phase === 'creating' || phase === 'waiting';
-
-  const openXamanSheet = () => {
-    if (xamanBusy) return;
-    if (rlusdReady) {
-      setXamanSheetOpen(true);
-      return;
-    }
-    void startXaman('xrp');
-  };
+  const xrpDisplay = quote.xrp.toFixed(2);
+  const usdDisplay = CANONICAL_USD.toFixed(2);
 
   if (unlocked) {
     return (
@@ -234,19 +216,22 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
 
   return (
     <div className="mt-6 space-y-3">
-      {/* Price: RLUSD/fiat first, live XRP second */}
       <div className="rounded-2xl border border-white/15 bg-[#0A1428]/50 px-4 py-4 text-center">
-        <p className="text-2xl font-bold text-white">
-          {CANONICAL_RLUSD} RLUSD
+        <p className="text-xs font-semibold tracking-wide text-white/50 uppercase">
+          Lifetime access
         </p>
-        <p className="text-sm text-white/60 mt-1">
-          ≈ ${CANONICAL_USD} USD fiat equivalent
+        <p className="text-3xl font-bold text-white mt-1">${usdDisplay} USD</p>
+        <p className="text-lg font-semibold text-[#F5C242] mt-3">
+          = {xrpDisplay} XRP
+          {!quote.xrpIsLive && <span className="text-sm font-normal text-white/50"> (estimate)</span>}
         </p>
-        <p className="text-lg font-semibold text-[#F5C242] mt-3">{xrpLabel}</p>
-        <p className="text-[10px] text-white/40 mt-1">
-          {quote.xrpIsLive ? 'Live XRP conversion' : 'Using estimate — live rate unavailable'}
+        <p className="text-[10px] text-white/40 mt-2 leading-relaxed">
+          Pay in XRP via Xaman wallet
           {quote.xrpIsLive && quote.xrpUsdRate > 0 && (
-            <span> · 1 XRP ≈ ${quote.xrpUsdRate.toFixed(4)}</span>
+            <span>
+              {' '}
+              · Live rate (updates ~2 min) · 1 XRP ≈ ${quote.xrpUsdRate.toFixed(4)}
+            </span>
           )}
         </p>
       </div>
@@ -259,17 +244,17 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
       )}
 
       <p className="text-center text-[10px] text-white/45 leading-relaxed">
-        Primary: Pay with Xaman. Card is alternative #2.
+        Primary: Xaman (XRP). Card is alternative #2.
       </p>
 
       <button
         type="button"
         data-purchase
         disabled={xamanBusy}
-        onClick={openXamanSheet}
+        onClick={() => void startXaman()}
         className="w-full min-h-[52px] text-center bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 disabled:opacity-60 text-black text-sm font-bold py-3.5 rounded-full transition-colors touch-manipulation"
       >
-        {xamanBusy ? 'Opening Xaman…' : 'Pay with Xaman'}
+        {xamanBusy ? 'Opening Xaman…' : `Pay $${usdDisplay} with Xaman`}
       </button>
 
       <button
@@ -291,70 +276,6 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
         </p>
       )}
 
-      {xamanSheetOpen && (
-        <div className="fixed inset-0 z-[100] flex flex-col justify-end">
-          <button
-            type="button"
-            aria-label="Close payment options"
-            className="absolute inset-0 bg-black/60 touch-manipulation"
-            onClick={() => setXamanSheetOpen(false)}
-          />
-          <div
-            role="dialog"
-            aria-labelledby="xaman-sheet-title"
-            className="relative z-10 rounded-t-3xl border border-white/10 bg-[#0F1E38] px-5 pt-5 pb-8 shadow-2xl"
-          >
-            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-white/20" />
-            <h3 id="xaman-sheet-title" className="text-center text-base font-bold text-white">
-              Pay with Xaman
-            </h3>
-            <p className="mt-1 text-center text-xs text-white/55 leading-relaxed">
-              Choose how to pay on XRPL — same wallet app for both.
-            </p>
-
-            <div className="mt-5 space-y-3">
-              {rlusdReady && (
-                <button
-                  type="button"
-                  disabled={xamanBusy}
-                  onClick={() => void startXaman('rlusd')}
-                  className="w-full rounded-2xl border border-[#F5C242]/40 bg-[#F5C242]/10 px-4 py-4 text-left hover:bg-[#F5C242]/15 active:bg-[#F5C242]/20 disabled:opacity-60 transition-colors touch-manipulation"
-                >
-                  <p className="text-sm font-bold text-[#F5C242]">
-                    {CANONICAL_RLUSD} RLUSD
-                  </p>
-                  <p className="mt-1 text-xs text-white/65 leading-relaxed">
-                    Stable ${CANONICAL_USD} USD · requires RLUSD trust line in Xaman
-                  </p>
-                </button>
-              )}
-
-              <button
-                type="button"
-                disabled={xamanBusy}
-                onClick={() => void startXaman('xrp')}
-                className="w-full rounded-2xl border border-white/15 bg-[#16223C] px-4 py-4 text-left hover:bg-[#1a2848] active:bg-[#1e2e52] disabled:opacity-60 transition-colors touch-manipulation"
-              >
-                <p className="text-sm font-bold text-white">
-                  {quote.xrp.toFixed(2)} XRP
-                  {quote.xrpIsLive ? ' (live)' : ' (estimate)'}
-                </p>
-                <p className="mt-1 text-xs text-white/65 leading-relaxed">
-                  Pay in XRP · no trust line needed · rate updates every ~2 min
-                </p>
-              </button>
-            </div>
-
-            <button
-              type="button"
-              className="mt-4 w-full min-h-[44px] text-center text-sm font-semibold text-white/50 touch-manipulation"
-              onClick={() => setXamanSheetOpen(false)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

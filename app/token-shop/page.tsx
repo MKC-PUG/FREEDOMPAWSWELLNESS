@@ -142,7 +142,7 @@ export default function TokenShopPage() {
             </p>
             <p>
               Every purchase directly funds no-kill animal shelters and patriotic veteran-dog lake meetups.
-              Prices start at {SHOP_PRICE.rlusd} RLUSD (≈ ${SHOP_PRICE.rlusd} USD) with a live XRP equivalent at checkout.
+              Protocols are ${SHOP_PRICE.rlusd}.00 USD each — pay in XRP via Xaman (live conversion at checkout) or by card.
             </p>
           </div>
         </div>
