@@ -132,21 +132,26 @@ export default function ViTResultsPanel({
         </div>
       )}
 
-      {result.primary && <ProtocolCard rank={1} rec={result.primary} tone="primary" />}
-      {result.secondary && <ProtocolCard rank={2} rec={result.secondary} tone="secondary" />}
-
       {result.visualFindings && result.visualFindings.length > 0 && (
-        <div className="rounded-xl border border-white/10 bg-[#0A1428]/60 p-4">
-          <p className="text-xs font-semibold text-white/50 mb-2 uppercase tracking-wide">
-            Visual observations
-          </p>
-          <ul className="text-sm text-white/75 list-disc pl-5 space-y-1">
+        <div className="rounded-2xl border-2 border-amber-400/50 bg-amber-950/25 p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-lg" aria-hidden>
+              👁️
+            </span>
+            <p className="text-sm font-bold text-amber-300 uppercase tracking-wide">
+              What AI saw from your {result.mediaType === 'video' ? 'video' : 'photo'}
+            </p>
+          </div>
+          <ul className="text-sm text-white/90 list-disc pl-5 space-y-1.5">
             {result.visualFindings.map((f) => (
               <li key={f}>{f}</li>
             ))}
           </ul>
         </div>
       )}
+
+      {result.primary && <ProtocolCard rank={1} rec={result.primary} tone="primary" />}
+      {result.secondary && <ProtocolCard rank={2} rec={result.secondary} tone="secondary" />}
 
       {result.matchedTerms && result.matchedTerms.length > 0 && (
         <div className="rounded-xl border border-green-500/30 bg-green-950/20 p-4">
