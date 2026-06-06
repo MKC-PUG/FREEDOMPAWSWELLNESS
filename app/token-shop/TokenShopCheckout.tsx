@@ -29,6 +29,7 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
   const [message, setMessage] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(false);
   const [configReady, setConfigReady] = useState<boolean | null>(null);
+  const [rlusdReady, setRlusdReady] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const loadQuote = useCallback(async () => {
@@ -53,7 +54,10 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
     loadQuote();
     fetch('/api/shop/config-status')
       .then((r) => r.json())
-      .then((d) => setConfigReady(Boolean(d.readyForXamanTest)))
+      .then((d) => {
+        setConfigReady(Boolean(d.readyForXamanTest));
+        setRlusdReady(Boolean(d.rlusdIssuer));
+      })
       .catch(() => setConfigReady(null));
     const interval = setInterval(loadQuote, 2 * 60 * 1000);
     return () => {
@@ -214,22 +218,24 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
         type="button"
         data-purchase
         disabled={phase === 'creating' || phase === 'waiting'}
-        onClick={() => startXaman('rlusd')}
+        onClick={() => startXaman('xrp')}
         className="w-full min-h-[52px] text-center bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 disabled:opacity-60 text-black text-sm font-bold py-3.5 rounded-full transition-colors touch-manipulation"
       >
         {phase === 'creating' || phase === 'waiting'
           ? 'Opening Xaman…'
-          : `Pay with Xaman — ${CANONICAL_RLUSD} RLUSD`}
+          : `Pay with Xaman — ${quote.xrp.toFixed(2)} XRP (live)`}
       </button>
 
-      <button
-        type="button"
-        disabled={phase === 'creating' || phase === 'waiting'}
-        onClick={() => startXaman('xrp')}
-        className="w-full min-h-[48px] text-center border border-[#F5C242]/50 text-[#F5C242] hover:bg-[#F5C242]/10 disabled:opacity-60 text-xs font-bold py-3 rounded-full transition-colors touch-manipulation"
-      >
-        Pay with Xaman — {quote.xrp.toFixed(2)} XRP (live)
-      </button>
+      {rlusdReady && (
+        <button
+          type="button"
+          disabled={phase === 'creating' || phase === 'waiting'}
+          onClick={() => startXaman('rlusd')}
+          className="w-full min-h-[48px] text-center border border-[#F5C242]/50 text-[#F5C242] hover:bg-[#F5C242]/10 disabled:opacity-60 text-xs font-bold py-3 rounded-full transition-colors touch-manipulation"
+        >
+          Pay with Xaman — {CANONICAL_RLUSD} RLUSD
+        </button>
+      )}
 
       <button
         type="button"

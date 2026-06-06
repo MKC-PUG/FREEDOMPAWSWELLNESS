@@ -110,12 +110,11 @@ export async function createProtocolPaymentPayload(
         },
         custom_meta: {
           identifier: `fp-protocol-${row.slug}`,
-          instruction: `Freedom Paws: ${row.cardTitle} (${amountLabel})`,
+          instruction: `Freedom Paws protocol ${row.slug} — ${amountLabel}`,
         },
         options: {
           submit: true,
           expire: 15,
-          force_network: 'MAINNET',
           return_url: {
             app: returnUrl,
             web: returnUrl,

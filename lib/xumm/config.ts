@@ -61,8 +61,11 @@ export function xrpToDrops(xrp: number): string {
 }
 
 export function tokenShopReturnUrl(slug: string, paid = false): string {
-  const q = paid ? `?protocol=${encodeURIComponent(slug)}&paid=1` : `?protocol=${encodeURIComponent(slug)}`;
-  const path = `/token-shop${q}#${slug}`;
+  const q = paid
+    ? `?protocol=${encodeURIComponent(slug)}&paid=1`
+    : `?protocol=${encodeURIComponent(slug)}`;
+  // No URL hash — some XUMM return_url parsers reject fragments (error 603).
+  const path = `/token-shop${q}`;
   const origin = appOrigin();
   return origin ? `${origin}${path}` : appPath(path);
 }
