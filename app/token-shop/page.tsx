@@ -3,8 +3,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import BackLink from '@/app/components/BackLink';
-import { protocolDetailHref, tokenShopBuyHref } from '../lib/routes';
+import { protocolDetailHref } from '../lib/routes';
+import TokenShopBuyButton from './TokenShopBuyButton';
 import TokenShopFocus from './TokenShopFocus';
+import TokenShopPaidReturn from './TokenShopPaidReturn';
 import { SHOP_PRICE, tokenShopItems } from './shop-items';
 
 export const metadata: Metadata = {
@@ -87,14 +89,7 @@ function TokenShopCard({ item }: { item: (typeof tokenShopItems)[number] }) {
           Supports no-kill shelters &amp; veteran programs
         </p>
 
-        <Link
-          href={tokenShopBuyHref(item.slug)}
-          data-purchase
-          prefetch={false}
-          className="mt-4 block w-full min-h-[52px] text-center bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 text-black text-sm font-bold py-3.5 rounded-full transition-colors touch-manipulation flex items-center justify-center"
-        >
-          Buy Now – Lifetime Access
-        </Link>
+        <TokenShopBuyButton slug={item.slug} cardTitle={item.cardTitle} />
       </div>
     </article>
   );
@@ -105,6 +100,7 @@ export default function TokenShopPage() {
     <div className="min-h-screen bg-[#0A1428] text-white">
       <Suspense fallback={null}>
         <TokenShopFocus />
+        <TokenShopPaidReturn />
       </Suspense>
 
       <header className="relative overflow-hidden">

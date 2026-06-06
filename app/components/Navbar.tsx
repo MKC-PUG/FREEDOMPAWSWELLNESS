@@ -87,7 +87,8 @@ export default function Navbar() {
 
           <Link
             id="connect-wallet"
-            href="#"
+            href="/token-shop"
+            prefetch={false}
             className="relative z-[101] bg-amber-400 active:bg-amber-300 text-black text-[10px] font-bold px-3 min-h-[48px] inline-flex items-center rounded-xl whitespace-nowrap touch-manipulation"
           >
             WALLET
@@ -96,7 +97,8 @@ export default function Navbar() {
 
         <Link
           id="connect-wallet-desktop"
-          href="#"
+          href="/token-shop"
+          prefetch={false}
           className="hidden md:inline-flex bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold px-6 py-3 rounded-xl whitespace-nowrap transition-colors"
         >
           CONNECT WALLET

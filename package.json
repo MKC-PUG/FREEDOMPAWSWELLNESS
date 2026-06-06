@@ -22,7 +22,8 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "replicate": "^1.4.0",
-    "xumm": "^1.0.0"
+    "xumm": "^1.0.0",
+    "xumm-sdk": "^1.11.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
