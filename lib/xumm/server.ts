@@ -68,7 +68,6 @@ export async function createProtocolPaymentPayload(
     return { ok: false, code: 'INVALID_PROTOCOL', error: 'Unknown protocol slug.' };
   }
 
-  const memo = `Freedom Paws: ${row.slug}`;
   let amount: string | { currency: string; issuer: string; value: string };
   let amountLabel: string;
 
@@ -98,53 +97,49 @@ export async function createProtocolPaymentPayload(
   }
 
   try {
-    const created = (await sdk.payload.create({
-      txjson: {
-        TransactionType: 'Payment',
-        Account: '{{user}}',
-        Destination: treasury,
-        Amount: amount,
-        Memos: [
-          {
-            Memo: {
-              MemoType: Buffer.from('FP-PROTOCOL', 'utf8').toString('hex').toUpperCase(),
-              MemoData: Buffer.from(row.slug, 'utf8').toString('hex').toUpperCase(),
-            },
+    const returnUrl = tokenShopReturnUrl(row.slug, true);
+    // Second arg `true` forces SDK to throw with the real XUMM API error instead of null.
+    const created = (await sdk.payload.create(
+      {
+        txjson: {
+          TransactionType: 'Payment',
+          Account: '{{user}}',
+          Destination: treasury,
+          Amount: amount,
+        },
+        custom_meta: {
+          identifier: `fp-protocol-${row.slug}`,
+          instruction: `Freedom Paws: ${row.cardTitle} (${amountLabel})`,
+        },
+        options: {
+          submit: true,
+          expire: 15,
+          force_network: 'MAINNET',
+          return_url: {
+            app: returnUrl,
+            web: returnUrl,
           },
-        ],
-      },
-      custom_meta: {
-        identifier: `fp-protocol-${row.slug}`,
-        blob: {
-          protocol: row.slug,
-          title: row.cardTitle,
-          currency: input.currency,
         },
       },
-      options: {
-        submit: true,
-        expire: 10,
-        return_url: {
-          app: tokenShopReturnUrl(row.slug, true),
-          web: tokenShopReturnUrl(row.slug, true),
-        },
-      },
-    })) as {
+      true
+    )) as {
       uuid?: string;
       next?: { always?: string };
       refs?: { qr_png?: string };
     } | null;
 
-    if (!created) {
+    if (!created?.uuid) {
       return {
         ok: false,
         code: 'XUMM_PAYLOAD_FAILED',
-        error: 'Xaman returned no payload. Try again.',
+        error: 'Xaman returned no payload. Check API Key + Secret match in apps.xumm.dev.',
       };
     }
 
-    const deeplink = created.next?.always;
-    if (!created.uuid || !deeplink) {
+    const deeplink =
+      created.next?.always ||
+      (created.uuid ? `https://xaman.app/sign/${created.uuid}` : null);
+    if (!deeplink) {
       return {
         ok: false,
         code: 'XUMM_PAYLOAD_FAILED',
@@ -163,8 +158,12 @@ export async function createProtocolPaymentPayload(
     };
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Xaman payload creation failed';
-    console.error('[xumm/create]', msg);
-    return { ok: false, code: 'XUMM_ERROR', error: msg };
+    console.error('[xumm/create]', msg, err);
+    const hint =
+      msg.toLowerCase().includes('credential') || msg.toLowerCase().includes('unauthorized')
+        ? ' Verify API Key and API Secret are from the same app at apps.xumm.dev.'
+        : '';
+    return { ok: false, code: 'XUMM_ERROR', error: `${msg}${hint}` };
   }
 }
 
@@ -194,7 +193,10 @@ export async function getPayloadStatus(uuid: string): Promise<PayloadStatusResul
     const meta = payload.meta;
     const resolved = Boolean(meta.resolved);
     const signed = Boolean(meta.signed);
-    const blob = payload.custom_meta?.blob as { protocol?: string } | undefined;
+    const identifier = payload.custom_meta?.identifier as string | undefined;
+    const slugFromId = identifier?.startsWith('fp-protocol-')
+      ? identifier.slice('fp-protocol-'.length)
+      : null;
     const txid = typeof payload.response?.txid === 'string' ? payload.response.txid : null;
 
     return {
@@ -204,7 +206,7 @@ export async function getPayloadStatus(uuid: string): Promise<PayloadStatusResul
       expired: Boolean(meta.expired),
       resolved,
       txid,
-      slug: blob?.protocol ?? null,
+      slug: slugFromId,
     };
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Status check failed';

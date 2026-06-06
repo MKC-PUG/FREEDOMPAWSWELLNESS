@@ -131,7 +131,8 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
       setPhase('waiting');
       setMessage(`Open Xaman to pay ${data.amountLabel} for ${cardTitle}…`);
       pollStatus(data.uuid);
-      window.location.assign(data.deeplink);
+      // href works more reliably than assign for xaman.app / xumm.app on iOS PWA
+      window.location.href = data.deeplink;
     } catch {
       setPhase('error');
       setMessage('Network error — check connection and try again.');
