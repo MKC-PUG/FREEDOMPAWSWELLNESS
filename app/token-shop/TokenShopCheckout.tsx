@@ -28,6 +28,7 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [message, setMessage] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(false);
+  const [configReady, setConfigReady] = useState<boolean | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const loadQuote = useCallback(async () => {
@@ -50,6 +51,10 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
   useEffect(() => {
     setUnlocked(isProtocolUnlocked(slug));
     loadQuote();
+    fetch('/api/shop/config-status')
+      .then((r) => r.json())
+      .then((d) => setConfigReady(Boolean(d.readyForXamanTest)))
+      .catch(() => setConfigReady(null));
     const interval = setInterval(loadQuote, 2 * 60 * 1000);
     return () => {
       clearInterval(interval);
@@ -192,6 +197,13 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
           )}
         </p>
       </div>
+
+      {configReady === false && (
+        <p className="text-center text-xs text-amber-300/90 leading-relaxed rounded-xl border border-amber-400/30 bg-amber-950/20 px-3 py-2">
+          Checkout setup incomplete on server — add Vercel env vars from{' '}
+          <span className="font-semibold">Today-Tasks-2-and-3</span> doc, then redeploy.
+        </p>
+      )}
 
       <p className="text-center text-[10px] text-white/45 leading-relaxed">
         Primary: XRPL via Xaman (RLUSD or live XRP). Card is alternative #2.

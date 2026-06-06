@@ -1,4 +1,4 @@
-import { appPath } from '@/lib/site-urls';
+import { appOrigin, appPath } from '@/lib/site-urls';
 
 export type ShopCurrency = 'xrp' | 'rlusd';
 
@@ -32,5 +32,7 @@ export function xrpToDrops(xrp: number): string {
 
 export function tokenShopReturnUrl(slug: string, paid = false): string {
   const q = paid ? `?protocol=${encodeURIComponent(slug)}&paid=1` : `?protocol=${encodeURIComponent(slug)}`;
-  return appPath(`/token-shop${q}#${slug}`);
+  const path = `/token-shop${q}#${slug}`;
+  const origin = appOrigin();
+  return origin ? `${origin}${path}` : appPath(path);
 }

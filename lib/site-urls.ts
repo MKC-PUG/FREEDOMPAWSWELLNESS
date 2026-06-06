@@ -5,10 +5,22 @@
 
 const trim = (url: string) => url.replace(/\/$/, '');
 
-/** Production PWA base — empty string = same-origin relative links. */
+/** Production PWA base — empty string = same-origin relative links in the app UI. */
 export function appBaseUrl(): string {
   const raw = process.env.NEXT_PUBLIC_APP_URL?.trim();
   return raw ? trim(raw) : '';
+}
+
+/**
+ * Absolute HTTPS origin for Xaman return URLs and webhooks.
+ * Falls back to VERCEL_URL when NEXT_PUBLIC_APP_URL is not set yet.
+ */
+export function appOrigin(): string {
+  const explicit = appBaseUrl();
+  if (explicit) return explicit;
+  const vercel = process.env.VERCEL_URL?.trim();
+  if (vercel) return `https://${vercel.replace(/^https?:\/\//, '')}`;
+  return '';
 }
 
 /** Marketing site (Framer). */
