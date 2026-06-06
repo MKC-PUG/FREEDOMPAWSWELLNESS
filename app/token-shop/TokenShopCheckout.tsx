@@ -30,6 +30,7 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
   const [unlocked, setUnlocked] = useState(false);
   const [configReady, setConfigReady] = useState<boolean | null>(null);
   const [rlusdReady, setRlusdReady] = useState(false);
+  const [xamanSheetOpen, setXamanSheetOpen] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pendingUuidRef = useRef<string | null>(null);
   const PENDING_KEY = `fp-xumm-pending-${slug}`;
@@ -146,6 +147,7 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
   }, [slug, loadQuote, PENDING_KEY, pollStatus, resumePendingPayment]);
 
   const startXaman = async (currency: 'xrp' | 'rlusd') => {
+    setXamanSheetOpen(false);
     setPhase('creating');
     setMessage(null);
     stopPolling();
@@ -208,6 +210,17 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
     ? `≈ ${quote.xrp.toFixed(2)} XRP`
     : `≈ ${quote.xrp.toFixed(2)} XRP (estimate)`;
 
+  const xamanBusy = phase === 'creating' || phase === 'waiting';
+
+  const openXamanSheet = () => {
+    if (xamanBusy) return;
+    if (rlusdReady) {
+      setXamanSheetOpen(true);
+      return;
+    }
+    void startXaman('xrp');
+  };
+
   if (unlocked) {
     return (
       <div className="mt-6 space-y-3">
@@ -246,31 +259,18 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
       )}
 
       <p className="text-center text-[10px] text-white/45 leading-relaxed">
-        Primary: XRPL via Xaman (RLUSD or live XRP). Card is alternative #2.
+        Primary: Pay with Xaman. Card is alternative #2.
       </p>
 
       <button
         type="button"
         data-purchase
-        disabled={phase === 'creating' || phase === 'waiting'}
-        onClick={() => startXaman('xrp')}
+        disabled={xamanBusy}
+        onClick={openXamanSheet}
         className="w-full min-h-[52px] text-center bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 disabled:opacity-60 text-black text-sm font-bold py-3.5 rounded-full transition-colors touch-manipulation"
       >
-        {phase === 'creating' || phase === 'waiting'
-          ? 'Opening Xaman…'
-          : `Pay with Xaman — ${quote.xrp.toFixed(2)} XRP (live)`}
+        {xamanBusy ? 'Opening Xaman…' : 'Pay with Xaman'}
       </button>
-
-      {rlusdReady && (
-        <button
-          type="button"
-          disabled={phase === 'creating' || phase === 'waiting'}
-          onClick={() => startXaman('rlusd')}
-          className="w-full min-h-[48px] text-center border border-[#F5C242]/50 text-[#F5C242] hover:bg-[#F5C242]/10 disabled:opacity-60 text-xs font-bold py-3 rounded-full transition-colors touch-manipulation"
-        >
-          Pay with Xaman — {CANONICAL_RLUSD} RLUSD
-        </button>
-      )}
 
       <button
         type="button"
@@ -289,6 +289,71 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
         >
           {message}
         </p>
+      )}
+
+      {xamanSheetOpen && (
+        <div className="fixed inset-0 z-[100] flex flex-col justify-end">
+          <button
+            type="button"
+            aria-label="Close payment options"
+            className="absolute inset-0 bg-black/60 touch-manipulation"
+            onClick={() => setXamanSheetOpen(false)}
+          />
+          <div
+            role="dialog"
+            aria-labelledby="xaman-sheet-title"
+            className="relative z-10 rounded-t-3xl border border-white/10 bg-[#0F1E38] px-5 pt-5 pb-8 shadow-2xl"
+          >
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-white/20" />
+            <h3 id="xaman-sheet-title" className="text-center text-base font-bold text-white">
+              Pay with Xaman
+            </h3>
+            <p className="mt-1 text-center text-xs text-white/55 leading-relaxed">
+              Choose how to pay on XRPL — same wallet app for both.
+            </p>
+
+            <div className="mt-5 space-y-3">
+              {rlusdReady && (
+                <button
+                  type="button"
+                  disabled={xamanBusy}
+                  onClick={() => void startXaman('rlusd')}
+                  className="w-full rounded-2xl border border-[#F5C242]/40 bg-[#F5C242]/10 px-4 py-4 text-left hover:bg-[#F5C242]/15 active:bg-[#F5C242]/20 disabled:opacity-60 transition-colors touch-manipulation"
+                >
+                  <p className="text-sm font-bold text-[#F5C242]">
+                    {CANONICAL_RLUSD} RLUSD
+                  </p>
+                  <p className="mt-1 text-xs text-white/65 leading-relaxed">
+                    Stable ${CANONICAL_USD} USD · requires RLUSD trust line in Xaman
+                  </p>
+                </button>
+              )}
+
+              <button
+                type="button"
+                disabled={xamanBusy}
+                onClick={() => void startXaman('xrp')}
+                className="w-full rounded-2xl border border-white/15 bg-[#16223C] px-4 py-4 text-left hover:bg-[#1a2848] active:bg-[#1e2e52] disabled:opacity-60 transition-colors touch-manipulation"
+              >
+                <p className="text-sm font-bold text-white">
+                  {quote.xrp.toFixed(2)} XRP
+                  {quote.xrpIsLive ? ' (live)' : ' (estimate)'}
+                </p>
+                <p className="mt-1 text-xs text-white/65 leading-relaxed">
+                  Pay in XRP · no trust line needed · rate updates every ~2 min
+                </p>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              className="mt-4 w-full min-h-[44px] text-center text-sm font-semibold text-white/50 touch-manipulation"
+              onClick={() => setXamanSheetOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
