@@ -97,9 +97,9 @@ export async function createProtocolPaymentPayload(
     amountLabel = `${xrp} XRP`;
   }
 
+  // Omit Account — Xaman fills it from the signing user ({{user}} causes error 603).
   const txjson = {
     TransactionType: 'Payment' as const,
-    Account: '{{user}}',
     Destination: treasury,
     Amount: amount,
   };

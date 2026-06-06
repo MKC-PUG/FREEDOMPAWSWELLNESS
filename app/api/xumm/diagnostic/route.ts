@@ -22,10 +22,25 @@ export async function GET() {
   const treasury = validateTreasuryAddress();
   const tests = [
     await tryCreate('sign_in', { txjson: { TransactionType: 'SignIn' } }),
-    await tryCreate('payment_sample_dest', {
+    await tryCreate('payment_no_account', {
+      txjson: {
+        TransactionType: 'Payment',
+        Destination: SAMPLE_DESTINATION,
+        Amount: '1000000',
+      },
+    }),
+    await tryCreate('payment_with_account_placeholder', {
       txjson: {
         TransactionType: 'Payment',
         Account: '{{user}}',
+        Destination: SAMPLE_DESTINATION,
+        Amount: '1000000',
+      },
+    }),
+    await tryCreate('payment_user_tag', {
+      txjson: {
+        TransactionType: 'Payment',
+        Account: '$user',
         Destination: SAMPLE_DESTINATION,
         Amount: '1000000',
       },
@@ -37,7 +52,6 @@ export async function GET() {
       await tryCreate('payment_treasury', {
         txjson: {
           TransactionType: 'Payment',
-          Account: '{{user}}',
           Destination: treasury.address,
           Amount: '1000000',
         },
