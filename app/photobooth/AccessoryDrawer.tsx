@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ACCESSORY_STICKERS, stickerCandidates, type StickerPlacement } from '@/lib/photobooth/themes';
 
 type Props = {
@@ -41,17 +42,35 @@ export default function AccessoryDrawer({
   hasSelection,
   onRemoveSelected,
 }: Props) {
-  if (!open) return null;
+  const [mounted, setMounted] = useState(false);
 
-  return (
-    <div className="fixed inset-0 z-[110] flex flex-col justify-end">
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  if (!open || !mounted) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[250] flex flex-col justify-end pointer-events-auto">
       <button
         type="button"
         aria-label="Close accessories"
         className="absolute inset-0 bg-black/60 touch-manipulation"
         onClick={onClose}
       />
-      <div className="relative z-10 max-h-[70vh] rounded-t-3xl border border-white/10 bg-[#0F1E38] px-4 pt-4 pb-8 shadow-2xl">
+      <div
+        className="relative z-10 max-h-[70vh] rounded-t-3xl border border-white/10 bg-[#0F1E38] px-4 pt-4 shadow-2xl"
+        style={{ paddingBottom: 'calc(2rem + env(safe-area-inset-bottom, 0px))' }}
+      >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/20" />
         <h3 className="text-center text-base font-bold text-amber-400">Add accessory</h3>
         <p className="mt-1 text-center text-[10px] text-white/45 leading-relaxed">
@@ -95,6 +114,7 @@ export default function AccessoryDrawer({
           Done
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

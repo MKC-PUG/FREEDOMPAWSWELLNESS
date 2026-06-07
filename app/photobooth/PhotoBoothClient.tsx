@@ -157,7 +157,7 @@ export default function PhotoBoothClient({
     setThemeId(id);
     setEditorActive(true);
     setCanvasReady(false);
-    setThemePickerExpanded(false);
+    setThemePickerExpanded(true);
     setThemeSparkle(true);
     window.setTimeout(() => setThemeSparkle(false), 700);
     if (id === 'me-and-my-pup') {
@@ -377,29 +377,35 @@ export default function PhotoBoothClient({
       style={editorActive ? { top: 'var(--nav-total-height)' } : undefined}
     >
       {themePickerCollapsed ? (
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setThemePickerExpanded(true)}
-            className="flex-1 flex items-center justify-between min-h-[40px] rounded-xl border border-amber-400/35 bg-[#0F1E38] px-3 py-2 touch-manipulation"
-          >
-            <span className="flex items-center gap-2 text-sm font-bold text-white">
-              <span>{activeTheme.emoji}</span>
-              <span>{activeTheme.name}</span>
-            </span>
-            <span className="text-xs text-amber-400">Change style ▾</span>
-          </button>
-          {petImageUrl && (
+        <>
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={handleSurpriseMe}
-              className="shrink-0 min-h-[40px] rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 text-xs font-bold text-amber-300 touch-manipulation"
-              title="Random style"
+              onClick={() => setThemePickerExpanded(true)}
+              className="flex-1 flex items-center justify-between min-h-[40px] rounded-xl border border-amber-400/35 bg-[#0F1E38] px-3 py-2 touch-manipulation"
             >
-              🎲
+              <span className="flex items-center gap-2 text-sm font-bold text-white">
+                <span>{activeTheme.emoji}</span>
+                <span>{activeTheme.name}</span>
+              </span>
+              <span className="text-xs text-amber-400">More styles ▾</span>
             </button>
-          )}
-        </div>
+            {petImageUrl && (
+              <button
+                type="button"
+                onClick={handleSurpriseMe}
+                className="shrink-0 min-h-[40px] rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 text-xs font-bold text-amber-300 touch-manipulation"
+                title="Random style"
+              >
+                🎲
+              </button>
+            )}
+          </div>
+          <p className="mt-1.5 mb-1.5 text-[10px] text-white/45">Swipe to switch style — no need to re-upload</p>
+          <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory photobooth-hscroll">
+            {PHOTO_BOOTH_THEMES.map(themeChip)}
+          </div>
+        </>
       ) : (
         <>
           <div className="flex items-center justify-between gap-2 mb-2">

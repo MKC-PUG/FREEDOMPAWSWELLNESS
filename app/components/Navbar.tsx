@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const navLinks = [
   { label: 'HOME', href: '/' },
@@ -17,9 +18,24 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const closeMobileMenu = useCallback(() => setMenuOpen(false), []);
+
+  const navigateFromMenu = useCallback(
+    (href: string) => {
+      closeMobileMenu();
+      if (href === '#' || href === pathname) return;
+      router.push(href);
+    },
+    [closeMobileMenu, pathname, router]
+  );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     closeMobileMenu();
@@ -105,46 +121,58 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {menuOpen && (
-        <>
-          <button
-            type="button"
-            className="fp-mobile-menu-backdrop fixed inset-0 z-[98] bg-black/60 md:hidden touch-manipulation"
-            aria-label="Close menu"
-            onClick={closeMobileMenu}
-          />
-          <div
-            id="mobile-menu"
-            className="fp-mobile-menu-panel fixed left-0 right-0 z-[99] border-t border-white/10 bg-[#0A1625] shadow-xl shadow-black/40 overflow-y-auto md:hidden"
-            style={{
-              top: 'var(--nav-total-height)',
-              maxHeight: 'calc(100dvh - var(--nav-total-height))',
-            }}
-          >
-            <div className="px-4 sm:px-6 py-2 flex flex-col text-sm font-semibold tracking-wide">
-              {navLinks.map((l) => {
-                const isActive = l.href !== '#' && pathname === l.href;
-                return (
-                  <Link
-                    key={l.label}
-                    href={l.href}
-                    prefetch={false}
-                    onClick={closeMobileMenu}
-                    className={
-                      isActive
-                        ? 'text-amber-400 min-h-[52px] flex items-center border-b border-white/5 touch-manipulation'
-                        : 'text-white/90 active:text-white min-h-[52px] flex items-center border-b border-white/5 touch-manipulation'
-                    }
-                    style={{ WebkitTapHighlightColor: 'transparent' }}
-                  >
-                    {l.label}
-                  </Link>
-                );
-              })}
+      {mounted &&
+        menuOpen &&
+        createPortal(
+          <>
+            <button
+              type="button"
+              className="fp-mobile-menu-backdrop fixed inset-0 z-[200] bg-black/60 md:hidden touch-manipulation"
+              aria-label="Close menu"
+              onClick={closeMobileMenu}
+            />
+            <div
+              id="mobile-menu"
+              className="fp-mobile-menu-panel fixed left-0 right-0 z-[201] border-t border-white/10 bg-[#0A1625] shadow-xl shadow-black/40 overflow-y-auto md:hidden"
+              style={{
+                top: 'var(--nav-total-height)',
+                maxHeight: 'calc(100dvh - var(--nav-total-height))',
+                paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+              }}
+            >
+              <div className="px-4 sm:px-6 py-2 flex flex-col text-sm font-semibold tracking-wide">
+                {navLinks.map((l) => {
+                  const isActive = l.href !== '#' && pathname === l.href;
+                  return (
+                    <Link
+                      key={l.label}
+                      href={l.href}
+                      prefetch={false}
+                      onClick={(e) => {
+                        if (l.href === '#') {
+                          e.preventDefault();
+                          closeMobileMenu();
+                          return;
+                        }
+                        e.preventDefault();
+                        navigateFromMenu(l.href);
+                      }}
+                      className={
+                        isActive
+                          ? 'text-amber-400 min-h-[52px] flex items-center border-b border-white/5 touch-manipulation'
+                          : 'text-white/90 active:text-white min-h-[52px] flex items-center border-b border-white/5 touch-manipulation'
+                      }
+                      style={{ WebkitTapHighlightColor: 'transparent' }}
+                    >
+                      {l.label}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>,
+          document.body
+        )}
     </nav>
   );
 }

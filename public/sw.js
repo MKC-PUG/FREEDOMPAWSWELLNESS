@@ -1,7 +1,7 @@
 // Freedom Paws PWA — network-first, Photo Booth / API never cached.
 // Bump CACHE_NAME on each deploy that changes static assets.
 
-const CACHE_NAME = 'freedom-paws-v57';
+const CACHE_NAME = 'freedom-paws-v58';
 
 const PRECACHE_URLS = [
   '/manifest.json',
@@ -74,6 +74,17 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (isNetworkOnly(url.pathname)) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
+  // Next.js App Router client navigations — never cache (fixes stale PWA routing).
+  if (
+    url.searchParams.has('_rsc') ||
+    request.headers.get('RSC') === '1' ||
+    request.headers.get('Next-Router-Prefetch') === '1' ||
+    request.headers.get('Next-Router-State-Tree') != null
+  ) {
     event.respondWith(fetch(request));
     return;
   }

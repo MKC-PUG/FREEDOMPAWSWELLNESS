@@ -500,13 +500,6 @@ export default function PhotoBoothUnifiedEditor({
                   </span>
                 )}
               </button>
-              <AccessoryDrawer
-                open={accessoryOpen}
-                onClose={() => setAccessoryOpen(false)}
-                onPick={onAddAccessory}
-                hasSelection={selectedStickerId !== null}
-                onRemoveSelected={() => canvasRef.current?.removeSelected()}
-              />
 
               {themeId === 'accessories-only' && (
                 <p className="text-center text-xs text-white/45">Checkerboard = no background</p>
@@ -634,6 +627,16 @@ export default function PhotoBoothUnifiedEditor({
             </>
           )}
         </div>
+      )}
+
+      {!isDuoMode && (
+        <AccessoryDrawer
+          open={accessoryOpen}
+          onClose={() => setAccessoryOpen(false)}
+          onPick={onAddAccessory}
+          hasSelection={selectedStickerId !== null}
+          onRemoveSelected={() => canvasRef.current?.removeSelected()}
+        />
       )}
     </>
   );
