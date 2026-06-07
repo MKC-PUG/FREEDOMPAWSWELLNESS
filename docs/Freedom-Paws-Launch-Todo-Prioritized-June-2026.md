@@ -6,7 +6,7 @@
 **Date:** June 5, 2026  
 **Project:** `freedompaws-app` (Next.js PWA on Vercel)  
 **GitHub:** `MKC-PUG/FREEDOMPAWSWELLNESS`  
-**Current PWA release:** v43  
+**Current PWA release:** v53  
 **Launch target:** 12–15 weeks from preview (per Master Business Plan)  
 **User decision (June 5):** Park Monitor beta for daily use; **full cloud relay required at public launch**
 

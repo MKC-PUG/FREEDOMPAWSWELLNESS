@@ -13,7 +13,7 @@ const cards = [
   {
     icon: '🐾',
     title: 'My Pets',
-    desc: 'Manage your dogs and their wellness protocols',
+    desc: 'Manage your pets, wellness notes & unlocked protocols',
     cta: 'MANAGE →',
     href: '/mypets',
   },

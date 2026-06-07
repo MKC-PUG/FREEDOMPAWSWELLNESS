@@ -1,6 +1,7 @@
 'use client';
 
-import type { RefObject } from 'react';
+import { useState, type RefObject } from 'react';
+import AccessoryDrawer from './AccessoryDrawer';
 import AdjustPhotoPad from './AdjustPhotoPad';
 import MeAndMyPupCanvas from './MeAndMyPupCanvas';
 import PhotoBoothCanvas from './PhotoBoothCanvas';
@@ -118,6 +119,8 @@ export default function PhotoBoothUnifiedEditor({
   onShare,
   onSave,
 }: Props) {
+  const [accessoryOpen, setAccessoryOpen] = useState(false);
+
   return (
     <>
       <input
@@ -483,37 +486,27 @@ export default function PhotoBoothUnifiedEditor({
               Add your photo below to enable Share &amp; Save
             </p>
           )}
-          {shareMsg && <p className="text-center text-sm text-green-400">{shareMsg}</p>}
-
           {!isDuoMode && (
             <>
-              <div className="rounded-2xl border border-white/15 bg-[#0F1E38]/90 p-4">
-                <p className="text-sm font-bold text-amber-400 mb-1">Add accessory (optional)</p>
-                <p className="text-[10px] text-white/45 mb-3 leading-relaxed">
-                  Tap to add · drag on photo to move · gold corners to resize · double-tap to remove
-                </p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {ACCESSORY_STICKERS.map((sticker) => (
-                    <button
-                      key={sticker.src}
-                      type="button"
-                      onClick={() => onAddAccessory(sticker)}
-                      className="min-h-[44px] rounded-xl bg-black/30 border border-white/15 py-2.5 px-2 text-xs font-semibold leading-tight touch-manipulation hover:border-amber-400/50 active:bg-amber-400/10"
-                    >
-                      + {sticker.label}
-                    </button>
-                  ))}
-                </div>
+              <button
+                type="button"
+                onClick={() => setAccessoryOpen(true)}
+                className="w-full min-h-[48px] rounded-2xl border border-amber-400/40 bg-[#0F1E38]/90 py-3 text-sm font-bold text-amber-300 touch-manipulation hover:bg-amber-400/10"
+              >
+                ✨ Add accessory
                 {canvasStickers.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => canvasRef.current?.removeSelected()}
-                    className="mt-3 w-full min-h-[44px] rounded-xl border border-red-500/40 py-2.5 text-sm text-red-300 touch-manipulation"
-                  >
-                    Remove selected accessory
-                  </button>
+                  <span className="ml-2 text-white/50 font-normal">
+                    ({canvasStickers.length} on photo)
+                  </span>
                 )}
-              </div>
+              </button>
+              <AccessoryDrawer
+                open={accessoryOpen}
+                onClose={() => setAccessoryOpen(false)}
+                onPick={onAddAccessory}
+                hasSelection={selectedStickerId !== null}
+                onRemoveSelected={() => canvasRef.current?.removeSelected()}
+              />
 
               {themeId === 'accessories-only' && (
                 <p className="text-center text-xs text-white/45">Checkerboard = no background</p>

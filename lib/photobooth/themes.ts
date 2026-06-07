@@ -16,10 +16,10 @@ export type PhotoBoothTheme = {
   id: string;
   name: string;
   emoji: string;
+  /** Image under /public — .png or .jpg */
   background: string;
   /** Fallback if primary background file missing */
   backgroundFallback?: string;
-  /** Themes are backgrounds only — members add accessories manually */
   stickers: StickerPlacement[];
 };
 
@@ -65,31 +65,45 @@ export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [
     stickers: [],
   },
   {
+    id: 'snow-mountain',
+    name: 'Snowy Mountain',
+    emoji: '🏔️',
+    background: BG('bg-snow-mountain.png'),
+    stickers: [],
+  },
+  {
+    id: 'tropical-beach',
+    name: 'Tropical Beach',
+    emoji: '🏝️',
+    background: BG('bg-tropical-beach.png'),
+    stickers: [],
+  },
+  {
     id: 'patriot-pup',
     name: 'Patriot Pup',
     emoji: '🇺🇸',
-    background: '',
+    background: BG('bg-patriot-pup.png'),
     stickers: [],
   },
   {
     id: 'hollywood-star',
     name: 'Hollywood Star',
     emoji: '⭐',
-    background: '',
+    background: BG('bg-hollywood-star.png'),
     stickers: [],
   },
   {
     id: 'wellness-warrior',
     name: 'Wellness Warrior',
     emoji: '💚',
-    background: '',
+    background: BG('bg-wellness-warrior.png'),
     stickers: [],
   },
   {
     id: 'birthday-bash',
     name: 'Birthday Bash',
     emoji: '🎉',
-    background: '',
+    background: BG('bg-birthday-bash.png'),
     stickers: [],
   },
 ];
@@ -115,17 +129,43 @@ export const ACCESSORY_STICKERS: StickerPlacement[] = [
 /** @deprecated Use ACCESSORY_STICKERS */
 export const EXTRA_STICKERS = ACCESSORY_STICKERS;
 
+/** Scenic backgrounds eligible for Surprise Me (excludes editor-only modes). */
+export const SURPRISE_THEME_IDS = [
+  'superbud-hero',
+  'lake-legend',
+  'snow-mountain',
+  'tropical-beach',
+  'patriot-pup',
+  'hollywood-star',
+  'wellness-warrior',
+  'birthday-bash',
+] as const;
+
+export function pickRandomSurpriseThemeId(): string {
+  const pool = SURPRISE_THEME_IDS;
+  return pool[Math.floor(Math.random() * pool.length)] ?? 'superbud-hero';
+}
+
 export function getTheme(id: string): PhotoBoothTheme {
   return PHOTO_BOOTH_THEMES.find((t) => t.id === id) ?? PHOTO_BOOTH_THEMES[0];
 }
 
-/** Candidate URLs for a background (primary, then fallback). */
+/** True when theme uses a PNG/JPG file from /public (not canvas-drawn gradient). */
+export function themeUsesImageBackground(themeOrId: PhotoBoothTheme | string): boolean {
+  const theme = typeof themeOrId === 'string' ? getTheme(themeOrId) : themeOrId;
+  return Boolean(theme.background?.trim());
+}
+
+/** Candidate URLs for a background (primary, then fallback). Supports .png and .jpg */
 export function backgroundCandidates(theme: PhotoBoothTheme): string[] {
   return [theme.background, theme.backgroundFallback].filter(Boolean) as string[];
 }
 
 /** Candidate URLs for a sticker (.png art, then .svg placeholder). */
 export function stickerCandidates(pngPath: string): string[] {
-  const svgPath = pngPath.replace(/\.png$/i, '.svg');
-  return svgPath !== pngPath ? [pngPath, svgPath] : [pngPath];
+  const base = pngPath.replace(/\.(png|jpg|jpeg|webp)$/i, '');
+  const svgPath = `${base}.svg`;
+  const paths = [pngPath];
+  if (svgPath !== pngPath) paths.push(svgPath);
+  return paths;
 }

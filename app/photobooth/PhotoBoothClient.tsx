@@ -2,10 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import PhotoBoothToast from '@/app/components/PhotoBoothToast';
 import PhotoUploadZone from '@/app/components/PhotoUploadZone';
 import { clearPhotoFromDb } from '@/lib/photo-db';
 import { clearPhotoPreview } from '@/lib/photo-storage';
-import { ACCESSORY_STICKERS, PHOTO_BOOTH_THEMES } from '@/lib/photobooth/themes';
+import { preloadPhotoBoothAssets } from '@/lib/photobooth/preload-themes';
+import {
+  ACCESSORY_STICKERS,
+  getTheme,
+  PHOTO_BOOTH_THEMES,
+  pickRandomSurpriseThemeId,
+} from '@/lib/photobooth/themes';
 import { type FrameStyleId } from '@/lib/photobooth/frames';
 import {
   type MeAndMyPupCustomBackgroundId,
@@ -66,6 +73,9 @@ export default function PhotoBoothClient({
   const [meMyPupCustomBg, setMeMyPupCustomBg] = useState<MeAndMyPupCustomBackgroundId>('navy');
   const [meMyPupHeadlineOffset, setMeMyPupHeadlineOffset] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState<SlotId | null>('dog');
+  const [themeSparkle, setThemeSparkle] = useState(false);
+  const [themePickerExpanded, setThemePickerExpanded] = useState(true);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const handleStickersChange = useCallback(
     (stickers: StickerListItem[], selectedId: number | null) => {
@@ -78,6 +88,7 @@ export default function PhotoBoothClient({
   useEffect(() => {
     clearPhotoPreview('photobooth');
     void clearPhotoFromDb('photobooth');
+    preloadPhotoBoothAssets();
   }, []);
 
   const setPhotoUrl = useCallback((url: string | null, options?: { keepEditor?: boolean }) => {
@@ -135,14 +146,24 @@ export default function PhotoBoothClient({
     [loadUploadById]
   );
 
+  useEffect(() => {
+    if (!shareMsg) return;
+    setToastMsg(shareMsg);
+    const t = window.setTimeout(() => setToastMsg(null), 2800);
+    return () => window.clearTimeout(t);
+  }, [shareMsg]);
+
   const pickTheme = useCallback((id: string) => {
     setThemeId(id);
     setEditorActive(true);
     setCanvasReady(false);
+    setThemePickerExpanded(false);
+    setThemeSparkle(true);
+    window.setTimeout(() => setThemeSparkle(false), 700);
     if (id === 'me-and-my-pup') {
       setShareMsg('Add your photo · drag each circle to adjust · then Share!');
     } else {
-      setShareMsg('Drag to adjust your pet on the photo · share below when ready!');
+      setShareMsg('Drag to adjust your pet · share below when ready!');
     }
     if (cutoutApplied && id !== 'frame-only') {
       setFrameId('none');
@@ -150,6 +171,11 @@ export default function PhotoBoothClient({
       setFrameId('walnut');
     }
   }, [frameId, cutoutApplied]);
+
+  const handleSurpriseMe = useCallback(() => {
+    pickTheme(pickRandomSurpriseThemeId());
+    setShareMsg('🎲 Surprise style! Drag your pet to adjust · share when ready!');
+  }, [pickTheme]);
 
   const handleOwnerFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -282,7 +308,7 @@ export default function PhotoBoothClient({
       link.click();
       URL.revokeObjectURL(url);
     }
-    setShareMsg('Saved to your device!');
+    setShareMsg('Saved to Photos!');
   }, [themeId]);
 
   const sharePhoto = useCallback(async () => {
@@ -321,53 +347,100 @@ export default function PhotoBoothClient({
   }, [savePhoto, themeId]);
 
   const displayError = uploadError && !petImageUrl && !loadingPhoto ? uploadError : localUploadError;
+  const activeTheme = getTheme(themeId);
+  const themePickerCollapsed = editorActive && !themePickerExpanded;
+
+  const themeChip = (theme: (typeof PHOTO_BOOTH_THEMES)[number]) => (
+    <button
+      key={theme.id}
+      type="button"
+      onClick={() => pickTheme(theme.id)}
+      className={`shrink-0 snap-start flex items-center gap-2 min-h-[40px] rounded-xl px-3 py-2 text-xs font-bold transition touch-manipulation ${
+        themeId === theme.id && editorActive
+          ? 'bg-amber-400 text-black ring-2 ring-amber-200'
+          : 'bg-[#0F1E38] border border-white/15 text-white'
+      }`}
+    >
+      <span className="text-base leading-none">{theme.emoji}</span>
+      <span className="whitespace-nowrap">{theme.name}</span>
+    </button>
+  );
 
   const themePicker = (
     <section
       ref={themesRef}
       className={
         editorActive
-          ? 'sticky z-20 -mx-4 px-4 py-3 mb-4 bg-[#0A1625]/95 backdrop-blur-md border-b border-amber-400/20'
+          ? 'sticky z-20 -mx-4 px-4 py-2 mb-3 bg-[#0A1625]/95 backdrop-blur-md border-b border-amber-400/20'
           : 'mt-4 mb-4'
       }
       style={editorActive ? { top: 'var(--nav-total-height)' } : undefined}
     >
-      <p className="text-base font-bold text-amber-400 mb-1">
-        {editorActive && themeId === 'me-and-my-pup'
-          ? 'Me & My Pup frame'
-          : editorActive
-            ? 'Change background'
-            : 'Step 2 — Pick a style'}
-      </p>
-      <p className="text-[11px] text-white/45 mb-3 leading-relaxed">
-        {editorActive && themeId === 'me-and-my-pup'
-          ? 'You + your pup in gold circles — great for sharing with family.'
-          : editorActive
-            ? 'Drag to adjust your pet · add accessories or try Me & My Pup anytime.'
-            : 'Tap a background — drag to adjust your pet after. Try 💞 Me & My Pup for a duo card.'}
-      </p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {PHOTO_BOOTH_THEMES.map((theme) => (
+      {themePickerCollapsed ? (
+        <div className="flex items-center gap-2">
           <button
-            key={theme.id}
             type="button"
-            onClick={() => pickTheme(theme.id)}
-            className={`min-h-[56px] rounded-xl px-2 py-2.5 text-xs font-bold transition touch-manipulation ${
-              themeId === theme.id && editorActive
-                ? 'bg-amber-400 text-black ring-2 ring-amber-200'
-                : 'bg-[#0F1E38] border border-white/15 text-white'
-            }`}
+            onClick={() => setThemePickerExpanded(true)}
+            className="flex-1 flex items-center justify-between min-h-[40px] rounded-xl border border-amber-400/35 bg-[#0F1E38] px-3 py-2 touch-manipulation"
           >
-            <span className="text-xl block mb-0.5">{theme.emoji}</span>
-            {theme.name}
+            <span className="flex items-center gap-2 text-sm font-bold text-white">
+              <span>{activeTheme.emoji}</span>
+              <span>{activeTheme.name}</span>
+            </span>
+            <span className="text-xs text-amber-400">Change style ▾</span>
           </button>
-        ))}
-      </div>
+          {petImageUrl && (
+            <button
+              type="button"
+              onClick={handleSurpriseMe}
+              className="shrink-0 min-h-[40px] rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 text-xs font-bold text-amber-300 touch-manipulation"
+              title="Random style"
+            >
+              🎲
+            </button>
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <p className="text-sm font-bold text-amber-400">
+              {editorActive ? 'Change style' : 'Step 2 — Pick a style'}
+            </p>
+            {editorActive && (
+              <button
+                type="button"
+                onClick={() => setThemePickerExpanded(false)}
+                className="text-[10px] font-bold text-white/45 touch-manipulation"
+              >
+                Collapse ▴
+              </button>
+            )}
+          </div>
+          {!editorActive && (
+            <p className="text-[10px] text-white/45 mb-2 leading-relaxed">
+              Swipe styles → tap one · then adjust your pet below
+            </p>
+          )}
+          {petImageUrl && (
+            <button
+              type="button"
+              onClick={handleSurpriseMe}
+              className="mb-2 w-full min-h-[36px] rounded-lg border border-amber-400/35 bg-amber-400/10 text-xs font-bold text-amber-300 touch-manipulation"
+            >
+              🎲 Surprise Me
+            </button>
+          )}
+          <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory photobooth-hscroll">
+            {PHOTO_BOOTH_THEMES.map(themeChip)}
+          </div>
+        </>
+      )}
     </section>
   );
 
   return (
     <div className="min-h-screen bg-[#0A1625] text-white">
+      <PhotoBoothToast message={toastMsg} />
       <div className="max-w-lg mx-auto px-4 py-6 pb-16">
         <Link
           href="/"
@@ -388,7 +461,7 @@ export default function PhotoBoothClient({
           <h1 className="text-3xl font-bold text-center pr-10">SuperBud Photo Booth</h1>
         </div>
         <p className="mt-2 text-center text-sm text-white/60">
-          Upload · pick a background · share in seconds
+          Dress up your pet · pick a style · share in seconds
         </p>
 
         {displayError && (
@@ -489,7 +562,7 @@ export default function PhotoBoothClient({
           </>
         )}
 
-        <div className="mt-5">
+        <div className={`mt-5 ${themeSparkle && editorActive ? 'fp-theme-sparkle' : ''}`}>
           {petImageUrl && !editorActive && (
             <div className="overflow-hidden rounded-2xl border border-white/15 bg-[#0F1E38]/60">
               <div

@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 const steps = [
   {
     title: '1. Upload your pet photo',
-    body: 'Tap Choose Photo and pick a picture from your camera roll. Your photo uploads automatically — no cutout required for most backgrounds.',
+    body: 'Tap Choose Photo and pick a picture of your pet from your camera roll. Upload starts automatically — no cutout required for most styles.',
   },
   {
     title: '2. Pick a style',
-    body: 'Tap any background theme, or choose Me & My Pup for a duo card with you and your pup in gold circles.',
+    body: 'Swipe the style row and tap one — the bar collapses so your pet stays visible. Try Surprise Me, or Me & My Pup for a duo card.',
   },
   {
     title: '3. Share or save',
@@ -30,7 +30,7 @@ const meAndMyPupSteps = [
 ];
 
 const accessoryTips = [
-  'Tap an accessory to add it to the photo.',
+  'Tap Add accessory to open the sticker drawer, then tap an item to place it on the photo.',
   'Drag to move · gold corners to resize · pinch with two fingers.',
   'Double-tap an accessory on the photo to remove it.',
 ];

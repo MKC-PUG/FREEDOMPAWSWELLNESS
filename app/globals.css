@@ -106,3 +106,33 @@ button {
   background: #f5c242;
   border: 2px solid #0a1625;
 }
+
+@keyframes fp-theme-sparkle {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 194, 66, 0);
+  }
+  45% {
+    box-shadow: 0 0 28px 6px rgba(245, 194, 66, 0.35);
+  }
+}
+
+.fp-theme-sparkle {
+  animation: fp-theme-sparkle 0.7s ease-out;
+  border-radius: 1rem;
+}
+
+.photobooth-hscroll {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 194, 66, 0.35) transparent;
+}
+
+.photobooth-hscroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.photobooth-hscroll::-webkit-scrollbar-thumb {
+  background: rgba(245, 194, 66, 0.4);
+  border-radius: 4px;
+}

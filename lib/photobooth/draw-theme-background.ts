@@ -1,7 +1,8 @@
-/** Clean canvas-drawn backgrounds — no protocol marketing art behind the pet. */
+import { themeUsesImageBackground } from './themes';
 
+/** @deprecated Use themeUsesImageBackground — kept for canvas paint imports */
 export function usesPhotoBackground(themeId: string): boolean {
-  return themeId === 'superbud-hero' || themeId === 'lake-legend';
+  return themeUsesImageBackground(themeId);
 }
 
 export function drawThemeBackground(

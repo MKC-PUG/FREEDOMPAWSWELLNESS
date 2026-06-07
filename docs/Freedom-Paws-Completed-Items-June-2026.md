@@ -3,11 +3,11 @@
 
 **Document purpose:** Single record of what is **done and validated** so launch planning does not redo settled work.
 
-**Date:** June 5, 2026  
+**Date:** June 6, 2026 (updated)  
 **Project:** `freedompaws-app`  
 **GitHub:** `MKC-PUG/FREEDOMPAWSWELLNESS`  
-**Current PWA release:** **v40** (latest deploy: Monitor polish + Phase 2 tunnel docs)  
-**Production:** Vercel preview mode (`NEXT_PUBLIC_SITE_MODE=preview`)
+**Current PWA release:** **v53**  
+**Production:** `https://app.freedompawsinc.com` (preview mode; DNS live)
 
 **Related:** `Freedom-Paws-Launch-Todo-Prioritized-June-2026.md`
 
@@ -93,13 +93,20 @@
 
 ---
 
-## 5. Token Shop
+## 5. Token Shop & Xaman checkout
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Token Shop page | ✅ | `/token-shop` with protocol sections |
-| Deep links from ViT results | ✅ | `#slug` anchors |
-| Buy / wallet URL helpers | ✅ | `app/lib/routes.ts` |
+| Canonical shop `/token-shop` | ✅ | App = source of truth |
+| Protocol catalog + price sheet | ✅ | `lib/shop/protocol-catalog.ts`, docs CSV |
+| Live XRP pricing (CoinGecko) | ✅ | `/api/pricing/live` |
+| XUMM payload + status APIs | ✅ | v46–v52; Payment omit `Account` (603 fix) |
+| Vercel env (XUMM + treasury + app URL) | ✅ | Task #2 — June 6 |
+| **iPhone Xaman payment (Mainnet)** | ✅ | Task #3 — Spending → treasury; Max Movement unlocked |
+| Device unlock (`localStorage`) | ✅ | `lib/shop/unlocks.ts`; v53 resume polling |
+| RLUSD pay button | ⏳ | Add `XRPL_RLUSD_ISSUER` on Vercel (Task A) |
+| Stripe checkout | ⏳ | Task C |
+| Server-side unlock / webhook | ⏳ | Task C |
 
 ---
 
@@ -151,18 +158,15 @@
 
 ---
 
-## 9. Deploy history (v33–v40)
+## 9. Deploy history (v33–v53)
 
 | Version | Focus |
 |---------|--------|
-| **v33** | Senior/cognitive overlap; matched terms UI |
-| **v34** | Vercel analyze fix (`/tmp` feedback); App release label |
-| **v35** | Full lexicon all 10 categories |
-| **v36** | Premium results; video frames + vision |
-| **v37** | Image quality gate |
-| **v38** | “How ViT works” explainer |
-| **v39** | Monitor stream.html + home beta note |
-| **v40** | Monitor help, wizard, away-mode tunnel docs, dynamic https banner |
+| **v33–v40** | ViT polish; Monitor home/away beta |
+| **v41–v42** | ViT visual observations; SuperBud hero |
+| **v43–v45** | Token Shop P0; XUMM scaffold; config-status |
+| **v46–v52** | XUMM 603 fixes; treasury validation; Mainnet payment |
+| **v53** | Resume Xaman polling on iOS return |
 
 ---
 
@@ -176,6 +180,7 @@
 | ViT — quality gate “Good for AI analysis” | ✅ |
 | PWA install + refresh banner | ✅ |
 | Photo Booth — themes + share | ✅ |
+| Token Shop — Xaman XRP Mainnet payment | ✅ Max Movement; ✓ Unlocked |
 | Monitor — home live view (go2rtc) | ✅ ● Live, RTC |
 | Monitor — away live view (5G, Wi‑Fi off) | ✅ ● Live, Away mode banner |
 | Wyze app — pan/tilt | ✅ |
@@ -206,7 +211,7 @@ These work **for you** but are **not** launch-complete for all members:
 | ViT | ~90% | Vercel API key verify, accounts optional |
 | Photo Booth | ~85% | Phase 2 polish QA |
 | Protocols | ~90% | Framer sync, final device pass |
-| Token Shop | ~80% | Payments, canonical shop |
+| Token Shop | ~90% | RLUSD env, Stripe, server unlock |
 | Monitor | ~50% for launch | **Cloud relay + member setup** |
 | My Pets vault | ~5% | Full MVP |
 | Legal / payments | ~10% | Terms, Stripe, LLC |
@@ -214,4 +219,4 @@ These work **for you** but are **not** launch-complete for all members:
 ---
 
 *Freedom Paws Wellness — Honor Buddy's Legacy*  
-*Completed items record — June 5, 2026*
+*Completed items record — updated June 6, 2026*

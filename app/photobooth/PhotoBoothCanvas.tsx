@@ -455,13 +455,14 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       drawFrameOnlyBackground(ctx, cw, ch);
     } else if (accessoriesOnlyRef.current) {
       drawCheckerboard(ctx, cw, ch);
-    } else if (!usesPhotoBackground(activeThemeIdRef.current)) {
-      drawThemeBackground(ctx, activeThemeIdRef.current, cw, ch);
-    } else if (bgRef.current) {
-      drawCover(ctx, bgRef.current, cw, ch);
+    } else if (usesPhotoBackground(activeThemeIdRef.current)) {
+      if (bgRef.current) {
+        drawCover(ctx, bgRef.current, cw, ch);
+      } else {
+        drawThemeBackground(ctx, activeThemeIdRef.current, cw, ch);
+      }
     } else {
-      ctx.fillStyle = '#0A1625';
-      ctx.fillRect(0, 0, cw, ch);
+      drawThemeBackground(ctx, activeThemeIdRef.current, cw, ch);
     }
 
     let frameLayout: ReturnType<typeof computeFrameRects> | null = null;
