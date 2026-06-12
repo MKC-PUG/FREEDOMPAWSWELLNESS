@@ -159,6 +159,31 @@ JSON: primary + secondary (spec + branded + slug + confidence)
 - [ ] Labeled pet imagery dataset  
 - [ ] Fine-tuned model on Replicate or dedicated GPU  
 
+### Phase ID — Identity & biometric re-ID (Track 1 — **before chipped module**)
+
+**Master plan:** `Freedom-Paws-ID-Lost-Dog-Infrastructure-Roadmap.md` v2.0
+
+ViT Diagnostics expands from wellness-only to **identity-grade multi-region capture**, shared with Freedom Paws ID:
+
+| Region | Wellness use | ID enroll use |
+|--------|--------------|---------------|
+| **Eyes** | Clear Vision protocol signals | Periocular identity features |
+| **Face** | Stress / senior cues | Primary biometric geometry |
+| **Body** | BCS, coat, markings | Pattern / marking identity |
+| **Posture** | Mobility, spine | Stance signature |
+| **Gait (video)** | Limp, stiffness (Max Movement) | Motion embedding for match |
+
+**Implementation checklist:**
+
+- [ ] `identity` mode on `POST /api/analyze` — separate prompt schema from wellness  
+- [ ] Per-region quality gates (`lib/vit/media-quality-gate.ts`)  
+- [ ] Gait pipeline — reuse Phase 2b video frames + gait descriptor  
+- [ ] `lib/id/embeddings.ts` — fuse region descriptors → pgvector  
+- [ ] `/id/enroll` wizard; “Save to ID profile” from `/diagnostics`  
+- [ ] Found-dog similarity search (Track 1 — **not** chip scanner)
+
+**Pilot target:** October 1, 2026 (unchipped shelter E2E). Chipped scanner module is **Track 2** (Feb 2027).
+
 ---
 
 ## 8. Environment variables

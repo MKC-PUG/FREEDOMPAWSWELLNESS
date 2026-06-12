@@ -17,3 +17,15 @@ export function tokenShopHref(slug?: string) {
 export function tokenShopBuyHref(slug: string) {
   return `/token-shop?protocol=${encodeURIComponent(slug)}&buy=1#${slug}`;
 }
+
+export function idHubHref() {
+  return '/id';
+}
+
+export function idEnrollHref() {
+  return '/id/enroll';
+}
+
+export function diagnosticsIdentityHref() {
+  return '/diagnostics?mode=identity';
+}

@@ -1,4 +1,11 @@
 import type { ProtocolRecommendation } from './protocol-registry';
+import type {
+  AnalyzeMode,
+  IdentityAnalysisResult,
+  IdentityRegion,
+} from '@/lib/id/types';
+
+export type { AnalyzeMode, IdentityRegion, IdentityAnalysisResult };
 
 export interface AnalysisResponse {
   success: boolean;
@@ -45,6 +52,7 @@ export type AnalyzeApiResponse = {
   success: boolean;
   analysisId?: string;
   error?: string;
+  mode?: AnalyzeMode;
   primary?: ApiProtocolResult;
   secondary?: ApiProtocolResult | null;
   finding?: string;
@@ -59,6 +67,7 @@ export type AnalyzeApiResponse = {
   frameCount?: number;
   analyzedAt?: string;
   disclaimer?: string;
+  identity?: IdentityAnalysisResult;
 };
 
 function toApiProtocol(rec: ProtocolRecommendation): ApiProtocolResult {
@@ -84,6 +93,7 @@ export function toAnalyzeApiResponse(
   return {
     success: true,
     analysisId,
+    mode: 'wellness',
     primary: toApiProtocol(data.primary),
     secondary: data.secondary ? toApiProtocol(data.secondary) : null,
     finding: data.finding,
@@ -98,5 +108,33 @@ export function toAnalyzeApiResponse(
     frameCount: data.frameCount,
     analyzedAt: data.analyzedAt,
     disclaimer: data.disclaimer,
+  };
+}
+
+export function toIdentityAnalyzeApiResponse(
+  analysisId: string,
+  identity: IdentityAnalysisResult,
+  meta: {
+    usedVision: boolean;
+    mediaType: 'photo' | 'video';
+    frameCount: number;
+  }
+): AnalyzeApiResponse {
+  const visualFindings = Object.values(identity.regions).flatMap((r) => r?.descriptors ?? []);
+  return {
+    success: true,
+    analysisId,
+    mode: 'identity',
+    finding: identity.enrollReady
+      ? 'Region quality sufficient for enrollment'
+      : 'More capture needed before enrollment',
+    reasoning: identity.fusedDescriptorText,
+    visualFindings: visualFindings.slice(0, 12),
+    usedVision: meta.usedVision,
+    mediaType: meta.mediaType,
+    frameCount: meta.frameCount,
+    analyzedAt: new Date().toISOString(),
+    disclaimer: identity.disclaimer,
+    identity,
   };
 }

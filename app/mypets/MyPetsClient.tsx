@@ -6,6 +6,12 @@ import BackLink from '@/app/components/BackLink';
 import { tokenShopItems } from '@/app/token-shop/shop-items';
 import { fileToPetThumb } from '@/lib/mypets/photo-thumb';
 import {
+  createServerPet,
+  deleteServerPet,
+  fetchServerPets,
+  updateServerPet,
+} from '@/lib/mypets/api';
+import {
   createPetProfile,
   deletePetProfile,
   readPetProfiles,
@@ -30,10 +36,23 @@ export default function MyPetsClient() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<PetFormInput>(EMPTY_FORM);
   const [formError, setFormError] = useState('');
+  const [useServer, setUseServer] = useState(false);
   const photoInputRef = useRef<HTMLInputElement>(null);
 
-  const refresh = useCallback(() => {
-    setPets(readPetProfiles());
+  const refresh = useCallback(async () => {
+    try {
+      const serverPets = await fetchServerPets();
+      if (serverPets) {
+        setPets(serverPets);
+        setUseServer(true);
+      } else {
+        setPets(readPetProfiles());
+        setUseServer(false);
+      }
+    } catch {
+      setPets(readPetProfiles());
+      setUseServer(false);
+    }
     setUnlocked(readUnlockedProtocols());
   }, []);
 
@@ -74,30 +93,56 @@ export default function MyPetsClient() {
     if (!file) return;
     try {
       const thumb = await fileToPetThumb(file);
-      if (thumb) setForm((f) => ({ ...f, photoThumb: thumb }));
+      if (thumb) {
+        setFormError('');
+        setForm((f) => ({ ...f, photoThumb: thumb }));
+        return;
+      }
+      setFormError('Could not load that photo — try JPG or PNG.');
     } catch {
-      setFormError('Could not load that photo — try another image.');
+      setFormError('Could not load that photo — try JPG, PNG, or HEIC from Photos.');
     }
   };
 
-  const saveForm = () => {
+  const saveForm = async () => {
     if (!form.name.trim()) {
       setFormError('Pet name is required.');
       return;
     }
-    if (editingId) {
-      updatePetProfile(editingId, form);
-    } else {
-      createPetProfile(form);
+    try {
+      if (useServer) {
+        if (editingId) {
+          await updateServerPet(editingId, form);
+        } else {
+          await createServerPet(form);
+        }
+      } else if (editingId) {
+        updatePetProfile(editingId, form);
+      } else {
+        createPetProfile(form);
+      }
+      closeForm();
+      await refresh();
+    } catch {
+      setFormError('Could not save pet. Try again or sign in for cloud sync.');
     }
-    closeForm();
-    refresh();
   };
 
-  const removePet = (id: string) => {
-    if (!window.confirm('Remove this pet profile from this device?')) return;
-    deletePetProfile(id);
-    refresh();
+  const removePet = async (id: string) => {
+    const msg = useServer
+      ? 'Remove this pet from your account?'
+      : 'Remove this pet profile from this device?';
+    if (!window.confirm(msg)) return;
+    try {
+      if (useServer) {
+        await deleteServerPet(id);
+      } else {
+        deletePetProfile(id);
+      }
+      await refresh();
+    } catch {
+      setFormError('Could not remove pet.');
+    }
   };
 
   const unlockedItems = tokenShopItems.filter((item) => unlocked.includes(item.slug));
@@ -106,6 +151,20 @@ export default function MyPetsClient() {
     <div className="min-h-screen bg-[#0A1428] text-white p-6 sm:p-8 pb-20">
       <div className="max-w-5xl mx-auto">
         <BackLink />
+        {!useServer && (
+          <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-950/25 px-4 py-3 text-sm text-amber-200/90">
+            Pets saved on this device only.{' '}
+            <Link href="/login?next=/mypets" className="font-semibold text-amber-300 underline">
+              Sign in
+            </Link>{' '}
+            for cloud sync and Freedom Paws ID enrollment.
+          </div>
+        )}
+        {useServer && (
+          <p className="mb-4 text-xs text-emerald-400/80 font-semibold">
+            ✓ Cloud sync active — pets available for ID enrollment
+          </p>
+        )}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-4">
             <span className="text-4xl sm:text-5xl">🐾</span>
@@ -148,8 +207,8 @@ export default function MyPetsClient() {
             <div className="text-7xl mb-6">🐕</div>
             <h2 className="text-2xl sm:text-4xl font-bold mb-3">No pets added yet</h2>
             <p className="text-gray-400 max-w-md mx-auto mb-8 text-sm leading-relaxed">
-              Add your first pet to track wellness notes, unlocked protocols, and photos — saved on
-              this device.
+              Add your first pet to track wellness notes, unlocked protocols, and photos.
+              {useServer ? ' Synced to your account.' : ' Saved on this device until you sign in.'}
             </p>
             <button
               type="button"
@@ -198,7 +257,7 @@ export default function MyPetsClient() {
                       Remove
                     </button>
                     <Link
-                      href="/diagnostics"
+                      href={`/diagnostics?pet=${encodeURIComponent(pet.name)}&petId=${encodeURIComponent(pet.id)}`}
                       className="text-xs font-bold text-white/70 touch-manipulation"
                     >
                       Run ViT →
@@ -343,7 +402,7 @@ export default function MyPetsClient() {
               {formError && <p className="text-sm text-red-400">{formError}</p>}
               <button
                 type="button"
-                onClick={saveForm}
+                onClick={() => void saveForm()}
                 className="w-full min-h-[48px] rounded-full bg-[#F5C242] text-black font-bold text-sm touch-manipulation"
               >
                 {editingId ? 'Save changes' : 'Add pet'}

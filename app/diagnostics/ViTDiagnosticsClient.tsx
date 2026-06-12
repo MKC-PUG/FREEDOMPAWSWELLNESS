@@ -8,6 +8,9 @@ import BackLink from '@/app/components/BackLink';
 import type { AnalyzeApiResponse } from '@/lib/ai/types';
 import ViTMediaUpload, { type VitMediaSelection } from './ViTMediaUpload';
 import ViTResultsPanel from './ViTResultsPanel';
+import ViTIdentityResultsPanel from './ViTIdentityResultsPanel';
+import type { IdentityRegion } from '@/lib/id/types';
+import { IDENTITY_REGIONS } from '@/lib/id/types';
 import ViTQualityGate from './ViTQualityGate';
 import ViTHowItWorks from './ViTHowItWorks';
 import {
@@ -16,11 +19,22 @@ import {
   type VitMediaQuality,
 } from '@/lib/vit/media-quality-gate';
 
+const REGION_LABELS: Record<IdentityRegion, string> = {
+  eyes: 'Eyes',
+  face: 'Face',
+  body: 'Body / coat',
+  posture: 'Posture',
+  gait: 'Gait (video)',
+};
+
 type Props = {
   initialPhoto: string | null;
   initialFileName: string;
   uploadError: string | null;
   uploadSuccess: boolean;
+  identityMode?: boolean;
+  petName?: string | null;
+  petId?: string | null;
 };
 
 async function dataUrlToFile(dataUrl: string, name: string): Promise<File> {
@@ -34,8 +48,13 @@ export default function ViTDiagnosticsClient({
   initialFileName,
   uploadError,
   uploadSuccess,
+  identityMode = false,
+  petName = null,
+  petId = null,
 }: Props) {
   const symptomsRef = useRef<HTMLTextAreaElement>(null);
+  const identityNotesRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedRegions, setSelectedRegions] = useState<IdentityRegion[]>(['face']);
   const [media, setMedia] = useState<VitMediaSelection | null>(null);
   const [result, setResult] = useState<AnalyzeApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -82,11 +101,21 @@ export default function ViTDiagnosticsClient({
 
   const hasMedia = Boolean(media || (uploadSuccess && initialPhoto));
 
+  const toggleRegion = (region: IdentityRegion) => {
+    setSelectedRegions((prev) => {
+      if (prev.includes(region)) {
+        return prev.length > 1 ? prev.filter((r) => r !== region) : prev;
+      }
+      return [...prev, region];
+    });
+  };
+
   const resetAnalysis = () => {
     setResult(null);
     setError('');
     setFeedbackSent(null);
     if (symptomsRef.current) symptomsRef.current.value = '';
+    if (identityNotesRef.current) identityNotesRef.current.value = '';
   };
 
   const clearMedia = async () => {
@@ -100,14 +129,20 @@ export default function ViTDiagnosticsClient({
 
   const analyze = async () => {
     const symptoms = symptomsRef.current?.value ?? '';
+    const identityNotes = identityNotesRef.current?.value ?? '';
 
     if (!media && !initialPhoto) {
       setError('Please upload a photo or short video first.');
       return;
     }
 
-    if (!symptoms.trim()) {
+    if (!identityMode && !symptoms.trim()) {
       setError('Please describe symptoms.');
+      return;
+    }
+
+    if (identityMode && selectedRegions.length === 0) {
+      setError('Select at least one identity region.');
       return;
     }
 
@@ -128,7 +163,16 @@ export default function ViTDiagnosticsClient({
       }
 
       const formData = new FormData();
-      formData.append('symptoms', symptoms);
+      if (identityMode) {
+        formData.append('mode', 'identity');
+        formData.append('regions', selectedRegions.join(','));
+        if (identityNotes.trim()) {
+          formData.append('identityNotes', identityNotes.trim());
+        }
+      } else {
+        formData.append('mode', 'wellness');
+        formData.append('symptoms', symptoms);
+      }
 
       if (selection.kind === 'video') {
         formData.append('mediaType', 'video');
@@ -197,10 +241,28 @@ export default function ViTDiagnosticsClient({
   return (
     <div className="min-h-screen bg-[#0A1428] text-white p-6 sm:p-8">
       <div className="max-w-5xl mx-auto">
-        <BackLink />
-        <h1 className="text-5xl font-bold text-center mb-2">ViT Diagnostics</h1>
+        <BackLink href={identityMode ? '/id' : '/mypets'} label={identityMode ? 'Back to ID hub' : 'Back to My Pets'} />
+        {petName && (
+          <div className="mt-4 mb-2 rounded-2xl border border-amber-500/35 bg-amber-950/25 px-4 py-3 text-center text-sm text-amber-100">
+            ViT scan for <strong>{petName}</strong>
+            {petId ? (
+              <>
+                {' '}
+                ·{' '}
+                <a href={`/id/enroll?petId=${encodeURIComponent(petId)}`} className="text-amber-300 underline">
+                  Enroll ID →
+                </a>
+              </>
+            ) : null}
+          </div>
+        )}
+        <h1 className="text-5xl font-bold text-center mb-2">
+          {identityMode ? 'ViT Identity Capture' : 'ViT Diagnostics'}
+        </h1>
         <p className="text-center text-[#F5C242] mb-2">
-          Upload photo or short video + symptoms for AI protocol recommendation
+          {identityMode
+            ? 'Upload photo or video — capture identity regions for Freedom Paws ID'
+            : 'Upload photo or short video + symptoms for AI protocol recommendation'}
         </p>
         <p className="text-center text-sm font-semibold text-[#F5C242] mb-1">
           App release {PWA_VERSION}
@@ -258,22 +320,67 @@ export default function ViTDiagnosticsClient({
           </div>
 
           <div className="bg-[#1F2A44] rounded-3xl p-8 flex flex-col">
-            <h3 className="text-xl font-semibold mb-4">2. Describe Symptoms</h3>
-            <textarea
-              ref={symptomsRef}
-              name="symptoms"
-              defaultValue=""
-              placeholder="e.g. limping on walks, sneezing, senior pacing at night..."
-              className="w-full h-40 bg-[#0A1428] border border-[#F5C242]/30 rounded-2xl p-6 text-white resize-y focus:outline-none focus:border-[#F5C242]"
-            />
+            {identityMode ? (
+              <>
+                <h3 className="text-xl font-semibold mb-4">2. Identity regions</h3>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {IDENTITY_REGIONS.map((region) => {
+                    const active = selectedRegions.includes(region);
+                    return (
+                      <button
+                        key={region}
+                        type="button"
+                        onClick={() => toggleRegion(region)}
+                        className={`rounded-full px-4 py-2 text-sm font-semibold border transition ${
+                          active
+                            ? 'border-emerald-400 bg-emerald-500/20 text-emerald-200'
+                            : 'border-white/20 bg-[#0A1428] text-white/60 hover:border-white/40'
+                        }`}
+                      >
+                        {REGION_LABELS[region]}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-white/45 mb-4">
+                  Use video for gait. Photo works for eyes, face, body, and posture.
+                </p>
+                <textarea
+                  ref={identityNotesRef}
+                  name="identityNotes"
+                  defaultValue=""
+                  placeholder="Optional: lighting, collar color, capture context…"
+                  className="w-full h-24 bg-[#0A1428] border border-emerald-500/30 rounded-2xl p-4 text-white resize-y focus:outline-none focus:border-emerald-400 text-sm"
+                />
+              </>
+            ) : (
+              <>
+                <h3 className="text-xl font-semibold mb-4">2. Describe Symptoms</h3>
+                <textarea
+                  ref={symptomsRef}
+                  name="symptoms"
+                  defaultValue=""
+                  placeholder="e.g. limping on walks, sneezing, senior pacing at night..."
+                  className="w-full h-40 bg-[#0A1428] border border-[#F5C242]/30 rounded-2xl p-6 text-white resize-y focus:outline-none focus:border-[#F5C242]"
+                />
+              </>
+            )}
 
             <button
               type="button"
               onClick={() => void analyze()}
               disabled={loading || !canAnalyze}
-              className="mt-6 bg-[#F5C242] hover:bg-[#F5C242]/90 disabled:opacity-50 text-black font-bold py-4 rounded-2xl text-xl transition"
+              className={`mt-6 disabled:opacity-50 text-black font-bold py-4 rounded-2xl text-xl transition ${
+                identityMode
+                  ? 'bg-emerald-400 hover:bg-emerald-400/90'
+                  : 'bg-[#F5C242] hover:bg-[#F5C242]/90'
+              }`}
             >
-              {loading ? 'Analyzing…' : 'Get AI Recommendation'}
+              {loading
+                ? 'Analyzing…'
+                : identityMode
+                  ? 'Analyze identity regions'
+                  : 'Get AI Recommendation'}
             </button>
 
             {!hasMedia && (
@@ -292,16 +399,19 @@ export default function ViTDiagnosticsClient({
               </p>
             )}
 
-            {result && (
-              <ViTResultsPanel
-                result={result}
-                feedbackSent={feedbackSent}
-                wrongProtocol={wrongProtocol}
-                onWrongProtocolChange={setWrongProtocol}
-                onFeedback={(f) => void sendFeedback(f)}
-                onTryAnother={resetAnalysis}
-              />
-            )}
+            {result &&
+              (identityMode || result.mode === 'identity' ? (
+                <ViTIdentityResultsPanel result={result} onTryAnother={resetAnalysis} />
+              ) : (
+                <ViTResultsPanel
+                  result={result}
+                  feedbackSent={feedbackSent}
+                  wrongProtocol={wrongProtocol}
+                  onWrongProtocolChange={setWrongProtocol}
+                  onFeedback={(f) => void sendFeedback(f)}
+                  onTryAnother={resetAnalysis}
+                />
+              ))}
 
             {error && <p className="text-red-400 mt-6 text-center">{error}</p>}
           </div>

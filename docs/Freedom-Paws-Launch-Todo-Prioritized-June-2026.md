@@ -140,19 +140,73 @@
 | [ ] **NFT gallery placeholder** | “Dynamic NFT” section with wallet link (XRPL — display only at launch if wallet not live) |
 | [ ] **Nav label** | Align “MY PETS” with home card “Manage your dogs…” |
 
+### Freedom Paws ID & Tool Box — **BUILD NOW** (flexible launch)
+
+**Master plan:** `docs/Freedom-Paws-ID-Complete-Master-Roadmap-June-2026.md` (full) · `docs/Freedom-Paws-ID-Lost-Dog-Infrastructure-Roadmap.md` v2.0 (summary) — **Track 1 (first):** ViT eyes/face/body/posture/gait + biometric enroll + found-dog match. **Track 2 (second):** microchip scanner + AAHA registry. **Biometric pilot Oct 1, 2026 · full launch Feb 1, 2027.**
+
+**Framer page (live now):** `/freedom-paws-id-toolbox` — marketing + links to **live app tools**.  
+**App routes (Track 1 first):** `/id`, `/id/enroll`, `/id/found`, `/id/match`, `/id/shelter`  
+**App routes (Track 2 later):** `/id/scan`, `/id/lookup`, `/id/vet`, `/id/kit`
+
+**Vision (founder spec — build order locked):**
+
+| Track | Order | What it does |
+|-------|-------|----------------|
+| **Unchipped (biometric)** | **1st** | ViT capture: **eyes, face, body, posture, gait (video)** → embeddings → found-dog match → shelter reunion queue |
+| **Chipped dogs** | **2nd** | Universal Bluetooth scanner (125/128/134.2 kHz) + AAHA registry routing — links onto biometric profile |
+| **Privacy** | Both | Member-owned images; explicit biometric consent; human review before owner contact |
+
+**Website launch (Framer — do now):** Full wiring in `docs/Framer-CTA-Link-Map.md` **Section 14**.
+
+- [ ] Nav **ID & Tool Box** → `/freedom-paws-id-toolbox` (Framer page)  
+- [ ] **Hero:** Rename Upload → **Add your pet in the app** → `{APP}/mypets`  
+- [ ] **Copy compliance:** Soften auto-enroll, IPFS, alerts, QR portal (Section 14 table A)  
+- [ ] **Tool Box grid:** Medical Records / Vaccinations / Daily Notes → `{APP}/mypets`; ViT Scans → `{APP}/diagnostics`  
+- [ ] **Live demo:** Rename to ViT trial; **Try Live AI Demo** → `{APP}/diagnostics` (not ID match)  
+- [ ] **Bottom CTAs:** Explore Protocols → `/protocol-overview`; Shop CTA → `{APP}/token-shop` (rename Recovery Plus if no SKU)  
+- [ ] **Stats:** Use verified numbers or founding-community wording  
+- [ ] **Privacy block:** Add biometric consent + not a government license line  
+- [ ] **Footer** on page: same as site-wide footer map  
+- [ ] **Publish** + Section 14 iPhone test (6 taps)
+
+**App build — Track 1 biometric (weeks 1–18, pilot Oct 1, 2026):**
+
+- [x] **ViT identity regions** — eyes, face, body, posture, **gait (video)**; API mode `identity`  
+- [x] **Scope + consent** — biometric enroll, false-match policy; shelter DPA draft in `docs/Freedom-Paws-ID-Biometric-Consent-Template-June-2026.md`  
+- [x] **Server My Pets +** `lib/id/types.ts` — embeddings, enroll status, found-dog reports  
+- [x] **`/id/enroll`** — multi-step wizard with quality gates  
+- [x] **`/id/found` + `/id/match`** — similarity search + human review queue  
+- [x] **`/id/shelter`** — partner intake dashboard + live stats  
+- [x] **`/id/settings`** — match alerts + revoke biometric enrollment  
+- [x] **ViT → enroll bridge** — “Save to ID profile” on identity diagnostics results  
+- [x] **Audit log** — migration `004` + hooks on match/found/revoke  
+- [x] **Shelter docs** — onboarding guide + one-pager (`docs/Freedom-Paws-ID-Shelter-*.md`)  
+- [ ] **Legal** — attorney sign-off on biometric consent template  
+- [ ] **Framer + app** — biometric enroll CTA live when `/id/enroll` ships (founder — Decision H)  
+
+**App build — Track 2 chipped (weeks 18–29, full launch Jan 1, 2027 promotion):**
+
+- [x] **Placeholder routes** — `/id/scan`, `/id/lookup`, `/id/kit` (Track 2 preview pages)  
+- [ ] **Bluetooth universal scanner** — 125/128/134.2 kHz into `/id/scan`  
+- [ ] **AAHA lookup + AVID branch** — `/id/lookup`  
+- [ ] **Chip link** on existing biometric profile  
+- [ ] **Scanner kit** SKU + vet waitlist → active conversion  
+
 ### Toolbox (if separate from My Pets)
 
-- [ ] **Define Toolbox scope** — supplements calendar, symptom log, grant links, or sub-pages under My Pets?  
-- [ ] If separate route: `/toolbox` hub linking ViT history, Photo Booth saves, Monitor shortcut  
-- [ ] **Recommendation:** fold “vault” into **My Pets** for launch (one member home for their dog)
+- [x] **Framer:** `/freedom-paws-id-toolbox` page exists — wire app tool links (website finish)  
+- [ ] **Define app Toolbox scope** — supplements calendar, symptom log, grant links, or sub-pages under My Pets?  
+- [ ] If separate app route: `/toolbox` hub linking ViT history, Photo Booth saves, Monitor shortcut  
+- [ ] **Recommendation:** fold “vault” into **My Pets** for launch; **ID verify** can live under My Pets or `/id` when built
 
 ### Accounts (minimum for launch)
 
 | Task | Detail |
 |------|--------|
-| [ ] **Decision:** launch with email magic link **or** defer accounts (local-only My Pets) | |
-| [ ] If accounts: Supabase / Clerk / NextAuth — pick one | |
-| [ ] Sync pets + protocol unlocks across devices | |
+| [x] **Decision:** email magic link via **Supabase** (Freedom Paws ID pilot) | |
+| [x] Supabase auth — `/login`, middleware, `user_profiles` | |
+| [x] Sync pets across devices — `/api/pets` when signed in | |
+| [ ] Protocol unlocks across devices (post-pilot) | |
 
 ---
 
@@ -256,7 +310,7 @@ Wyze RTSP → Member home relay OR Wyze cloud path
 
 ### Give-back tracking
 
-- [ ] 10% shelter/veteran policy — how it’s calculated and displayed  
+- [ ] 10% give-back policy — **50% veteran dog orgs / 50% shelters**; sourced from Token Shop + affiliate; display at checkout (see MASTER/FINAL economics report)  
 - [ ] Grant page on Framer matches app footer claims  
 
 ---

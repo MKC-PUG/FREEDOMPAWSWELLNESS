@@ -1,18 +1,29 @@
 import { randomUUID } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { analyzeDogMedia } from '@/lib/ai/diagnostics';
+import { analyzeIdentityFrames, parseIdentityRegions } from '@/lib/ai/identity-analyze';
 import {
   collectAnalyzeFrameFiles,
   isValidAnalyzeImage,
 } from '@/lib/ai/media-utils';
-import { toAnalyzeApiResponse } from '@/lib/ai/types';
+import type { AnalyzeMode } from '@/lib/id/types';
+import { toAnalyzeApiResponse, toIdentityAnalyzeApiResponse } from '@/lib/ai/types';
 import { getApprovedAliases, recordAnalysis } from '@/lib/symptom-feedback-store';
+
+function parseAnalyzeMode(raw: string): AnalyzeMode {
+  const mode = raw.trim().toLowerCase();
+  if (mode === 'identity' || mode === 'both') return mode;
+  return 'wellness';
+}
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const image = formData.get('image');
     const symptoms = (formData.get('symptoms') || '').toString().trim();
+    const mode = parseAnalyzeMode((formData.get('mode') || 'wellness').toString());
+    const regionsRaw = (formData.get('regions') || '').toString();
+    const identityNotes = (formData.get('identityNotes') || '').toString().trim();
     const mediaTypeRaw = (formData.get('mediaType') || 'photo').toString();
     const mediaType = mediaTypeRaw === 'video' ? 'video' : 'photo';
 
@@ -42,6 +53,24 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+    }
+
+    if (mode === 'identity') {
+      const regions = parseIdentityRegions(regionsRaw);
+      if (mediaType === 'video' && !regions.includes('gait') && !regions.includes('posture')) {
+        regions.push('gait');
+      }
+
+      const identity = await analyzeIdentityFrames(frames, regions, mediaType, identityNotes);
+      const analysisId = randomUUID();
+
+      return NextResponse.json(
+        toIdentityAnalyzeApiResponse(analysisId, identity, {
+          usedVision: identity.usedVision,
+          mediaType: identity.mediaType,
+          frameCount: identity.frameCount,
+        })
+      );
     }
 
     if (!symptoms) {

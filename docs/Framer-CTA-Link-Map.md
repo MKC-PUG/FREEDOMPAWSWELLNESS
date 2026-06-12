@@ -1,6 +1,6 @@
 # Framer ↔ App CTA Link Map — Permanent Routing Guide
 
-**Date:** June 7, 2026 (updated)  
+**Date:** June 9, 2026 (updated)  
 **Purpose:** One place for **every** Framer button URL. Follow this doc tap-by-tap when wiring cards.  
 **Canonical checkout:** Always the **app** (`app.freedompawsinc.com`). Framer never processes payment.
 
@@ -23,6 +23,7 @@
 11. [DNS + `{APP}` base URL](#11-dns--app-base-url)
 12. [Monthly sync checklist](#12-monthly-sync-checklist)
 13. [What Framer must never do](#13-what-framer-must-never-do)
+14. [ID & Tool Box page — full launch wiring (`/freedom-paws-id-toolbox`)](#14-id--tool-box-page--full-launch-wiring-freedom-paws-id-toolbox)
 
 ---
 
@@ -322,6 +323,131 @@ Same URLs for matching menu items. Protocol marketing can point to **`/protocol-
 
 ---
 
+## 14. ID & Tool Box page — full launch wiring (`/freedom-paws-id-toolbox`)
+
+**Page:** Framer `/freedom-paws-id-toolbox`  
+**Nav:** **ID & Tool Box** → this Framer page (not the app)  
+**Launch rule:** Tell the **vision**; link only what is **live** in the app; mark ID vault/IPFS/match/alerts as **planned**.
+
+`{APP}` = `https://app.freedompawsinc.com`
+
+---
+
+### A. Copy changes (compliance — edit text on page)
+
+Do these **before** or **while** wiring links.
+
+| Section | Change from (risk) | Change to (launch-safe) |
+|---------|-------------------|-------------------------|
+| Hero **Upload** | Implies full ID enroll works | Button label: **Add your pet in the app** |
+| Hero subline | — | Add: *ViT Diagnostics & My Pets available now. Full ID matching rolling out soon.* |
+| Body — auto-enroll | “Subscribers are **automatically added**…” | “**Planned:** protocol members will enroll in the Freedom Paws ID database.” |
+| Body — IPFS | “**IPFS storage** of your dog’s profile” | “**Designed for** private decentralized storage (IPFS) — coming soon.” |
+| Body — alerts | “**Real-time alerts**” | “**Owner alerts** on match (coming soon).” |
+| Body — QR / shelter portal | States as live | “**QR & shelter portal** (roadmap).” |
+| Tool Box intro | “lifelong digital health vault… on IPFS” | “**Your pet’s digital health hub** — ViT & My Pets in the app today; full vault on IPFS (planned).” |
+| Live demo headline | “Try Freedom Paws ID Right Now – **Live Demo**” | “**Try ViT AI Now** — same vision tech as future ID matching” |
+| Live demo sub | Implies lost-dog ID search works | “Upload a photo in the app to test **ViT Diagnostics** (not lost-dog ID match yet).” |
+| Step 1 — Recovery Plus | Named product may not exist | “**Any Freedom Paws protocol**” (remove Recovery Plus unless you add SKU) |
+| Stats row | 1K+ / 88% if not verified | Use **Founding community** / **24/7 app access** / **10 protocols** OR remove until real |
+| Privacy block | Good — keep | Add one line: *Biometric ID enrollment will require explicit consent (planned).* |
+| Bottom disclaimer | — | Add: *Freedom Paws ID is not a government pet license. Not veterinary advice.* |
+
+---
+
+### B. Every clickable — link map
+
+**New tab: OFF** for all `{APP}` URLs.
+
+#### Hero (top of page)
+
+| Element | Link To | Type |
+|---------|---------|------|
+| Red **Upload** → rename **Add your pet in the app** | `{APP}/mypets` | URL |
+| (Optional) Secondary **Try ViT AI** | `{APP}/diagnostics` | URL |
+
+#### Freedom Paws Tool Box — four icon buttons
+
+| Button | Launch link | Why |
+|--------|-------------|-----|
+| **Medical Records** | `{APP}/mypets` | Vault MVP lives in My Pets (records UI planned) |
+| **ViT Scans** | `{APP}/diagnostics` | Live today |
+| **Vaccinations** | `{APP}/mypets` | Track in pet profile (expand later) |
+| **Daily Notes** | `{APP}/mypets` | Same interim home |
+
+Add small caption under grid: *Full encrypted vault & IPFS sync — coming soon.*
+
+#### Live demo block
+
+| Element | Link To | Notes |
+|---------|---------|-------|
+| Green **Try Live AI Demo** | `{APP}/diagnostics` | ViT is the honest “live demo” |
+| **Upload A Dog Photo To Test the AI** (if clickable) | `{APP}/diagnostics` | Same |
+| Sample dog thumbnails (if clickable) | `{APP}/diagnostics` | Do **not** imply ID database match |
+
+#### Protect Your Dog Today (bottom CTAs)
+
+| Element | Link To |
+|---------|---------|
+| **Get Recovery Plus (Click Here)** | `{APP}/token-shop` **OR** rename to **Get lifetime access (Click Here)** → `{APP}/token-shop` |
+| **Explore All Protocols (Click Here)** | `/protocol-overview` (Framer page) |
+
+Use **Recovery Plus** label only if that product exists in shop; otherwise rename to avoid confusion.
+
+#### Footer (same as site-wide — Section 9 + footer table)
+
+| Link | Destination |
+|------|-------------|
+| Our Story | `/about-buddys-story` |
+| Patriotic Mission / Veterans | `/community-impact` |
+| Plans / Supplements | `/protocol-overview` |
+| Resources | `/how-recovery-works` |
+| Contact | `/contact` |
+| FAQ | `/faq` |
+| Success Stories | `/community-impact` |
+| freedompawsinc.com | `/home` |
+| Instagram / Facebook | Your real profile URLs |
+
+---
+
+### C. Tap-by-tap (Framer editor)
+
+1. **Pages** → `/freedom-paws-id-toolbox`.
+2. Work **top → bottom** (table B). For each button: select → **Link** → **URL** or **Page** → paste → **New tab: No**.
+3. Apply **copy changes** (table A) in same pass.
+4. **Publish**.
+5. iPhone test (table D).
+
+---
+
+### D. iPhone test — ID & Tool Box page
+
+| # | Tap | Must open |
+|---|-----|-----------|
+| 1 | **Add your pet in the app** | `{APP}/mypets` |
+| 2 | **ViT Scans** / **Try Live AI Demo** | `{APP}/diagnostics` |
+| 3 | **Medical Records** | `{APP}/mypets` |
+| 4 | **Explore All Protocols** | Framer `/protocol-overview` |
+| 5 | **Get lifetime access** / shop CTA | `{APP}/token-shop` |
+| 6 | Nav **ID & Tool Box** | Stays on this Framer page |
+
+---
+
+### E. When ID product ships (future — replace launch placeholders)
+
+**Build order (v2.0 roadmap):** **Track 1 biometric first** (ViT eyes/face/body/posture/gait → `/id/enroll` → found-dog match, **~Oct 2026**). **Track 2 chipped second** (scanner + AAHA, **~Feb 2027**). See `Freedom-Paws-ID-Lost-Dog-Infrastructure-Roadmap.md`.
+
+| Launch placeholder | Future replacement | Track |
+|--------------------|-------------------|-------|
+| `{APP}/mypets` enroll CTA | `{APP}/id/enroll` or My Pets **ID** tab | 1 |
+| “coming soon” biometric copy | Live enroll + found-dog match | 1 |
+| Live demo → diagnostics | `{APP}/diagnostics?mode=identity` or `/id/demo` trial | 1 |
+| Tool Box buttons | Deep-link to vault sections in app | 1–2 |
+| Chip / scanner claims | `{APP}/id/scan` + kit SKU — **only after Track 2** | 2 |
+| Recovery Plus | Real SKU URL with `?protocol=…&buy=1` | — |
+
+---
+
 ## App → Framer (footer — already in PWA)
 
 | App footer label | Default URL |
@@ -336,4 +462,4 @@ Override via `NEXT_PUBLIC_FRAMER_*_URL` env vars if paths differ.
 ---
 
 *Freedom Paws Wellness — Honor Buddy's Legacy*  
-*Permanent Framer ↔ app routing — June 7, 2026*
+*Permanent Framer ↔ app routing — June 9, 2026*

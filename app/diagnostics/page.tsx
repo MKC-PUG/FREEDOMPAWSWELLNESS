@@ -3,7 +3,14 @@ import { getUpload, toDataUrl } from '@/lib/upload-store';
 import ViTDiagnosticsClient from './ViTDiagnosticsClient';
 
 type Props = {
-  searchParams: Promise<{ uploadError?: string; uploaded?: string; uploadId?: string }>;
+  searchParams: Promise<{
+    uploadError?: string;
+    uploaded?: string;
+    uploadId?: string;
+    mode?: string;
+    pet?: string;
+    petId?: string;
+  }>;
 };
 
 export default async function ViTDiagnosticsPage({ searchParams }: Props) {
@@ -38,6 +45,9 @@ export default async function ViTDiagnosticsPage({ searchParams }: Props) {
       : null;
 
   const uploadSuccess = params.uploaded === '1' && Boolean(initialPhoto);
+  const identityMode = params.mode === 'identity';
+  const petName = params.pet?.trim() || null;
+  const petId = params.petId?.trim() || null;
 
   return (
     <ViTDiagnosticsClient
@@ -45,6 +55,9 @@ export default async function ViTDiagnosticsPage({ searchParams }: Props) {
       initialFileName={initialFileName}
       uploadError={uploadError}
       uploadSuccess={uploadSuccess}
+      identityMode={identityMode}
+      petName={petName}
+      petId={petId}
     />
   );
 }
