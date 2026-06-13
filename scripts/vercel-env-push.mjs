@@ -61,6 +61,10 @@ if (!existsSync(envPath)) {
 }
 
 const env = parseEnv(readFileSync(envPath, 'utf8'));
+const protocolAffiliateKeys = Object.keys(env).filter(
+  (k) => k.startsWith('NEXT_PUBLIC_FP_PROTOCOL_') && k.endsWith('_URL')
+);
+const allKeys = [...new Set([...PROD_KEYS, ...protocolAffiliateKeys, 'NEXT_PUBLIC_FP_PROTOCOL_AFFILIATES_ENABLED'])];
 const missing = PROD_KEYS.filter((k) => !env[k]?.trim());
 if (missing.length) {
   console.warn('Warning — empty or missing in .env.local:', missing.join(', '));
@@ -68,7 +72,7 @@ if (missing.length) {
 
 console.log('Pushing env to Vercel (production)…\n');
 
-for (const key of PROD_KEYS) {
+for (const key of allKeys) {
   const value = env[key]?.trim();
   if (!value) {
     console.log(`skip ${key} (empty)`);

@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import BackLink from '@/app/components/BackLink';
+import ProtocolAffiliatePicks from '@/app/components/protocols/ProtocolAffiliatePicks';
+import { getProtocolAffiliateSection } from '@/lib/protocols/affiliates';
 import { protocols } from '../protocols';
 import { protocolDetails, type Block, type DetailSection } from '../details';
 import { protocolOverviewHref, tokenShopHref } from '../../lib/routes';
@@ -112,6 +114,7 @@ export default async function ProtocolDetailPage({
   if (!protocol) notFound();
 
   const detail = protocolDetails[slug];
+  const affiliateSection = getProtocolAffiliateSection(slug, protocol.title);
 
   return (
     <div className="min-h-screen bg-[#0A1428] text-white">
@@ -195,6 +198,8 @@ export default async function ProtocolDetailPage({
                 </Link>
               </div>
             </section>
+
+            {affiliateSection && <ProtocolAffiliatePicks section={affiliateSection} />}
 
             {/* Disclaimer */}
             <p className="mt-8 text-center text-xs leading-relaxed text-white/45 max-w-3xl mx-auto">
