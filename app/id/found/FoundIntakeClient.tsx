@@ -33,7 +33,8 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
   const [result, setResult] = useState<SubmitResult | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const photoRef = useRef<HTMLInputElement>(null);
+  const photoLibraryRef = useRef<HTMLInputElement>(null);
+  const photoCameraRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLInputElement>(null);
   const [mediaType, setMediaType] = useState<'photo' | 'video'>('photo');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -149,7 +150,21 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
 
   return (
     <div className="min-h-screen bg-[#0A1625] text-white font-sans">
-      <input ref={photoRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => void onPhoto(e)} />
+      <input
+        ref={photoLibraryRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => void onPhoto(e)}
+      />
+      <input
+        ref={photoCameraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => void onPhoto(e)}
+      />
       <input ref={videoRef} type="file" accept="video/*" className="hidden" onChange={(e) => void onVideo(e)} />
 
       <div className="mx-auto max-w-lg px-6 py-10">
@@ -198,10 +213,17 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
               <div className="mt-3 flex gap-2">
                 <button
                   type="button"
-                  onClick={() => photoRef.current?.click()}
+                  onClick={() => photoLibraryRef.current?.click()}
                   className="flex-1 rounded-xl border border-emerald-500/40 py-2 text-sm font-semibold text-emerald-300"
                 >
-                  Photo
+                  Photo library
+                </button>
+                <button
+                  type="button"
+                  onClick={() => photoCameraRef.current?.click()}
+                  className="flex-1 rounded-xl border border-emerald-500/25 py-2 text-sm font-semibold text-emerald-200/80"
+                >
+                  Camera
                 </button>
                 <button
                   type="button"
@@ -211,6 +233,9 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
                   Video
                 </button>
               </div>
+              <p className="mt-2 text-center text-[10px] text-white/40 leading-relaxed">
+                Photo library opens your camera roll or files — use for enrollment test images.
+              </p>
             </div>
 
             <textarea
