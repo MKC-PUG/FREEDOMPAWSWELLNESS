@@ -15,6 +15,8 @@
     "id:setup": "node scripts/id-supabase-setup.mjs",
     "id:setup:check": "node scripts/id-supabase-setup.mjs --check",
     "id:setup:migrate": "node scripts/id-supabase-setup.mjs --migrations-only",
+    "id:backfill-intake-mirror": "npx tsx scripts/backfill-intake-mirror.ts",
+    "id:test:intake-fusion": "npx tsx scripts/test-intake-fusion.ts",
     "vercel:env:push": "node scripts/vercel-env-push.mjs",
     "lint": "eslint"
   },

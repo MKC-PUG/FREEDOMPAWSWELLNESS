@@ -33,7 +33,7 @@ export type FoundReportResult = {
   fusedDescriptorText: string;
 };
 
-const INTAKE_REGIONS: IdentityRegion[] = ['face', 'body', 'posture'];
+const INTAKE_REGIONS: IdentityRegion[] = ['eyes', 'face', 'body', 'posture'];
 
 export async function listPilotShelters(): Promise<ShelterOption[]> {
   const supabase = await createSupabaseServerClient();

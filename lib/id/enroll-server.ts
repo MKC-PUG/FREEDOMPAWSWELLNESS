@@ -5,6 +5,7 @@ import {
   createDescriptorEmbedding,
   EMBEDDING_MODEL_VERSION,
   fuseEnrollmentDescriptors,
+  fuseIntakeMirrorFromEnrollment,
   generateFreedomPawsId,
   generateQrSlug,
   validateEnrollmentMedia,
@@ -333,7 +334,19 @@ export async function completeEnrollment(
     }))
   );
 
+  const mirrorText = fuseIntakeMirrorFromEnrollment(
+    status.media.map((m) => ({
+      region: m.region,
+      angle: m.angle,
+      quality_score: m.qualityScore,
+      descriptors: m.descriptors,
+    }))
+  );
+
   const embedding = await createDescriptorEmbedding(fused);
+  const intakeMirrorEmbedding = mirrorText.trim()
+    ? await createDescriptorEmbedding(mirrorText)
+    : null;
   const freedomPawsId = generateFreedomPawsId(enrollmentId);
   let qrSlug = generateQrSlug();
 
@@ -356,6 +369,8 @@ export async function completeEnrollment(
       embedding,
       model_version: EMBEDDING_MODEL_VERSION,
       fused_descriptor_text: fused,
+      intake_mirror_embedding: intakeMirrorEmbedding,
+      intake_mirror_descriptor_text: mirrorText.trim() || null,
     },
     { onConflict: 'enrollment_id' }
   );

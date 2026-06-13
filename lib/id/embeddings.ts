@@ -5,6 +5,10 @@ import { ID_MATCH_THRESHOLD_DEFAULT } from '@/lib/id/types';
 export const EMBEDDING_MODEL = 'text-embedding-3-small';
 export const EMBEDDING_DIMENSIONS = 1536;
 export const EMBEDDING_MODEL_VERSION = 'text-embedding-3-small-v1';
+export const INTAKE_MIRROR_MODEL_VERSION = 'text-embedding-3-small-intake-mirror-v1';
+
+/** Regions aligned between enrollment mirror and shelter found photo intake */
+export const INTAKE_FUSION_REGIONS = ['eyes', 'face', 'body', 'posture'] as const;
 
 type MediaRow = {
   region: string;
@@ -13,7 +17,50 @@ type MediaRow = {
   descriptors: string[] | unknown;
 };
 
-/** Found-dog intake — fuse vision analysis (fewer regions than full enroll). */
+export type IntakeFusionRow = {
+  region: string;
+  angle: string | null;
+  descriptors: string[] | unknown;
+};
+
+function descriptorList(row: IntakeFusionRow | MediaRow | undefined): string[] {
+  if (!row) return [];
+  return Array.isArray(row.descriptors)
+    ? row.descriptors.filter((d): d is string => typeof d === 'string')
+    : [];
+}
+
+/** Shared label order for found intake + enrollment intake mirror. */
+export function fuseIntakeAlignedDescriptors(rows: IntakeFusionRow[]): string {
+  const parts: string[] = [];
+
+  const append = (label: string, row: IntakeFusionRow | undefined) => {
+    const desc = descriptorList(row);
+    if (desc.length) parts.push(`${label}: ${desc.join('; ')}`);
+  };
+
+  const byKey = (region: string, angle?: string | null) =>
+    rows.find((r) => r.region === region && (angle ? r.angle === angle : !r.angle));
+
+  append('eyes', byKey('eyes'));
+  append('face', byKey('face'));
+  append('body', byKey('body', 'front') ?? byKey('body', 'side') ?? byKey('body'));
+  append('posture', byKey('posture'));
+
+  return parts.join(' | ').slice(0, 8000);
+}
+
+export function fuseIntakeMirrorFromEnrollment(rows: MediaRow[]): string {
+  return fuseIntakeAlignedDescriptors(
+    rows.map((r) => ({
+      region: r.region,
+      angle: r.angle,
+      descriptors: r.descriptors,
+    }))
+  );
+}
+
+/** Found-dog intake — structured fusion aligned with enrollment mirror. */
 export function fuseFoundIntakeDescriptors(analysis: {
   regions: Partial<
     Record<
@@ -23,18 +70,28 @@ export function fuseFoundIntakeDescriptors(analysis: {
   >;
   fusedDescriptorText?: string;
 }): string {
-  if (analysis.fusedDescriptorText?.trim()) {
-    return analysis.fusedDescriptorText.trim().slice(0, 8000);
-  }
-  const parts: string[] = [];
+  const rows: IntakeFusionRow[] = [];
   for (const [region, data] of Object.entries(analysis.regions)) {
-    if (!data) continue;
-    const desc = data.descriptors?.filter(Boolean) ?? [];
-    if (desc.length) parts.push(`${region}: ${desc.join('; ')}`);
-    if (data.gaitDescriptor) parts.push(`gait_motion: ${data.gaitDescriptor}`);
-    if (data.postureClass) parts.push(`posture: ${data.postureClass}`);
+    if (!data || region === 'gait') continue;
+    rows.push({
+      region,
+      angle: null,
+      descriptors: data.descriptors ?? [],
+    });
   }
-  return parts.join(' | ').slice(0, 8000);
+
+  let fused = fuseIntakeAlignedDescriptors(rows);
+
+  const gait = analysis.regions.gait;
+  if (gait?.gaitDescriptor?.trim()) {
+    fused = fused
+      ? `${fused} | gait_motion: ${gait.gaitDescriptor.trim()}`
+      : `gait_motion: ${gait.gaitDescriptor.trim()}`;
+  }
+
+  if (fused.trim()) return fused.slice(0, 8000);
+
+  return analysis.fusedDescriptorText?.trim().slice(0, 8000) ?? '';
 }
 
 export function fuseEnrollmentDescriptors(rows: MediaRow[]): string {
