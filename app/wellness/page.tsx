@@ -146,6 +146,64 @@ export default function WellnessPage() {
           </div>
         </section>
 
+        <section className="rounded-2xl border border-emerald-400/30 bg-emerald-950/20 p-5 mb-8">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl shrink-0" aria-hidden>
+              🌿
+            </span>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-sm font-bold text-emerald-300">
+                Holistic telehealth — wellness guidance, not emergency care
+              </h2>
+              <p className="mt-2 text-sm text-white/65 leading-relaxed">
+                For mild-to-moderate concerns, nutrition questions, and lifestyle planning, connect
+                with <strong className="text-white/85">integrative veterinarians</strong> aligned
+                with our prevention-first approach. Telehealth supports whole-food nutrition,
+                supplementation education, and behavior — not pharmaceutical-first care plans.
+              </p>
+              <p className="mt-2 text-xs text-white/50 leading-relaxed">
+                {config.telehealth.focusNote}
+              </p>
+              <ul className="mt-3 space-y-1.5 text-sm text-white/60 list-disc pl-5">
+                <li>Ideal after ViT when you want professional guidance without an ER visit</li>
+                <li>Not a substitute for in-person care when urgent signs appear</li>
+                <li>Independent licensed providers — Freedom Paws does not diagnose or treat</li>
+              </ul>
+              {config.telehealth.enabled && config.telehealth.bookUrl ? (
+                <a
+                  href={config.telehealth.bookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="mt-4 block w-full rounded-xl border border-emerald-400/60 bg-emerald-900/40 py-3.5 text-center text-sm font-bold text-emerald-200 hover:bg-emerald-900/60 transition touch-manipulation"
+                >
+                  Book holistic vet telehealth
+                  {config.telehealth.partnerName ? (
+                    <span className="block text-[10px] font-semibold text-emerald-300/70 mt-0.5">
+                      via {config.telehealth.partnerName} ↗
+                    </span>
+                  ) : null}
+                </a>
+              ) : (
+                <div className="mt-4 rounded-xl border border-emerald-500/25 bg-emerald-950/30 px-4 py-3">
+                  <p className="text-sm text-emerald-200/90 font-semibold text-center">
+                    Holistic telehealth partners onboarding
+                  </p>
+                  <p className="mt-1 text-xs text-white/50 text-center leading-relaxed">
+                    We&apos;re signing integrative vet telehealth programs with member discounts.{' '}
+                    <Link href="/diagnostics" className="text-emerald-400/90 underline">
+                      Run ViT Diagnostics
+                    </Link>{' '}
+                    today — partner booking links appear here and in your results when live.
+                  </p>
+                </div>
+              )}
+              <p className="mt-3 text-[10px] text-white/40 leading-relaxed">
+                {config.telehealth.disclosure}
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="rounded-2xl border border-amber-400/20 bg-amber-950/15 p-5 mb-8">
           <h2 className="text-sm font-bold text-amber-300">Partner program (for affiliates)</h2>
           <p className="mt-2 text-sm text-white/65 leading-relaxed">

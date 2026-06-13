@@ -91,15 +91,23 @@ export default function ShelterDashboardClient({ role, isReviewer }: Props) {
             </li>
           ) : (
             <li className="rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/50">
-              Match review requires shelter admin or FP ops. See{' '}
-              <code className="text-amber-200">docs/Freedom-Paws-ID-Shelter-Onboarding-June-2026.md</code>
+              Match review requires shelter admin or FP ops.
             </li>
           )}
 
-          <li className="rounded-xl border border-white/10 px-4 py-3 text-xs text-white/50 text-center">
-            Onboarding guide:{' '}
-            <span className="text-amber-200/80">docs/Freedom-Paws-ID-Shelter-Onboarding-June-2026.md</span>
-          </li>
+          {isReviewer && (
+            <li className="rounded-2xl border border-white/10 bg-[#0F1E38]/80 p-5">
+              <p className="text-xs font-bold uppercase tracking-wide text-white/45">
+                Pilot E2E flow (Oct 2026)
+              </p>
+              <ol className="mt-3 space-y-2 text-sm text-white/65 list-decimal pl-5">
+                <li>Owner enrolls at <Link href="/id/enroll" className="text-amber-400 underline">/id/enroll</Link></li>
+                <li>Intake found dog at <Link href="/id/found" className="text-amber-400 underline">/id/found</Link></li>
+                <li>Approve match at <Link href="/id/match" className="text-emerald-400 underline">/id/match</Link></li>
+                <li>Owner receives email alert (Resend)</li>
+              </ol>
+            </li>
+          )}
         </ul>
 
         <p className="mt-8 text-center text-[10px] text-white/40 leading-relaxed">
