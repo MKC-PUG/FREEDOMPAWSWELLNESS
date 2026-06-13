@@ -23,6 +23,9 @@ export interface AnalysisResponse {
     analyzedAt: string;
     vetUrgent?: boolean;
     vetUrgentReason?: string | null;
+    urgentCongruency?: number;
+    matchedSevereCondition?: string | null;
+    mildModerateOnly?: boolean;
     visualFindings?: string[];
     usedVision?: boolean;
     mediaType?: 'photo' | 'video';
@@ -61,6 +64,9 @@ export type AnalyzeApiResponse = {
   unknownPhrases?: string[];
   vetUrgent?: boolean;
   vetUrgentReason?: string | null;
+  urgentCongruency?: number;
+  matchedSevereCondition?: string | null;
+  mildModerateOnly?: boolean;
   visualFindings?: string[];
   usedVision?: boolean;
   mediaType?: 'photo' | 'video';
@@ -102,6 +108,9 @@ export function toAnalyzeApiResponse(
     unknownPhrases: analysisMeta?.unknownPhrases ?? [],
     vetUrgent: data.vetUrgent,
     vetUrgentReason: data.vetUrgentReason,
+    urgentCongruency: data.urgentCongruency,
+    matchedSevereCondition: data.matchedSevereCondition,
+    mildModerateOnly: data.mildModerateOnly,
     visualFindings: data.visualFindings,
     usedVision: data.usedVision,
     mediaType: data.mediaType,

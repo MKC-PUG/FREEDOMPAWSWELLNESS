@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
+import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { BIOMETRIC_CONSENT_TEXT, BIOMETRIC_CONSENT_VERSION } from '@/lib/id/consent';
 import { fetchServerPets, createServerPet } from '@/lib/mypets/api';
 import type { PetProfile } from '@/lib/mypets/types';
@@ -699,6 +700,8 @@ export default function EnrollWizardClient({ userEmail, initialPetId = null }: P
             >
               Open QR pet card →
             </Link>
+
+            <WellnessPartnerPanel context="id_enroll_complete" className="text-left" />
 
             <Link href="/id" className="block text-sm text-white/50 hover:text-white/70">
               Return to ID hub

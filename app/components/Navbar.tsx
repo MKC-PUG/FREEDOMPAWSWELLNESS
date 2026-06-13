@@ -10,6 +10,8 @@ const navLinks = [
   { label: 'VIT DIAGNOSTICS', href: '/diagnostics' },
   { label: 'SUPERBUD PHOTO BOOTH', href: '/photobooth' },
   { label: 'MY PETS', href: '/mypets' },
+  { label: 'FREEDOM PAWS ID', href: '/id' },
+  { label: 'WELLNESS', href: '/wellness' },
   { label: 'PROTOCOL OVERVIEW', href: '/protocols' },
   { label: 'MONITOR MY DOG', href: '/monitor' },
   { label: 'COMMUNITY DISCORD', href: '#' },
@@ -70,7 +72,11 @@ export default function Navbar() {
 
         <div className="fp-nav-desktop hidden md:flex items-center gap-3 lg:gap-5 text-[10px] lg:text-xs font-semibold tracking-wider">
           {navLinks.map((l) => {
-            const isActive = l.href !== '#' && pathname === l.href;
+            const isActive =
+              l.href !== '#' &&
+              (pathname === l.href ||
+                (l.href === '/id' && pathname.startsWith('/id')) ||
+                (l.href === '/wellness' && pathname.startsWith('/wellness')));
             return (
               <Link
                 key={l.label}
@@ -142,7 +148,11 @@ export default function Navbar() {
             >
               <div className="px-4 sm:px-6 py-2 flex flex-col text-sm font-semibold tracking-wide">
                 {navLinks.map((l) => {
-                  const isActive = l.href !== '#' && pathname === l.href;
+                  const isActive =
+              l.href !== '#' &&
+              (pathname === l.href ||
+                (l.href === '/id' && pathname.startsWith('/id')) ||
+                (l.href === '/wellness' && pathname.startsWith('/wellness')));
                   return (
                     <Link
                       key={l.label}

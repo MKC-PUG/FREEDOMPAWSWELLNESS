@@ -11,11 +11,25 @@ const cards = [
     href: '/diagnostics',
   },
   {
+    icon: '🛡️',
+    title: 'Freedom Paws ID',
+    desc: 'Biometric pet identity — enroll eyes, face & gait for lost-dog matching (CA/TN pilot)',
+    cta: 'OPEN ID HUB →',
+    href: '/id',
+  },
+  {
     icon: '🐾',
     title: 'My Pets',
     desc: 'Manage your pets, wellness notes & unlocked protocols',
     cta: 'MANAGE →',
     href: '/mypets',
+  },
+  {
+    icon: '🌿',
+    title: 'Wellness Partners',
+    desc: 'Holistic telehealth, insurance affiliates & natural-care education — prevention over crisis',
+    cta: 'EXPLORE →',
+    href: '/wellness',
   },
   {
     icon: '📋',

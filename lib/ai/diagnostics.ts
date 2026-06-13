@@ -3,6 +3,7 @@ import { rankTopTwoProtocols } from './rank-protocols';
 import { formatDualLabel } from './protocol-registry';
 import type { ApprovedAlias } from '../symptom-feedback-store';
 import { AnalysisResponse } from './types';
+import { assessUrgentNeed } from './urgent-assessment';
 import { analyzeVisionFrames } from './vision-analyze';
 
 export type VitMediaInput = {
@@ -21,6 +22,10 @@ export type SymptomAnalysisResult = NonNullable<AnalysisResponse['data']> & {
     usedVision: boolean;
     visualFindings: string[];
     vetUrgent: boolean;
+    vetUrgentReason: string | null;
+    urgentCongruency: number;
+    matchedSevereCondition: string | null;
+    mildModerateOnly: boolean;
     mediaType: 'photo' | 'video';
     frameCount: number;
   };
@@ -35,6 +40,24 @@ export async function analyzeDogMedia(
   const frames = input.frames.filter((f) => f.size > 0);
   const parsed = normalizeSymptoms(symptoms, approved);
   const vision = await analyzeVisionFrames(frames, symptoms, mediaType);
+
+  const textOnlyUrgent = !vision.usedVision
+    ? assessUrgentNeed({ symptoms, visualFindings: vision.visualFindings })
+    : null;
+
+  const vetUrgent = vision.usedVision ? vision.vetUrgent : (textOnlyUrgent?.vetUrgent ?? false);
+  const vetUrgentReason = vision.usedVision
+    ? vision.vetUrgentReason
+    : (textOnlyUrgent?.vetUrgentReason ?? null);
+  const urgentCongruency = vision.usedVision
+    ? vision.urgentCongruency
+    : (textOnlyUrgent?.congruencyScore ?? 0);
+  const matchedSevereCondition = vision.usedVision
+    ? vision.matchedSevereCondition
+    : (textOnlyUrgent?.matchedConditionName ?? null);
+  const mildModerateOnly = vision.usedVision
+    ? vision.mildModerateOnly
+    : (textOnlyUrgent?.mildModerateOnly ?? false);
 
   const ranked = rankTopTwoProtocols({
     matches: parsed.matches,
@@ -71,8 +94,10 @@ export async function analyzeDogMedia(
     reasoning += ' Overlap detected — prioritised top 2 supplement protocols.';
   }
 
-  if (vision.vetUrgent) {
-    reasoning = `⚠️ ${vision.vetUrgentReason || 'Signs warrant prompt veterinary evaluation.'} ${reasoning}`;
+  if (vetUrgent) {
+    reasoning = `⚠️ ${vetUrgentReason || 'Signs warrant prompt veterinary evaluation.'} ${reasoning}`;
+  } else if (mildModerateOnly) {
+    reasoning += ' Signs appear mild-to-moderate — wellness protocols, lifestyle, and natural support may help; monitor and consult a vet if worsening.';
   }
 
   const primaryLabel = formatDualLabel(ranked.primary.protocolTitle);
@@ -87,7 +112,11 @@ export async function analyzeDogMedia(
     normalized: parsed.normalized,
     usedVision: vision.usedVision,
     visualFindings: vision.visualFindings,
-    vetUrgent: vision.vetUrgent,
+    vetUrgent,
+    vetUrgentReason,
+    urgentCongruency,
+    matchedSevereCondition,
+    mildModerateOnly,
     mediaType,
     frameCount: vision.frameCount || frames.length,
   };
@@ -100,9 +129,11 @@ export async function analyzeDogMedia(
       secondaryProtocol: ranked.secondary?.brandedTitle ?? null,
       primary: ranked.primary,
       secondary: ranked.secondary,
-      finding: vision.vetUrgent
+      finding: vetUrgent
         ? 'Urgent veterinary evaluation recommended'
-        : `Primary: ${primaryLabel}`,
+        : mildModerateOnly
+          ? `Wellness support recommended — ${primaryLabel}`
+          : `Primary: ${primaryLabel}`,
       reasoning,
       confidence: ranked.primary.confidence,
       recommendations: [
@@ -110,13 +141,19 @@ export async function analyzeDogMedia(
         ranked.secondary
           ? `✅ #2 SUPPLEMENT: ${secondaryLabel} (${ranked.secondary.confidence}%)`
           : '',
-        vision.vetUrgent ? '⚠️ See a veterinarian promptly — do not delay care.' : '',
+        vetUrgent ? '⚠️ See a veterinarian promptly — do not delay care.' : '',
+        mildModerateOnly && !vetUrgent
+          ? '🌿 Focus on natural wellness, detox support, and protocol alignment — refer to a vet only if signs worsen.'
+          : '',
       ].filter(Boolean),
       disclaimer:
         'Educational tool only. Not a diagnosis or substitute for licensed veterinary care. Always consult your veterinarian.',
       analyzedAt: new Date().toISOString(),
-      vetUrgent: vision.vetUrgent,
-      vetUrgentReason: vision.vetUrgentReason,
+      vetUrgent,
+      vetUrgentReason,
+      urgentCongruency,
+      matchedSevereCondition,
+      mildModerateOnly,
       visualFindings: vision.visualFindings,
       usedVision: vision.usedVision,
       mediaType,

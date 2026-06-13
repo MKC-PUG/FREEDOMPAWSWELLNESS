@@ -42,6 +42,14 @@ const hubCards = [
     status: 'live' as const,
   },
   {
+    icon: '🌿',
+    title: 'Wellness Partners',
+    desc: 'Holistic telehealth referrals, pet insurance affiliates, and prevention education — wellness-first, not pharmaceutical care.',
+    cta: 'WELLNESS HUB →',
+    href: '/wellness',
+    status: 'live' as const,
+  },
+  {
     icon: '🛡️',
     title: 'Shelter Dashboard',
     desc: 'Found-dog intake + match review queue for pilot partners.',

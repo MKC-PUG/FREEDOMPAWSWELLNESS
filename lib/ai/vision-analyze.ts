@@ -1,12 +1,18 @@
 import OpenAI from 'openai';
+import { SEVERE_CONDITION_IDS } from './severe-conditions-db';
 import { PROTOCOL_BY_SLUG } from './protocol-registry';
 import { SYSTEM_PROMPT } from './prompt-templates';
+import { assessUrgentNeed } from './urgent-assessment';
 
 export type VisionAnalysisResult = {
   usedVision: boolean;
   visualFindings: string[];
   vetUrgent: boolean;
   vetUrgentReason: string | null;
+  urgentCongruency: number;
+  matchedSevereCondition: string | null;
+  mildModerateOnly: boolean;
+  severeIndicatorHits: Array<{ conditionId: string; confidence: number }>;
   primaryProtocolTitle: string | null;
   secondaryProtocolTitle: string | null;
   confidenceBoost: number;
@@ -21,6 +27,8 @@ const SLUG_TO_TITLE: Record<string, string> = Object.fromEntries(
 
 const VALID_SLUGS = new Set(Object.keys(PROTOCOL_BY_SLUG));
 
+const VALID_SEVERE_IDS = new Set(SEVERE_CONDITION_IDS);
+
 const RESPONSE_SCHEMA = {
   type: 'object' as const,
   properties: {
@@ -29,8 +37,22 @@ const RESPONSE_SCHEMA = {
       items: { type: 'string' },
       description: 'Observable visual signs across all frames (max 6 short phrases)',
     },
-    vetUrgent: { type: 'boolean' },
-    vetUrgentReason: { type: ['string', 'null'] },
+    severeIndicatorHits: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          conditionId: {
+            type: 'string',
+            description: 'Severe condition ID from the allowed severe list',
+          },
+          confidence: { type: 'number', description: '0-100 confidence for this severe indicator' },
+        },
+        required: ['conditionId', 'confidence'],
+        additionalProperties: false,
+      },
+      description: 'Only severe conditions from the allowed ID list — omit mild/moderate signs',
+    },
     primaryProtocolSlug: {
       type: 'string',
       description: 'Best-matching protocol slug from the allowed list',
@@ -44,8 +66,7 @@ const RESPONSE_SCHEMA = {
   },
   required: [
     'visualFindings',
-    'vetUrgent',
-    'vetUrgentReason',
+    'severeIndicatorHits',
     'primaryProtocolSlug',
     'secondaryProtocolSlug',
     'confidencePrimary',
@@ -69,6 +90,10 @@ function emptyVision(
     visualFindings: [],
     vetUrgent: false,
     vetUrgentReason: null,
+    urgentCongruency: 0,
+    matchedSevereCondition: null,
+    mildModerateOnly: false,
+    severeIndicatorHits: [],
     primaryProtocolTitle: null,
     secondaryProtocolTitle: null,
     confidenceBoost: 0,
@@ -87,8 +112,7 @@ async function fileToDataUrl(file: File): Promise<string> {
 
 function parseVisionResponse(raw: string): {
   visualFindings: string[];
-  vetUrgent: boolean;
-  vetUrgentReason: string | null;
+  severeIndicatorHits: Array<{ conditionId: string; confidence: number }>;
   primaryProtocolSlug: string;
   secondaryProtocolSlug: string | null;
   confidencePrimary: number;
@@ -96,8 +120,7 @@ function parseVisionResponse(raw: string): {
 } {
   return JSON.parse(raw) as {
     visualFindings: string[];
-    vetUrgent: boolean;
-    vetUrgentReason: string | null;
+    severeIndicatorHits: Array<{ conditionId: string; confidence: number }>;
     primaryProtocolSlug: string;
     secondaryProtocolSlug: string | null;
     confidencePrimary: number;
@@ -105,10 +128,23 @@ function parseVisionResponse(raw: string): {
   };
 }
 
+function sanitizeSevereHits(
+  hits: Array<{ conditionId: string; confidence: number }> | undefined
+): Array<{ conditionId: string; confidence: number }> {
+  if (!hits?.length) return [];
+  return hits
+    .filter((h) => VALID_SEVERE_IDS.has(h.conditionId) && h.confidence >= 70)
+    .map((h) => ({
+      conditionId: h.conditionId,
+      confidence: Math.min(100, Math.max(0, Math.round(h.confidence))),
+    }));
+}
+
 function buildVisionResult(
   parsed: ReturnType<typeof parseVisionResponse>,
   mediaType: 'photo' | 'video',
-  frameCount: number
+  frameCount: number,
+  symptoms: string
 ): VisionAnalysisResult {
   const primary = slugToTitle(parsed.primaryProtocolSlug);
   const secondary = slugToTitle(parsed.secondaryProtocolSlug);
@@ -117,11 +153,24 @@ function buildVisionResult(
       ? Math.min(8, Math.round((parsed.confidencePrimary - 70) / 3))
       : 0;
 
+  const severeIndicatorHits = sanitizeSevereHits(parsed.severeIndicatorHits);
+  const visualFindings = parsed.visualFindings?.slice(0, 6) ?? [];
+
+  const urgent = assessUrgentNeed({
+    symptoms,
+    visualFindings,
+    aiSevereHits: severeIndicatorHits,
+  });
+
   return {
     usedVision: true,
-    visualFindings: parsed.visualFindings?.slice(0, 6) ?? [],
-    vetUrgent: Boolean(parsed.vetUrgent),
-    vetUrgentReason: parsed.vetUrgentReason,
+    visualFindings,
+    vetUrgent: urgent.vetUrgent,
+    vetUrgentReason: urgent.vetUrgentReason,
+    urgentCongruency: urgent.congruencyScore,
+    matchedSevereCondition: urgent.matchedConditionName,
+    mildModerateOnly: urgent.mildModerateOnly,
+    severeIndicatorHits,
     primaryProtocolTitle: primary,
     secondaryProtocolTitle: secondary,
     confidenceBoost: boost,
@@ -150,6 +199,7 @@ export async function analyzeVisionFrames(
   }
 
   const slugList = [...VALID_SLUGS].join(', ');
+  const severeList = [...VALID_SEVERE_IDS].join(', ');
   const mediaNote =
     mediaType === 'video'
       ? `This is a short dog video represented by ${frames.length} sampled frames. Consider gait, posture, and movement across frames.`
@@ -158,6 +208,8 @@ export async function analyzeVisionFrames(
   const userText = `Owner-reported symptoms: "${symptoms}"
 
 Allowed protocol slugs (use exactly these): ${slugList}
+
+Allowed severe condition IDs for severeIndicatorHits (exact IDs only): ${severeList}
 
 Overlap rule example: senior cognitive signs → primary patriot-immune, secondary freedom-calm.
 
@@ -196,7 +248,7 @@ Combine visual signals with symptoms. Never diagnose — suggest protocol alignm
     const raw = response.choices[0]?.message?.content;
     if (!raw) return emptyVision('Vision model returned no content.', mediaType, frames.length);
 
-    return buildVisionResult(parseVisionResponse(raw), mediaType, frames.length);
+    return buildVisionResult(parseVisionResponse(raw), mediaType, frames.length, symptoms);
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Vision request failed';
     console.error('[vision-analyze]', msg);

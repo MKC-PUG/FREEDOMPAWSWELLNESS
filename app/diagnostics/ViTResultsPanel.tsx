@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { protocols } from '@/app/protocols/protocols';
 import { protocolDisplayName } from '@/lib/ai/symptom-lexicon';
 import type { AnalyzeApiResponse, ApiProtocolResult } from '@/lib/ai/types';
+import { vitResultToWellnessContext } from '@/lib/wellness/partners';
 
 type Props = {
   result: AnalyzeApiResponse;
@@ -105,6 +107,13 @@ export default function ViTResultsPanel({
   onFeedback,
   onTryAnother,
 }: Props) {
+  const wellnessContext = vitResultToWellnessContext({
+    vetUrgent: result.vetUrgent,
+    primaryConfidence: result.primary?.confidenceValue,
+  });
+  const showIdEnroll =
+    wellnessContext === 'vit_urgent' || wellnessContext === 'vit_concern';
+
   const mediaLabel =
     result.mediaType === 'video' && (result.frameCount ?? 0) > 1
       ? `Video analysis · ${result.frameCount} frames`
@@ -128,6 +137,22 @@ export default function ViTResultsPanel({
           <p className="text-red-200/90 text-sm mt-2 leading-relaxed">
             {result.vetUrgentReason ||
               'Visible or reported signs may need prompt professional evaluation.'}
+          </p>
+          {(result.urgentCongruency ?? 0) > 0 && (
+            <p className="text-red-200/70 text-xs mt-2">
+              Severe indicator congruency: {result.urgentCongruency}%
+              {result.matchedSevereCondition ? ` — ${result.matchedSevereCondition}` : ''}
+            </p>
+          )}
+        </div>
+      )}
+
+      {!result.vetUrgent && result.mildModerateOnly && (
+        <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/25 p-5">
+          <p className="text-emerald-300 font-bold text-sm">🌿 Wellness-first routing</p>
+          <p className="text-emerald-200/85 text-sm mt-2 leading-relaxed">
+            Signs appear mild-to-moderate. Focus on natural nutrition, detox support, lifestyle
+            shifts, and our protocol recommendations. Seek veterinary triage if symptoms worsen.
           </p>
         </div>
       )}
@@ -192,6 +217,11 @@ export default function ViTResultsPanel({
           {result.disclaimer}
         </p>
       )}
+
+      <WellnessPartnerPanel
+        context={wellnessContext}
+        showIdEnroll={showIdEnroll}
+      />
 
       {result.analysisId && !feedbackSent && (
         <div className="rounded-2xl border border-white/10 bg-[#0A1428]/60 p-4 space-y-3">

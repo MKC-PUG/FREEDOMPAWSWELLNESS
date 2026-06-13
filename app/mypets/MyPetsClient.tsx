@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
+import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { tokenShopItems } from '@/app/token-shop/shop-items';
 import { fileToPetThumb } from '@/lib/mypets/photo-thumb';
 import {
@@ -162,7 +163,10 @@ export default function MyPetsClient() {
         )}
         {useServer && (
           <p className="mb-4 text-xs text-emerald-400/80 font-semibold">
-            ✓ Cloud sync active — pets available for ID enrollment
+            ✓ Cloud sync active —{' '}
+            <Link href="/id/enroll" className="underline hover:text-emerald-300">
+              enroll Freedom Paws ID
+            </Link>
           </p>
         )}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -186,10 +190,12 @@ export default function MyPetsClient() {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
           {[
+            { href: '/id', label: 'Freedom Paws ID', emoji: '🛡️' },
             { href: '/diagnostics', label: 'ViT Scan', emoji: '📸' },
             { href: '/photobooth', label: 'Photo Booth', emoji: '✨' },
             { href: '/token-shop', label: 'Token Shop', emoji: '🪙' },
             { href: '/protocols', label: 'Protocols', emoji: '📋' },
+            { href: '/wellness', label: 'Wellness', emoji: '🌿' },
           ].map((link) => (
             <Link
               key={link.href}
@@ -201,6 +207,8 @@ export default function MyPetsClient() {
             </Link>
           ))}
         </div>
+
+        <WellnessPartnerPanel context="my_pets" className="mb-10" />
 
         {pets.length === 0 ? (
           <div className="bg-[#1F2A44] rounded-3xl p-10 sm:p-16 text-center border border-white/10">
