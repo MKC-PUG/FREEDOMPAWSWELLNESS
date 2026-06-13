@@ -58,6 +58,29 @@ export default function WellnessPage() {
 
         <WellnessPartnerPanel context="wellness_hub" className="mb-8" />
 
+        <section className="rounded-2xl border border-emerald-500/25 bg-emerald-950/15 p-5 mb-8">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl shrink-0" aria-hidden>
+              ✅
+            </span>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-sm font-bold text-emerald-300">
+                Safe Picks — non-toxic chews, toys &amp; home
+              </h2>
+              <p className="mt-2 text-sm text-white/65 leading-relaxed">
+                Ten vetted brands for dental chews, enrichment toys, non-toxic cleaners, and
+                optional monitor setup — curated for allergy, gut, and dental protocol alignment.
+              </p>
+              <Link
+                href="/wellness/safe-products"
+                className="mt-4 block w-full rounded-xl border border-emerald-400/50 bg-emerald-900/30 py-3.5 text-center text-sm font-bold text-emerald-200 hover:bg-emerald-900/50 transition touch-manipulation"
+              >
+                Browse Freedom Paws Safe Picks →
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section className="space-y-4 mb-8">
           <h2 className="text-sm font-bold uppercase tracking-wide text-white/50">
             Our approach

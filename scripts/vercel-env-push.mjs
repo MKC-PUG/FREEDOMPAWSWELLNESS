@@ -64,7 +64,18 @@ const env = parseEnv(readFileSync(envPath, 'utf8'));
 const protocolAffiliateKeys = Object.keys(env).filter(
   (k) => k.startsWith('NEXT_PUBLIC_FP_PROTOCOL_') && k.endsWith('_URL')
 );
-const allKeys = [...new Set([...PROD_KEYS, ...protocolAffiliateKeys, 'NEXT_PUBLIC_FP_PROTOCOL_AFFILIATES_ENABLED'])];
+const safeProductKeys = Object.keys(env).filter(
+  (k) => k.startsWith('NEXT_PUBLIC_FP_SAFE_') && k.endsWith('_URL')
+);
+const allKeys = [
+  ...new Set([
+    ...PROD_KEYS,
+    ...protocolAffiliateKeys,
+    ...safeProductKeys,
+    'NEXT_PUBLIC_FP_PROTOCOL_AFFILIATES_ENABLED',
+    'NEXT_PUBLIC_FP_SAFE_PRODUCTS_ENABLED',
+  ]),
+];
 const missing = PROD_KEYS.filter((k) => !env[k]?.trim());
 if (missing.length) {
   console.warn('Warning — empty or missing in .env.local:', missing.join(', '));
