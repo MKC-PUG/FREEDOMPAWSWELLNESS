@@ -72,6 +72,8 @@ Set **`{FRAMER}`** = `https://freedompawsinc.com`
 | ViT | `{APP}/diagnostics` | …/diagnostics |
 | Photo Booth | `{APP}/photobooth` | …/photobooth |
 | My Pets | `{APP}/mypets` | …/mypets |
+| **Freedom Paws ID hub** | `{APP}/id` | …/id |
+| **ID enroll** | `{APP}/id/enroll` | …/id/enroll |
 | Monitor | `{APP}/monitor` | …/monitor |
 | App protocol overview | `{APP}/protocols` | …/protocols |
 | **App detail** | `{APP}/protocols/{slug}` | …/protocols/max-movement |
@@ -240,13 +242,50 @@ For **each** page `/protocol-1` through `/protocol-10`:
 
 ## 9. Step-by-step: Framer homepage + nav
 
-### Homepage tool cards
+**Your live homepage** (`freedompawsinc.com`) uses nav + hero + protocol grid — not separate ViT/My Pets tool cards. Wire what exists below.
+
+`{APP}` = `https://app.freedompawsinc.com`
+
+### Hero CTAs (recommended — add below welcome subline)
+
+| Priority | Button label | URL | Why |
+|----------|--------------|-----|-----|
+| **Primary** | **Try ViT AI free** | `{APP}/diagnostics` | Lowest friction; proves AI value instantly |
+| **Secondary** | **Enroll Freedom Paws ID** | `{APP}/id/enroll` | Pilot conversion; smaller button or text link |
+
+**Framer:** Duplicate **Connect Wallet** styling — primary = full yellow button; secondary = outline/text link beside or below. **New tab: OFF** for both.
+
+Skip generic **Open the App** unless you want a small footer link to `{APP}/`.
+
+### Nav (your site)
+
+| Nav item | Link |
+|----------|------|
+| About / Buddy's Story | Framer page (keep) |
+| Protocols Overview | Framer `/protocol-overview` |
+| Community Impact | Framer page (keep) |
+| **Token Shop** | `{APP}/token-shop` |
+| **ID & Tool Box** | Framer `/freedom-paws-id-toolbox` |
+| Grants FAQ | Framer page (keep) |
+| **Connect Wallet** (top right) | `{APP}/token-shop` |
+
+### Mid-page sections (your homepage)
+
+| Section | Wire to |
+|---------|---------|
+| 10 protocol cards — **Learn More** | Framer `/protocol-1` … `/protocol-10` (not app) |
+| 10 protocol cards — **Buy** (if present) | `{APP}/token-shop?protocol={slug}&buy=1#{slug}` |
+| **Token Shop** block CTA | `{APP}/token-shop` |
+| **Freedom Paws ID** block (bottom) | `{APP}/id` (+ optional **Enroll** → `{APP}/id/enroll`) |
+
+### Homepage tool cards (PWA-style home only — skip on Framer if absent)
 
 | Button on site | Link → URL |
 |----------------|------------|
 | ViT Diagnostics / LAUNCH | `{APP}/diagnostics` |
 | SuperBud Photo Booth | `{APP}/photobooth` |
 | My Pets | `{APP}/mypets` |
+| **Freedom Paws ID** | `{APP}/id` |
 | Monitor My Dog | `{APP}/monitor` |
 | Token Shop / SHOP | `{APP}/token-shop` |
 | Install / Open App | `{APP}/` |
@@ -364,6 +403,8 @@ Do these **before** or **while** wiring links.
 | Element | Link To | Type |
 |---------|---------|------|
 | Red **Upload** → rename **Add your pet in the app** | `{APP}/mypets` | URL |
+| **Enroll Freedom Paws ID** (add if missing) | `{APP}/id/enroll` | URL |
+| (Optional) **ID hub / Learn more** | `{APP}/id` | URL |
 | (Optional) Secondary **Try ViT AI** | `{APP}/diagnostics` | URL |
 
 #### Freedom Paws Tool Box — four icon buttons
@@ -439,9 +480,9 @@ Use **Recovery Plus** label only if that product exists in shop; otherwise renam
 
 | Launch placeholder | Future replacement | Track |
 |--------------------|-------------------|-------|
-| `{APP}/mypets` enroll CTA | `{APP}/id/enroll` or My Pets **ID** tab | 1 |
-| “coming soon” biometric copy | Live enroll + found-dog match | 1 |
-| Live demo → diagnostics | `{APP}/diagnostics?mode=identity` or `/id/demo` trial | 1 |
+| `{APP}/mypets` enroll CTA | `{APP}/id/enroll` or My Pets **enroll** link | 1 |
+| “coming soon” biometric copy | Live enroll at `{APP}/id/enroll` + found-dog match | 1 |
+| Live demo → diagnostics | `{APP}/diagnostics?mode=identity` or `{APP}/id` | 1 |
 | Tool Box buttons | Deep-link to vault sections in app | 1–2 |
 | Chip / scanner claims | `{APP}/id/scan` + kit SKU — **only after Track 2** | 2 |
 | Recovery Plus | Real SKU URL with `?protocol=…&buy=1` | — |
