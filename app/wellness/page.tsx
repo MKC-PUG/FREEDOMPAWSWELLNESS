@@ -89,6 +89,63 @@ export default function WellnessPage() {
           </p>
         </section>
 
+        <section className="rounded-2xl border border-amber-400/30 bg-amber-950/20 p-5 mb-8">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl shrink-0" aria-hidden>
+              🛡️
+            </span>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-sm font-bold text-amber-300">Pet insurance — protect what wellness builds</h2>
+              <p className="mt-2 text-sm text-white/65 leading-relaxed">
+                Daily prevention — clean nutrition, our protocols, and lifestyle — is the foundation.
+                Pet insurance helps close the{' '}
+                <strong className="text-white/85">financial gap</strong> when urgent care, surgery,
+                or emergencies happen despite your best efforts. Pair with{' '}
+                <Link href="/id/enroll" className="text-amber-400/90 underline hover:text-amber-300">
+                  Freedom Paws ID
+                </Link>{' '}
+                for lost-dog peace of mind; many plans include recovery and emergency benefits.
+              </p>
+              <ul className="mt-3 space-y-1.5 text-sm text-white/60 list-disc pl-5">
+                <li>Compare plans before a crisis — only ~3–4% of U.S. dogs are insured today</li>
+                <li>Wellness-first: insurance complements natural care; it does not replace it</li>
+                <li>Freedom Paws is not an insurer — we refer to licensed partner programs</li>
+              </ul>
+              {config.insurance.enabled && config.insurance.quoteUrl ? (
+                <a
+                  href={config.insurance.quoteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="mt-4 block w-full rounded-xl bg-amber-400 py-3.5 text-center text-sm font-bold text-black hover:bg-amber-300 transition touch-manipulation"
+                >
+                  Get a pet insurance quote
+                  {config.insurance.partnerName ? (
+                    <span className="block text-[10px] font-semibold text-black/70 mt-0.5">
+                      via {config.insurance.partnerName} ↗
+                    </span>
+                  ) : null}
+                </a>
+              ) : (
+                <div className="mt-4 rounded-xl border border-amber-500/25 bg-amber-950/30 px-4 py-3">
+                  <p className="text-sm text-amber-200/90 font-semibold text-center">
+                    Partner quotes launching soon
+                  </p>
+                  <p className="mt-1 text-xs text-white/50 text-center leading-relaxed">
+                    We&apos;re onboarding mission-aligned insurers with member discounts. Enroll in{' '}
+                    <Link href="/id/enroll" className="text-amber-400/90 underline">
+                      Freedom Paws ID
+                    </Link>{' '}
+                    now — insurance options appear here and after ViT when partners go live.
+                  </p>
+                </div>
+              )}
+              <p className="mt-3 text-[10px] text-white/40 leading-relaxed">
+                {config.insurance.disclosure}
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="rounded-2xl border border-amber-400/20 bg-amber-950/15 p-5 mb-8">
           <h2 className="text-sm font-bold text-amber-300">Partner program (for affiliates)</h2>
           <p className="mt-2 text-sm text-white/65 leading-relaxed">
