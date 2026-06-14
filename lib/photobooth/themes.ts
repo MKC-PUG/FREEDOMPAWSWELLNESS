@@ -212,47 +212,21 @@ export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [
 ];
 
 /**
- * Transparent PNG photo props — add files under /public/images/photobooth/stickers/.
- * Shown first in the accessory drawer; hidden from list until PNG exists (drawer filters).
+ * Transparent PNG photo props — add files under /public/images/photobooth/stickers/
+ * with the prop-* prefix. Shown in the accessory drawer; hidden until PNG exists.
  */
 export const PHOTO_PROP_ACCESSORIES: StickerPlacement[] = [
   { src: ST('prop-santa-hat.png'), label: 'Santa hat', x: 0.5, y: 0.18, scale: 0.22 },
   { src: ST('prop-cowboy-hat.png'), label: 'Cowboy hat', x: 0.5, y: 0.2, scale: 0.22 },
-  { src: ST('prop-bandana-usa.png'), label: 'USA bandana', x: 0.5, y: 0.62, scale: 0.2 },
-  { src: ST('prop-bandana-red.png'), label: 'Red bandana', x: 0.5, y: 0.62, scale: 0.2 },
   { src: ST('prop-sunglasses.png'), label: 'Aviator shades', x: 0.5, y: 0.32, scale: 0.22 },
   { src: ST('prop-sunglasses-cool.png'), label: 'Cool shades', x: 0.5, y: 0.32, scale: 0.22 },
   { src: ST('prop-gold-chain.png'), label: 'Gold chain', x: 0.5, y: 0.52, scale: 0.28 },
-  { src: ST('prop-bowtie.png'), label: 'Bow tie', x: 0.5, y: 0.55, scale: 0.16 },
-  { src: ST('prop-scarf-plaid.png'), label: 'Plaid scarf', x: 0.5, y: 0.58, scale: 0.22 },
-  { src: ST('prop-flower-lei.png'), label: 'Flower lei', x: 0.5, y: 0.58, scale: 0.24 },
-  { src: ST('prop-pilot-goggles.png'), label: 'Aviator goggles', x: 0.5, y: 0.3, scale: 0.22 },
-  { src: ST('prop-cape-red.png'), label: 'Hero cape', x: 0.5, y: 0.55, scale: 0.55 },
 ];
 
-/** Cartoon SVG placeholders — replace any item by adding a PNG with the same base name. */
-export const CARTOON_ACCESSORY_STICKERS: StickerPlacement[] = [
-  { src: ST('sticker-cape-superbud.png'), label: 'Cape', x: 0.5, y: 0.55, scale: 0.55 },
-  { src: ST('sticker-cape-patriotic.png'), label: 'Patriot cape', x: 0.5, y: 0.58, scale: 0.5 },
-  { src: ST('sticker-hat-patriotic.png'), label: 'Patriot hat', x: 0.5, y: 0.22, scale: 0.24 },
-  { src: ST('sticker-hat-party.png'), label: 'Party hat', x: 0.5, y: 0.2, scale: 0.22 },
-  { src: ST('sticker-hat-cowboy.png'), label: 'Cowboy hat', x: 0.5, y: 0.2, scale: 0.22 },
-  { src: ST('sticker-hat-crown.png'), label: 'Crown', x: 0.5, y: 0.18, scale: 0.2 },
-  { src: ST('sticker-glasses-cool.png'), label: 'Shades', x: 0.5, y: 0.32, scale: 0.22 },
-  { src: ST('sticker-glasses-star.png'), label: 'Star glasses', x: 0.5, y: 0.32, scale: 0.22 },
-  { src: ST('sticker-glasses-heart.png'), label: 'Heart glasses', x: 0.5, y: 0.34, scale: 0.2 },
-  { src: ST('sticker-bandana-red.png'), label: 'Bandana', x: 0.5, y: 0.62, scale: 0.2 },
-  { src: ST('sticker-bow-pink.png'), label: 'Bow', x: 0.5, y: 0.28, scale: 0.14 },
-  { src: ST('sticker-scarf-wellness.png'), label: 'Scarf', x: 0.5, y: 0.58, scale: 0.22 },
-  { src: ST('sticker-medal-gold.png'), label: 'Medal', x: 0.75, y: 0.7, scale: 0.15 },
-  { src: ST('sticker-sparkle.png'), label: 'Sparkle', x: 0.85, y: 0.2, scale: 0.12 },
-];
+/** @deprecated Cartoon placeholders removed — use PHOTO_PROP_ACCESSORIES only. */
+export const CARTOON_ACCESSORY_STICKERS: StickerPlacement[] = [];
 
-/** Photo props first, then cartoon — drawer may filter to available files only. */
-export const ACCESSORY_STICKERS: StickerPlacement[] = [
-  ...PHOTO_PROP_ACCESSORIES,
-  ...CARTOON_ACCESSORY_STICKERS,
-];
+export const ACCESSORY_STICKERS: StickerPlacement[] = [...PHOTO_PROP_ACCESSORIES];
 
 /** @deprecated Use ACCESSORY_STICKERS */
 export const EXTRA_STICKERS = ACCESSORY_STICKERS;

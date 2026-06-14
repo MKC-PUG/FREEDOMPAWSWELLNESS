@@ -3,7 +3,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import {
-  CARTOON_ACCESSORY_STICKERS,
   PHOTO_PROP_ACCESSORIES,
   stickerCandidates,
   type StickerPlacement,
@@ -200,18 +199,11 @@ export default function AccessoryDrawer({
               />
             ))}
           </StickerRow>
-        ) : null}
-
-        <StickerRow title="Fun stickers" hint="Cartoon overlays — swap for PNGs anytime.">
-          {CARTOON_ACCESSORY_STICKERS.map((sticker) => (
-            <StickerPickButton
-              key={sticker.src}
-              sticker={sticker}
-              onPick={onPick}
-              onClose={onClose}
-            />
-          ))}
-        </StickerRow>
+        ) : (
+          <p className="mt-4 text-center text-xs text-white/40 leading-relaxed px-2">
+            Photo props appear here as you add PNG cut-outs. More coming soon!
+          </p>
+        )}
 
         {hasSelection && (
           <button
