@@ -10,17 +10,17 @@ import { preloadPhotoBoothAssets } from '@/lib/photobooth/preload-themes';
 import {
   ACCESSORY_STICKERS,
   DEFAULT_PHOTO_BOOTH_THEME_ID,
-  getTheme,
-  PHOTO_BOOTH_THEMES,
   pickRandomSurpriseThemeId,
 } from '@/lib/photobooth/themes';
-import { type FrameStyleId } from '@/lib/photobooth/frames';
+import { getFrameStyle, type FrameStyleId } from '@/lib/photobooth/frames';
 import {
   type MeAndMyPupCustomBackgroundId,
   type MeAndMyPupFrameColorId,
   type MeAndMyPupVariant,
   type SlotId,
 } from '@/lib/photobooth/me-and-my-pup';
+import FrameDrawer from './FrameDrawer';
+import PhotoBoothThemeBar from './PhotoBoothThemeBar';
 import PhotoBoothUnifiedEditor from './PhotoBoothUnifiedEditor';
 import type { MeAndMyPupCanvasHandle } from './MeAndMyPupCanvas';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
@@ -48,7 +48,7 @@ export default function PhotoBoothClient({
   const ownerBlobUrlRef = useRef<string | null>(null);
   const blobUrlRef = useRef<string | null>(null);
   const originalPhotoUrlRef = useRef<string | null>(null);
-  const themesRef = useRef<HTMLElement>(null);
+  const themesRef = useRef<HTMLDivElement>(null);
 
   const [petImageUrl, setPetImageUrl] = useState<string | null>(null);
   const [loadingPhoto, setLoadingPhoto] = useState(Boolean(initialUploadId));
@@ -75,7 +75,7 @@ export default function PhotoBoothClient({
   const [meMyPupHeadlineOffset, setMeMyPupHeadlineOffset] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState<SlotId | null>('dog');
   const [themeSparkle, setThemeSparkle] = useState(false);
-  const [themePickerExpanded, setThemePickerExpanded] = useState(true);
+  const [frameOpen, setFrameOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [cutoutPromptDismissed, setCutoutPromptDismissed] = useState(false);
 
@@ -166,7 +166,6 @@ export default function PhotoBoothClient({
     setThemeId(id);
     setEditorActive(true);
     setCanvasReady(false);
-    setThemePickerExpanded(true);
     setThemeSparkle(true);
     window.setTimeout(() => setThemeSparkle(false), 700);
     if (id === 'me-and-my-pup') {
@@ -360,102 +359,8 @@ export default function PhotoBoothClient({
   }, [savePhoto, themeId]);
 
   const displayError = uploadError && !petImageUrl && !loadingPhoto ? uploadError : localUploadError;
-  const activeTheme = getTheme(themeId);
-  const themePickerCollapsed = editorActive && !themePickerExpanded;
-
-  const themeChip = (theme: (typeof PHOTO_BOOTH_THEMES)[number]) => (
-    <button
-      key={theme.id}
-      type="button"
-      onClick={() => pickTheme(theme.id)}
-      className={`shrink-0 snap-start flex items-center gap-2 min-h-[40px] rounded-xl px-3 py-2 text-xs font-bold transition touch-manipulation ${
-        themeId === theme.id && editorActive
-          ? 'bg-amber-400 text-black ring-2 ring-amber-200'
-          : 'bg-[#0F1E38] border border-white/15 text-white'
-      }`}
-    >
-      <span className="text-base leading-none">{theme.emoji}</span>
-      <span className="whitespace-nowrap">{theme.name}</span>
-    </button>
-  );
-
-  const themePicker = (
-    <section
-      ref={themesRef}
-      className={
-        editorActive
-          ? 'sticky z-20 -mx-4 px-4 py-2 mb-3 bg-[#0A1625]/95 backdrop-blur-md border-b border-amber-400/20'
-          : 'mt-4 mb-4'
-      }
-      style={editorActive ? { top: 'var(--nav-total-height)' } : undefined}
-    >
-      {themePickerCollapsed ? (
-        <>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setThemePickerExpanded(true)}
-              className="flex-1 flex items-center justify-between min-h-[40px] rounded-xl border border-amber-400/35 bg-[#0F1E38] px-3 py-2 touch-manipulation"
-            >
-              <span className="flex items-center gap-2 text-sm font-bold text-white">
-                <span>{activeTheme.emoji}</span>
-                <span>{activeTheme.name}</span>
-              </span>
-              <span className="text-xs text-amber-400">More styles ▾</span>
-            </button>
-            {petImageUrl && (
-              <button
-                type="button"
-                onClick={handleSurpriseMe}
-                className="shrink-0 min-h-[40px] rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 text-xs font-bold text-amber-300 touch-manipulation"
-                title="Random style"
-              >
-                🎲
-              </button>
-            )}
-          </div>
-          <p className="mt-1.5 mb-1.5 text-[10px] text-white/45">Swipe to switch style — no need to re-upload</p>
-          <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory photobooth-hscroll">
-            {PHOTO_BOOTH_THEMES.map(themeChip)}
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="flex items-center justify-between gap-2 mb-2">
-            <p className="text-sm font-bold text-amber-400">
-              {editorActive ? 'Change style' : 'Step 2 — Pick a style'}
-            </p>
-            {editorActive && (
-              <button
-                type="button"
-                onClick={() => setThemePickerExpanded(false)}
-                className="text-[10px] font-bold text-white/45 touch-manipulation"
-              >
-                Collapse ▴
-              </button>
-            )}
-          </div>
-          {!editorActive && (
-            <p className="text-[10px] text-white/45 mb-2 leading-relaxed">
-              Swipe styles → tap one · then adjust your pet below
-            </p>
-          )}
-          {petImageUrl && (
-            <button
-              type="button"
-              onClick={handleSurpriseMe}
-              className="mb-2 w-full min-h-[36px] rounded-lg border border-amber-400/35 bg-amber-400/10 text-xs font-bold text-amber-300 touch-manipulation"
-            >
-              🎲 Surprise Me
-            </button>
-          )}
-          <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory photobooth-hscroll">
-            {PHOTO_BOOTH_THEMES.map(themeChip)}
-          </div>
-        </>
-      )}
-    </section>
-  );
+  const isDuoMode = themeId === 'me-and-my-pup';
+  const activeFrame = getFrameStyle(frameId);
 
   return (
     <div className="min-h-screen bg-[#0A1625] text-white">
@@ -517,29 +422,105 @@ export default function PhotoBoothClient({
         )}
 
         {petImageUrl && (
-          <>
-            {themePicker}
-
+          <div
+            ref={themesRef}
+            className={`mt-4 ${themeSparkle && editorActive ? 'fp-theme-sparkle' : ''}`}
+          >
             {uploadSuccess && (
-              <div className="rounded-2xl border border-green-500/40 bg-green-900/20 p-3 text-center text-sm text-green-400">
-                ✓ Photo ready — choose a background above
+              <div className="mb-3 rounded-2xl border border-green-500/40 bg-green-900/20 p-3 text-center text-sm text-green-400">
+                ✓ Photo ready — pick a background below
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={() => void clearPhoto()}
-              className="mt-4 w-full rounded-xl border border-white/20 py-2.5 text-sm text-white/70"
-            >
-              Upload a different photo
-            </button>
+            <PhotoBoothThemeBar
+              themeId={themeId}
+              editorActive={editorActive}
+              onPickTheme={pickTheme}
+              onSurpriseMe={handleSurpriseMe}
+            />
+
+            {editorActive && !isDuoMode && (
+              <button
+                type="button"
+                onClick={() => setFrameOpen(true)}
+                className="mb-3 w-full min-h-[40px] rounded-xl border border-white/15 bg-[#0F1E38]/90 px-3 py-2 text-xs font-bold text-white/85 touch-manipulation flex items-center justify-between"
+              >
+                <span>🖼️ Picture frame (optional)</span>
+                <span className="text-amber-300/90">
+                  {frameId === 'none' ? 'Tap to choose ▾' : activeFrame.name}
+                </span>
+              </button>
+            )}
+
+            {!editorActive ? (
+              <div className="overflow-hidden rounded-2xl border border-white/15 bg-[#0F1E38]/60">
+                <div
+                  className={`flex aspect-[4/3] items-center justify-center p-2 ${
+                    cutoutApplied
+                      ? 'bg-[length:16px_16px] bg-[position:0_0,8px_8px] bg-[image:linear-gradient(45deg,#1a2a44_25%,transparent_25%),linear-gradient(-45deg,#1a2a44_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#1a2a44_75%),linear-gradient(-45deg,transparent_75%,#1a2a44_75%)]'
+                      : ''
+                  }`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={petImageUrl}
+                    alt="Your pet"
+                    className="max-h-full max-w-full object-contain rounded-xl"
+                  />
+                </div>
+                <p className="border-t border-white/10 py-3 text-center text-xs text-amber-300/90">
+                  Your pet · pick a <strong>background</strong> above
+                </p>
+              </div>
+            ) : (
+              <PhotoBoothUnifiedEditor
+                themeId={themeId}
+                isDuoMode={isDuoMode}
+                petImageUrl={petImageUrl}
+                ownerImageUrl={ownerImageUrl}
+                ownerInputRef={ownerInputRef}
+                canvasRef={canvasRef}
+                meMyPupRef={meMyPupRef}
+                canvasReady={canvasReady}
+                frameId={frameId}
+                frameWidth={frameWidth}
+                cutoutApplied={cutoutApplied}
+                bgRemoving={bgRemoving}
+                bgProgress={bgProgress}
+                bgError={bgError}
+                petSelected={petSelected}
+                selectedSlot={selectedSlot}
+                selectedStickerId={selectedStickerId}
+                canvasStickers={canvasStickers}
+                meMyPupVariant={meMyPupVariant}
+                meMyPupCustomText={meMyPupCustomText}
+                meMyPupFrameColor={meMyPupFrameColor}
+                meMyPupCustomBg={meMyPupCustomBg}
+                meMyPupHeadlineOffset={meMyPupHeadlineOffset}
+                onOwnerFile={handleOwnerFile}
+                onReadyChange={setCanvasReady}
+                onSlotSelectedChange={setSelectedSlot}
+                onPetSelectedChange={setPetSelected}
+                onStickersChange={handleStickersChange}
+                onError={setError}
+                onMeMyPupVariant={setMeMyPupVariant}
+                onMeMyPupCustomText={setMeMyPupCustomText}
+                onMeMyPupFrameColor={setMeMyPupFrameColor}
+                onMeMyPupCustomBg={setMeMyPupCustomBg}
+                onMeMyPupHeadlineOffset={setMeMyPupHeadlineOffset}
+                onAddAccessory={addAccessory}
+                onRemoveBackground={() => void handleRemoveBackground()}
+                onRestoreOriginal={handleRestoreOriginal}
+                onShare={() => void sharePhoto()}
+                onSave={() => void savePhoto()}
+              />
+            )}
 
             {!editorActive && !cutoutApplied && !bgRemoving && !cutoutPromptDismissed && (
-              <div className="mt-4 rounded-2xl border border-amber-400/35 bg-amber-950/20 p-4 text-center">
+              <div className="mt-3 rounded-2xl border border-amber-400/35 bg-amber-950/20 p-4 text-center">
                 <p className="text-sm font-semibold text-amber-200">Try magic cutout?</p>
                 <p className="mt-1 text-xs text-white/55 leading-relaxed">
-                  Optional — float your pet on themed backgrounds. Most people pick a style above with
-                  the full photo instead.
+                  Optional — float your pet on themed backgrounds.
                 </p>
                 <div className="mt-3 flex flex-col gap-2 sm:flex-row">
                   <button
@@ -554,19 +535,18 @@ export default function PhotoBoothClient({
                     onClick={() => setCutoutPromptDismissed(true)}
                     className="flex-1 min-h-[44px] rounded-xl border border-white/20 py-2.5 text-sm text-white/70 touch-manipulation"
                   >
-                    Skip — pick a style
+                    Skip — pick a background
                   </button>
                 </div>
               </div>
             )}
 
             {!editorActive && (
-              <div className="mt-4 space-y-2">
+              <div className="mt-3 space-y-2">
                 {bgRemoving && (
                   <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4 text-center">
                     <p className="text-base font-bold text-amber-400">Magic cutout working…</p>
                     <p className="mt-2 text-sm text-white/70">{bgProgress || 'Please wait'}</p>
-                    <p className="mt-2 text-xs text-white/45">First time downloads ~80MB on Wi‑Fi (30–60 sec)</p>
                   </div>
                 )}
                 {bgError && (
@@ -574,116 +554,54 @@ export default function PhotoBoothClient({
                     {bgError}
                   </div>
                 )}
-                {!cutoutApplied ? (
-                  <>
-                    <p className="text-center text-[11px] text-white/50 leading-relaxed px-1">
-                      <strong className="text-amber-300/90">Tip:</strong> Most people skip cutout and pick a
-                      background — your full photo still looks amazing.
-                    </p>
-                    <button
-                      type="button"
-                      disabled={bgRemoving}
-                      onClick={() => void handleRemoveBackground()}
-                      className="w-full min-h-[48px] rounded-xl border border-white/20 bg-[#1F2A44]/80 py-2.5 text-sm font-semibold text-white/75 disabled:opacity-50 touch-manipulation"
-                      style={{ WebkitTapHighlightColor: 'transparent' }}
-                    >
-                      {bgRemoving ? `✨ Cutout… ${bgProgress}` : '✨ Optional: try magic cutout (beta)'}
-                    </button>
-                    <p className="text-center text-[10px] text-white/40 leading-relaxed px-2">
-                      Best with one pet on a plain background. Busy photos? Pick a theme above instead.
-                    </p>
-                  </>
-                ) : (
+                {!cutoutApplied && cutoutPromptDismissed && (
+                  <button
+                    type="button"
+                    disabled={bgRemoving}
+                    onClick={() => void handleRemoveBackground()}
+                    className="w-full min-h-[44px] rounded-xl border border-white/20 bg-[#1F2A44]/80 py-2.5 text-sm font-semibold text-white/75 disabled:opacity-50 touch-manipulation"
+                  >
+                    {bgRemoving ? `✨ Cutout… ${bgProgress}` : '✨ Optional: try magic cutout (beta)'}
+                  </button>
+                )}
+                {cutoutApplied && (
                   <button
                     type="button"
                     onClick={handleRestoreOriginal}
-                    className="w-full min-h-[48px] rounded-xl border border-white/20 py-2.5 text-sm text-white/70 touch-manipulation"
+                    className="w-full min-h-[44px] rounded-xl border border-white/20 py-2.5 text-sm text-white/70 touch-manipulation"
                   >
                     ↩ Restore original photo
                   </button>
                 )}
               </div>
             )}
-          </>
-        )}
 
-        <div className={`mt-5 ${themeSparkle && editorActive ? 'fp-theme-sparkle' : ''}`}>
-          {petImageUrl && !editorActive && (
-            <div className="overflow-hidden rounded-2xl border border-white/15 bg-[#0F1E38]/60">
-              <div
-                className={`flex aspect-[4/3] items-center justify-center p-2 ${
-                  cutoutApplied
-                    ? 'bg-[length:16px_16px] bg-[position:0_0,8px_8px] bg-[image:linear-gradient(45deg,#1a2a44_25%,transparent_25%),linear-gradient(-45deg,#1a2a44_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#1a2a44_75%),linear-gradient(-45deg,transparent_75%,#1a2a44_75%)]'
-                    : ''
-                }`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={petImageUrl}
-                  alt="Your pet"
-                  className="max-h-full max-w-full object-contain rounded-xl"
-                />
-              </div>
-              <p className="border-t border-white/10 py-3 text-center text-xs text-amber-300/90">
-                ↑ Your pet · pick a <strong>background</strong> above · share anytime
-              </p>
-            </div>
-          )}
+            <button
+              type="button"
+              onClick={() => void clearPhoto()}
+              className="mt-4 w-full rounded-xl border border-white/15 py-2 text-xs text-white/50 touch-manipulation"
+            >
+              Upload a different photo
+            </button>
 
-          {petImageUrl && editorActive && (
-            <PhotoBoothUnifiedEditor
-              themeId={themeId}
-              isDuoMode={themeId === 'me-and-my-pup'}
-              petImageUrl={petImageUrl}
-              ownerImageUrl={ownerImageUrl}
-              ownerInputRef={ownerInputRef}
-              canvasRef={canvasRef}
-              meMyPupRef={meMyPupRef}
-              canvasReady={canvasReady}
+            <FrameDrawer
+              open={frameOpen}
+              onClose={() => setFrameOpen(false)}
               frameId={frameId}
               frameWidth={frameWidth}
               cutoutApplied={cutoutApplied}
-              bgRemoving={bgRemoving}
-              bgProgress={bgProgress}
-              bgError={bgError}
-              petSelected={petSelected}
-              selectedSlot={selectedSlot}
-              selectedStickerId={selectedStickerId}
-              canvasStickers={canvasStickers}
-              meMyPupVariant={meMyPupVariant}
-              meMyPupCustomText={meMyPupCustomText}
-              meMyPupFrameColor={meMyPupFrameColor}
-              meMyPupCustomBg={meMyPupCustomBg}
-              meMyPupHeadlineOffset={meMyPupHeadlineOffset}
-              shareMsg={shareMsg}
-              onOwnerFile={handleOwnerFile}
-              onReadyChange={setCanvasReady}
-              onSlotSelectedChange={setSelectedSlot}
-              onPetSelectedChange={setPetSelected}
-              onStickersChange={handleStickersChange}
-              onError={setError}
-              onMeMyPupVariant={setMeMyPupVariant}
-              onMeMyPupCustomText={setMeMyPupCustomText}
-              onMeMyPupFrameColor={setMeMyPupFrameColor}
-              onMeMyPupCustomBg={setMeMyPupCustomBg}
-              onMeMyPupHeadlineOffset={setMeMyPupHeadlineOffset}
+              themeId={themeId}
               onFrameStyle={pickFrameStyle}
               onFrameWidth={setFrameWidth}
-              onAddAccessory={addAccessory}
-              onRemoveBackground={() => void handleRemoveBackground()}
-              onRestoreOriginal={handleRestoreOriginal}
-              onShare={() => void sharePhoto()}
-              onSave={() => void savePhoto()}
             />
-          )}
+          </div>
+        )}
 
-
-          {!petImageUrl && (
-            <div className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-dashed border-white/15 bg-[#0F1E38]/40 px-4 text-center text-xs text-white/40">
-              {loadingPhoto ? 'Preparing preview…' : 'Your dressed-up pet appears here after upload'}
-            </div>
-          )}
-        </div>
+        {!petImageUrl && !loadingPhoto && (
+          <div className="mt-6 flex aspect-[4/3] items-center justify-center rounded-2xl border border-dashed border-white/15 bg-[#0F1E38]/40 px-4 text-center text-xs text-white/40">
+            Your dressed-up pet appears here after upload
+          </div>
+        )}
 
         {error && <p className="mt-4 text-center text-sm text-red-400">{error}</p>}
       </div>

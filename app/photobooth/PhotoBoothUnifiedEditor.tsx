@@ -5,15 +5,8 @@ import AccessoryDrawer from './AccessoryDrawer';
 import AdjustPhotoPad from './AdjustPhotoPad';
 import MeAndMyPupCanvas from './MeAndMyPupCanvas';
 import PhotoBoothCanvas from './PhotoBoothCanvas';
-import {
-  ACCESSORY_STICKERS,
-} from '@/lib/photobooth/themes';
-import {
-  FRAME_STYLES,
-  FRAME_WIDTH_MAX,
-  FRAME_WIDTH_MIN,
-  type FrameStyleId,
-} from '@/lib/photobooth/frames';
+import { ACCESSORY_STICKERS } from '@/lib/photobooth/themes';
+import { type FrameStyleId } from '@/lib/photobooth/frames';
 import {
   CUSTOM_HEADLINE_MAX,
   CUSTOM_HEADLINE_OFFSET_MAX,
@@ -54,7 +47,6 @@ type Props = {
   meMyPupFrameColor: MeAndMyPupFrameColorId;
   meMyPupCustomBg: MeAndMyPupCustomBackgroundId;
   meMyPupHeadlineOffset: number;
-  shareMsg: string;
   onOwnerFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onReadyChange: (ready: boolean) => void;
   onSlotSelectedChange: (slot: SlotId | null) => void;
@@ -66,8 +58,6 @@ type Props = {
   onMeMyPupFrameColor: (id: MeAndMyPupFrameColorId) => void;
   onMeMyPupCustomBg: (id: MeAndMyPupCustomBackgroundId) => void;
   onMeMyPupHeadlineOffset: (offset: number) => void;
-  onFrameStyle: (id: FrameStyleId) => void;
-  onFrameWidth: (width: number) => void;
   onAddAccessory: (sticker: (typeof ACCESSORY_STICKERS)[number]) => void;
   onRemoveBackground: () => void;
   onRestoreOriginal: () => void;
@@ -99,7 +89,6 @@ export default function PhotoBoothUnifiedEditor({
   meMyPupFrameColor,
   meMyPupCustomBg,
   meMyPupHeadlineOffset,
-  shareMsg,
   onOwnerFile,
   onReadyChange,
   onSlotSelectedChange,
@@ -111,8 +100,6 @@ export default function PhotoBoothUnifiedEditor({
   onMeMyPupFrameColor,
   onMeMyPupCustomBg,
   onMeMyPupHeadlineOffset,
-  onFrameStyle,
-  onFrameWidth,
   onAddAccessory,
   onRemoveBackground,
   onRestoreOriginal,
@@ -123,9 +110,7 @@ export default function PhotoBoothUnifiedEditor({
 
   const adjustingSticker = !isDuoMode && selectedStickerId !== null;
   const adjustingPet = !isDuoMode && petSelected && selectedStickerId === null;
-  const showFloatingPad = adjustingSticker || adjustingPet;
-
-  const clearCanvasSelection = () => canvasRef.current?.clearSelection();
+  const showAdjustPad = adjustingSticker || adjustingPet;
 
   return (
     <>
@@ -139,7 +124,8 @@ export default function PhotoBoothUnifiedEditor({
         onChange={onOwnerFile}
       />
 
-      <div className="relative mt-4">
+      {/* Image */}
+      <div className="relative">
         {isDuoMode ? (
           <MeAndMyPupCanvas
             ref={meMyPupRef}
@@ -155,131 +141,160 @@ export default function PhotoBoothUnifiedEditor({
             onError={onError}
           />
         ) : (
-          <>
-            <PhotoBoothCanvas
-              ref={canvasRef}
-              petImageUrl={petImageUrl}
-              themeId={themeId}
-              frameId={frameId}
-              frameWidth={frameWidth}
-              cutoutApplied={cutoutApplied}
-              onReadyChange={onReadyChange}
-              onStickersChange={onStickersChange}
-              onPetSelectedChange={onPetSelectedChange}
-              onError={onError}
-            />
-            {showFloatingPad && (
-              <div
-                className="absolute inset-x-2 bottom-2 z-20 pointer-events-none"
-                style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
-              >
-                <AdjustPhotoPad
-                  layout="floating"
-                  label={
-                    adjustingSticker
-                      ? 'Move accessory — photo stays visible above'
-                      : 'Move your pet — photo stays visible above'
-                  }
-                  onNudge={(dx, dy) => canvasRef.current?.nudgeSelected(dx, dy)}
-                  onScale={(factor) => canvasRef.current?.scaleSelected(factor)}
-                  zoomOutLabel="−"
-                  zoomInLabel="+"
-                  showTilt={adjustingSticker}
-                  onTilt={(dir) => canvasRef.current?.tiltSelected(dir)}
-                  onDone={clearCanvasSelection}
-                />
-              </div>
-            )}
-          </>
+          <PhotoBoothCanvas
+            ref={canvasRef}
+            petImageUrl={petImageUrl}
+            themeId={themeId}
+            frameId={frameId}
+            frameWidth={frameWidth}
+            cutoutApplied={cutoutApplied}
+            onReadyChange={onReadyChange}
+            onStickersChange={onStickersChange}
+            onPetSelectedChange={onPetSelectedChange}
+            onError={onError}
+          />
         )}
       </div>
 
       {canvasReady && (
-        <div className="mt-4 space-y-4">
-          <div className="rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-4">
-            <p className="text-sm font-bold text-amber-400 mb-2">
-              {isDuoMode ? 'Adjust your circles' : 'Adjust your pet'}
-            </p>
-            {isDuoMode ? (
-              <>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => meMyPupRef.current?.selectSlot('dog')}
-                    className={`flex-1 min-h-[44px] rounded-xl py-2 text-xs font-bold touch-manipulation ${
-                      selectedSlot === 'dog'
-                        ? 'bg-amber-400 text-black'
-                        : 'border border-white/20 text-white/80'
-                    }`}
-                  >
-                    🐾 MY PUP
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!ownerImageUrl) {
-                        ownerInputRef.current?.click();
-                        return;
-                      }
-                      meMyPupRef.current?.selectSlot('owner');
-                    }}
-                    className={`flex-1 min-h-[44px] rounded-xl py-2 text-xs font-bold touch-manipulation ${
-                      selectedSlot === 'owner'
-                        ? 'bg-amber-400 text-black'
-                        : 'border border-white/20 text-white/80'
-                    }`}
-                  >
-                    🙂 ME
-                  </button>
-                </div>
-                {selectedSlot && (
-                  <div className="mt-3">
-                    <AdjustPhotoPad
-                      label={`Adjust ${selectedSlot === 'dog' ? 'your pup' : 'your face'} in the circle`}
-                      nudgeStep={0.08}
-                      onNudge={(dx, dy) => meMyPupRef.current?.nudgeSelected(dx, dy)}
-                      onScale={(factor) => meMyPupRef.current?.scaleSelected(factor)}
-                    />
-                  </div>
-                )}
-              </>
-            ) : (
-              <>
+        <div className="mt-3 space-y-3">
+          {/* Tools directly below image */}
+          {!isDuoMode ? (
+            <div className="rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-3 space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setAccessoryOpen(true)}
+                  className="min-h-[44px] rounded-xl border border-amber-400/40 bg-amber-400/10 py-2.5 text-xs font-bold text-amber-300 touch-manipulation"
+                >
+                  ✨ Add accessory
+                  {canvasStickers.length > 0 && (
+                    <span className="ml-1 font-normal text-white/50">({canvasStickers.length})</span>
+                  )}
+                </button>
                 <button
                   type="button"
                   onClick={() => canvasRef.current?.selectPet()}
-                  className={`w-full min-h-[44px] rounded-xl py-2.5 text-sm font-semibold touch-manipulation ${
+                  className={`min-h-[44px] rounded-xl py-2.5 text-xs font-bold touch-manipulation ${
                     petSelected
                       ? 'bg-amber-400 text-black'
-                      : 'border border-amber-400/50 text-amber-300'
+                      : 'border border-white/20 text-white/80'
                   }`}
                 >
-                  {petSelected
-                    ? '✓ Pet selected — drag on photo to move'
-                    : 'Tap to select your pet & move it'}
+                  {petSelected ? '✓ Pet selected' : '🐾 Move pet'}
                 </button>
-                {petSelected && (
-                  <p className="mt-2 text-center text-[10px] text-white/45">
-                    Use the arrow pad on your photo · or drag with your finger
+              </div>
+
+              {canvasStickers.length > 0 && (
+                <div>
+                  <p className="mb-1.5 text-center text-[10px] text-white/45">
+                    Tap to select · double-tap on photo to remove
                   </p>
-                )}
-              </>
-            )}
-          </div>
+                  <div className="flex flex-wrap justify-center gap-1.5">
+                    {canvasStickers.map((sticker) => (
+                      <button
+                        key={sticker.id}
+                        type="button"
+                        onClick={() => canvasRef.current?.selectSticker(sticker.id)}
+                        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold touch-manipulation ${
+                          selectedStickerId === sticker.id
+                            ? 'bg-amber-400 text-black'
+                            : 'bg-[#0A1625] border border-white/15 text-white/80'
+                        }`}
+                      >
+                        {sticker.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {showAdjustPad && (
+                <AdjustPhotoPad
+                  label={
+                    adjustingSticker
+                      ? 'Move & resize accessory'
+                      : 'Move & resize your pet'
+                  }
+                  onNudge={(dx, dy) => canvasRef.current?.nudgeSelected(dx, dy)}
+                  onScale={(factor) => canvasRef.current?.scaleSelected(factor)}
+                  zoomOutLabel="− Smaller"
+                  zoomInLabel="+ Bigger"
+                  showTilt={adjustingSticker}
+                  onTilt={(dir) => canvasRef.current?.tiltSelected(dir)}
+                />
+              )}
+
+              {showAdjustPad && (
+                <button
+                  type="button"
+                  onClick={() => canvasRef.current?.clearSelection()}
+                  className="w-full rounded-xl border border-amber-400/40 py-2 text-xs font-semibold text-amber-300 touch-manipulation"
+                >
+                  Done adjusting
+                </button>
+              )}
+
+              {themeId === 'accessories-only' && (
+                <p className="text-center text-[10px] text-white/45">Checkerboard = no background</p>
+              )}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-3 space-y-3">
+              <p className="text-sm font-bold text-amber-400">Adjust your circles</p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => meMyPupRef.current?.selectSlot('dog')}
+                  className={`flex-1 min-h-[44px] rounded-xl py-2 text-xs font-bold touch-manipulation ${
+                    selectedSlot === 'dog'
+                      ? 'bg-amber-400 text-black'
+                      : 'border border-white/20 text-white/80'
+                  }`}
+                >
+                  🐾 MY PUP
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!ownerImageUrl) {
+                      ownerInputRef.current?.click();
+                      return;
+                    }
+                    meMyPupRef.current?.selectSlot('owner');
+                  }}
+                  className={`flex-1 min-h-[44px] rounded-xl py-2 text-xs font-bold touch-manipulation ${
+                    selectedSlot === 'owner'
+                      ? 'bg-amber-400 text-black'
+                      : 'border border-white/20 text-white/80'
+                  }`}
+                >
+                  🙂 ME
+                </button>
+              </div>
+              {selectedSlot && (
+                <AdjustPhotoPad
+                  label={`Adjust ${selectedSlot === 'dog' ? 'your pup' : 'your face'}`}
+                  nudgeStep={0.08}
+                  onNudge={(dx, dy) => meMyPupRef.current?.nudgeSelected(dx, dy)}
+                  onScale={(factor) => meMyPupRef.current?.scaleSelected(factor)}
+                />
+              )}
+            </div>
+          )}
 
           {isDuoMode && (
             <>
-              <div className="rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-4">
-                <p className="text-sm font-bold text-amber-400 mb-2">Add your photo</p>
+              <div className="rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-3">
                 <button
                   type="button"
                   onClick={() => ownerInputRef.current?.click()}
-                  className="w-full min-h-[52px] rounded-xl bg-amber-400 py-3 text-sm font-bold text-black touch-manipulation"
+                  className="w-full min-h-[48px] rounded-xl bg-amber-400 py-3 text-sm font-bold text-black touch-manipulation"
                 >
                   {ownerImageUrl ? '📷 Change my photo' : '📷 Add my photo (selfie)'}
                 </button>
                 <p className="mt-2 text-[10px] text-white/45 text-center">
-                  Stays on your phone until you share — not uploaded to our server.
+                  Stays on your phone until you share
                 </p>
               </div>
 
@@ -319,9 +334,6 @@ export default function PhotoBoothUnifiedEditor({
                       placeholder="Me & My Pup"
                       className="w-full min-h-[48px] rounded-xl border border-white/20 bg-[#0A1625] px-4 py-3 text-base text-white placeholder:text-white/35 touch-manipulation"
                     />
-                    <p className="mt-1.5 text-[10px] text-white/45 text-center">
-                      Shows above your photos · {meMyPupCustomText.length}/{CUSTOM_HEADLINE_MAX}
-                    </p>
                   </div>
                   <div>
                     <p className="text-sm font-bold text-amber-400 mb-2">Headline position</p>
@@ -363,7 +375,6 @@ export default function PhotoBoothUnifiedEditor({
                   </div>
                   <div>
                     <p className="text-sm font-bold text-amber-400 mb-2">Background</p>
-                    <p className="text-[10px] text-white/45 mb-2">Solid colors</p>
                     <div className="grid grid-cols-3 gap-2 mb-3">
                       {ME_AND_MY_PUP_FRAME_COLORS.map((color) => (
                         <button
@@ -384,8 +395,7 @@ export default function PhotoBoothUnifiedEditor({
                         </button>
                       ))}
                     </div>
-                    <p className="text-[10px] text-white/45 mb-2">Photo Booth scenes · swipe for more</p>
-                    <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+                    <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory">
                       {ME_AND_MY_PUP_SCENE_BACKGROUNDS.map((scene) => (
                         <button
                           key={scene.id}
@@ -444,43 +454,34 @@ export default function PhotoBoothUnifiedEditor({
           )}
 
           {!isDuoMode && (
-            <div className="rounded-2xl border border-white/10 bg-[#0F1E38]/60 p-4 space-y-2">
-              <p className="text-sm font-semibold text-white/70">Magic cutout (optional)</p>
-              {bgRemoving && (
-                <div className="rounded-xl border border-amber-400/40 bg-amber-400/10 p-3 text-center">
-                  <p className="text-sm font-bold text-amber-400">Working… {bgProgress}</p>
-                </div>
-              )}
-              {bgError && (
-                <p className="text-xs text-red-300 leading-relaxed">{bgError}</p>
-              )}
-              {!cutoutApplied ? (
-                <>
-                  <p className="text-[10px] text-white/45 leading-relaxed">
-                    Skip cutout and adjust your photo above — or try cutout to float your pet on the scene.
-                  </p>
-                  <button
-                    type="button"
-                    disabled={bgRemoving}
-                    onClick={onRemoveBackground}
-                    className="w-full min-h-[44px] rounded-xl border border-white/20 bg-[#1F2A44]/80 py-2.5 text-sm font-semibold text-white/75 disabled:opacity-50 touch-manipulation"
-                  >
-                    {bgRemoving ? `✨ Cutout… ${bgProgress}` : '✨ Try magic cutout (beta)'}
-                  </button>
-                </>
-              ) : (
+            <div className="rounded-xl border border-white/10 bg-[#0F1E38]/40 px-3 py-2">
+              {bgRemoving ? (
+                <p className="text-center text-xs font-bold text-amber-400">✨ Cutout… {bgProgress}</p>
+              ) : bgError ? (
+                <p className="text-xs text-red-300">{bgError}</p>
+              ) : cutoutApplied ? (
                 <button
                   type="button"
                   onClick={onRestoreOriginal}
-                  className="w-full min-h-[44px] rounded-xl border border-white/20 py-2.5 text-sm text-white/70 touch-manipulation"
+                  className="w-full py-2 text-xs text-white/70 touch-manipulation"
                 >
                   ↩ Restore original photo
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  disabled={bgRemoving}
+                  onClick={onRemoveBackground}
+                  className="w-full py-2 text-xs text-white/55 touch-manipulation disabled:opacity-50"
+                >
+                  ✨ Optional: magic cutout (beta)
                 </button>
               )}
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
+          {/* Share / Save at bottom */}
+          <div className="grid grid-cols-2 gap-3 pt-1">
             <button
               type="button"
               disabled={isDuoMode && !ownerImageUrl}
@@ -499,118 +500,9 @@ export default function PhotoBoothUnifiedEditor({
             </button>
           </div>
           {isDuoMode && !ownerImageUrl && (
-            <p className="text-center text-xs text-amber-300/80">
-              Add your photo below to enable Share &amp; Save
+            <p className="text-center text-xs text-amber-300/80 -mt-1">
+              Add your photo to enable Share &amp; Save
             </p>
-          )}
-          {!isDuoMode && (
-            <>
-              <button
-                type="button"
-                onClick={() => setAccessoryOpen(true)}
-                className="w-full min-h-[48px] rounded-2xl border border-amber-400/40 bg-[#0F1E38]/90 py-3 text-sm font-bold text-amber-300 touch-manipulation hover:bg-amber-400/10"
-              >
-                ✨ Add accessory
-                {canvasStickers.length > 0 && (
-                  <span className="ml-2 text-white/50 font-normal">
-                    ({canvasStickers.length} on photo)
-                  </span>
-                )}
-              </button>
-              <p className="text-center text-[10px] text-white/40 -mt-2">
-                Hats &amp; glasses snap near your pet&apos;s head zone — drag to fine-tune
-              </p>
-
-              {themeId === 'accessories-only' && (
-                <p className="text-center text-xs text-white/45">Checkerboard = no background</p>
-              )}
-
-              <div className="rounded-2xl border border-white/10 bg-[#0F1E38]/60 p-4">
-                <p className="text-sm font-semibold text-white/70 mb-1">Picture frame (optional)</p>
-                <p className="text-[10px] text-white/45 mb-3">
-                  {cutoutApplied && themeId !== 'frame-only'
-                    ? 'After cutout, Frame Only adds mat & border — themes show your pet on the scene.'
-                    : 'Works on any theme · drag slider for thin → thick'}
-                </p>
-                <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory">
-                  {FRAME_STYLES.map((frame) => (
-                    <button
-                      key={frame.id}
-                      type="button"
-                      onClick={() => onFrameStyle(frame.id)}
-                      className={`shrink-0 snap-start flex flex-col items-center gap-1.5 rounded-xl px-3 py-2.5 min-w-[4.25rem] transition ${
-                        frameId === frame.id
-                          ? 'bg-amber-400/15 border-2 border-amber-400'
-                          : 'bg-black/30 border border-white/10'
-                      }`}
-                    >
-                      <span
-                        className="block h-8 w-8 rounded-md border border-white/25 shadow-inner"
-                        style={{
-                          background:
-                            frame.id === 'none'
-                              ? 'linear-gradient(135deg, #3d4554 50%, #2c3442 50%)'
-                              : frame.swatch,
-                        }}
-                      />
-                      <span className="text-[10px] font-semibold text-white/90">{frame.name}</span>
-                    </button>
-                  ))}
-                </div>
-                {frameId !== 'none' && (
-                  <div className="mt-4">
-                    <div className="flex justify-between text-[10px] text-white/45 mb-1.5">
-                      <span>Thin</span>
-                      <span className="text-amber-300/80">Thickness</span>
-                      <span>Thick</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={FRAME_WIDTH_MIN}
-                      max={FRAME_WIDTH_MAX}
-                      step={0.02}
-                      value={frameWidth}
-                      onChange={(e) => onFrameWidth(Number(e.target.value))}
-                      className="photobooth-frame-slider w-full touch-none"
-                      aria-label="Frame thickness"
-                    />
-                  </div>
-                )}
-              </div>
-
-              {canvasStickers.length > 0 && (
-                <>
-                  <div>
-                    <p className="mb-2 text-center text-[10px] text-white/45">
-                      Tap a name to select ·{' '}
-                      <strong className="text-amber-300/90">double-tap</strong> the accessory on the photo to
-                      remove it
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {canvasStickers.map((sticker) => (
-                        <button
-                          key={sticker.id}
-                          type="button"
-                          onClick={() => canvasRef.current?.selectSticker(sticker.id)}
-                          className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                            selectedStickerId === sticker.id
-                              ? 'bg-amber-400 text-black'
-                              : 'bg-[#0F1E38] border border-white/15 text-white/80'
-                          }`}
-                        >
-                          {sticker.label}
-                        </button>
-                      ))}
-                    </div>
-                    {selectedStickerId !== null && (
-                      <p className="mt-2 text-center text-[10px] text-amber-300/80">
-                        Arrow pad appears on your photo — tap Done when finished
-                      </p>
-                    )}
-                  </div>
-                </>
-              )}
-            </>
           )}
         </div>
       )}
