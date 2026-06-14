@@ -24,6 +24,7 @@ import {
   type AiCostumeId,
 } from '@/lib/photobooth/ai-costumes';
 import PhotoBoothFlowHint from './PhotoBoothFlowHint';
+import { trimPetCutoutBlob } from '@/lib/photobooth/trim-pet-alpha';
 import FrameDrawer from './FrameDrawer';
 import ExportDrawer from './ExportDrawer';
 import AiCostumeDrawer from './AiCostumeDrawer';
@@ -295,10 +296,12 @@ export default function PhotoBoothClient({
       const cutout = await removePetBackground(sourceBlob, (p) => {
         setBgProgress(p.percent > 0 ? `${p.percent}%` : 'Loading AI model…');
       });
+      setBgProgress('Tightening fit…');
+      const trimmed = await trimPetCutoutBlob(cutout);
       if (!originalPhotoUrlRef.current) {
         originalPhotoUrlRef.current = petImageUrl;
       }
-      setPhotoUrl(URL.createObjectURL(cutout));
+      setPhotoUrl(URL.createObjectURL(trimmed));
       setCutoutApplied(true);
       setFrameId('none');
       setThemeId(DEFAULT_PHOTO_BOOTH_THEME_ID);
@@ -433,7 +436,13 @@ export default function PhotoBoothClient({
           imageDataUrl?: string;
         };
         if (!res.ok || !data.success || !data.imageDataUrl) {
-          throw new Error(data.error || 'AI Magic Look failed');
+          const raw = data.error || 'AI Magic Look failed';
+          if (/402|insufficient credit|payment required/i.test(raw)) {
+            throw new Error(
+              'AI Magic Look needs Replicate billing credit — add funds at replicate.com/account/billing, then try again.'
+            );
+          }
+          throw new Error(raw);
         }
 
         const outBlob = await fetch(data.imageDataUrl).then((r) => {

@@ -41,7 +41,7 @@ import { trimTransparentPetImage } from '@/lib/photobooth/trim-pet-alpha';
 
 const PET_MAX_DIM = 640;
 /** After cutout trim, scale pet slightly so it fills the scene better. */
-const CUTOUT_FIT_SCALE = 1.14;
+const CUTOUT_FIT_SCALE = 1.22;
 /** ~6° per tap */
 const TILT_STEP_RAD = Math.PI / 30;
 const TILT_MAX_RAD = Math.PI / 2;
@@ -471,8 +471,8 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       cutoutAppliedRef.current && !frameOnlyRef.current && !accessoriesOnlyRef.current;
     const maxW = frameOnlyRef.current || accessoriesOnlyRef.current ? 0.82 : 0.88;
     const maxH =
-      frameOnlyRef.current || accessoriesOnlyRef.current ? 0.85 : isCutout ? 0.76 : 0.9;
-    const centerY = isCutout ? 0.51 : 0.54;
+      frameOnlyRef.current || accessoriesOnlyRef.current ? 0.85 : isCutout ? 0.82 : 0.9;
+    const centerY = isCutout ? 0.5 : 0.54;
     const photo = computePetRect(petRef.current, cw, ch, maxW, maxH, centerY);
     let scale = photo.width / cw;
     if (isCutout) scale = Math.min(PET_SCALE_MAX, scale * CUTOUT_FIT_SCALE);
@@ -1006,7 +1006,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       if (generation !== applyGenRef.current) return;
 
       syncPetTransformFromFit();
-      setPetSelected(true);
+      setPetSelected(false);
 
       paintRef.current();
       notifyStickers();
