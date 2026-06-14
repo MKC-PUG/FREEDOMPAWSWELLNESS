@@ -37,7 +37,11 @@ import {
   measureFrameHeadlineMatExtra,
 } from '@/lib/photobooth/frame-headline';
 
+import { trimTransparentPetImage } from '@/lib/photobooth/trim-pet-alpha';
+
 const PET_MAX_DIM = 640;
+/** After cutout trim, scale pet slightly so it fills the scene better. */
+const CUTOUT_FIT_SCALE = 1.14;
 /** ~6° per tap */
 const TILT_STEP_RAD = Math.PI / 30;
 const TILT_MAX_RAD = Math.PI / 2;
@@ -143,24 +147,43 @@ function canvasHasAlpha(ctx: CanvasRenderingContext2D, w: number, h: number): bo
 }
 
 async function loadPetImage(url: string): Promise<HTMLImageElement> {
-  const img = await loadImageElement(url);
+  let img = await loadImageElement(url);
   const maxSide = Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height);
-  if (maxSide <= PET_MAX_DIM) return img;
+  if (maxSide > PET_MAX_DIM) {
+    const scale = PET_MAX_DIM / maxSide;
+    const w = Math.max(1, Math.round((img.naturalWidth || img.width) * scale));
+    const h = Math.max(1, Math.round((img.naturalHeight || img.height) * scale));
+    const scratch = document.createElement('canvas');
+    scratch.width = w;
+    scratch.height = h;
+    const ctx = scratch.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return img;
+    ctx.drawImage(img, 0, 0, w, h);
+    const hasAlpha = canvasHasAlpha(ctx, w, h);
+    const dataUrl = hasAlpha
+      ? scratch.toDataURL('image/png')
+      : scratch.toDataURL('image/jpeg', 0.88);
+    img = await loadImageElement(dataUrl);
+  }
 
-  const scale = PET_MAX_DIM / maxSide;
-  const w = Math.max(1, Math.round((img.naturalWidth || img.width) * scale));
-  const h = Math.max(1, Math.round((img.naturalHeight || img.height) * scale));
-  const scratch = document.createElement('canvas');
-  scratch.width = w;
-  scratch.height = h;
-  const ctx = scratch.getContext('2d', { willReadFrequently: true });
-  if (!ctx) return img;
-  ctx.drawImage(img, 0, 0, w, h);
-  const hasAlpha = canvasHasAlpha(ctx, w, h);
-  const dataUrl = hasAlpha
-    ? scratch.toDataURL('image/png')
-    : scratch.toDataURL('image/jpeg', 0.88);
-  return loadImageElement(dataUrl);
+  const iw = img.naturalWidth || img.width;
+  const ih = img.naturalHeight || img.height;
+  const probe = document.createElement('canvas');
+  probe.width = Math.min(iw, 72);
+  probe.height = Math.min(ih, 72);
+  const pCtx = probe.getContext('2d', { willReadFrequently: true });
+  if (pCtx) {
+    pCtx.drawImage(img, 0, 0, probe.width, probe.height);
+    if (canvasHasAlpha(pCtx, probe.width, probe.height)) {
+      try {
+        img = await trimTransparentPetImage(img);
+      } catch {
+        /* keep original */
+      }
+    }
+  }
+
+  return img;
 }
 
 function drawCheckerboard(ctx: CanvasRenderingContext2D, w: number, h: number) {
@@ -444,13 +467,19 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   const syncPetTransformFromFit = useCallback(() => {
     if (!petRef.current) return;
     const { width: cw, height: ch } = dimsRef.current;
+    const isCutout =
+      cutoutAppliedRef.current && !frameOnlyRef.current && !accessoriesOnlyRef.current;
     const maxW = frameOnlyRef.current || accessoriesOnlyRef.current ? 0.82 : 0.88;
-    const maxH = frameOnlyRef.current || accessoriesOnlyRef.current ? 0.85 : 0.9;
-    const photo = computePetRect(petRef.current, cw, ch, maxW, maxH, 0.54);
+    const maxH =
+      frameOnlyRef.current || accessoriesOnlyRef.current ? 0.85 : isCutout ? 0.76 : 0.9;
+    const centerY = isCutout ? 0.51 : 0.54;
+    const photo = computePetRect(petRef.current, cw, ch, maxW, maxH, centerY);
+    let scale = photo.width / cw;
+    if (isCutout) scale = Math.min(PET_SCALE_MAX, scale * CUTOUT_FIT_SCALE);
     petTransformRef.current = {
       x: (photo.left + photo.width / 2) / cw,
       y: (photo.top + photo.height / 2) / ch,
-      scale: photo.width / cw,
+      scale,
     };
   }, []);
 

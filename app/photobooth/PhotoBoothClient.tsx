@@ -23,6 +23,7 @@ import {
   getAiCostume,
   type AiCostumeId,
 } from '@/lib/photobooth/ai-costumes';
+import PhotoBoothFlowHint from './PhotoBoothFlowHint';
 import FrameDrawer from './FrameDrawer';
 import ExportDrawer from './ExportDrawer';
 import AiCostumeDrawer from './AiCostumeDrawer';
@@ -99,7 +100,6 @@ export default function PhotoBoothClient({
   const [aiCostumeConfigured, setAiCostumeConfigured] = useState(false);
   const [aiCostumeApplied, setAiCostumeApplied] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
-  const [cutoutPromptDismissed, setCutoutPromptDismissed] = useState(false);
 
   const handleStickersChange = useCallback(
     (stickers: StickerListItem[], selectedId: number | null) => {
@@ -146,7 +146,6 @@ export default function PhotoBoothClient({
         const url = URL.createObjectURL(blob);
         originalPhotoUrlRef.current = url;
         setCutoutApplied(false);
-        setCutoutPromptDismissed(false);
         setPhotoUrl(url);
       } catch {
         setLocalUploadError('Could not load saved photo. Please upload again.');
@@ -257,7 +256,6 @@ export default function PhotoBoothClient({
     ownerBlobUrlRef.current = null;
     setOwnerImageUrl(null);
     blobUrlRef.current = null;
-    setCutoutPromptDismissed(false);
     setAiCostumeApplied(false);
     setAiCostumeOpen(false);
     setAiCostumeBusy(false);
@@ -401,17 +399,12 @@ export default function PhotoBoothClient({
       const costume = getAiCostume(costumeId);
       if (!costume) return;
 
+      setAiCostumeOpen(false);
       setAiCostumeBusy(true);
       setAiCostumeProgress('Uploading your pet photo…');
-      setShareMsg('');
-      try {
-        if (!editorActive) {
-          pickTheme(costume.themeId);
-        } else {
-          setThemeId(costume.themeId);
-          setCanvasReady(false);
-        }
+      setShareMsg('✨ Creating Magic Look — please wait 15–30 sec…');
 
+      try {
         const sourceBlob = await fetch(petImageUrl).then((r) => {
           if (!r.ok) throw new Error('Could not read pet photo');
           return r.blob();
@@ -421,7 +414,19 @@ export default function PhotoBoothClient({
         fd.append('costumeId', costumeId);
 
         setAiCostumeProgress('AI is creating your holiday look…');
-        const res = await fetch('/api/photobooth/ai-costume', { method: 'POST', body: fd });
+        const controller = new AbortController();
+        const timeoutId = window.setTimeout(() => controller.abort(), 90000);
+        let res: Response;
+        try {
+          res = await fetch('/api/photobooth/ai-costume', {
+            method: 'POST',
+            body: fd,
+            signal: controller.signal,
+          });
+        } finally {
+          window.clearTimeout(timeoutId);
+        }
+
         const data = (await res.json()) as {
           success?: boolean;
           error?: string;
@@ -431,23 +436,36 @@ export default function PhotoBoothClient({
           throw new Error(data.error || 'AI Magic Look failed');
         }
 
+        const outBlob = await fetch(data.imageDataUrl).then((r) => {
+          if (!r.ok) throw new Error('Could not read AI image');
+          return r.blob();
+        });
+        const outUrl = URL.createObjectURL(outBlob);
+
         if (!preAiCostumeUrlRef.current) {
           preAiCostumeUrlRef.current = petImageUrl;
         }
-        setPhotoUrl(data.imageDataUrl, { keepEditor: true });
+
+        setThemeId(costume.themeId);
+        if (!editorActive) {
+          setEditorActive(true);
+        }
+        setPhotoUrl(outUrl, { keepEditor: true });
         setAiCostumeApplied(true);
         setCutoutApplied(true);
-        setAiCostumeOpen(false);
         setShareMsg(`✨ ${costume.name} — Magic Look applied!`);
       } catch (e) {
-        if (e instanceof Error && e.name === 'AbortError') return;
-        setShareMsg(e instanceof Error ? e.message : 'AI Magic Look failed');
+        if (e instanceof Error && e.name === 'AbortError') {
+          setShareMsg('AI Magic Look timed out — try again in a moment.');
+        } else {
+          setShareMsg(e instanceof Error ? e.message : 'AI Magic Look failed');
+        }
       } finally {
         setAiCostumeBusy(false);
         setAiCostumeProgress('');
       }
     },
-    [aiCostumeBusy, editorActive, petImageUrl, pickTheme, setPhotoUrl]
+    [aiCostumeBusy, editorActive, petImageUrl, setPhotoUrl]
   );
 
   const handleRestoreAiCostume = useCallback(() => {
@@ -460,14 +478,37 @@ export default function PhotoBoothClient({
 
   const handleRestoreOriginal = useCallback(() => {
     if (!originalPhotoUrlRef.current) return;
-    setPhotoUrl(originalPhotoUrlRef.current, { keepEditor: true });
+    preAiCostumeUrlRef.current = null;
+    setAiCostumeApplied(false);
+    setPhotoUrl(originalPhotoUrlRef.current);
     setCutoutApplied(false);
-    setShareMsg('Original photo restored.');
+    setThemeId(DEFAULT_PHOTO_BOOTH_THEME_ID);
+    setEditorActive(false);
+    setFrameId('walnut');
+    setShareMsg('Original photo restored — try cutout or pick a background.');
+    requestAnimationFrame(() => {
+      themesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   }, [setPhotoUrl]);
+
+  const handleBackToBackgrounds = useCallback(() => {
+    setEditorActive(false);
+    setShareMsg('Pick a different background above.');
+    requestAnimationFrame(() => {
+      themesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, []);
 
   const displayError = uploadError && !petImageUrl && !loadingPhoto ? uploadError : localUploadError;
   const isDuoMode = themeId === 'me-and-my-pup';
   const activeFrame = getFrameStyle(frameId);
+  const flowStep = !petImageUrl
+    ? 0
+    : editorActive
+      ? 3
+      : cutoutApplied
+        ? 2
+        : 1;
 
   return (
     <div className="min-h-screen bg-[#0A1625] text-white">
@@ -512,7 +553,7 @@ export default function PhotoBoothClient({
             <p className="mb-3 text-center text-xs text-white/50 leading-relaxed">
               Tap <strong className="text-white">Choose Photo</strong> below — upload starts automatically.
               <br />
-              Then pick a <strong className="text-amber-300">background</strong> — no cutout needed.
+              Optional <strong className="text-amber-300">magic cutout</strong> first, then pick a background.
             </p>
             <PhotoUploadZone
               onSelect={() => {}}
@@ -533,9 +574,58 @@ export default function PhotoBoothClient({
             ref={themesRef}
             className={`mt-4 ${themeSparkle && editorActive ? 'fp-theme-sparkle' : ''}`}
           >
+            <PhotoBoothFlowHint activeStep={flowStep} />
+
+            {aiCostumeBusy && (
+              <div className="mb-3 rounded-2xl border border-violet-400/45 bg-violet-950/40 p-4 text-center">
+                <p className="text-sm font-bold text-violet-200">✨ AI Magic Look working…</p>
+                <p className="mt-1 text-xs text-white/60">
+                  {aiCostumeProgress || 'Usually 15–30 seconds — app is not frozen'}
+                </p>
+              </div>
+            )}
+
             {uploadSuccess && (
               <div className="mb-3 rounded-2xl border border-green-500/40 bg-green-900/20 p-3 text-center text-sm text-green-400">
-                ✓ Photo ready — pick a background below
+                ✓ Photo ready — try magic cutout or pick a background below
+              </div>
+            )}
+
+            {!editorActive && (
+              <div className="mb-3 space-y-2">
+                {bgRemoving ? (
+                  <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4 text-center">
+                    <p className="text-base font-bold text-amber-400">Magic cutout working…</p>
+                    <p className="mt-2 text-sm text-white/70">{bgProgress || 'Please wait'}</p>
+                  </div>
+                ) : (
+                  <>
+                    {!cutoutApplied && (
+                      <button
+                        type="button"
+                        disabled={bgRemoving}
+                        onClick={() => void handleRemoveBackground()}
+                        className="w-full min-h-[48px] rounded-xl bg-amber-400 py-3 text-sm font-bold text-black touch-manipulation disabled:opacity-50"
+                      >
+                        ✨ Magic cutout (optional — do this before background)
+                      </button>
+                    )}
+                    {cutoutApplied && (
+                      <button
+                        type="button"
+                        onClick={handleRestoreOriginal}
+                        className="w-full min-h-[44px] rounded-xl border border-white/20 py-2.5 text-sm text-white/75 touch-manipulation"
+                      >
+                        ↩ Restore original photo (remove cutout)
+                      </button>
+                    )}
+                  </>
+                )}
+                {bgError && (
+                  <div className="rounded-2xl border border-red-500/50 bg-red-950/40 p-4 text-sm text-red-300 leading-relaxed">
+                    {bgError}
+                  </div>
+                )}
               </div>
             )}
 
@@ -624,72 +714,14 @@ export default function PhotoBoothClient({
                 onAddAccessory={addAccessory}
                 onRemoveBackground={() => void handleRemoveBackground()}
                 onRestoreOriginal={handleRestoreOriginal}
+                onBackToBackgrounds={handleBackToBackgrounds}
                 onRestoreAiCostume={handleRestoreAiCostume}
                 aiCostumeApplied={aiCostumeApplied}
+                aiCostumeBusy={aiCostumeBusy}
                 aiCostumeConfigured={aiCostumeConfigured}
                 onOpenAiCostume={() => setAiCostumeOpen(true)}
                 onExport={() => setExportOpen(true)}
               />
-            )}
-
-            {!editorActive && !cutoutApplied && !bgRemoving && !cutoutPromptDismissed && (
-              <div className="mt-3 rounded-2xl border border-amber-400/35 bg-amber-950/20 p-4 text-center">
-                <p className="text-sm font-semibold text-amber-200">Try magic cutout?</p>
-                <p className="mt-1 text-xs text-white/55 leading-relaxed">
-                  Optional — float your pet on themed backgrounds.
-                </p>
-                <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-                  <button
-                    type="button"
-                    onClick={() => void handleRemoveBackground()}
-                    className="flex-1 min-h-[44px] rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black touch-manipulation"
-                  >
-                    ✨ Try cutout
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCutoutPromptDismissed(true)}
-                    className="flex-1 min-h-[44px] rounded-xl border border-white/20 py-2.5 text-sm text-white/70 touch-manipulation"
-                  >
-                    Skip — pick a background
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {!editorActive && (
-              <div className="mt-3 space-y-2">
-                {bgRemoving && (
-                  <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4 text-center">
-                    <p className="text-base font-bold text-amber-400">Magic cutout working…</p>
-                    <p className="mt-2 text-sm text-white/70">{bgProgress || 'Please wait'}</p>
-                  </div>
-                )}
-                {bgError && (
-                  <div className="rounded-2xl border border-red-500/50 bg-red-950/40 p-4 text-sm text-red-300 leading-relaxed">
-                    {bgError}
-                  </div>
-                )}
-                {!cutoutApplied && cutoutPromptDismissed && (
-                  <button
-                    type="button"
-                    disabled={bgRemoving}
-                    onClick={() => void handleRemoveBackground()}
-                    className="w-full min-h-[44px] rounded-xl border border-white/20 bg-[#1F2A44]/80 py-2.5 text-sm font-semibold text-white/75 disabled:opacity-50 touch-manipulation"
-                  >
-                    {bgRemoving ? `✨ Cutout… ${bgProgress}` : '✨ Optional: try magic cutout (beta)'}
-                  </button>
-                )}
-                {cutoutApplied && (
-                  <button
-                    type="button"
-                    onClick={handleRestoreOriginal}
-                    className="w-full min-h-[44px] rounded-xl border border-white/20 py-2.5 text-sm text-white/70 touch-manipulation"
-                  >
-                    ↩ Restore original photo
-                  </button>
-                )}
-              </div>
             )}
 
             <button

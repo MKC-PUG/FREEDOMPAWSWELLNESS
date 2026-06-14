@@ -63,8 +63,10 @@ type Props = {
   onAddAccessory: (sticker: (typeof ACCESSORY_STICKERS)[number]) => void;
   onRemoveBackground: () => void;
   onRestoreOriginal: () => void;
+  onBackToBackgrounds: () => void;
   onRestoreAiCostume: () => void;
   aiCostumeApplied: boolean;
+  aiCostumeBusy: boolean;
   aiCostumeConfigured: boolean;
   onOpenAiCostume: () => void;
   onExport: () => void;
@@ -110,8 +112,10 @@ export default function PhotoBoothUnifiedEditor({
   onAddAccessory,
   onRemoveBackground,
   onRestoreOriginal,
+  onBackToBackgrounds,
   onRestoreAiCostume,
   aiCostumeApplied,
+  aiCostumeBusy,
   aiCostumeConfigured,
   onOpenAiCostume,
   onExport,
@@ -176,6 +180,7 @@ export default function PhotoBoothUnifiedEditor({
             <div className="rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-3 space-y-3">
               <button
                 type="button"
+                disabled={aiCostumeBusy}
                 onClick={onOpenAiCostume}
                 className="w-full min-h-[44px] rounded-xl border border-violet-400/45 bg-violet-500/15 py-2.5 text-xs font-bold text-violet-200 touch-manipulation"
               >
@@ -469,6 +474,13 @@ export default function PhotoBoothUnifiedEditor({
 
           {!isDuoMode && (
             <div className="rounded-xl border border-white/10 bg-[#0F1E38]/40 px-3 py-2 space-y-1">
+              <button
+                type="button"
+                onClick={onBackToBackgrounds}
+                className="w-full min-h-[40px] py-2 text-xs font-semibold text-amber-300/90 touch-manipulation"
+              >
+                ↩ Change background
+              </button>
               {aiCostumeApplied && (
                 <button
                   type="button"
@@ -488,7 +500,7 @@ export default function PhotoBoothUnifiedEditor({
                   onClick={onRestoreOriginal}
                   className="w-full py-2 text-xs text-white/70 touch-manipulation"
                 >
-                  ↩ Restore original photo
+                  ↩ Restore original photo (remove cutout &amp; restart)
                 </button>
               ) : (
                 <button
@@ -497,7 +509,7 @@ export default function PhotoBoothUnifiedEditor({
                   onClick={onRemoveBackground}
                   className="w-full py-2 text-xs text-white/55 touch-manipulation disabled:opacity-50"
                 >
-                  ✨ Optional: magic cutout (beta)
+                  ✨ Magic cutout (optional)
                 </button>
               )}
             </div>

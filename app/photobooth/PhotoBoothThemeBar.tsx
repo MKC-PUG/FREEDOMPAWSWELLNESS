@@ -35,7 +35,7 @@ export default function PhotoBoothThemeBar({
     <section className="mb-3">
       <div className="flex items-center gap-2 mb-2">
         <p className="text-sm font-bold text-amber-400 flex-1">
-          {editorActive ? 'Background' : 'Step 2 — Pick a background'}
+          {editorActive ? 'Background' : 'Pick a background'}
         </p>
         <button
           type="button"
@@ -47,7 +47,12 @@ export default function PhotoBoothThemeBar({
       </div>
       {!editorActive && (
         <p className="text-[10px] text-white/45 mb-2 leading-relaxed">
-          Swipe → tap one · your pet appears below
+          Swipe → tap one · your pet appears on the scene below
+        </p>
+      )}
+      {editorActive && (
+        <p className="text-[10px] text-white/45 mb-2 leading-relaxed">
+          Use ↩ Change background below to pick a different scene
         </p>
       )}
       <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory photobooth-hscroll">
