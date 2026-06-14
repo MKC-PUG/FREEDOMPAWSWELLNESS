@@ -26,28 +26,10 @@ export type PhotoBoothTheme = {
 const BG = (file: string) => `/images/photobooth/backgrounds/${file}`;
 const ST = (file: string) => `/images/photobooth/stickers/${file}`;
 
-export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [
-  {
-    id: 'me-and-my-pup',
-    name: 'Me & My Pup',
-    emoji: '💞',
-    background: '',
-    stickers: [],
-  },
-  {
-    id: 'frame-only',
-    name: 'Frame Only',
-    emoji: '🖼️',
-    background: '',
-    stickers: [],
-  },
-  {
-    id: 'accessories-only',
-    name: 'No Background',
-    emoji: '✨',
-    background: '',
-    stickers: [],
-  },
+/** Default single-pet scenic theme — never Me & My Pup until user taps it. */
+export const DEFAULT_PHOTO_BOOTH_THEME_ID = 'lake-legend';
+
+const SCENIC_THEMES: PhotoBoothTheme[] = [
   {
     id: 'superbud-hero',
     name: 'SuperBud Hero',
@@ -108,6 +90,33 @@ export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [
   },
 ];
 
+const EDITOR_THEMES: PhotoBoothTheme[] = [
+  {
+    id: 'me-and-my-pup',
+    name: 'Me & My Pup',
+    emoji: '💞',
+    background: '',
+    stickers: [],
+  },
+  {
+    id: 'frame-only',
+    name: 'Frame Only',
+    emoji: '🖼️',
+    background: '',
+    stickers: [],
+  },
+  {
+    id: 'accessories-only',
+    name: 'No Background',
+    emoji: '✨',
+    background: '',
+    stickers: [],
+  },
+];
+
+/** Scenic backgrounds first in the picker; duo / frame / checkerboard last. */
+export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [...SCENIC_THEMES, ...EDITOR_THEMES];
+
 /** Tap-to-add accessories — user places, resizes, and removes on canvas */
 export const ACCESSORY_STICKERS: StickerPlacement[] = [
   { src: ST('sticker-cape-superbud.png'), label: 'Cape', x: 0.5, y: 0.55, scale: 0.55 },
@@ -147,7 +156,11 @@ export function pickRandomSurpriseThemeId(): string {
 }
 
 export function getTheme(id: string): PhotoBoothTheme {
-  return PHOTO_BOOTH_THEMES.find((t) => t.id === id) ?? PHOTO_BOOTH_THEMES[0];
+  return (
+    PHOTO_BOOTH_THEMES.find((t) => t.id === id) ??
+    PHOTO_BOOTH_THEMES.find((t) => t.id === DEFAULT_PHOTO_BOOTH_THEME_ID) ??
+    PHOTO_BOOTH_THEMES[0]
+  );
 }
 
 /** True when theme uses a PNG/JPG file from /public (not canvas-drawn gradient). */

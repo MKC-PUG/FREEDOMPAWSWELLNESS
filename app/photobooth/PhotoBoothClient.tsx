@@ -9,6 +9,7 @@ import { clearPhotoPreview } from '@/lib/photo-storage';
 import { preloadPhotoBoothAssets } from '@/lib/photobooth/preload-themes';
 import {
   ACCESSORY_STICKERS,
+  DEFAULT_PHOTO_BOOTH_THEME_ID,
   getTheme,
   PHOTO_BOOTH_THEMES,
   pickRandomSurpriseThemeId,
@@ -52,7 +53,7 @@ export default function PhotoBoothClient({
   const [petImageUrl, setPetImageUrl] = useState<string | null>(null);
   const [loadingPhoto, setLoadingPhoto] = useState(Boolean(initialUploadId));
   const [editorActive, setEditorActive] = useState(false);
-  const [themeId, setThemeId] = useState(PHOTO_BOOTH_THEMES[0].id);
+  const [themeId, setThemeId] = useState(DEFAULT_PHOTO_BOOTH_THEME_ID);
   const [canvasReady, setCanvasReady] = useState(false);
   const [error, setError] = useState('');
   const [localUploadError, setLocalUploadError] = useState('');
@@ -156,6 +157,12 @@ export default function PhotoBoothClient({
   }, [shareMsg]);
 
   const pickTheme = useCallback((id: string) => {
+    if (id === 'me-and-my-pup') {
+      const ok = window.confirm(
+        'Me & My Pup uses two circles — one for you and one for your pet.\n\nOpen this layout?'
+      );
+      if (!ok) return;
+    }
     setThemeId(id);
     setEditorActive(true);
     setCanvasReady(false);
@@ -225,6 +232,8 @@ export default function PhotoBoothClient({
     setOwnerImageUrl(null);
     blobUrlRef.current = null;
     setCutoutPromptDismissed(false);
+    setThemeId(DEFAULT_PHOTO_BOOTH_THEME_ID);
+    setEditorActive(false);
     setPhotoUrl(null);
     setCutoutApplied(false);
     setBgRemoving(false);
@@ -261,11 +270,12 @@ export default function PhotoBoothClient({
       if (!originalPhotoUrlRef.current) {
         originalPhotoUrlRef.current = petImageUrl;
       }
-      setPhotoUrl(URL.createObjectURL(cutout), { keepEditor: true });
+      setPhotoUrl(URL.createObjectURL(cutout));
       setCutoutApplied(true);
       setFrameId('none');
-      setEditorActive(true);
-      setShareMsg('Cutout ready — drag your pet to reposition!');
+      setThemeId(DEFAULT_PHOTO_BOOTH_THEME_ID);
+      setEditorActive(false);
+      setShareMsg('Cutout ready — swipe a background below, then add props if you like!');
       requestAnimationFrame(() => {
         themesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
