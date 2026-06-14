@@ -66,6 +66,8 @@ type Props = {
   /** True after AI background removal — pet PNG has alpha; skip opaque mat/shadow on themes. */
   cutoutApplied?: boolean;
   showWatermark?: boolean;
+  /** Hide tip line when move controls are shown below the canvas. */
+  hideHint?: boolean;
   onReadyChange?: (ready: boolean) => void;
   onStickersChange?: (stickers: StickerListItem[], selectedId: number | null) => void;
   onPetSelectedChange?: (selected: boolean) => void;
@@ -351,6 +353,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     frameWidth = 0.45,
     cutoutApplied = false,
     showWatermark = true,
+    hideHint = false,
     onReadyChange,
     onStickersChange,
     onPetSelectedChange,
@@ -1133,9 +1136,11 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
           Applying theme…
         </div>
       )}
-      <p className="mb-2 text-center text-[11px] text-amber-300/80 leading-relaxed">
-        Tap your pet to move · pinch or ± to zoom · double-tap accessories to remove
-      </p>
+      {!hideHint && (
+        <p className="mb-2 text-center text-[11px] text-amber-300/80 leading-relaxed">
+          Tap your pet to move · pinch or ± to zoom · double-tap accessories to remove
+        </p>
+      )}
       <canvas
         ref={canvasRef}
         className="w-full touch-none rounded-2xl border border-white/15 shadow-xl select-none"

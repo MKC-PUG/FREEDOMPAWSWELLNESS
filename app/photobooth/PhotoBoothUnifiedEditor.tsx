@@ -124,8 +124,8 @@ export default function PhotoBoothUnifiedEditor({
         onChange={onOwnerFile}
       />
 
-      {/* Image */}
-      <div className="relative">
+      {/* Image — controls always render below, never on top */}
+      <div>
         {isDuoMode ? (
           <MeAndMyPupCanvas
             ref={meMyPupRef}
@@ -148,6 +148,7 @@ export default function PhotoBoothUnifiedEditor({
             frameId={frameId}
             frameWidth={frameWidth}
             cutoutApplied={cutoutApplied}
+            hideHint={showAdjustPad}
             onReadyChange={onReadyChange}
             onStickersChange={onStickersChange}
             onPetSelectedChange={onPetSelectedChange}
@@ -213,26 +214,17 @@ export default function PhotoBoothUnifiedEditor({
                 <AdjustPhotoPad
                   label={
                     adjustingSticker
-                      ? 'Move & resize accessory'
-                      : 'Move & resize your pet'
+                      ? 'Move accessory — controls below photo'
+                      : 'Move your pet — controls below photo'
                   }
                   onNudge={(dx, dy) => canvasRef.current?.nudgeSelected(dx, dy)}
                   onScale={(factor) => canvasRef.current?.scaleSelected(factor)}
-                  zoomOutLabel="− Smaller"
-                  zoomInLabel="+ Bigger"
+                  zoomOutLabel="−"
+                  zoomInLabel="+"
                   showTilt={adjustingSticker}
                   onTilt={(dir) => canvasRef.current?.tiltSelected(dir)}
+                  onDone={() => canvasRef.current?.clearSelection()}
                 />
-              )}
-
-              {showAdjustPad && (
-                <button
-                  type="button"
-                  onClick={() => canvasRef.current?.clearSelection()}
-                  className="w-full rounded-xl border border-amber-400/40 py-2 text-xs font-semibold text-amber-300 touch-manipulation"
-                >
-                  Done adjusting
-                </button>
               )}
 
               {themeId === 'accessories-only' && (

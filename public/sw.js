@@ -1,7 +1,7 @@
 // Freedom Paws PWA — network-first, Photo Booth / API never cached.
 // Bump CACHE_NAME on each deploy that changes static assets.
 
-const CACHE_NAME = 'freedom-paws-v58';
+const CACHE_NAME = 'freedom-paws-v59';
 
 const PRECACHE_URLS = [
   '/manifest.json',
@@ -24,15 +24,22 @@ function isNetworkOnly(pathname) {
   );
 }
 
+/** Hashed Next.js JS chunks — network-first so Photo Booth updates reach PWA users. */
+function isNextJsChunk(pathname) {
+  return pathname.startsWith('/_next/static/chunks/');
+}
+
 /** Hashed Next.js CSS — network-first so PWA never serves stale styles after deploy. */
 function isNextCss(pathname) {
   return pathname.startsWith('/_next/static/css/');
 }
 
-/** Hashed Next.js assets and stable public images — safe to cache. */
+/** Stable public images — safe to cache. Excludes hashed Next.js bundles. */
 function isCacheableAsset(pathname) {
   return (
-    pathname.startsWith('/_next/static/') ||
+    (pathname.startsWith('/_next/static/') &&
+      !isNextJsChunk(pathname) &&
+      !isNextCss(pathname)) ||
     pathname.startsWith('/images/') ||
     pathname.startsWith('/imgly-bg-removal/') ||
     pathname === '/favicon.ico' ||
@@ -95,6 +102,24 @@ self.addEventListener('fetch', (event) => {
       fetch(request).catch(() =>
         caches.match('/offline.html').then((cached) => cached || caches.match('/'))
       )
+    );
+    return;
+  }
+
+  // Next.js JS chunks — network-first (prevents stale Photo Booth UI after deploy).
+  if (isNextJsChunk(url.pathname)) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            caches
+              .open(CACHE_NAME)
+              .then((cache) => cache.put(request, response.clone()))
+              .catch(() => {});
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
     );
     return;
   }
