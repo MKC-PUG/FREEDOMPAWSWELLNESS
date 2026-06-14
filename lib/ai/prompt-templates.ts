@@ -37,7 +37,12 @@ Only include hits where you are ≥70% confident of the severe indicator.
 - Weight owner symptoms heavily; photo confirms or adds visual findings.
 - Use only slugs from the allowed list provided in the user message.
 - confidencePrimary: 55–92 (never above 92 — educational tool only).
-- Be concise in visualFindings (short phrases).`;
+- Be concise in visualFindings (short phrases).
+
+### STILL PHOTO RULES (single image — not video):
+- Do NOT report gait, timing, or motion-based findings you cannot see in one frame (e.g. "slow to stand", "slow to rise", "limping while walking", "trouble getting up") unless the frozen posture clearly shows it (e.g. obvious mid-rise struggle).
+- OK for stills: stiff posture, weight shift, asymmetric stance, visible swelling, coat/eye/dental cues.
+- Movement and rise-time symptoms come from owner text or video frames — do not infer them from a still photo alone.`;
 
 export const ANALYSIS_PROMPT = `Analyze the photo and symptoms. Return JSON matching the schema.`;
 

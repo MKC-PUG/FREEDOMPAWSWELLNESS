@@ -286,6 +286,7 @@ export const SYMPTOM_LEXICON: SymptomEntry[] = [
       'hip dysplasia',
       'elbow dysplasia',
       'slow to rise',
+      'slow to stand',
       'hard to stand up',
       'trouble standing',
     ],

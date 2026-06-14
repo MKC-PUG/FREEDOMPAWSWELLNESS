@@ -2,6 +2,10 @@ import type { SymptomMatch } from './normalize-symptoms';
 import { toRecommendation, type ProtocolRecommendation } from './protocol-registry';
 import { FALLBACK_PROTOCOL } from './symptom-lexicon';
 
+const MAX_MOVEMENT_PROTOCOL = 'Max Movement Pro – Joint Support';
+const PATRIOT_PROTOCOL = 'Patriot Defender – Immunity & Vitality';
+const FREEDOM_CALM_PROTOCOL = 'Freedom Calm – Anxiety Relief';
+
 export type RankedProtocols = {
   primary: ProtocolRecommendation;
   secondary: ProtocolRecommendation | null;
@@ -42,6 +46,21 @@ function findOverlapPair(
     }
   }
   return null;
+}
+
+/** Joint/mobility + senior: mobility #1, senior support #2 (not Immune+Calm alone). */
+function mobilitySeniorPair(
+  matches: SymptomMatch[],
+  seniorPair: { primary: string; secondary: string }
+): { primary: string; secondary: string } | null {
+  const hasMobility = matches.some((m) => m.entry.protocol === MAX_MOVEMENT_PROTOCOL);
+  const isSeniorPair =
+    seniorPair.primary === PATRIOT_PROTOCOL && seniorPair.secondary === FREEDOM_CALM_PROTOCOL;
+  if (!hasMobility || !isSeniorPair) return null;
+  return {
+    primary: MAX_MOVEMENT_PROTOCOL,
+    secondary: PATRIOT_PROTOCOL,
+  };
 }
 
 function findForcedSecondary(matches: SymptomMatch[], primaryTitle: string): string | null {
@@ -104,6 +123,8 @@ export function rankTopTwoProtocols(options: {
 
   const overlapPair = findOverlapPair(matches);
   if (overlapPair) {
+    const mobilityFirst = mobilitySeniorPair(matches, overlapPair);
+    const pair = mobilityFirst ?? overlapPair;
     const primaryConf = primaryConfidence(
       usedFallback,
       unknownPhrases.length,
@@ -112,8 +133,8 @@ export function rankTopTwoProtocols(options: {
     );
     const secondaryConf = secondaryConfidence(primaryConf, true, true);
     return {
-      primary: toRecommendation(overlapPair.primary, primaryConf),
-      secondary: toRecommendation(overlapPair.secondary, secondaryConf),
+      primary: toRecommendation(pair.primary, primaryConf),
+      secondary: toRecommendation(pair.secondary, secondaryConf),
       forcedPairUsed: true,
     };
   }

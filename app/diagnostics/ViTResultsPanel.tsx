@@ -130,7 +130,34 @@ export default function ViTResultsPanel({
         </p>
         <h3 className="text-xl font-bold text-white">Personalised protocol recommendations</h3>
         <p className="text-xs text-white/45 mt-2">{mediaLabel}</p>
+        {result.usedVision && (
+          <p className="text-sm text-amber-200/90 mt-3 leading-relaxed">
+            We combined your described symptoms with AI photo analysis below.
+          </p>
+        )}
       </div>
+
+      {result.visualFindings && result.visualFindings.length > 0 && (
+        <div className="rounded-2xl border-2 border-amber-400/50 bg-amber-950/25 p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-lg" aria-hidden>
+              👁️
+            </span>
+            <p className="text-sm font-bold text-amber-300 uppercase tracking-wide">
+              What AI saw from your {result.mediaType === 'video' ? 'video' : 'photo'}
+            </p>
+          </div>
+          <p className="text-[11px] text-white/45 mb-2 leading-relaxed">
+            Visible cues from this {result.mediaType === 'video' ? 'clip' : 'still image'} only — movement
+            symptoms come from what you typed or from video.
+          </p>
+          <ul className="text-sm text-white/90 list-disc pl-5 space-y-1.5">
+            {result.visualFindings.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {result.vetUrgent && (
         <div className="rounded-2xl border-2 border-red-500 bg-red-950/50 p-5">
@@ -155,24 +182,6 @@ export default function ViTResultsPanel({
             Signs appear mild-to-moderate. Focus on natural nutrition, detox support, lifestyle
             shifts, and our protocol recommendations. Seek veterinary triage if symptoms worsen.
           </p>
-        </div>
-      )}
-
-      {result.visualFindings && result.visualFindings.length > 0 && (
-        <div className="rounded-2xl border-2 border-amber-400/50 bg-amber-950/25 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg" aria-hidden>
-              👁️
-            </span>
-            <p className="text-sm font-bold text-amber-300 uppercase tracking-wide">
-              What AI saw from your {result.mediaType === 'video' ? 'video' : 'photo'}
-            </p>
-          </div>
-          <ul className="text-sm text-white/90 list-disc pl-5 space-y-1.5">
-            {result.visualFindings.map((f) => (
-              <li key={f}>{f}</li>
-            ))}
-          </ul>
         </div>
       )}
 
