@@ -161,7 +161,7 @@ const HOLIDAY_THEMES: PhotoBoothTheme[] = [
   },
 ];
 
-/** Real-photo adventures & US landmarks — same drop-in folder as holidays. */
+/** Real-photo adventures & landmarks — only themes with JPGs in /backgrounds/ (add more later). */
 const LANDMARK_THEMES: PhotoBoothTheme[] = [
   {
     id: 'ocean-boat',
@@ -175,27 +175,6 @@ const LANDMARK_THEMES: PhotoBoothTheme[] = [
     name: 'Golden Gate',
     emoji: '🌉',
     background: BG('bg-landmark-golden-gate.jpg'),
-    stickers: [],
-  },
-  {
-    id: 'landmark-grand-canyon',
-    name: 'Grand Canyon',
-    emoji: '🏜️',
-    background: BG('bg-landmark-grand-canyon.jpg'),
-    stickers: [],
-  },
-  {
-    id: 'landmark-rushmore',
-    name: 'Mount Rushmore',
-    emoji: '🗿',
-    background: BG('bg-landmark-rushmore.jpg'),
-    stickers: [],
-  },
-  {
-    id: 'landmark-national-mall',
-    name: 'National Mall',
-    emoji: '🏛️',
-    background: BG('bg-landmark-national-mall.jpg'),
     stickers: [],
   },
 ];
