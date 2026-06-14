@@ -90,6 +90,19 @@ const SCENIC_THEMES: PhotoBoothTheme[] = [
   },
 ];
 
+/** Holiday scenic backgrounds (canvas-drawn until custom PNGs ship). */
+const HOLIDAY_THEMES: PhotoBoothTheme[] = [
+  { id: 'holiday-new-years', name: "New Year's", emoji: '🎊', background: '', stickers: [] },
+  { id: 'holiday-st-patricks', name: "St. Patrick's", emoji: '☘️', background: '', stickers: [] },
+  { id: 'holiday-easter', name: 'Easter', emoji: '🐣', background: '', stickers: [] },
+  { id: 'holiday-cinco-de-mayo', name: 'Cinco de Mayo', emoji: '🎺', background: '', stickers: [] },
+  { id: 'holiday-july-4th', name: '4th of July', emoji: '🎆', background: '', stickers: [] },
+  { id: 'holiday-veterans', name: 'Veterans Day', emoji: '🎖️', background: '', stickers: [] },
+  { id: 'holiday-halloween', name: 'Halloween', emoji: '🎃', background: '', stickers: [] },
+  { id: 'holiday-thanksgiving', name: 'Thanksgiving', emoji: '🦃', background: '', stickers: [] },
+  { id: 'holiday-christmas', name: 'Christmas', emoji: '🎄', background: '', stickers: [] },
+];
+
 const EDITOR_THEMES: PhotoBoothTheme[] = [
   {
     id: 'me-and-my-pup',
@@ -114,8 +127,12 @@ const EDITOR_THEMES: PhotoBoothTheme[] = [
   },
 ];
 
-/** Scenic backgrounds first in the picker; duo / frame / checkerboard last. */
-export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [...SCENIC_THEMES, ...EDITOR_THEMES];
+/** Scenic + holiday backgrounds first; duo / frame / checkerboard last. */
+export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [
+  ...SCENIC_THEMES,
+  ...HOLIDAY_THEMES,
+  ...EDITOR_THEMES,
+];
 
 /** Tap-to-add accessories — user places, resizes, and removes on canvas */
 export const ACCESSORY_STICKERS: StickerPlacement[] = [

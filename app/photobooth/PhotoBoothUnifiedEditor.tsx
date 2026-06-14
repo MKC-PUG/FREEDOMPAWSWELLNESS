@@ -61,6 +61,10 @@ type Props = {
   onAddAccessory: (sticker: (typeof ACCESSORY_STICKERS)[number]) => void;
   onRemoveBackground: () => void;
   onRestoreOriginal: () => void;
+  onRestoreAiCostume: () => void;
+  aiCostumeApplied: boolean;
+  aiCostumeConfigured: boolean;
+  onOpenAiCostume: () => void;
   onExport: () => void;
 };
 
@@ -102,6 +106,10 @@ export default function PhotoBoothUnifiedEditor({
   onAddAccessory,
   onRemoveBackground,
   onRestoreOriginal,
+  onRestoreAiCostume,
+  aiCostumeApplied,
+  aiCostumeConfigured,
+  onOpenAiCostume,
   onExport,
 }: Props) {
   const [accessoryOpen, setAccessoryOpen] = useState(false);
@@ -160,6 +168,16 @@ export default function PhotoBoothUnifiedEditor({
           {/* Tools directly below image */}
           {!isDuoMode ? (
             <div className="rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-3 space-y-3">
+              <button
+                type="button"
+                onClick={onOpenAiCostume}
+                className="w-full min-h-[44px] rounded-xl border border-violet-400/45 bg-violet-500/15 py-2.5 text-xs font-bold text-violet-200 touch-manipulation"
+              >
+                ✨ AI Magic Look — holiday costumes
+                {!aiCostumeConfigured && (
+                  <span className="ml-1 font-normal text-white/45">(backgrounds ready)</span>
+                )}
+              </button>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -444,7 +462,16 @@ export default function PhotoBoothUnifiedEditor({
           )}
 
           {!isDuoMode && (
-            <div className="rounded-xl border border-white/10 bg-[#0F1E38]/40 px-3 py-2">
+            <div className="rounded-xl border border-white/10 bg-[#0F1E38]/40 px-3 py-2 space-y-1">
+              {aiCostumeApplied && (
+                <button
+                  type="button"
+                  onClick={onRestoreAiCostume}
+                  className="w-full py-2 text-xs text-violet-300/90 touch-manipulation"
+                >
+                  ↩ Remove AI costume
+                </button>
+              )}
               {bgRemoving ? (
                 <p className="text-center text-xs font-bold text-amber-400">✨ Cutout… {bgProgress}</p>
               ) : bgError ? (

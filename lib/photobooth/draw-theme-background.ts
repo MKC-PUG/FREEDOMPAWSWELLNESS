@@ -24,6 +24,33 @@ export function drawThemeBackground(
     case 'birthday-bash':
       drawBirthday(ctx, w, h);
       break;
+    case 'holiday-new-years':
+      drawHolidayNewYears(ctx, w, h);
+      break;
+    case 'holiday-st-patricks':
+      drawHolidayStPatricks(ctx, w, h);
+      break;
+    case 'holiday-easter':
+      drawHolidayEaster(ctx, w, h);
+      break;
+    case 'holiday-cinco-de-mayo':
+      drawHolidayCincoDeMayo(ctx, w, h);
+      break;
+    case 'holiday-july-4th':
+      drawHolidayJuly4(ctx, w, h);
+      break;
+    case 'holiday-veterans':
+      drawHolidayVeterans(ctx, w, h);
+      break;
+    case 'holiday-halloween':
+      drawHolidayHalloween(ctx, w, h);
+      break;
+    case 'holiday-thanksgiving':
+      drawHolidayThanksgiving(ctx, w, h);
+      break;
+    case 'holiday-christmas':
+      drawHolidayChristmas(ctx, w, h);
+      break;
     default:
       ctx.fillStyle = '#0A1625';
       ctx.fillRect(0, 0, w, h);
@@ -109,5 +136,105 @@ function drawBirthday(ctx: CanvasRenderingContext2D, w: number, h: number) {
       ctx.arc(x, y, size * 0.5, 0, Math.PI * 2);
       ctx.fill();
     }
+  }
+}
+
+function drawHolidayNewYears(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#0f172a');
+  grad.addColorStop(0.5, '#312e81');
+  grad.addColorStop(1, '#1e1b4b');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#F5C242';
+  for (let i = 0; i < 30; i += 1) {
+    ctx.beginPath();
+    ctx.arc(((i * 97) % 1000) / 1000 * w, ((i * 53) % 800) / 1000 * h, 1.5 + (i % 3), 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawHolidayStPatricks(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const grad = ctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, '#14532d');
+  grad.addColorStop(1, '#052e16');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = 'rgba(74, 222, 128, 0.35)';
+  for (let i = 0; i < 12; i += 1) {
+    ctx.beginPath();
+    ctx.arc(w * (0.1 + i * 0.07), h * 0.15, 8 + (i % 3) * 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawHolidayEaster(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#fdf2f8');
+  grad.addColorStop(0.45, '#fbcfe8');
+  grad.addColorStop(1, '#a7f3d0');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+}
+
+function drawHolidayCincoDeMayo(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const colors = ['#DC2626', '#16A34A', '#F5C242', '#FFFFFF'];
+  for (let i = 0; i < 8; i += 1) {
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fillRect(0, (h / 8) * i, w, h / 8 + 1);
+  }
+}
+
+function drawHolidayJuly4(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  drawPatriot(ctx, w, h);
+}
+
+function drawHolidayVeterans(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#1e293b');
+  grad.addColorStop(0.5, '#334155');
+  grad.addColorStop(1, '#0f172a');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = 'rgba(245, 194, 66, 0.85)';
+  ctx.font = `bold ${Math.max(10, w * 0.04)}px system-ui,sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText('Thank you for your service', w / 2, h * 0.12);
+}
+
+function drawHolidayHalloween(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#431407');
+  grad.addColorStop(0.55, '#7c2d12');
+  grad.addColorStop(1, '#1c1917');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#F97316';
+  ctx.beginPath();
+  ctx.arc(w * 0.85, h * 0.18, w * 0.08, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawHolidayThanksgiving(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#78350f');
+  grad.addColorStop(0.4, '#b45309');
+  grad.addColorStop(1, '#451a03');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+}
+
+function drawHolidayChristmas(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#0f172a');
+  grad.addColorStop(0.45, '#14532d');
+  grad.addColorStop(1, '#7f1d1d');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  for (let i = 0; i < 24; i += 1) {
+    ctx.beginPath();
+    ctx.arc(((i * 113) % 1000) / 1000 * w, ((i * 67) % 600) / 1000 * h, 1.2, 0, Math.PI * 2);
+    ctx.fill();
   }
 }

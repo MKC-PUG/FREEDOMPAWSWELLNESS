@@ -19,8 +19,13 @@ import {
   type MeAndMyPupVariant,
   type SlotId,
 } from '@/lib/photobooth/me-and-my-pup';
+import {
+  getAiCostume,
+  type AiCostumeId,
+} from '@/lib/photobooth/ai-costumes';
 import FrameDrawer from './FrameDrawer';
 import ExportDrawer from './ExportDrawer';
+import AiCostumeDrawer from './AiCostumeDrawer';
 import PhotoBoothThemeBar from './PhotoBoothThemeBar';
 import PhotoBoothUnifiedEditor from './PhotoBoothUnifiedEditor';
 import type { ExportPhotoPayload } from '@/lib/photobooth/export-photo';
@@ -55,6 +60,7 @@ export default function PhotoBoothClient({
   const ownerBlobUrlRef = useRef<string | null>(null);
   const blobUrlRef = useRef<string | null>(null);
   const originalPhotoUrlRef = useRef<string | null>(null);
+  const preAiCostumeUrlRef = useRef<string | null>(null);
   const themesRef = useRef<HTMLDivElement>(null);
 
   const [petImageUrl, setPetImageUrl] = useState<string | null>(null);
@@ -85,6 +91,11 @@ export default function PhotoBoothClient({
   const [frameOpen, setFrameOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [exportBusy, setExportBusy] = useState(false);
+  const [aiCostumeOpen, setAiCostumeOpen] = useState(false);
+  const [aiCostumeBusy, setAiCostumeBusy] = useState(false);
+  const [aiCostumeProgress, setAiCostumeProgress] = useState('');
+  const [aiCostumeConfigured, setAiCostumeConfigured] = useState(false);
+  const [aiCostumeApplied, setAiCostumeApplied] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [cutoutPromptDismissed, setCutoutPromptDismissed] = useState(false);
 
@@ -100,6 +111,10 @@ export default function PhotoBoothClient({
     clearPhotoPreview('photobooth');
     void clearPhotoFromDb('photobooth');
     preloadPhotoBoothAssets();
+    void fetch('/api/photobooth/ai-costume')
+      .then((r) => r.json())
+      .then((data: { configured?: boolean }) => setAiCostumeConfigured(Boolean(data.configured)))
+      .catch(() => setAiCostumeConfigured(false));
   }, []);
 
   const setPhotoUrl = useCallback((url: string | null, options?: { keepEditor?: boolean }) => {
@@ -236,10 +251,15 @@ export default function PhotoBoothClient({
       URL.revokeObjectURL(ownerBlobUrlRef.current);
     }
     originalPhotoUrlRef.current = null;
+    preAiCostumeUrlRef.current = null;
     ownerBlobUrlRef.current = null;
     setOwnerImageUrl(null);
     blobUrlRef.current = null;
     setCutoutPromptDismissed(false);
+    setAiCostumeApplied(false);
+    setAiCostumeOpen(false);
+    setAiCostumeBusy(false);
+    setAiCostumeProgress('');
     setThemeId(DEFAULT_PHOTO_BOOTH_THEME_ID);
     setEditorActive(false);
     setPhotoUrl(null);
@@ -372,6 +392,69 @@ export default function PhotoBoothClient({
       );
     });
   }, [runExport]);
+
+  const handleApplyAiCostume = useCallback(
+    async (costumeId: AiCostumeId) => {
+      if (!petImageUrl || aiCostumeBusy) return;
+      const costume = getAiCostume(costumeId);
+      if (!costume) return;
+
+      setAiCostumeBusy(true);
+      setAiCostumeProgress('Uploading your pet photo…');
+      setShareMsg('');
+      try {
+        if (!editorActive) {
+          pickTheme(costume.themeId);
+        } else {
+          setThemeId(costume.themeId);
+          setCanvasReady(false);
+        }
+
+        const sourceBlob = await fetch(petImageUrl).then((r) => {
+          if (!r.ok) throw new Error('Could not read pet photo');
+          return r.blob();
+        });
+        const fd = new FormData();
+        fd.append('image', sourceBlob, 'pet.jpg');
+        fd.append('costumeId', costumeId);
+
+        setAiCostumeProgress('AI is creating your holiday look…');
+        const res = await fetch('/api/photobooth/ai-costume', { method: 'POST', body: fd });
+        const data = (await res.json()) as {
+          success?: boolean;
+          error?: string;
+          imageDataUrl?: string;
+        };
+        if (!res.ok || !data.success || !data.imageDataUrl) {
+          throw new Error(data.error || 'AI Magic Look failed');
+        }
+
+        if (!preAiCostumeUrlRef.current) {
+          preAiCostumeUrlRef.current = petImageUrl;
+        }
+        setPhotoUrl(data.imageDataUrl, { keepEditor: true });
+        setAiCostumeApplied(true);
+        setCutoutApplied(true);
+        setAiCostumeOpen(false);
+        setShareMsg(`✨ ${costume.name} — Magic Look applied!`);
+      } catch (e) {
+        if (e instanceof Error && e.name === 'AbortError') return;
+        setShareMsg(e instanceof Error ? e.message : 'AI Magic Look failed');
+      } finally {
+        setAiCostumeBusy(false);
+        setAiCostumeProgress('');
+      }
+    },
+    [aiCostumeBusy, editorActive, petImageUrl, pickTheme, setPhotoUrl]
+  );
+
+  const handleRestoreAiCostume = useCallback(() => {
+    if (!preAiCostumeUrlRef.current) return;
+    setPhotoUrl(preAiCostumeUrlRef.current, { keepEditor: true });
+    preAiCostumeUrlRef.current = null;
+    setAiCostumeApplied(false);
+    setShareMsg('Removed AI costume — your original pet photo is back.');
+  }, [setPhotoUrl]);
 
   const handleRestoreOriginal = useCallback(() => {
     if (!originalPhotoUrlRef.current) return;
@@ -533,6 +616,10 @@ export default function PhotoBoothClient({
                 onAddAccessory={addAccessory}
                 onRemoveBackground={() => void handleRemoveBackground()}
                 onRestoreOriginal={handleRestoreOriginal}
+                onRestoreAiCostume={handleRestoreAiCostume}
+                aiCostumeApplied={aiCostumeApplied}
+                aiCostumeConfigured={aiCostumeConfigured}
+                onOpenAiCostume={() => setAiCostumeOpen(true)}
                 onExport={() => setExportOpen(true)}
               />
             )}
@@ -623,6 +710,15 @@ export default function PhotoBoothClient({
               onSaveToPhotos={handleSaveToPhotos}
               onShareSocial={handleShareSocial}
               onShareEmail={handleShareEmail}
+            />
+
+            <AiCostumeDrawer
+              open={aiCostumeOpen}
+              busy={aiCostumeBusy}
+              configured={aiCostumeConfigured}
+              progress={aiCostumeProgress}
+              onClose={() => setAiCostumeOpen(false)}
+              onPick={(id) => void handleApplyAiCostume(id)}
             />
           </div>
         )}
