@@ -36,8 +36,20 @@ import {
   shareToSocial,
   shareViaEmail,
 } from '@/lib/photobooth/export-photo';
+import { aiCreditFetchInit } from '@/lib/photobooth/guest-session';
 import type { MeAndMyPupCanvasHandle } from './MeAndMyPupCanvas';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
+
+type AiCreditsClient = {
+  configured: boolean;
+  remaining: number;
+  monthlyAllowance: number;
+  dailyCap: number;
+  dailyUsed: number;
+  tier: string;
+  allowanceResetAt: string | null;
+  packs: { code: string; name: string; credits: number; priceUsd: number }[];
+};
 
 type Props = {
   initialUploadId: string | null;
@@ -100,7 +112,19 @@ export default function PhotoBoothClient({
   const [aiCostumeProgress, setAiCostumeProgress] = useState('');
   const [aiCostumeConfigured, setAiCostumeConfigured] = useState(false);
   const [aiCostumeApplied, setAiCostumeApplied] = useState(false);
+  const [aiCredits, setAiCredits] = useState<AiCreditsClient | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  const refreshAiCredits = useCallback(async () => {
+    try {
+      const res = await fetch('/api/photobooth/ai-credits', aiCreditFetchInit());
+      if (!res.ok) return;
+      const data = (await res.json()) as AiCreditsClient;
+      setAiCredits(data);
+    } catch {
+      /* non-fatal */
+    }
+  }, []);
 
   const handleStickersChange = useCallback(
     (stickers: StickerListItem[], selectedId: number | null) => {
@@ -114,11 +138,15 @@ export default function PhotoBoothClient({
     clearPhotoPreview('photobooth');
     void clearPhotoFromDb('photobooth');
     preloadPhotoBoothAssets();
-    void fetch('/api/photobooth/ai-costume')
+    void fetch('/api/photobooth/ai-costume', aiCreditFetchInit())
       .then((r) => r.json())
-      .then((data: { configured?: boolean }) => setAiCostumeConfigured(Boolean(data.configured)))
+      .then((data: { configured?: boolean; credits?: AiCreditsClient }) => {
+        setAiCostumeConfigured(Boolean(data.configured));
+        if (data.credits) setAiCredits(data.credits);
+      })
       .catch(() => setAiCostumeConfigured(false));
-  }, []);
+    void refreshAiCredits();
+  }, [refreshAiCredits]);
 
   const setPhotoUrl = useCallback((url: string | null, options?: { keepEditor?: boolean }) => {
     if (
@@ -422,6 +450,7 @@ export default function PhotoBoothClient({
         let res: Response;
         try {
           res = await fetch('/api/photobooth/ai-costume', {
+            ...aiCreditFetchInit(),
             method: 'POST',
             body: fd,
             signal: controller.signal,
@@ -433,10 +462,18 @@ export default function PhotoBoothClient({
         const data = (await res.json()) as {
           success?: boolean;
           error?: string;
+          errorCode?: string;
           imageDataUrl?: string;
+          credits?: AiCreditsClient;
         };
+        if (data.credits) setAiCredits(data.credits);
+        else void refreshAiCredits();
+
         if (!res.ok || !data.success || !data.imageDataUrl) {
           const raw = data.error || 'AI Magic Look failed';
+          if (data.errorCode === 'no_credits') {
+            throw new Error(raw);
+          }
           if (/402|insufficient credit|payment required/i.test(raw)) {
             throw new Error(
               'AI Magic Look needs Replicate billing credit — add funds at replicate.com/account/billing, then try again.'
@@ -474,7 +511,7 @@ export default function PhotoBoothClient({
         setAiCostumeProgress('');
       }
     },
-    [aiCostumeBusy, editorActive, petImageUrl, setPhotoUrl]
+    [aiCostumeBusy, editorActive, petImageUrl, refreshAiCredits, setPhotoUrl]
   );
 
   const handleRestoreAiCostume = useCallback(() => {
@@ -728,7 +765,11 @@ export default function PhotoBoothClient({
                 aiCostumeApplied={aiCostumeApplied}
                 aiCostumeBusy={aiCostumeBusy}
                 aiCostumeConfigured={aiCostumeConfigured}
-                onOpenAiCostume={() => setAiCostumeOpen(true)}
+                aiCreditsRemaining={aiCredits?.remaining}
+                onOpenAiCostume={() => {
+                  void refreshAiCredits();
+                  setAiCostumeOpen(true);
+                }}
                 onExport={() => setExportOpen(true)}
               />
             )}
@@ -770,6 +811,7 @@ export default function PhotoBoothClient({
               busy={aiCostumeBusy}
               configured={aiCostumeConfigured}
               progress={aiCostumeProgress}
+              credits={aiCredits}
               onClose={() => setAiCostumeOpen(false)}
               onPick={(id) => void handleApplyAiCostume(id)}
             />

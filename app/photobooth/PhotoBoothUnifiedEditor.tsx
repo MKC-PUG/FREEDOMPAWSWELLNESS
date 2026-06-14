@@ -68,6 +68,7 @@ type Props = {
   aiCostumeApplied: boolean;
   aiCostumeBusy: boolean;
   aiCostumeConfigured: boolean;
+  aiCreditsRemaining?: number;
   onOpenAiCostume: () => void;
   onExport: () => void;
 };
@@ -117,6 +118,7 @@ export default function PhotoBoothUnifiedEditor({
   aiCostumeApplied,
   aiCostumeBusy,
   aiCostumeConfigured,
+  aiCreditsRemaining,
   onOpenAiCostume,
   onExport,
 }: Props) {
@@ -180,11 +182,16 @@ export default function PhotoBoothUnifiedEditor({
             <div className="rounded-2xl border border-amber-400/35 bg-[#0F1E38]/90 p-3 space-y-3">
               <button
                 type="button"
-                disabled={aiCostumeBusy}
+                disabled={aiCostumeBusy || (aiCreditsRemaining !== undefined && aiCreditsRemaining < 1)}
                 onClick={onOpenAiCostume}
-                className="w-full min-h-[44px] rounded-xl border border-violet-400/45 bg-violet-500/15 py-2.5 text-xs font-bold text-violet-200 touch-manipulation"
+                className="w-full min-h-[44px] rounded-xl border border-violet-400/45 bg-violet-500/15 py-2.5 text-xs font-bold text-violet-200 touch-manipulation disabled:opacity-40"
               >
                 ✨ AI Magic Look — holiday costumes
+                {aiCreditsRemaining !== undefined && (
+                  <span className="ml-1 font-normal text-white/55">
+                    ({aiCreditsRemaining} left this month)
+                  </span>
+                )}
                 {!aiCostumeConfigured && (
                   <span className="ml-1 font-normal text-white/45">(backgrounds ready)</span>
                 )}
