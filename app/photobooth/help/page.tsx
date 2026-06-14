@@ -47,7 +47,7 @@ const optionalTips = [
   },
   {
     title: 'Picture frame (optional)',
-    body: 'After picking a background, scroll down to add a mat and border. Drag the thickness slider for thin → thick.',
+    body: 'After picking a background, tap Picture frame to add a mat and border. Type a print headline on the cream mat — great for gifts and wall prints. Drag the thickness slider for thin → thick.',
   },
 ];
 

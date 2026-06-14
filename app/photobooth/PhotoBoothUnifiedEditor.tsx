@@ -34,6 +34,8 @@ type Props = {
   canvasReady: boolean;
   frameId: FrameStyleId;
   frameWidth: number;
+  frameHeadline: string;
+  frameHeadlineOffset: number;
   cutoutApplied: boolean;
   bgRemoving: boolean;
   bgProgress: string;
@@ -79,6 +81,8 @@ export default function PhotoBoothUnifiedEditor({
   canvasReady,
   frameId,
   frameWidth,
+  frameHeadline,
+  frameHeadlineOffset,
   cutoutApplied,
   bgRemoving,
   bgProgress,
@@ -153,6 +157,8 @@ export default function PhotoBoothUnifiedEditor({
             themeId={themeId}
             frameId={frameId}
             frameWidth={frameWidth}
+            frameHeadline={frameHeadline}
+            frameHeadlineOffset={frameHeadlineOffset}
             cutoutApplied={cutoutApplied}
             hideHint={showAdjustPad}
             onReadyChange={onReadyChange}

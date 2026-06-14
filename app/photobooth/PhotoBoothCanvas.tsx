@@ -25,11 +25,17 @@ import {
 } from '@/lib/photobooth/draw-frame';
 import {
   computePetRect,
+  frameThicknessPx,
+  matPaddingPx,
   type FrameStyleId,
   type PetRect,
 } from '@/lib/photobooth/frames';
 import { smartStickerPlacement } from '@/lib/photobooth/smart-placement';
 import { drawPhotoBoothWatermark } from '@/lib/photobooth/watermark';
+import {
+  drawFrameMatHeadline,
+  measureFrameHeadlineMatExtra,
+} from '@/lib/photobooth/frame-headline';
 
 const PET_MAX_DIM = 640;
 /** ~6° per tap */
@@ -63,6 +69,9 @@ type Props = {
   themeId: string;
   frameId?: FrameStyleId;
   frameWidth?: number;
+  /** Print-style caption on the picture-frame mat (requires frame + mat). */
+  frameHeadline?: string;
+  frameHeadlineOffset?: number;
   /** True after AI background removal — pet PNG has alpha; skip opaque mat/shadow on themes. */
   cutoutApplied?: boolean;
   showWatermark?: boolean;
@@ -351,6 +360,8 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     themeId,
     frameId = 'none',
     frameWidth = 0.45,
+    frameHeadline = '',
+    frameHeadlineOffset = 0,
     cutoutApplied = false,
     showWatermark = true,
     hideHint = false,
@@ -388,11 +399,15 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
   const selectedIdRef = useRef<number | null>(null);
   const frameIdRef = useRef<FrameStyleId>(frameId);
   const frameWidthRef = useRef(frameWidth);
+  const frameHeadlineRef = useRef(frameHeadline);
+  const frameHeadlineOffsetRef = useRef(frameHeadlineOffset);
   const cutoutAppliedRef = useRef(cutoutApplied);
   const [busy, setBusy] = useState(false);
 
   frameIdRef.current = frameId;
   frameWidthRef.current = frameWidth;
+  frameHeadlineRef.current = frameHeadline;
+  frameHeadlineOffsetRef.current = frameHeadlineOffset;
   cutoutAppliedRef.current = cutoutApplied;
 
   busyRef.current = busy;
@@ -470,18 +485,51 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     }
 
     let frameLayout: ReturnType<typeof computeFrameRects> | null = null;
+    let photo: PetRect | null = null;
+    let yShift = 0;
 
     if (petRef.current) {
-      const photo = getCurrentPetRect()!;
+      photo = getCurrentPetRect()!;
       const styleId = frameIdRef.current;
       const widthNorm = frameWidthRef.current;
+      const headline = frameHeadlineRef.current;
 
       const floatCutout =
         cutoutAppliedRef.current && !frameOnlyRef.current && !accessoriesOnlyRef.current;
       const drawFrameBacking = styleId !== 'none' && !floatCutout;
 
       if (drawFrameBacking) {
-        frameLayout = computeFrameRects(photo, widthNorm, cw, ch);
+        const framePx = frameThicknessPx(cw, ch, widthNorm);
+        const matPx = matPaddingPx(framePx);
+        const matBottomExtra = headline.trim()
+          ? measureFrameHeadlineMatExtra(
+              ctx,
+              headline,
+              photo.width + matPx * 2,
+              cw,
+              matPx
+            )
+          : 0;
+        frameLayout = computeFrameRects(photo, widthNorm, cw, ch, matBottomExtra);
+        const watermarkPad = showWatermark ? Math.max(14, cw * 0.04) : 0;
+        const overflow =
+          frameLayout.outer.top + frameLayout.outer.height - (ch - watermarkPad);
+        if (overflow > 0) yShift = overflow;
+      }
+    }
+
+    if (yShift > 0) {
+      ctx.save();
+      ctx.translate(0, -yShift);
+    }
+
+    if (petRef.current && photo) {
+      const styleId = frameIdRef.current;
+      const floatCutout =
+        cutoutAppliedRef.current && !frameOnlyRef.current && !accessoriesOnlyRef.current;
+      const drawFrameBacking = styleId !== 'none' && !floatCutout;
+
+      if (drawFrameBacking && frameLayout) {
         drawFrameShadow(ctx, photo, frameLayout.framePx, frameLayout.matPx);
         drawFrameMat(ctx, frameLayout.mat);
       }
@@ -522,6 +570,20 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       cutoutAppliedRef.current && !frameOnlyRef.current && !accessoriesOnlyRef.current;
     if (frameLayout && frameIdRef.current !== 'none' && !floatCutout) {
       drawFrameBorder(ctx, frameLayout.outer, frameLayout.mat, frameIdRef.current);
+      if (photo && frameHeadlineRef.current.trim()) {
+        drawFrameMatHeadline(
+          ctx,
+          photo,
+          frameLayout.mat,
+          frameHeadlineRef.current,
+          frameHeadlineOffsetRef.current,
+          cw
+        );
+      }
+    }
+
+    if (yShift > 0) {
+      ctx.restore();
     }
 
     if (showWatermark) {
@@ -948,7 +1010,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     if (!petImageUrl || busy) return;
     if (petRef.current) syncPetTransformFromFit();
     paintRef.current();
-  }, [frameId, frameWidth, cutoutApplied, petImageUrl, busy, syncPetTransformFromFit]);
+  }, [frameId, frameWidth, frameHeadline, frameHeadlineOffset, cutoutApplied, petImageUrl, busy, syncPetTransformFromFit]);
 
   const addSticker = useCallback(
     async (placement: StickerPlacement) => {

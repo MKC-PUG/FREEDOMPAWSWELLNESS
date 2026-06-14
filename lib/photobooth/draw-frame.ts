@@ -7,7 +7,9 @@ export function computeFrameRects(
   photo: PetRect,
   widthNorm: number,
   cw: number,
-  ch: number
+  ch: number,
+  /** Extra cream mat below the photo for a print-style caption. */
+  matBottomExtra = 0
 ): { outer: PetRect; mat: PetRect; framePx: number; matPx: number } {
   const framePx = frameThicknessPx(cw, ch, widthNorm);
   const matPx = matPaddingPx(framePx);
@@ -15,7 +17,7 @@ export function computeFrameRects(
     left: photo.left - matPx,
     top: photo.top - matPx,
     width: photo.width + matPx * 2,
-    height: photo.height + matPx * 2,
+    height: photo.height + matPx * 2 + Math.max(0, matBottomExtra),
   };
   const outer: PetRect = {
     left: mat.left - framePx,

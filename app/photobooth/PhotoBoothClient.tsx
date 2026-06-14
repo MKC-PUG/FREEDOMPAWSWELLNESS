@@ -75,6 +75,8 @@ export default function PhotoBoothClient({
   const [selectedStickerId, setSelectedStickerId] = useState<number | null>(null);
   const [frameId, setFrameId] = useState<FrameStyleId>('walnut');
   const [frameWidth, setFrameWidth] = useState(0.5);
+  const [frameHeadline, setFrameHeadline] = useState('');
+  const [frameHeadlineOffset, setFrameHeadlineOffset] = useState(0);
   const [bgRemoving, setBgRemoving] = useState(false);
   const [bgProgress, setBgProgress] = useState('');
   const [bgError, setBgError] = useState('');
@@ -552,7 +554,11 @@ export default function PhotoBoothClient({
               >
                 <span>🖼️ Picture frame (optional)</span>
                 <span className="text-amber-300/90">
-                  {frameId === 'none' ? 'Tap to choose ▾' : activeFrame.name}
+                  {frameId === 'none'
+                    ? 'Tap to choose ▾'
+                    : frameHeadline.trim()
+                      ? `${activeFrame.name} · caption`
+                      : activeFrame.name}
                 </span>
               </button>
             )}
@@ -589,6 +595,8 @@ export default function PhotoBoothClient({
                 canvasReady={canvasReady}
                 frameId={frameId}
                 frameWidth={frameWidth}
+                frameHeadline={frameHeadline}
+                frameHeadlineOffset={frameHeadlineOffset}
                 cutoutApplied={cutoutApplied}
                 bgRemoving={bgRemoving}
                 bgProgress={bgProgress}
@@ -697,10 +705,14 @@ export default function PhotoBoothClient({
               onClose={() => setFrameOpen(false)}
               frameId={frameId}
               frameWidth={frameWidth}
+              frameHeadline={frameHeadline}
+              frameHeadlineOffset={frameHeadlineOffset}
               cutoutApplied={cutoutApplied}
               themeId={themeId}
               onFrameStyle={pickFrameStyle}
               onFrameWidth={setFrameWidth}
+              onFrameHeadline={setFrameHeadline}
+              onFrameHeadlineOffset={setFrameHeadlineOffset}
             />
 
             <ExportDrawer
