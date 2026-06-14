@@ -20,8 +20,15 @@ import {
   type SlotId,
 } from '@/lib/photobooth/me-and-my-pup';
 import FrameDrawer from './FrameDrawer';
+import ExportDrawer from './ExportDrawer';
 import PhotoBoothThemeBar from './PhotoBoothThemeBar';
 import PhotoBoothUnifiedEditor from './PhotoBoothUnifiedEditor';
+import type { ExportPhotoPayload } from '@/lib/photobooth/export-photo';
+import {
+  saveToPhotoLibrary,
+  shareToSocial,
+  shareViaEmail,
+} from '@/lib/photobooth/export-photo';
 import type { MeAndMyPupCanvasHandle } from './MeAndMyPupCanvas';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
 
@@ -76,6 +83,8 @@ export default function PhotoBoothClient({
   const [selectedSlot, setSelectedSlot] = useState<SlotId | null>('dog');
   const [themeSparkle, setThemeSparkle] = useState(false);
   const [frameOpen, setFrameOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportBusy, setExportBusy] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [cutoutPromptDismissed, setCutoutPromptDismissed] = useState(false);
 
@@ -290,73 +299,86 @@ export default function PhotoBoothClient({
     }
   }, [petImageUrl, bgRemoving, setPhotoUrl]);
 
+  const captureExportPayload = useCallback(async (): Promise<ExportPhotoPayload | null> => {
+    const isDuo = themeId === 'me-and-my-pup';
+    if (isDuo) {
+      meMyPupRef.current?.clearSelection();
+      const blob = await meMyPupRef.current?.exportBlob();
+      if (!blob) return null;
+      return {
+        blob,
+        filename: 'freedom-paws-me-and-my-pup.png',
+        title: 'Me & My Pup — Freedom Paws Wellness',
+        shareText: 'Me and my best friend! 🐾💞',
+      };
+    }
+    canvasRef.current?.clearSelection();
+    const blob = await canvasRef.current?.exportBlob();
+    if (!blob) return null;
+    return {
+      blob,
+      filename: 'freedom-paws-superbud.png',
+      title: 'SuperBud Photo Booth — Freedom Paws Wellness',
+      shareText: 'Look at my pet in the Freedom Paws Photo Booth! 🐾',
+    };
+  }, [themeId]);
+
+  const runExport = useCallback(
+    async (action: (payload: ExportPhotoPayload) => Promise<unknown>) => {
+      setExportBusy(true);
+      try {
+        const payload = await captureExportPayload();
+        if (!payload) {
+          setShareMsg('Could not prepare your photo — try again.');
+          return;
+        }
+        await action(payload);
+        setExportOpen(false);
+      } catch (e) {
+        if (e instanceof Error && e.name === 'AbortError') return;
+        setShareMsg('Something went wrong — try again or use Save to Photos.');
+      } finally {
+        setExportBusy(false);
+      }
+    },
+    [captureExportPayload]
+  );
+
+  const handleSaveToPhotos = useCallback(() => {
+    void runExport(async (payload) => {
+      const result = await saveToPhotoLibrary(payload);
+      setShareMsg(
+        result === 'shared'
+          ? 'Choose Save Image in the share sheet to add to Photos'
+          : 'Saved — check your Downloads or Files app'
+      );
+    });
+  }, [runExport]);
+
+  const handleShareSocial = useCallback(() => {
+    void runExport(async (payload) => {
+      await shareToSocial(payload);
+      setShareMsg('Shared!');
+    });
+  }, [runExport]);
+
+  const handleShareEmail = useCallback(() => {
+    void runExport(async (payload) => {
+      const result = await shareViaEmail(payload);
+      setShareMsg(
+        result === 'shared'
+          ? 'Pick Mail in the share sheet to send your photo'
+          : 'Email opened — attach the saved image if needed'
+      );
+    });
+  }, [runExport]);
+
   const handleRestoreOriginal = useCallback(() => {
     if (!originalPhotoUrlRef.current) return;
     setPhotoUrl(originalPhotoUrlRef.current, { keepEditor: true });
     setCutoutApplied(false);
     setShareMsg('Original photo restored.');
   }, [setPhotoUrl]);
-
-  const savePhoto = useCallback(async () => {
-    const isDuo = themeId === 'me-and-my-pup';
-    if (isDuo) {
-      meMyPupRef.current?.clearSelection();
-      const blob = await meMyPupRef.current?.exportBlob();
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'freedom-paws-me-and-my-pup.png';
-      link.click();
-      URL.revokeObjectURL(url);
-    } else {
-      canvasRef.current?.clearSelection();
-      const blob = await canvasRef.current?.exportBlob();
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'freedom-paws-superbud.png';
-      link.click();
-      URL.revokeObjectURL(url);
-    }
-    setShareMsg('Saved to Photos!');
-  }, [themeId]);
-
-  const sharePhoto = useCallback(async () => {
-    const isDuo = themeId === 'me-and-my-pup';
-    let blob: Blob | null = null;
-    if (isDuo) {
-      meMyPupRef.current?.clearSelection();
-      blob = await meMyPupRef.current?.exportBlob() ?? null;
-    } else {
-      canvasRef.current?.clearSelection();
-      blob = await canvasRef.current?.exportBlob() ?? null;
-    }
-    if (!blob) return;
-
-    const file = new File(
-      [blob],
-      isDuo ? 'freedom-paws-me-and-my-pup.png' : 'freedom-paws-superbud.png',
-      { type: 'image/png' }
-    );
-    if (navigator.share && navigator.canShare?.({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: isDuo ? 'Me & My Pup — Freedom Paws' : 'SuperBud Photo Booth',
-          text: isDuo
-            ? 'Me and my best friend! 🐾💞'
-            : 'Look at my pet in the Freedom Paws Photo Booth! 🐾',
-          files: [file],
-        });
-        setShareMsg('Shared!');
-        return;
-      } catch {
-        /* user cancelled */
-      }
-    }
-    await savePhoto();
-  }, [savePhoto, themeId]);
 
   const displayError = uploadError && !petImageUrl && !loadingPhoto ? uploadError : localUploadError;
   const isDuoMode = themeId === 'me-and-my-pup';
@@ -511,8 +533,7 @@ export default function PhotoBoothClient({
                 onAddAccessory={addAccessory}
                 onRemoveBackground={() => void handleRemoveBackground()}
                 onRestoreOriginal={handleRestoreOriginal}
-                onShare={() => void sharePhoto()}
-                onSave={() => void savePhoto()}
+                onExport={() => setExportOpen(true)}
               />
             )}
 
@@ -593,6 +614,15 @@ export default function PhotoBoothClient({
               themeId={themeId}
               onFrameStyle={pickFrameStyle}
               onFrameWidth={setFrameWidth}
+            />
+
+            <ExportDrawer
+              open={exportOpen}
+              busy={exportBusy}
+              onClose={() => setExportOpen(false)}
+              onSaveToPhotos={handleSaveToPhotos}
+              onShareSocial={handleShareSocial}
+              onShareEmail={handleShareEmail}
             />
           </div>
         )}

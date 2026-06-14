@@ -61,8 +61,7 @@ type Props = {
   onAddAccessory: (sticker: (typeof ACCESSORY_STICKERS)[number]) => void;
   onRemoveBackground: () => void;
   onRestoreOriginal: () => void;
-  onShare: () => void;
-  onSave: () => void;
+  onExport: () => void;
 };
 
 export default function PhotoBoothUnifiedEditor({
@@ -103,8 +102,7 @@ export default function PhotoBoothUnifiedEditor({
   onAddAccessory,
   onRemoveBackground,
   onRestoreOriginal,
-  onShare,
-  onSave,
+  onExport,
 }: Props) {
   const [accessoryOpen, setAccessoryOpen] = useState(false);
 
@@ -473,27 +471,17 @@ export default function PhotoBoothUnifiedEditor({
           )}
 
           {/* Share / Save at bottom */}
-          <div className="grid grid-cols-2 gap-3 pt-1">
-            <button
-              type="button"
-              disabled={isDuoMode && !ownerImageUrl}
-              onClick={onShare}
-              className="rounded-2xl bg-amber-400 py-4 text-base font-bold text-black touch-manipulation disabled:opacity-40"
-            >
-              📤 Share
-            </button>
-            <button
-              type="button"
-              disabled={isDuoMode && !ownerImageUrl}
-              onClick={onSave}
-              className="rounded-2xl border border-amber-400/60 py-4 text-base font-bold text-amber-300 touch-manipulation disabled:opacity-40"
-            >
-              💾 Save
-            </button>
-          </div>
+          <button
+            type="button"
+            disabled={isDuoMode && !ownerImageUrl}
+            onClick={onExport}
+            className="w-full rounded-2xl bg-amber-400 py-4 text-base font-bold text-black touch-manipulation disabled:opacity-40"
+          >
+            📤 Share / Save
+          </button>
           {isDuoMode && !ownerImageUrl && (
             <p className="text-center text-xs text-amber-300/80 -mt-1">
-              Add your photo to enable Share &amp; Save
+              Add your photo to enable Share / Save
             </p>
           )}
         </div>

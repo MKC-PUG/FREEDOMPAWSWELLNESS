@@ -29,8 +29,8 @@ import {
   type PetRect,
 } from '@/lib/photobooth/frames';
 import { smartStickerPlacement } from '@/lib/photobooth/smart-placement';
+import { drawPhotoBoothWatermark } from '@/lib/photobooth/watermark';
 
-const WATERMARK = 'Made with Freedom Paws';
 const PET_MAX_DIM = 640;
 /** ~6° per tap */
 const TILT_STEP_RAD = Math.PI / 30;
@@ -525,12 +525,7 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
     }
 
     if (showWatermark) {
-      const fontSize = Math.max(10, cw * 0.028);
-      ctx.font = `${fontSize}px system-ui, sans-serif`;
-      ctx.fillStyle = 'rgba(255,255,255,0.55)';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText(WATERMARK, cw - 8, ch - 8);
+      drawPhotoBoothWatermark(ctx, cw, ch);
     }
   }, [showWatermark, getCurrentPetRect]);
 

@@ -1,6 +1,7 @@
 /** Me & My Pup — dual circular portrait layout and drawing. */
 
 import { drawThemeBackground } from '@/lib/photobooth/draw-theme-background';
+import { drawPhotoBoothWatermark } from '@/lib/photobooth/watermark';
 
 export type MeAndMyPupVariant =
   | 'classic'
@@ -1075,22 +1076,7 @@ export function drawMeAndMyPupFrame(opts: DrawFrameOpts) {
   }
 
   if (showWatermark) {
-    if (variant === 'lives-whole') {
-      const inset = Math.max(12, cw * 0.028);
-      const fontSize = Math.max(11, cw * 0.03);
-      ctx.font = `600 ${fontSize}px system-ui, sans-serif`;
-      ctx.fillStyle = 'rgba(26,18,8,0.72)';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText('Freedom Paws Wellness', cw / 2, ch - inset - 8);
-    } else {
-      const fontSize = Math.max(9, cw * 0.024);
-      ctx.font = `${fontSize}px system-ui, sans-serif`;
-      ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText('Made with Freedom Paws', cw - 8, ch - 8);
-    }
+    drawPhotoBoothWatermark(ctx, cw, ch);
   }
 }
 
