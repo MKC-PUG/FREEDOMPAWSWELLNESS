@@ -121,6 +121,12 @@ export default function PhotoBoothUnifiedEditor({
 }: Props) {
   const [accessoryOpen, setAccessoryOpen] = useState(false);
 
+  const adjustingSticker = !isDuoMode && selectedStickerId !== null;
+  const adjustingPet = !isDuoMode && petSelected && selectedStickerId === null;
+  const showFloatingPad = adjustingSticker || adjustingPet;
+
+  const clearCanvasSelection = () => canvasRef.current?.clearSelection();
+
   return (
     <>
       <input
@@ -133,7 +139,7 @@ export default function PhotoBoothUnifiedEditor({
         onChange={onOwnerFile}
       />
 
-      <div className="mt-4">
+      <div className="relative mt-4">
         {isDuoMode ? (
           <MeAndMyPupCanvas
             ref={meMyPupRef}
@@ -149,18 +155,42 @@ export default function PhotoBoothUnifiedEditor({
             onError={onError}
           />
         ) : (
-          <PhotoBoothCanvas
-            ref={canvasRef}
-            petImageUrl={petImageUrl}
-            themeId={themeId}
-            frameId={frameId}
-            frameWidth={frameWidth}
-            cutoutApplied={cutoutApplied}
-            onReadyChange={onReadyChange}
-            onStickersChange={onStickersChange}
-            onPetSelectedChange={onPetSelectedChange}
-            onError={onError}
-          />
+          <>
+            <PhotoBoothCanvas
+              ref={canvasRef}
+              petImageUrl={petImageUrl}
+              themeId={themeId}
+              frameId={frameId}
+              frameWidth={frameWidth}
+              cutoutApplied={cutoutApplied}
+              onReadyChange={onReadyChange}
+              onStickersChange={onStickersChange}
+              onPetSelectedChange={onPetSelectedChange}
+              onError={onError}
+            />
+            {showFloatingPad && (
+              <div
+                className="absolute inset-x-2 bottom-2 z-20 pointer-events-none"
+                style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+              >
+                <AdjustPhotoPad
+                  layout="floating"
+                  label={
+                    adjustingSticker
+                      ? 'Move accessory — photo stays visible above'
+                      : 'Move your pet — photo stays visible above'
+                  }
+                  onNudge={(dx, dy) => canvasRef.current?.nudgeSelected(dx, dy)}
+                  onScale={(factor) => canvasRef.current?.scaleSelected(factor)}
+                  zoomOutLabel="−"
+                  zoomInLabel="+"
+                  showTilt={adjustingSticker}
+                  onTilt={(dir) => canvasRef.current?.tiltSelected(dir)}
+                  onDone={clearCanvasSelection}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -229,22 +259,9 @@ export default function PhotoBoothUnifiedEditor({
                     : 'Tap to select your pet & move it'}
                 </button>
                 {petSelected && (
-                  <div className="mt-3">
-                    <AdjustPhotoPad
-                      label="Drag to pan · pinch or buttons to zoom"
-                      onNudge={(dx, dy) => canvasRef.current?.nudgeSelected(dx, dy)}
-                      onScale={(factor) => canvasRef.current?.scaleSelected(factor)}
-                      zoomOutLabel="− Smaller"
-                      zoomInLabel="+ Bigger"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => canvasRef.current?.clearSelection()}
-                      className="mt-3 w-full rounded-xl border border-amber-400/40 py-2 text-xs font-semibold text-amber-300 touch-manipulation"
-                    >
-                      Done — hide selection
-                    </button>
-                  </div>
+                  <p className="mt-2 text-center text-[10px] text-white/45">
+                    Use the arrow pad on your photo · or drag with your finger
+                  </p>
                 )}
               </>
             )}
@@ -586,44 +603,10 @@ export default function PhotoBoothUnifiedEditor({
                       ))}
                     </div>
                     {selectedStickerId !== null && (
-                      <button
-                        type="button"
-                        onClick={() => canvasRef.current?.clearSelection()}
-                        className="mt-2 w-full rounded-xl border border-amber-400/40 py-2 text-xs font-semibold text-amber-300"
-                      >
-                        Done — hide selection frame
-                      </button>
+                      <p className="mt-2 text-center text-[10px] text-amber-300/80">
+                        Arrow pad appears on your photo — tap Done when finished
+                      </p>
                     )}
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <p className="text-[10px] text-white/40">Move &amp; tilt the selected accessory</p>
-                    <AdjustPhotoPad
-                      label=""
-                      onNudge={(dx, dy) => canvasRef.current?.nudgeSelected(dx, dy)}
-                      onScale={(factor) => canvasRef.current?.scaleSelected(factor)}
-                      zoomOutLabel="− Smaller"
-                      zoomInLabel="+ Bigger"
-                    />
-                    <div className="flex w-full max-w-xs gap-2">
-                      <button
-                        type="button"
-                        aria-label="Tilt left"
-                        disabled={selectedStickerId === null}
-                        onClick={() => canvasRef.current?.tiltSelected(-1)}
-                        className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold disabled:opacity-30 touch-manipulation"
-                      >
-                        ↺ Tilt left
-                      </button>
-                      <button
-                        type="button"
-                        aria-label="Tilt right"
-                        disabled={selectedStickerId === null}
-                        onClick={() => canvasRef.current?.tiltSelected(1)}
-                        className="flex-1 rounded-lg bg-[#0F1E38] border border-white/15 py-2.5 text-sm font-semibold disabled:opacity-30 touch-manipulation"
-                      >
-                        Tilt right ↻
-                      </button>
-                    </div>
                   </div>
                 </>
               )}
