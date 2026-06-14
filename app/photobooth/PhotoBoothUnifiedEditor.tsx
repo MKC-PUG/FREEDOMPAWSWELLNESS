@@ -500,6 +500,9 @@ export default function PhotoBoothUnifiedEditor({
                   </span>
                 )}
               </button>
+              <p className="text-center text-[10px] text-white/40 -mt-2">
+                Hats &amp; glasses snap near your pet&apos;s head zone — drag to fine-tune
+              </p>
 
               {themeId === 'accessories-only' && (
                 <p className="text-center text-xs text-white/45">Checkerboard = no background</p>

@@ -76,6 +76,7 @@ export default function PhotoBoothClient({
   const [themeSparkle, setThemeSparkle] = useState(false);
   const [themePickerExpanded, setThemePickerExpanded] = useState(true);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [cutoutPromptDismissed, setCutoutPromptDismissed] = useState(false);
 
   const handleStickersChange = useCallback(
     (stickers: StickerListItem[], selectedId: number | null) => {
@@ -118,6 +119,7 @@ export default function PhotoBoothClient({
         const url = URL.createObjectURL(blob);
         originalPhotoUrlRef.current = url;
         setCutoutApplied(false);
+        setCutoutPromptDismissed(false);
         setPhotoUrl(url);
       } catch {
         setLocalUploadError('Could not load saved photo. Please upload again.');
@@ -222,6 +224,7 @@ export default function PhotoBoothClient({
     ownerBlobUrlRef.current = null;
     setOwnerImageUrl(null);
     blobUrlRef.current = null;
+    setCutoutPromptDismissed(false);
     setPhotoUrl(null);
     setCutoutApplied(false);
     setBgRemoving(false);
@@ -467,7 +470,7 @@ export default function PhotoBoothClient({
           <h1 className="text-3xl font-bold text-center pr-10">SuperBud Photo Booth</h1>
         </div>
         <p className="mt-2 text-center text-sm text-white/60">
-          Dress up your pet · pick a style · share in seconds
+          Dress up your pet (dog or cat) · pick a style · share in seconds
         </p>
 
         {displayError && (
@@ -520,6 +523,32 @@ export default function PhotoBoothClient({
             >
               Upload a different photo
             </button>
+
+            {!editorActive && !cutoutApplied && !bgRemoving && !cutoutPromptDismissed && (
+              <div className="mt-4 rounded-2xl border border-amber-400/35 bg-amber-950/20 p-4 text-center">
+                <p className="text-sm font-semibold text-amber-200">Try magic cutout?</p>
+                <p className="mt-1 text-xs text-white/55 leading-relaxed">
+                  Optional — float your pet on themed backgrounds. Most people pick a style above with
+                  the full photo instead.
+                </p>
+                <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                  <button
+                    type="button"
+                    onClick={() => void handleRemoveBackground()}
+                    className="flex-1 min-h-[44px] rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black touch-manipulation"
+                  >
+                    ✨ Try cutout
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCutoutPromptDismissed(true)}
+                    className="flex-1 min-h-[44px] rounded-xl border border-white/20 py-2.5 text-sm text-white/70 touch-manipulation"
+                  >
+                    Skip — pick a style
+                  </button>
+                </div>
+              </div>
+            )}
 
             {!editorActive && (
               <div className="mt-4 space-y-2">

@@ -28,6 +28,7 @@ import {
   type FrameStyleId,
   type PetRect,
 } from '@/lib/photobooth/frames';
+import { smartStickerPlacement } from '@/lib/photobooth/smart-placement';
 
 const WATERMARK = 'Made with Freedom Paws';
 const PET_MAX_DIM = 640;
@@ -956,7 +957,12 @@ const PhotoBoothCanvas = forwardRef<PhotoBoothCanvasHandle, Props>(function Phot
       try {
         const img = await loadFirstImage(stickerCandidates(placement.src));
         stickerIdRef.current += 1;
-        const layer = makeLayer(placement, img, stickerIdRef.current);
+        const { width: cw, height: ch } = dimsRef.current;
+        const petRect = petRef.current
+          ? petRectFromTransform(petTransformRef.current, petRef.current, cw, ch)
+          : null;
+        const resolved = smartStickerPlacement(placement, petRect, cw, ch);
+        const layer = makeLayer(resolved, img, stickerIdRef.current);
         stickersRef.current.push(layer);
         setSelected(layer.id);
         paintRef.current();

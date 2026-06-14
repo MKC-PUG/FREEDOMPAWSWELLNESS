@@ -31,6 +31,7 @@ const meAndMyPupSteps = [
 
 const accessoryTips = [
   'Tap Add accessory to open the sticker drawer, then tap an item to place it on the photo.',
+  'Hats and glasses snap near your pet\'s head zone — drag to fine-tune placement.',
   'Drag to move · gold corners to resize · pinch with two fingers.',
   'Double-tap an accessory on the photo to remove it.',
 ];
@@ -63,7 +64,7 @@ export default function PhotoBoothHelpPage() {
 
         <h1 className="text-3xl font-bold text-amber-400">Photo Booth How-To</h1>
         <p className="mt-2 text-sm text-white/60 leading-relaxed">
-          Dress up your pet, create a Me &amp; My Pup card, and share in seconds.
+          Dress up your pet (dog or cat), create a Me &amp; My Pup card, and share in seconds.
         </p>
 
         <section className="mt-8 space-y-4">

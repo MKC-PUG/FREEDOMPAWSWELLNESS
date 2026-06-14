@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import PetVitRunBadge from '@/app/components/mypets/PetVitRunBadge';
+import PetVaultBadge from '@/app/components/mypets/PetVaultBadge';
 import BackLink from '@/app/components/BackLink';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { tokenShopItems } from '@/app/token-shop/shop-items';
@@ -176,7 +177,7 @@ export default function MyPetsClient() {
             <div>
               <h1 className="text-3xl sm:text-5xl font-bold">My Pets</h1>
               <p className="text-[#F5C242] text-sm sm:text-lg mt-1">
-                Your pet profiles, protocols &amp; wellness vault
+                Pet profiles, wellness vault, protocols &amp; ViT history
               </p>
             </div>
           </div>
@@ -252,6 +253,7 @@ export default function MyPetsClient() {
                     <p className="text-xs text-white/50 mt-2 line-clamp-2 leading-relaxed">{pet.notes}</p>
                   )}
                   <PetVitRunBadge petId={pet.id} useServer={useServer} />
+                  <PetVaultBadge petId={pet.id} petName={pet.name} useServer={useServer} />
                   <div className="flex flex-wrap gap-2 mt-4">
                     <button
                       type="button"
@@ -310,6 +312,22 @@ export default function MyPetsClient() {
         </section>
 
         <section className="rounded-3xl border border-dashed border-white/15 bg-[#0F1E38]/50 p-6">
+          <h2 className="text-lg font-bold text-white/80">Wellness vault</h2>
+          <p className="text-sm text-white/50 mt-2 leading-relaxed">
+            Each pet card links to a private vault for vet records, vaccinations, and daily notes.
+            Sign in for cloud sync. Full encrypted IPFS vault ships in a future release.
+          </p>
+          {pets.length > 0 && (
+            <Link
+              href={`/mypets/${encodeURIComponent(pets[0]!.id)}/vault?name=${encodeURIComponent(pets[0]!.name)}`}
+              className="inline-block mt-4 text-sm font-bold text-emerald-400 touch-manipulation"
+            >
+              Open {pets[0]!.name}&apos;s vault →
+            </Link>
+          )}
+        </section>
+
+        <section className="rounded-3xl border border-dashed border-white/15 bg-[#0F1E38]/50 p-6 mt-6">
           <h2 className="text-lg font-bold text-white/80">Dynamic NFT gallery</h2>
           <p className="text-sm text-white/50 mt-2 leading-relaxed">
             Your XRPL protocol tokens will appear here after wallet connect ships. Purchased access
