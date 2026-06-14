@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import ViTWellnessFunnel from '@/app/components/diagnostics/ViTWellnessFunnel';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { protocols } from '@/app/protocols/protocols';
 import { protocolDisplayName } from '@/lib/ai/symptom-lexicon';
@@ -177,6 +178,11 @@ export default function ViTResultsPanel({
 
       {result.primary && <ProtocolCard rank={1} rec={result.primary} tone="primary" />}
       {result.secondary && <ProtocolCard rank={2} rec={result.secondary} tone="secondary" />}
+
+      <ViTWellnessFunnel
+        primarySlug={result.primary?.slug}
+        secondarySlug={result.secondary?.slug}
+      />
 
       {result.matchedTerms && result.matchedTerms.length > 0 && (
         <div className="rounded-xl border border-green-500/30 bg-green-950/20 p-4">

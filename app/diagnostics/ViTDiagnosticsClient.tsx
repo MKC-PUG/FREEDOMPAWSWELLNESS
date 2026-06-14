@@ -18,6 +18,7 @@ import {
   assessVideoFramesForVit,
   type VitMediaQuality,
 } from '@/lib/vit/media-quality-gate';
+import { saveVitRunLocal, saveVitRunServer } from '@/lib/vit/history';
 
 const REGION_LABELS: Record<IdentityRegion, string> = {
   eyes: 'Eyes',
@@ -208,6 +209,10 @@ export default function ViTDiagnosticsClient({
       const data = await response.json();
       if (data.success) {
         setResult(data);
+        if (!identityMode && data.mode !== 'identity') {
+          saveVitRunLocal(data, petId ?? null, petName ?? null);
+          if (petId) void saveVitRunServer(petId, data);
+        }
       } else {
         setError(data.error || 'Analysis failed');
       }
@@ -270,6 +275,24 @@ export default function ViTDiagnosticsClient({
         <p className="text-center text-xs text-white/40 mb-4">
           Photo · short video · symptom matching · AI vision
         </p>
+
+        {!identityMode && (
+          <div className="mb-6 rounded-2xl border border-emerald-500/25 bg-emerald-950/15 px-4 py-3 text-center text-xs text-emerald-200/85 leading-relaxed">
+            Results link to{' '}
+            <a href="/wellness/safe-products" className="font-bold text-emerald-300 underline">
+              Safe Picks
+            </a>{' '}
+            and{' '}
+            <a href="/protocols" className="font-bold text-amber-300 underline">
+              protocols
+            </a>
+            . Enroll{' '}
+            <a href="/id/enroll" className="font-bold text-amber-300 underline">
+              Freedom Paws ID
+            </a>{' '}
+            from My Pets when ready.
+          </div>
+        )}
 
         <ViTHowItWorks />
 

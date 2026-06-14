@@ -50,11 +50,27 @@ const hubCards = [
     status: 'live' as const,
   },
   {
+    icon: '✅',
+    title: 'Safe Picks',
+    desc: 'Vetted non-toxic chews, toys, and home products — linked from ViT results and protocols.',
+    cta: 'SAFE PICKS →',
+    href: '/wellness/safe-products',
+    status: 'live' as const,
+  },
+  {
     icon: '🛡️',
     title: 'Shelter Dashboard',
     desc: 'Found-dog intake + match review queue for pilot partners.',
     cta: 'SHELTER PORTAL →',
     href: '/id/shelter',
+    status: 'live' as const,
+  },
+  {
+    icon: '📋',
+    title: 'Shelter Outreach Kit',
+    desc: 'E2E proof points, pilot steps, and LOI email template for CA/TN partners.',
+    cta: 'OUTREACH KIT →',
+    href: '/id/shelter/outreach',
     status: 'live' as const,
   },
   {

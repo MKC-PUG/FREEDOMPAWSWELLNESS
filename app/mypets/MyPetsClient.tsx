@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import PetVitRunBadge from '@/app/components/mypets/PetVitRunBadge';
 import BackLink from '@/app/components/BackLink';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { tokenShopItems } from '@/app/token-shop/shop-items';
@@ -196,6 +197,7 @@ export default function MyPetsClient() {
             { href: '/token-shop', label: 'Token Shop', emoji: '🪙' },
             { href: '/protocols', label: 'Protocols', emoji: '📋' },
             { href: '/wellness', label: 'Wellness', emoji: '🌿' },
+            { href: '/wellness/safe-products', label: 'Safe Picks', emoji: '✅' },
           ].map((link) => (
             <Link
               key={link.href}
@@ -249,6 +251,7 @@ export default function MyPetsClient() {
                   {pet.notes && (
                     <p className="text-xs text-white/50 mt-2 line-clamp-2 leading-relaxed">{pet.notes}</p>
                   )}
+                  <PetVitRunBadge petId={pet.id} useServer={useServer} />
                   <div className="flex flex-wrap gap-2 mt-4">
                     <button
                       type="button"

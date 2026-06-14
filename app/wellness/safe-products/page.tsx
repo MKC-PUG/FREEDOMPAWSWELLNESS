@@ -75,6 +75,45 @@ export default function SafeProductsPage() {
           </p>
         )}
 
+        {(() => {
+          const protocolSlugs = [
+            'gut-balance',
+            'allergy-shield',
+            'fresh-smile-dental',
+            'freedom-calm',
+            'max-movement',
+          ] as const;
+          const sections = protocolSlugs
+            .map((slug) => ({
+              slug,
+              picks: data.picks.filter((p) => p.protocolSlugs.includes(slug)),
+            }))
+            .filter((s) => s.picks.length > 0);
+          if (!sections.length) return null;
+          return (
+            <div className="mb-10 space-y-6">
+              <h2 className="text-sm font-bold text-white/80">By protocol (ViT funnel)</h2>
+              {sections.map(({ slug, picks }) => (
+                <section key={slug} id={slug} className="scroll-mt-28">
+                  <h3 className="text-xs font-bold uppercase tracking-wide text-emerald-400/90">
+                    {slug.replace(/-/g, ' ')}
+                  </h3>
+                  <ul className="mt-2 space-y-2">
+                    {picks.map((pick) => (
+                      <li
+                        key={pick.id}
+                        className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/70"
+                      >
+                        {pick.brandName} — {pick.productLine}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          );
+        })()}
+
         <div className="space-y-10">
           {(Object.keys(SAFE_PRODUCT_CATEGORY_LABELS) as Array<
             keyof typeof SAFE_PRODUCT_CATEGORY_LABELS

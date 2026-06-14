@@ -72,6 +72,24 @@ export default function SiteFooter() {
         <Link href="/token-shop" className="hover:text-[#F5C242] transition-colors">
           Token Shop (App)
         </Link>
+        <span className="text-white/20" aria-hidden>
+          |
+        </span>
+        <Link href="/waitlist" className="hover:text-[#F5C242] transition-colors">
+          Founding Waitlist
+        </Link>
+        <span className="text-white/20" aria-hidden>
+          |
+        </span>
+        <Link href="/terms" className="hover:text-[#F5C242] transition-colors">
+          Terms
+        </Link>
+        <span className="text-white/20" aria-hidden>
+          |
+        </span>
+        <Link href="/privacy" className="hover:text-[#F5C242] transition-colors">
+          Privacy
+        </Link>
       </nav>
 
       {!appSubdomainLive && (

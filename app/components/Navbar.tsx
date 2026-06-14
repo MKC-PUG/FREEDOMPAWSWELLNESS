@@ -5,6 +5,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+const discordInviteUrl = process.env.NEXT_PUBLIC_FP_DISCORD_INVITE_URL?.trim() || '';
+
 const navLinks = [
   { label: 'HOME', href: '/' },
   { label: 'VIT DIAGNOSTICS', href: '/diagnostics' },
@@ -14,9 +16,11 @@ const navLinks = [
   { label: 'WELLNESS', href: '/wellness' },
   { label: 'PROTOCOL OVERVIEW', href: '/protocols' },
   { label: 'MONITOR MY DOG', href: '/monitor' },
-  { label: 'COMMUNITY DISCORD', href: '#' },
+  discordInviteUrl
+    ? { label: 'COMMUNITY DISCORD', href: discordInviteUrl, external: true }
+    : { label: 'JOIN COMMUNITY', href: '/waitlist' },
   { label: 'TOKEN SHOP', href: '/token-shop' },
-];
+] as const;
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -29,7 +33,7 @@ export default function Navbar() {
   const navigateFromMenu = useCallback(
     (href: string) => {
       closeMobileMenu();
-      if (href === '#' || href === pathname) return;
+      if (href === pathname) return;
       router.push(href);
     },
     [closeMobileMenu, pathname, router]
@@ -72,11 +76,25 @@ export default function Navbar() {
 
         <div className="fp-nav-desktop hidden md:flex items-center gap-3 lg:gap-5 text-[10px] lg:text-xs font-semibold tracking-wider">
           {navLinks.map((l) => {
+            const isExternal = 'external' in l && l.external;
             const isActive =
-              l.href !== '#' &&
+              !isExternal &&
               (pathname === l.href ||
                 (l.href === '/id' && pathname.startsWith('/id')) ||
                 (l.href === '/wellness' && pathname.startsWith('/wellness')));
+            if (isExternal) {
+              return (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-white transition-colors whitespace-nowrap py-2"
+                >
+                  {l.label}
+                </a>
+              );
+            }
             return (
               <Link
                 key={l.label}
@@ -148,22 +166,33 @@ export default function Navbar() {
             >
               <div className="px-4 sm:px-6 py-2 flex flex-col text-sm font-semibold tracking-wide">
                 {navLinks.map((l) => {
+                  const isExternal = 'external' in l && l.external;
                   const isActive =
-              l.href !== '#' &&
-              (pathname === l.href ||
-                (l.href === '/id' && pathname.startsWith('/id')) ||
-                (l.href === '/wellness' && pathname.startsWith('/wellness')));
+                    !isExternal &&
+                    (pathname === l.href ||
+                      (l.href === '/id' && pathname.startsWith('/id')) ||
+                      (l.href === '/wellness' && pathname.startsWith('/wellness')));
+                  if (isExternal) {
+                    return (
+                      <a
+                        key={l.label}
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={closeMobileMenu}
+                        className="text-white/90 active:text-white min-h-[52px] flex items-center border-b border-white/5 touch-manipulation"
+                        style={{ WebkitTapHighlightColor: 'transparent' }}
+                      >
+                        {l.label}
+                      </a>
+                    );
+                  }
                   return (
                     <Link
                       key={l.label}
                       href={l.href}
                       prefetch={false}
                       onClick={(e) => {
-                        if (l.href === '#') {
-                          e.preventDefault();
-                          closeMobileMenu();
-                          return;
-                        }
                         e.preventDefault();
                         navigateFromMenu(l.href);
                       }}

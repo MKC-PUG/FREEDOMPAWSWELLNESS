@@ -216,6 +216,11 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
 
   return (
     <div className="mt-6 space-y-3">
+      <p className="text-center text-[11px] text-emerald-300/85 leading-relaxed rounded-xl border border-emerald-500/25 bg-emerald-950/20 px-3 py-2.5">
+        <strong className="text-emerald-200">Give-back:</strong> 10% of net platform proceeds to
+        veteran dog organizations &amp; no-kill shelters — 50/50 split.
+      </p>
+
       <div className="rounded-2xl border border-white/15 bg-[#0A1428]/50 px-4 py-4 text-center">
         <p className="text-xs font-semibold tracking-wide text-white/50 uppercase">
           Lifetime access
