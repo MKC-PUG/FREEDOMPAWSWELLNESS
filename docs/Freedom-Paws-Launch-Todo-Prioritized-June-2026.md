@@ -4,9 +4,11 @@
 **Document purpose:** Single prioritized checklist from today through **public launch**, including ViT, Photo Booth, My Pets vault, Monitor **production cloud relay**, Framer + Next.js integration, legal, and payments.
 
 **Date:** June 5, 2026  
+**⚠️ Superseded for priorities:** Use **`Freedom-Paws-Launch-Master-Checklist-June-2026.md`** (updated June 14, 2026, PWA v65). This file remains for historical reference.
+
 **Project:** `freedompaws-app` (Next.js PWA on Vercel)  
 **GitHub:** `MKC-PUG/FREEDOMPAWSWELLNESS`  
-**Current PWA release:** v53  
+**Current PWA release:** v53 *(see master checklist for v65)*  
 **Launch target:** 12–15 weeks from preview (per Master Business Plan)  
 **User decision (June 5):** Park Monitor beta for daily use; **full cloud relay required at public launch**
 

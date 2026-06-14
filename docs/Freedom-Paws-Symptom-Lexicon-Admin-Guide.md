@@ -3,8 +3,8 @@
 
 **Document purpose:** Step-by-step instructions for managing the dog symptom vocabulary (lexicon) used by ViT Diagnostics, including password setup, reviewing unknown phrases, approving or rejecting terms, and exporting approved words to production.
 
-**Last updated:** May 2026  
-**App version:** Symptom lexicon Layer 1 + review queue
+**Last updated:** June 14, 2026  
+**App version:** Symptom lexicon Layer 1 + review queue + production admin URLs
 
 ---
 
@@ -21,6 +21,7 @@
 9. [Testing on iPhone (local network)](#9-testing-on-iphone-local-network)
 10. [Troubleshooting](#10-troubleshooting)
 11. [Quick reference](#11-quick-reference)
+12. [Weekly admin SOP (production)](#12-weekly-admin-sop-production)
 
 ---
 
@@ -114,8 +115,10 @@ Wait until you see **✓ Ready**.
 
 | Item | Value |
 |------|--------|
-| **Login URL** | `http://YOUR-MAC-IP:3000/admin/login` |
-| **Review queue URL** | `http://YOUR-MAC-IP:3000/admin/symptoms` |
+| **Production login** | `https://app.freedompawsinc.com/admin/login` |
+| **Production review queue** | `https://app.freedompawsinc.com/admin/symptoms` |
+| **Local login** | `http://YOUR-MAC-IP:3000/admin/login` |
+| **Local review queue** | `http://YOUR-MAC-IP:3000/admin/symptoms` |
 
 Replace `YOUR-MAC-IP` with your Mac’s Wi‑Fi address (e.g. `192.168.1.50`). Find it in **System Settings → Network → Wi‑Fi → Details**.
 
@@ -391,6 +394,49 @@ npm run symptom:merge → git commit → production deploy
 | back pain, spine, IVDD | Red Light Spine & Joint Support |
 | liver, kidney, excessive thirst | Foundation Liver & Kidney Detox |
 | won't eat, weak immunity, fever | Patriot Defender |
+
+| won't eat, weak immunity, fever | Patriot Defender |
+
+---
+
+## 12. Weekly admin SOP (production)
+
+**Goal:** Keep ViT symptom matching accurate as real owners use the app.
+
+### Cadence
+
+| Frequency | Task | Owner |
+|-----------|------|-------|
+| **Weekly (Monday recommended)** | Review `/admin/symptoms` pending list | Founder |
+| **After 5–10 approvals** | Run `npm run symptom:merge` → commit → deploy | Engineering |
+| **Before each ViT deploy** | Run `npm run symptom:test:all` locally | Engineering |
+| **Monthly** | Spot-check production ViT on iPhone (photo + feedback Yes/No) | Founder |
+
+### Weekly checklist (5 minutes)
+
+1. Open https://app.freedompawsinc.com/admin/login → sign in  
+2. Open https://app.freedompawsinc.com/admin/symptoms  
+3. **Pending:** Approve (pick protocol) or Reject each phrase  
+4. **Approved aliases:** If banner says *ready to export* → notify engineering for merge  
+5. Sign out when done  
+
+### Owner feedback path
+
+When an owner taps **No — queue for review** on diagnostics results, their case flows into the same pending queue with context (symptoms + AI match). Prioritize these entries — they signal real-world misses.
+
+### Production data storage
+
+Feedback and queue data on Vercel is stored under `/tmp/freedompaws-symptom-feedback/` on the serverless instance. It persists across requests on the same deployment but is **not** a long-term database — weekly merge to git (`symptom-lexicon.ts`) is how approved vocabulary ships permanently.
+
+### Escalation
+
+| Symptom | Action |
+|---------|--------|
+| Login shows “Admin not configured” | Set `ADMIN_PASSWORD` in Vercel → Production → redeploy |
+| Feedback buttons error on phone | Check Vercel function logs for `/api/symptom-feedback` |
+| Queue always empty | Normal if lexicon covers phrases; use **No — queue for review** test |
+
+**Today session checklist:** `Today-Session-Founder-Checklists-June-2026.md` → **T2**
 
 ---
 

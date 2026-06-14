@@ -186,7 +186,7 @@ export default function PhotoBoothUnifiedEditor({
                 onClick={onOpenAiCostume}
                 className="w-full min-h-[44px] rounded-xl border border-violet-400/45 bg-violet-500/15 py-2.5 text-xs font-bold text-violet-200 touch-manipulation disabled:opacity-40"
               >
-                ✨ AI Magic Look — holiday costumes
+                ✨ AI Magic Look — photoreal costumes
                 {aiCreditsRemaining !== undefined && (
                   <span className="ml-1 font-normal text-white/55">
                     ({aiCreditsRemaining} left this month)

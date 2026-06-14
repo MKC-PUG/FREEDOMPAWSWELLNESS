@@ -3,20 +3,28 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Photo Booth How-To • Freedom Paws Wellness',
-  description: 'Step-by-step guide for SuperBud Photo Booth and Me & My Pup frames.',
+  description: 'Step-by-step guide for SuperBud Photo Booth, AI Magic Look, and Me & My Pup frames.',
 };
 
 const steps = [
   {
     title: '1. Upload your pet photo',
-    body: 'Tap Choose Photo and pick a picture of your pet from your camera roll. Upload starts automatically — no cutout required for most styles.',
+    body: 'Tap Choose Photo and pick a picture of your pet (dog or cat). Upload starts automatically.',
   },
   {
-    title: '2. Pick a style',
-    body: 'Swipe the style row and tap one — the bar collapses so your pet stays visible. Try Surprise Me, or Me & My Pup for a duo card.',
+    title: '2. Optional: magic cutout',
+    body: 'Tap ✨ Remove background for a clean cutout on themed scenes. First run downloads a small model (~15–30 sec on Wi‑Fi). Use Restore original anytime.',
   },
   {
-    title: '3. Share or save',
+    title: '3. Pick a style',
+    body: 'Swipe the style row and tap a background — holidays, landmarks, lake, and more. Try 🎲 Surprise Me, or Me & My Pup for a duo card. Tap ↩ Change background to switch scenes without losing your pet.',
+  },
+  {
+    title: '4. Optional: AI Magic Look',
+    body: 'Tap ✨ AI Magic Look for a photoreal holiday costume on your pet (~20 sec). Uses your monthly AI looks allowance. Backgrounds, cutout, frames, and cartoon stickers stay free.',
+  },
+  {
+    title: '5. Share or save',
     body: 'Tap Share to send to Messages, social apps, or family. Tap Save to download a PNG to your phone.',
   },
 ];
@@ -30,8 +38,8 @@ const meAndMyPupSteps = [
 ];
 
 const accessoryTips = [
-  'Tap Add accessory to open the sticker drawer, then tap an item to place it on the photo.',
-  'Hats and glasses snap near your pet\'s head zone — drag to fine-tune placement.',
+  'Tap Add accessory — Photo props (when available) or Fun stickers.',
+  'For photoreal costumes on your pet, use AI Magic Look first; props are quick extras.',
   'Drag to move · gold corners to resize · pinch with two fingers.',
   'Double-tap an accessory on the photo to remove it.',
 ];
@@ -42,12 +50,12 @@ const optionalTips = [
     body: 'Tap your pet on the canvas to select it, then drag to pan and pinch (or use the arrow and ± buttons) to zoom — no cutout required.',
   },
   {
-    title: 'Magic cutout (optional)',
-    body: 'Try magic cutout if your pet is on a plain background. Most people skip this and use a themed background with the full photo — it still looks great.',
+    title: 'Picture frame + print headline',
+    body: 'After picking a background, tap Picture frame to add a mat and border. Type a print headline on the cream mat — great for gifts and wall prints.',
   },
   {
-    title: 'Picture frame (optional)',
-    body: 'After picking a background, tap Picture frame to add a mat and border. Type a print headline on the cream mat — great for gifts and wall prints. Drag the thickness slider for thin → thick.',
+    title: 'Flow bar',
+    body: 'Follow Upload › Cutout › Background › Dress & share at the top of the editor. Gold buttons mark the recommended path.',
   },
 ];
 
@@ -64,7 +72,8 @@ export default function PhotoBoothHelpPage() {
 
         <h1 className="text-3xl font-bold text-amber-400">Photo Booth How-To</h1>
         <p className="mt-2 text-sm text-white/60 leading-relaxed">
-          Dress up your pet (dog or cat), create a Me &amp; My Pup card, and share in seconds.
+          Dress up your pet (dog or cat), try AI Magic Look costumes, create a Me &amp; My Pup card,
+          and share in seconds.
         </p>
 
         <section className="mt-8 space-y-4">

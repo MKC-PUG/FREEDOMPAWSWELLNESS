@@ -4,9 +4,11 @@
 **Document purpose:** Single record of what is **done and validated** so launch planning does not redo settled work.
 
 **Date:** June 6, 2026 (updated)  
+**⚠️ For current priorities and v65 status:** See **`Freedom-Paws-Launch-Master-Checklist-June-2026.md`**.
+
 **Project:** `freedompaws-app`  
 **GitHub:** `MKC-PUG/FREEDOMPAWSWELLNESS`  
-**Current PWA release:** **v53**  
+**Current PWA release:** **v53** *(historical snapshot — production is v65)*  
 **Production:** `https://app.freedompawsinc.com` (preview mode; DNS live)
 
 **Related:** `Freedom-Paws-Launch-Todo-Prioritized-June-2026.md`
