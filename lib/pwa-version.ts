@@ -1,2 +1,2 @@
 /** Bump when SW cache strategy or precache list changes — shown in install banner. */
-export const PWA_VERSION = 'v67';
+export const PWA_VERSION = 'v68';
