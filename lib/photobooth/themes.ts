@@ -171,13 +171,6 @@ const LANDMARK_THEMES: PhotoBoothTheme[] = [
     stickers: [],
   },
   {
-    id: 'landmark-liberty',
-    name: 'Liberty Harbor',
-    emoji: '🗽',
-    background: BG('bg-landmark-liberty.jpg'),
-    stickers: [],
-  },
-  {
     id: 'landmark-golden-gate',
     name: 'Golden Gate',
     emoji: '🌉',
