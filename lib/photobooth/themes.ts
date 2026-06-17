@@ -218,6 +218,7 @@ export const PHOTO_BOOTH_THEMES: PhotoBoothTheme[] = [
 export const PHOTO_PROP_ACCESSORIES: StickerPlacement[] = [
   { src: ST('prop-santa-hat.png'), label: 'Santa hat', x: 0.5, y: 0.18, scale: 0.22 },
   { src: ST('prop-cowboy-hat.png'), label: 'Cowboy hat', x: 0.5, y: 0.2, scale: 0.22 },
+  { src: ST('prop-fireman-hat.png'), label: 'Firefighter hat', x: 0.5, y: 0.18, scale: 0.24 },
   { src: ST('prop-sunglasses.png'), label: 'Aviator shades', x: 0.5, y: 0.32, scale: 0.22 },
   { src: ST('prop-sunglasses-cool.png'), label: 'Cool shades', x: 0.5, y: 0.32, scale: 0.22 },
   { src: ST('prop-gold-chain.png'), label: 'Gold chain', x: 0.5, y: 0.52, scale: 0.28 },

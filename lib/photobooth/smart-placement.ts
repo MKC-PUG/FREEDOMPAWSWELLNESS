@@ -8,6 +8,7 @@ export function accessoryZone(label: string): AccessoryZone {
   const l = label.toLowerCase();
   if (
     l.includes('hat') ||
+    l.includes('helmet') ||
     l.includes('crown') ||
     l.includes('bow') ||
     l.includes('glass') ||
