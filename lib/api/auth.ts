@@ -9,6 +9,7 @@ import {
 } from '@/lib/id/profiles';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { getServerUser } from '@/lib/supabase/server';
+import { canManageListings } from '@/lib/partner/listing-auth';
 
 export function supabaseNotConfiguredResponse() {
   return NextResponse.json(
@@ -85,4 +86,17 @@ export async function requireFoundReporter() {
 
 export function hasRole(profile: UserProfile, roles: IdUserRole[]) {
   return roles.includes(profile.role);
+}
+
+export async function requirePartnerStaff() {
+  const { user, profile, error } = await requireApiUserWithProfile();
+  if (error) return { user: null, profile: null, error };
+  if (!canManageListings(profile!.role)) {
+    return {
+      user: null,
+      profile: null,
+      error: forbiddenResponse('Shelter partner access required for adoption listings.'),
+    };
+  }
+  return { user, profile, error: null };
 }

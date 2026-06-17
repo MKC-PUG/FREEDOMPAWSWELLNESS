@@ -83,6 +83,50 @@ export function framerSheltersUrl(): string {
   return raw || `${framerBaseUrl()}/shelters`;
 }
 
+/** Partner portal (Adoption Network). */
+export function partnerBaseUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_PARTNER_HOST?.trim();
+  if (raw) return trim(raw.startsWith('http') ? raw : `https://${raw}`);
+  return 'https://shelter.freedompawsinc.com';
+}
+
+export function partnerPath(path: string): string {
+  const p = path.startsWith('/') ? path : `/${path}`;
+  const base = partnerBaseUrl();
+  return `${base}${p}`;
+}
+
+/** Canonical live adoption directory — app SSR (dynamic listings from Supabase). */
+export function adoptTnCanonicalUrl(subpath = ''): string {
+  return appPath(adoptTnPath(subpath));
+}
+
+/**
+ * Framer marketing entry for Adoption Network (story + CTA only).
+ * Live inventory always lives on the app — see adoptTnCanonicalUrl().
+ */
+export function framerAdoptLandingUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_FRAMER_ADOPT_URL?.trim();
+  return raw || `${framerBaseUrl()}/adopt`;
+}
+
+/** @deprecated Use adoptTnCanonicalUrl() for directory links; framerAdoptLandingUrl() for marketing. */
+export function framerAdoptTnUrl(): string {
+  return adoptTnCanonicalUrl();
+}
+
+/** App-hosted TN adoption directory (SSR). */
+export function adoptTnPath(subpath = ''): string {
+  const base = '/adopt/tn';
+  if (!subpath) return base;
+  const p = subpath.startsWith('/') ? subpath : `/${subpath}`;
+  return `${base}${p}`;
+}
+
+export function adoptTnListingPath(shelterSlug: string, listingSlug: string): string {
+  return adoptTnPath(`/${shelterSlug}/${listingSlug}`);
+}
+
 /** True when custom app subdomain is configured (not placeholder). */
 export function isAppSubdomainConfigured(): boolean {
   const url = appBaseUrl();

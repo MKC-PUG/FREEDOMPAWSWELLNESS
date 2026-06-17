@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import Navbar from './components/Navbar';
+import AppChrome from './components/AppChrome';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
 import PwaInstallBanner from './components/PwaInstallBanner';
 import PwaUpdateBanner from './components/PwaUpdateBanner';
 import OfflineBanner from './components/OfflineBanner';
-import SiteFooter from './components/SiteFooter';
 import PreviewModeBanner from './components/PreviewModeBanner';
 import { isPreviewMode } from '@/lib/site-mode';
 
@@ -52,13 +51,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-[#0A1428] text-white">
         <ServiceWorkerRegister />
-        <Navbar />
         <OfflineBanner />
         <PwaUpdateBanner />
         <PreviewModeBanner />
         <PwaInstallBanner />
-        <main>{children}</main>
-        <SiteFooter />
+        <AppChrome>
+          <main>{children}</main>
+        </AppChrome>
       </body>
     </html>
   );

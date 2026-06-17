@@ -11,6 +11,8 @@
 **Founder decision (June 14):** **Today’s focus** = ViT prod + admin queue, Photo Booth sign-off + Phase 4 assets, Framer CTAs. **Accelerate ID Track 2** (chip scanner) ahead of original Feb 2027 plan.
 
 **Related docs:**
+- `Freedom-Paws-Adoption-Network-TN-Pilot-Spec-May-2026.md` — **TN pilot partners (approved)**
+- `Freedom-Paws-Website-Post-Launch-Completion-Report-May-2026.md` — **website (Framer) completion punch list**
 - `Freedom-Paws-Completed-Items-June-2026.md` (historical — pre v53–v65)
 - `Photo-Booth-Phase-4-Real-Assets-June-2026.md`
 - `Freedom-Paws-ID-Complete-Master-Roadmap-June-2026.md`

@@ -3,17 +3,11 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { isSupabaseConfigured } from './config';
 
 export async function updateSupabaseSession(request: NextRequest) {
-  // Supabase sometimes redirects magic links to Site URL (/) with ?code= — forward to callback.
-  if (request.nextUrl.pathname === '/' && request.nextUrl.searchParams.has('code')) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/auth/callback';
-    if (!url.searchParams.has('next')) {
-      url.searchParams.set('next', '/mypets');
-    }
-    return NextResponse.redirect(url);
-  }
-
-  let response = NextResponse.next({ request });
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
 
   if (!isSupabaseConfigured()) {
     return response;
@@ -31,7 +25,11 @@ export async function updateSupabaseSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) => {
             request.cookies.set(name, value);
           });
-          response = NextResponse.next({ request });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
           cookiesToSet.forEach(({ name, value, options }) => {
             response.cookies.set(name, value, options);
           });

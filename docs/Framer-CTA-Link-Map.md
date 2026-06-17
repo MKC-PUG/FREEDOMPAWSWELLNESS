@@ -502,5 +502,36 @@ Override via `NEXT_PUBLIC_FRAMER_*_URL` env vars if paths differ.
 
 ---
 
+## 15. Adoption Network — Framer ↔ app (PWA v76+)
+
+### Routing decision (permanent)
+
+| Job | Domain | URL |
+|-----|--------|-----|
+| **Live adoptable dogs** | **App** | `https://app.freedompawsinc.com/adopt/tn` |
+| Marketing story + CTA | Framer | `https://freedompawsinc.com/adopt` |
+| Partner listings intake | App (partner host) | `https://shelter.freedompawsinc.com/partner/listings` |
+
+**Never** build per-dog pages in Framer — listings change hourly (status, photos, pending badge). Same rule as Token Shop: Framer teases, app is source of truth.
+
+### Framer `/adopt` page (create once)
+
+1. Hero: “Freedom Paws Adoption Network — Tennessee pilot”
+2. Short copy: municipal + private partners, ID reunion optional at adoption
+3. Primary button **Browse adoptable dogs** → `https://app.freedompawsinc.com/adopt/tn`
+4. Secondary **Shelter partners** → `https://freedompawsinc.com/shelters` or `https://shelter.freedompawsinc.com/partner`
+5. **New tab: OFF** on app directory button (member convention)
+
+### Also wire
+
+| Location | Label | URL |
+|----------|-------|-----|
+| Framer `/shelters` | Browse TN adoptable dogs | `https://app.freedompawsinc.com/adopt/tn` |
+| App partner footer | Public adoption directory | `/adopt/tn` (same-origin on app) |
+
+**Code:** `adoptTnCanonicalUrl()` in `lib/site-urls.ts`
+
+---
+
 *Freedom Paws Wellness — Honor Buddy's Legacy*  
 *Permanent Framer ↔ app routing — June 9, 2026*

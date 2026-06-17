@@ -14,6 +14,9 @@ export type ShelterOption = {
   id: string;
   name: string;
   state: string;
+  slug?: string;
+  orgType?: string;
+  city?: string;
 };
 
 export type SimilarPetMatch = {
@@ -39,8 +42,10 @@ export async function listPilotShelters(): Promise<ShelterOption[]> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from('shelters')
-    .select('id, name, state')
-    .order('state')
+    .select('id, name, state, slug, org_type, city')
+    .eq('state_code', 'TN')
+    .not('slug', 'is', null)
+    .order('org_type')
     .order('name');
 
   if (error) throw error;
@@ -48,6 +53,9 @@ export async function listPilotShelters(): Promise<ShelterOption[]> {
     id: s.id as string,
     name: s.name as string,
     state: s.state as string,
+    slug: (s.slug as string) ?? undefined,
+    orgType: (s.org_type as string) ?? undefined,
+    city: (s.city as string) ?? undefined,
   }));
 }
 
