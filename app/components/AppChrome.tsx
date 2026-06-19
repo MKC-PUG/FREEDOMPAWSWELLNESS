@@ -1,4 +1,6 @@
 import { getAppSurface } from '@/lib/partner/surface';
+import { isSupabaseConfigured } from '@/lib/supabase/config';
+import { getServerUser } from '@/lib/supabase/server';
 import Navbar from './Navbar';
 import PartnerNavbar from './PartnerNavbar';
 import OpsNavbar from './OpsNavbar';
@@ -10,9 +12,15 @@ export default async function AppChrome({ children }: { children: React.ReactNod
   const partner = surface === 'partner';
   const ops = surface === 'ops';
 
+  let partnerUserEmail: string | null = null;
+  if (partner && isSupabaseConfigured()) {
+    const user = await getServerUser();
+    partnerUserEmail = user?.email ?? null;
+  }
+
   return (
     <>
-      {ops ? <OpsNavbar /> : partner ? <PartnerNavbar /> : <Navbar />}
+      {ops ? <OpsNavbar /> : partner ? <PartnerNavbar userEmail={partnerUserEmail} /> : <Navbar />}
       {children}
       {ops ? null : partner ? <PartnerFooter /> : <SiteFooter />}
     </>

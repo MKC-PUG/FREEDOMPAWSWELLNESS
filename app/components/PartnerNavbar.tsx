@@ -5,12 +5,20 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PARTNER_NAV } from '@/lib/partner/nav';
+import { createSupabaseBrowserClient } from '@/lib/supabase/client';
+import { isSupabaseConfigured } from '@/lib/supabase/config';
 
-export default function PartnerNavbar() {
+type Props = {
+  userEmail?: string | null;
+};
+
+export default function PartnerNavbar({ userEmail = null }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const signedIn = Boolean(userEmail);
 
   const closeMobileMenu = useCallback(() => setMenuOpen(false), []);
 
@@ -22,6 +30,23 @@ export default function PartnerNavbar() {
     },
     [closeMobileMenu, pathname, router]
   );
+
+  const signOut = useCallback(async () => {
+    closeMobileMenu();
+    setSigningOut(true);
+    try {
+      if (isSupabaseConfigured()) {
+        const supabase = createSupabaseBrowserClient();
+        await supabase.auth.signOut();
+      }
+    } catch {
+      // Still redirect — session cookie may already be cleared.
+    } finally {
+      setSigningOut(false);
+      router.push('/partner');
+      router.refresh();
+    }
+  }, [closeMobileMenu, router]);
 
   useEffect(() => {
     setMounted(true);
@@ -42,9 +67,7 @@ export default function PartnerNavbar() {
 
   const navItems = PARTNER_NAV.filter((l) => l.label !== 'SIGN IN');
   const signInNext =
-    pathname.startsWith('/login') || pathname === '/'
-      ? '/partner'
-      : pathname;
+    pathname.startsWith('/login') || pathname === '/' ? '/partner' : pathname;
   const signInHref = `/login?next=${encodeURIComponent(signInNext)}`;
 
   return (
@@ -90,13 +113,15 @@ export default function PartnerNavbar() {
               </Link>
             );
           })}
-          <Link
-            href={signInHref}
-            prefetch={false}
-            className="text-white/80 hover:text-white transition-colors whitespace-nowrap py-2"
-          >
-            SIGN IN
-          </Link>
+          {!signedIn ? (
+            <Link
+              href={signInHref}
+              prefetch={false}
+              className="text-white/80 hover:text-white transition-colors whitespace-nowrap py-2"
+            >
+              SIGN IN
+            </Link>
+          ) : null}
         </div>
 
         <div className="fp-nav-mobile flex shrink-0 items-center md:hidden">
@@ -112,6 +137,24 @@ export default function PartnerNavbar() {
           </button>
         </div>
       </div>
+
+      {signedIn ? (
+        <div className="border-t border-emerald-500/15 bg-emerald-950/25">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between gap-3 text-xs">
+            <p className="min-w-0 truncate text-white/60">
+              Signed in as <span className="font-medium text-white/90">{userEmail}</span>
+            </p>
+            <button
+              type="button"
+              disabled={signingOut}
+              onClick={() => void signOut()}
+              className="shrink-0 rounded-lg border border-white/20 px-3 py-1.5 font-semibold text-white/80 hover:text-white hover:border-white/35 disabled:opacity-50 touch-manipulation"
+            >
+              {signingOut ? 'Signing out…' : 'Sign out'}
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {mounted &&
         menuOpen &&
@@ -133,17 +176,16 @@ export default function PartnerNavbar() {
               }}
             >
               <div className="px-4 sm:px-6 py-2 flex flex-col text-sm font-semibold tracking-wide">
-                {PARTNER_NAV.map((l) => {
-                  const href = l.label === 'SIGN IN' ? signInHref : l.href;
-                  const isActive = pathname === href || pathname.startsWith(`${href}/`);
+                {navItems.map((l) => {
+                  const isActive = pathname === l.href || pathname.startsWith(`${l.href}/`);
                   return (
                     <Link
                       key={l.label}
-                      href={href}
+                      href={l.href}
                       prefetch={false}
                       onClick={(e) => {
                         e.preventDefault();
-                        navigateFromMenu(href);
+                        navigateFromMenu(l.href);
                       }}
                       className={
                         isActive
@@ -155,6 +197,28 @@ export default function PartnerNavbar() {
                     </Link>
                   );
                 })}
+                {!signedIn ? (
+                  <Link
+                    href={signInHref}
+                    prefetch={false}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigateFromMenu(signInHref);
+                    }}
+                    className="text-white/90 active:text-white min-h-[52px] flex items-center border-b border-white/5 touch-manipulation"
+                  >
+                    SIGN IN
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={signingOut}
+                    onClick={() => void signOut()}
+                    className="text-left text-white/90 active:text-white min-h-[52px] flex items-center border-b border-white/5 touch-manipulation disabled:opacity-50"
+                  >
+                    {signingOut ? 'Signing out…' : 'SIGN OUT'}
+                  </button>
+                )}
               </div>
             </div>
           </>,
