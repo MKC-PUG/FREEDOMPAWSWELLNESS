@@ -15,7 +15,11 @@ export default function LoginClient({ nextPath, configured, authError }: Props) 
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState(authError ? 'Sign-in link expired or invalid. Try again.' : '');
+  const [error, setError] = useState(
+    authError
+      ? 'Sign-in link expired or invalid. Request a new link, then open it once in Safari (long-press → Open in Safari if Mail opened a preview).'
+      : ''
+  );
 
   const signIn = async () => {
     if (!configured) return;
@@ -29,7 +33,7 @@ export default function LoginClient({ nextPath, configured, authError }: Props) 
 
     try {
       const supabase = createSupabaseBrowserClient();
-      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+      const redirectTo = `${window.location.origin}/auth/confirm?next=${encodeURIComponent(nextPath)}`;
       const { error: signInError } = await supabase.auth.signInWithOtp({
         email: email.trim(),
         options: { emailRedirectTo: redirectTo },
@@ -73,7 +77,8 @@ export default function LoginClient({ nextPath, configured, authError }: Props) 
           <div className="rounded-2xl border border-emerald-500/40 bg-emerald-900/20 p-6 text-center">
             <p className="font-semibold text-emerald-300">Check your email</p>
             <p className="mt-2 text-sm text-white/70">
-              We sent a sign-in link to <strong>{email}</strong>.
+              We sent a sign-in link to <strong>{email}</strong>. Tap it once in your email app.
+              On iPhone, if sign-in fails, long-press the link and choose <strong>Open in Safari</strong>.
             </p>
           </div>
         ) : (

@@ -103,18 +103,22 @@ Add the **same keys** for **Production** and **Preview**. Redeploy after saving.
 1. Supabase → **Authentication** → **Providers**.
 2. Enable **Email**.
 3. **Site URL:** `https://app.freedompawsinc.com` (or your Vercel URL for preview).
-4. **Redirect URLs** — add:
+4. **Redirect URLs** — add (both app and partner host if live):
    - `https://app.freedompawsinc.com/auth/callback`
    - `https://app.freedompawsinc.com/auth/confirm`
+   - `https://shelter.freedompawsinc.com/auth/callback`
+   - `https://shelter.freedompawsinc.com/auth/confirm`
    - `http://localhost:3000/auth/callback` (local dev)
    - `http://localhost:3000/auth/confirm` (local dev)
-5. **Magic Link email template** (Authentication → Emails → Magic Link) — use server confirm (works on iPhone Mail → Safari):
+5. **Magic Link email template** (Authentication → Emails → Magic Link) — server confirm with dynamic `next` (works on iPhone Mail → Safari; no PKCE cookie required):
 
 ```html
 <h2>Your sign-in link</h2>
 <p>Follow the link below to sign in. This link expires shortly and can only be used once.</p>
-<p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/mypets">Sign in</a></p>
+<p><a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=email">Sign in</a></p>
 ```
+
+`{{ .RedirectTo }}` is set by the app (e.g. `…/auth/confirm?next=/partner/listings`). Do **not** hardcode `next=/mypets` in the template.
 
 **Do not** run `vercel env pull` on your Mac — it overwrites `.env.local`. Push env **to** Vercel with `npm run vercel:env:push`.
 

@@ -41,6 +41,11 @@ export default function PartnerNavbar() {
   }, [menuOpen]);
 
   const navItems = PARTNER_NAV.filter((l) => l.label !== 'SIGN IN');
+  const signInNext =
+    pathname.startsWith('/login') || pathname === '/'
+      ? '/partner'
+      : pathname;
+  const signInHref = `/login?next=${encodeURIComponent(signInNext)}`;
 
   return (
     <nav
@@ -86,7 +91,7 @@ export default function PartnerNavbar() {
             );
           })}
           <Link
-            href="/login?next=/partner"
+            href={signInHref}
             prefetch={false}
             className="text-white/80 hover:text-white transition-colors whitespace-nowrap py-2"
           >
@@ -129,15 +134,16 @@ export default function PartnerNavbar() {
             >
               <div className="px-4 sm:px-6 py-2 flex flex-col text-sm font-semibold tracking-wide">
                 {PARTNER_NAV.map((l) => {
-                  const isActive = pathname === l.href || pathname.startsWith(`${l.href}/`);
+                  const href = l.label === 'SIGN IN' ? signInHref : l.href;
+                  const isActive = pathname === href || pathname.startsWith(`${href}/`);
                   return (
                     <Link
                       key={l.label}
-                      href={l.href}
+                      href={href}
                       prefetch={false}
                       onClick={(e) => {
                         e.preventDefault();
-                        navigateFromMenu(l.href);
+                        navigateFromMenu(href);
                       }}
                       className={
                         isActive
