@@ -86,6 +86,10 @@ export function canReviewMatches(role: IdUserRole): boolean {
   return MATCH_REVIEW_ROLES.includes(role);
 }
 
+export function canFpOps(role: IdUserRole): boolean {
+  return role === 'fp_ops';
+}
+
 export function canSubmitFoundReport(role: IdUserRole): boolean {
   return ['owner', 'shelter_admin', 'shelter_staff', 'fp_ops'].includes(role);
 }

@@ -19,8 +19,10 @@ alter table public.shelters
   add column if not exists updated_at timestamptz not null default now();
 
 create unique index if not exists shelters_slug_unique
-  on public.shelters (slug)
-  where slug is not null;
+  on public.shelters (slug);
+
+-- Full unique index (not partial) so INSERT ... ON CONFLICT (slug) works.
+-- PostgreSQL still allows multiple NULL slugs on legacy rows.
 
 drop trigger if exists shelters_updated_at on public.shelters;
 create trigger shelters_updated_at

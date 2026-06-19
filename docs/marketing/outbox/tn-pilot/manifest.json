@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-06-18T16:04:41.403Z",
+  "partners": [
+    {
+      "rank": "1",
+      "organization": "Memphis Animal Services",
+      "slug": "memphis-animal-services",
+      "inbox": "shelter@freedompawsinc.com",
+      "email1": "01-memphis-animal-services-email-1.md",
+      "email2": "01-memphis-animal-services-email-2-day5.md",
+      "publicDirectory": "https://app.freedompawsinc.com/adopt/tn/memphis-animal-services",
+      "partnerPortal": "https://shelter.freedompawsinc.com/partner/listings"
+    },
+    {
+      "rank": "2",
+      "organization": "Metro Animal Care and Control Nashville",
+      "slug": "metro-animal-care-control",
+      "inbox": "shelter@freedompawsinc.com",
+      "email1": "02-metro-animal-care-control-email-1.md",
+      "email2": "02-metro-animal-care-control-email-2-day5.md",
+      "publicDirectory": "https://app.freedompawsinc.com/adopt/tn/metro-animal-care-control",
+      "partnerPortal": "https://shelter.freedompawsinc.com/partner/listings"
+    },
+    {
+      "rank": "3",
+      "organization": "Young-Williams Animal Center",
+      "slug": "young-williams-animal-center",
+      "inbox": "shelter@freedompawsinc.com",
+      "email1": "03-young-williams-animal-center-email-1.md",
+      "email2": "03-young-williams-animal-center-email-2-day5.md",
+      "publicDirectory": "https://app.freedompawsinc.com/adopt/tn/young-williams-animal-center",
+      "partnerPortal": "https://shelter.freedompawsinc.com/partner/listings"
+    },
+    {
+      "rank": "4",
+      "organization": "New Leash on Life Lebanon",
+      "slug": "new-leash-on-life",
+      "inbox": "shelter@freedompawsinc.com",
+      "email1": "04-new-leash-on-life-email-1.md",
+      "email2": "04-new-leash-on-life-email-2-day5.md",
+      "publicDirectory": "https://app.freedompawsinc.com/adopt/tn/new-leash-on-life",
+      "partnerPortal": "https://shelter.freedompawsinc.com/partner/listings"
+    },
+    {
+      "rank": "5",
+      "organization": "Humane Society of Sumner County",
+      "slug": "humane-society-sumner-county",
+      "inbox": "shelter@freedompawsinc.com",
+      "email1": "05-humane-society-sumner-county-email-1.md",
+      "email2": "05-humane-society-sumner-county-email-2-day5.md",
+      "publicDirectory": "https://app.freedompawsinc.com/adopt/tn/humane-society-sumner-county",
+      "partnerPortal": "https://shelter.freedompawsinc.com/partner/listings"
+    },
+    {
+      "rank": "6",
+      "organization": "Safe Place for Animals Gallatin",
+      "slug": "safe-place-for-animals",
+      "inbox": "shelter@freedompawsinc.com",
+      "email1": "06-safe-place-for-animals-email-1.md",
+      "email2": "06-safe-place-for-animals-email-2-day5.md",
+      "publicDirectory": "https://app.freedompawsinc.com/adopt/tn/safe-place-for-animals",
+      "partnerPortal": "https://shelter.freedompawsinc.com/partner/listings"
+    }
+  ]
+}

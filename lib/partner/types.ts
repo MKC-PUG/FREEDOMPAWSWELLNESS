@@ -19,4 +19,4 @@ export type PartnerOrg = {
   phone: string | null;
 };
 
-export type AppSurface = 'consumer' | 'partner';
+export type AppSurface = 'consumer' | 'partner' | 'ops';

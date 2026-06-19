@@ -5,7 +5,9 @@ export type AuditAction =
   | 'match.candidate.review'
   | 'match.owner_email.sent'
   | 'enrollment.revoked'
-  | 'found.report.submit';
+  | 'found.report.submit'
+  | 'ops.settings.update'
+  | 'ops.marketing.approval';
 
 export async function writeAuditLog(
   actorId: string,

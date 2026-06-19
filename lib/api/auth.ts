@@ -100,3 +100,16 @@ export async function requirePartnerStaff() {
   }
   return { user, profile, error: null };
 }
+
+export async function requireFpOps() {
+  const { user, profile, error } = await requireApiUserWithProfile();
+  if (error) return { user: null, profile: null, error };
+  if (profile!.role !== 'fp_ops') {
+    return {
+      user: null,
+      profile: null,
+      error: forbiddenResponse('FP ops command center access required.'),
+    };
+  }
+  return { user, profile, error: null };
+}

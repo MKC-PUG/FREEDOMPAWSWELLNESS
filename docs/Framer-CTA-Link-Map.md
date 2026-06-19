@@ -529,7 +529,8 @@ Override via `NEXT_PUBLIC_FRAMER_*_URL` env vars if paths differ.
 | Framer `/shelters` | Browse TN adoptable dogs | `https://app.freedompawsinc.com/adopt/tn` |
 | App partner footer | Public adoption directory | `/adopt/tn` (same-origin on app) |
 
-**Code:** `adoptTnCanonicalUrl()` in `lib/site-urls.ts`
+**Code:** `adoptTnCanonicalUrl()` in `lib/site-urls.ts`  
+**Full click-by-click guide:** `docs/Framer-Adopt-Page-Wiring-Guide-June-2026.md`
 
 ---
 

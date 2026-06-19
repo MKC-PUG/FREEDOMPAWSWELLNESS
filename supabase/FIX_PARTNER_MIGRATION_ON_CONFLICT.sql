@@ -1,7 +1,9 @@
--- Freedom Paws Adoption Network — paste into Supabase SQL Editor (009 + 010)
--- Or: SUPABASE_DB_URL=... npm run partner:migrate
+-- FIX: Run this ENTIRE file in Supabase SQL Editor (one shot).
+--
+-- If you saw 42P10 (ON CONFLICT) or 42703 (column "slug" does not exist):
+-- Supabase rolls back the whole script on error — schema + seed must run together here.
 
--- ========== 009_partner_orgs_tn_pilot.sql ==========
+-- ========== 009 — partner columns on shelters ==========
 
 alter table public.shelters
   add column if not exists slug text,
@@ -16,12 +18,6 @@ alter table public.shelters
   add column if not exists website text,
   add column if not exists phone text,
   add column if not exists updated_at timestamptz not null default now();
-
-drop index if exists shelters_slug_unique;
-create unique index shelters_slug_unique
-  on public.shelters (slug);
-
--- Full unique index (not partial) so INSERT ... ON CONFLICT (slug) works.
 
 drop trigger if exists shelters_updated_at on public.shelters;
 create trigger shelters_updated_at
@@ -39,6 +35,11 @@ where state_code is null;
 delete from public.shelters
 where name like 'Freedom Paws Pilot%';
 
+-- Full unique index (required for ON CONFLICT (slug))
+drop index if exists public.shelters_slug_unique;
+create unique index if not exists shelters_slug_unique on public.shelters (slug);
+
+-- ========== 009 — seed TN pilot partners ==========
 insert into public.shelters (
   name, state, state_code, slug, org_type, city, county,
   pilot_tier, listings_enabled, website, phone
@@ -94,8 +95,7 @@ on conflict (slug) do update set
   phone = excluded.phone,
   updated_at = now();
 
--- ========== 010_adoption_listings.sql ==========
-
+-- ========== 010 — adoption listings + RLS + storage ==========
 create table if not exists public.adoption_listings (
   id uuid primary key default gen_random_uuid(),
   shelter_id uuid not null references public.shelters (id) on delete cascade,
