@@ -115,10 +115,19 @@ Add the **same keys** for **Production** and **Preview**. Redeploy after saving.
 ```html
 <h2>Your sign-in link</h2>
 <p>Follow the link below to sign in. This link expires shortly and can only be used once.</p>
+<p>Your code: <strong>{{ .Token }}</strong></p>
 <p><a href="{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=email">Sign in</a></p>
 ```
 
 `{{ .RedirectTo }}` is set by the app (e.g. `…/auth/confirm?next=/partner/listings`). Do **not** hardcode `next=/mypets` in the template.
+
+If `{{ .RedirectTo }}` only resolves to the Site URL (no path), hardcode the partner confirm URL instead:
+
+```html
+<p><a href="https://shelter.freedompawsinc.com/auth/confirm?next=/partner/listings&token_hash={{ .TokenHash }}&type=email">Sign in</a></p>
+```
+
+The **6-digit code** (`{{ .Token }}`) lets partners sign in on the login page without clicking the link — avoids Mail click-tracking consuming the one-time link.
 
 **Do not** run `vercel env pull` on your Mac — it overwrites `.env.local`. Push env **to** Vercel with `npm run vercel:env:push`.
 

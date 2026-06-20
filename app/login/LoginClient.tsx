@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import BackLink from '@/app/components/BackLink';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 
@@ -12,12 +13,15 @@ type Props = {
 };
 
 export default function LoginClient({ nextPath, configured, authError }: Props) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(
     authError
-      ? 'Sign-in link expired or invalid. Request a new link, then open it once in Safari (long-press → Open in Safari if Mail opened a preview).'
+      ? 'Sign-in link expired or invalid. Request a new link, then open it once in Safari — or enter the 6-digit code from the same email below.'
       : ''
   );
 
@@ -51,6 +55,38 @@ export default function LoginClient({ nextPath, configured, authError }: Props) 
     }
   };
 
+  const verifyCode = async () => {
+    if (!configured || !email.trim()) return;
+    const code = otpCode.replace(/\D/g, '');
+    if (code.length < 6) {
+      setError('Enter the 6-digit code from your email.');
+      return;
+    }
+
+    setVerifying(true);
+    setError('');
+
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token: code,
+        type: 'email',
+      });
+
+      if (verifyError) {
+        setError(verifyError.message);
+        return;
+      }
+      router.push(nextPath);
+      router.refresh();
+    } catch {
+      setError('Could not verify code.');
+    } finally {
+      setVerifying(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0A1625] text-white font-sans">
       <div className="mx-auto max-w-md px-6 py-10">
@@ -74,12 +110,36 @@ export default function LoginClient({ nextPath, configured, authError }: Props) 
             server.
           </div>
         ) : sent ? (
-          <div className="rounded-2xl border border-emerald-500/40 bg-emerald-900/20 p-6 text-center">
-            <p className="font-semibold text-emerald-300">Check your email</p>
-            <p className="mt-2 text-sm text-white/70">
-              We sent a sign-in link to <strong>{email}</strong>. Tap it once in your email app.
-              On iPhone, if sign-in fails, long-press the link and choose <strong>Open in Safari</strong>.
-            </p>
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-emerald-500/40 bg-emerald-900/20 p-6 text-center">
+              <p className="font-semibold text-emerald-300">Check your email</p>
+              <p className="mt-2 text-sm text-white/70">
+                We sent a sign-in link and 6-digit code to <strong>{email}</strong>. Tap the link
+                once, or enter the code below (works even if the link was already used).
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/15 bg-[#0A1428] p-5">
+              <p className="mb-3 text-sm font-medium text-white/80">Or enter code from email</p>
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={8}
+                value={otpCode}
+                onChange={(e) => setOtpCode(e.target.value)}
+                placeholder="123456"
+                className="w-full rounded-2xl border border-white/20 bg-[#0A1625] px-4 py-3 text-center text-lg tracking-widest text-white focus:outline-none focus:border-amber-400"
+              />
+              <button
+                type="button"
+                disabled={verifying}
+                onClick={() => void verifyCode()}
+                className="mt-3 w-full rounded-2xl bg-amber-400 py-3 font-bold text-black disabled:opacity-50"
+              >
+                {verifying ? 'Verifying…' : 'Sign in with code'}
+              </button>
+            </div>
+            {error && <p className="text-center text-sm text-red-400">{error}</p>}
           </div>
         ) : (
           <div className="space-y-4">
