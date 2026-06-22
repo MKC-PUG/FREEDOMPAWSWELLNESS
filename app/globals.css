@@ -5,8 +5,8 @@
   --background: #0A1428;
   --foreground: #ffffff;
   --accent: #F5C242;
-  /* Nav content row — tall enough for stacked paw + label logo */
-  --nav-bar-height: 4.25rem;
+  /* Nav content row height (excludes notch inset) */
+  --nav-bar-height: 3.75rem;
   --nav-total-height: calc(var(--nav-bar-height) + env(safe-area-inset-top, 0px));
 }
 

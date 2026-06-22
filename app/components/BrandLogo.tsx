@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { BRAND_LOGO_HERO, BRAND_LOGO_NAV } from '@/lib/brand/paths';
+import { BRAND_LOGO_PAW } from '@/lib/brand/paths';
 
 type Variant = 'consumer' | 'partner' | 'ops' | 'vitpro';
 type Size = 'nav' | 'hero';
@@ -15,13 +15,22 @@ type Props = {
   onClick?: () => void;
 };
 
-const PORTAL_LABEL: Partial<Record<Variant, string>> = {
-  partner: 'Partner portal',
-  ops: 'Command Center',
-  vitpro: 'ViT Pro CDS',
+const TITLES: Record<Variant, string> = {
+  consumer: 'Freedom Paws Wellness',
+  partner: 'Freedom Paws Adoption Network',
+  ops: 'Freedom Paws Command Center',
+  vitpro: 'ViT Pro™ CDS',
 };
 
-const PORTAL_ACCENT: Partial<Record<Variant, string>> = {
+const SUBTITLES: Record<Variant, string | null> = {
+  consumer: "Honor Buddy's Legacy",
+  partner: 'Partner portal · Tennessee pilot',
+  ops: 'FP Ops · Owner console',
+  vitpro: 'Freedom Paws · Clinical decision support',
+};
+
+const SUBTITLE_ACCENT: Record<Variant, string> = {
+  consumer: 'text-amber-400',
   partner: 'text-emerald-400/90',
   ops: 'text-[#F5C242]/90',
   vitpro: 'text-sky-300/90',
@@ -35,38 +44,46 @@ export default function BrandLogo({
   onClick,
 }: Props) {
   const isHero = size === 'hero';
-  const portalLabel = variant !== 'consumer' ? PORTAL_LABEL[variant] : null;
-  const src = isHero ? BRAND_LOGO_HERO : BRAND_LOGO_NAV;
-  const height = isHero ? 128 : 56;
-  const width = isHero ? 128 : 56;
+  const title = TITLES[variant];
+  const subtitle = SUBTITLES[variant];
 
   return (
     <Link
       href={href}
-      className={`inline-flex flex-col items-center shrink-0 touch-manipulation ${className}`}
+      className={`inline-flex items-center gap-2 sm:gap-3 shrink-0 touch-manipulation min-w-0 ${className}`}
       prefetch={false}
       onClick={onClick}
-      aria-label="Freedom Paws"
+      aria-label={title}
     >
       <Image
-        src={src}
-        alt="Freedom Paws"
-        width={width}
-        height={height}
+        src={BRAND_LOGO_PAW}
+        alt=""
+        width={isHero ? 80 : 40}
+        height={isHero ? 80 : 40}
         className={
           isHero
-            ? 'h-24 sm:h-32 w-auto object-contain'
-            : 'h-12 sm:h-14 w-auto max-w-[4.5rem] sm:max-w-[5rem] object-contain'
+            ? 'shrink-0 w-16 h-16 sm:w-20 sm:h-20 object-contain'
+            : 'shrink-0 w-9 h-9 sm:w-10 sm:h-10 object-contain'
         }
         priority
+        aria-hidden
       />
-      {portalLabel ? (
-        <span
-          className={`mt-0.5 text-[8px] sm:text-[9px] font-semibold tracking-wide whitespace-nowrap ${PORTAL_ACCENT[variant]}`}
+      <div className="min-w-0 leading-tight text-left">
+        <div
+          className={`font-bold tracking-tight truncate text-white ${
+            isHero ? 'text-xl sm:text-2xl' : 'text-base sm:text-xl lg:text-2xl'
+          }`}
         >
-          {portalLabel}
-        </span>
-      ) : null}
+          {title}
+        </div>
+        {subtitle ? (
+          <div
+            className={`${isHero ? 'text-sm' : 'hidden sm:block text-xs'} mt-0.5 truncate ${SUBTITLE_ACCENT[variant]}`}
+          >
+            {subtitle}
+          </div>
+        ) : null}
+      </div>
     </Link>
   );
 }

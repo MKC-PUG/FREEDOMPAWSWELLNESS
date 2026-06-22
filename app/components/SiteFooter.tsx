@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { isPreviewMode } from '@/lib/site-mode';
-import { BRAND_LOGO_NAV } from '@/lib/brand/paths';
+import { BRAND_LOGO_PAW } from '@/lib/brand/paths';
 import {
   framerGrantsUrl,
   framerMissionUrl,
@@ -103,7 +103,7 @@ export default function SiteFooter() {
       )}
 
       <Image
-        src={BRAND_LOGO_NAV}
+        src={BRAND_LOGO_PAW}
         alt="Freedom Paws"
         width={56}
         height={56}

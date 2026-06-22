@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { adoptTnPath, appPath } from '@/lib/site-urls';
-import { BRAND_LOGO_NAV } from '@/lib/brand/paths';
+import { BRAND_LOGO_PAW } from '@/lib/brand/paths';
 
 export default function PartnerFooter() {
   const year = new Date().getFullYear();
@@ -24,7 +24,7 @@ export default function PartnerFooter() {
         </Link>
       </nav>
       <Image
-        src={BRAND_LOGO_NAV}
+        src={BRAND_LOGO_PAW}
         alt="Freedom Paws"
         width={56}
         height={56}

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
-import { BRAND_LOGO_NAV } from '@/lib/brand/paths';
+import { BRAND_LOGO_PAW } from '@/lib/brand/paths';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -64,7 +64,7 @@ export default function PwaInstallBanner() {
       <div className="mx-4 mb-4 rounded-2xl border border-amber-400/40 bg-[#0F1E38]/95 p-4 shadow-lg">
         <div className="flex items-center gap-3">
           <Image
-            src={BRAND_LOGO_NAV}
+            src={BRAND_LOGO_PAW}
             alt=""
             width={48}
             height={48}
