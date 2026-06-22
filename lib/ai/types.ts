@@ -4,8 +4,10 @@ import type {
   IdentityAnalysisResult,
   IdentityRegion,
 } from '@/lib/id/types';
+import type { VitProPublicOutput, VitProVetOutput } from '@/lib/vit-pro/types';
 
 export type { AnalyzeMode, IdentityRegion, IdentityAnalysisResult };
+export type { VitProPublicOutput, VitProVetOutput };
 
 export interface AnalysisResponse {
   success: boolean;
@@ -74,7 +76,38 @@ export type AnalyzeApiResponse = {
   analyzedAt?: string;
   disclaimer?: string;
   identity?: IdentityAnalysisResult;
+  /** Present when mode=vit_pro (Tier B vet CDS). */
+  vitPro?: VitProVetOutput;
+  /** Present when mode=vit_pro and outputTier=both — includes Tier A summary. */
+  vitProPublic?: VitProPublicOutput;
 };
+
+export function toVitProAnalyzeApiResponse(
+  analysisId: string,
+  vet: VitProVetOutput,
+  options?: { includePublic?: boolean; publicOutput?: VitProPublicOutput }
+): AnalyzeApiResponse {
+  const visualFindings = vet.regions.flatMap((r) => r.visualFindings).slice(0, 12);
+  return {
+    success: true,
+    analysisId,
+    mode: 'vit_pro',
+    finding: vet.urgency === 'urgent' ? 'Urgent evaluation recommended' : 'ViT Pro CDS report generated',
+    reasoning: vet.regions.map((r) => r.visualFindings.join('; ')).filter(Boolean).join(' | ') || vet.historySummary.slice(0, 200),
+    visualFindings,
+    usedVision: true,
+    mediaType: vet.audit.mediaType,
+    frameCount: vet.audit.frameCount,
+    analyzedAt: vet.analyzedAt,
+    disclaimer: vet.disclaimer,
+    vetUrgent: vet.urgency === 'urgent' || vet.urgency === 'prompt_vet',
+    vetUrgentReason: vet.urgencyReason,
+    urgentCongruency: vet.urgentCongruency,
+    matchedSevereCondition: vet.matchedSevereCondition,
+    vitPro: vet,
+    vitProPublic: options?.includePublic ? options.publicOutput : undefined,
+  };
+}
 
 function toApiProtocol(rec: ProtocolRecommendation): ApiProtocolResult {
   return {

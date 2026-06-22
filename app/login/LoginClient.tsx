@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import BackLink from '@/app/components/BackLink';
+import BrandLogo from '@/app/components/BrandLogo';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 
 type Props = {
@@ -93,7 +94,8 @@ export default function LoginClient({ nextPath, configured, authError }: Props) 
         <BackLink href="/" />
 
         <header className="mt-6 mb-8 text-center">
-          <h1 className="text-2xl font-bold">Sign in</h1>
+          <BrandLogo href="/" variant="consumer" size="hero" className="mx-auto" />
+          <h1 className="mt-6 text-2xl font-bold">Sign in</h1>
           <p className="mt-2 text-sm text-white/65">
             Use your email for a magic link — required for Freedom Paws ID enrollment and
             server-backed pet profiles.

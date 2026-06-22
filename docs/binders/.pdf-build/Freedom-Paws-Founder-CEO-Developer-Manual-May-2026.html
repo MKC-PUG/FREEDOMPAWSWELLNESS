@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Founder / CEO / Developer Manual</title>
+<style>
+@page { size: letter; margin: 0.75in; }
+@media print {
+  .page-break { page-break-before: always; break-before: page; }
+  h1, h2, h3 { break-after: avoid; }
+  table, pre, blockquote { break-inside: avoid; }
+}
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  max-width: 7.5in;
+  margin: 0 auto;
+  padding: 0.25in;
+}
+h1 { font-size: 22pt; color: #0A1428; margin-top: 0; border-bottom: 2px solid #F5C242; padding-bottom: 0.2em; }
+h2 { font-size: 16pt; color: #0A1428; margin-top: 1.2em; }
+h3 { font-size: 13pt; color: #333; }
+.cover-title { font-size: 28pt; text-align: center; border: none; color: #0A1428; }
+.cover-sub { text-align: center; font-size: 14pt; color: #555; }
+.cover-meta { text-align: center; margin-top: 2em; font-size: 11pt; }
+.hero-placeholder {
+  border: 2px dashed #ccc; background: #f8f8f8; text-align: center;
+  padding: 2em; margin: 1.5em 0; color: #888; font-size: 10pt;
+}
+table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 10pt; }
+th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #0A1428; color: #fff; }
+tr:nth-child(even) { background: #f6f6f6; }
+code { background: #f0f0f0; padding: 1px 4px; font-size: 9pt; border-radius: 3px; }
+pre {
+  background: #f4f4f4; border: 1px solid #ddd; padding: 10px;
+  font-size: 8.5pt; line-height: 1.35; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word;
+}
+blockquote {
+  border-left: 4px solid #F5C242; margin: 1em 0; padding: 0.5em 1em;
+  background: #fffbf0; color: #333;
+}
+ul, ol { margin: 0.5em 0; padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+a { color: #1565c0; }
+.doc-header {
+  font-size: 9pt; color: #666; border-bottom: 1px solid #ddd;
+  padding-bottom: 8px; margin-bottom: 16px;
+}
+.technical .doc-header { border-color: #0288d1; }
+.footer-note { font-size: 9pt; color: #666; margin-top: 2em; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body class="technical">
+<div class="doc-header">Founder / CEO / Developer Manual · Freedom Paws Wellness · May 2026</div>
+<h1 class="cover-title">Freedom Paws — Founder / CEO / Developer Operations Manual</h1>
+<p><strong>Version:</strong> 1.0  </p>
+<p><strong>Date:</strong> May 2026  </p>
+<p><strong>Audience:</strong> Founder, CEO, lead developer  </p>
+<p><strong>Classification:</strong> Internal — full system access  </p>
+<hr/>
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#1-purpose--how-to-use-this-manual">Purpose &amp; how to use this manual</a></li>
+<li><a href="#2-system-overview">System overview</a></li>
+<li><a href="#3-urls-domains--surfaces">URLs, domains &amp; surfaces</a></li>
+<li><a href="#4-access-control--roles">Access control &amp; roles</a></li>
+<li><a href="#5-sign-in-all-portals">Sign-in (all portals)</a></li>
+<li><a href="#6-command-center--ops">Command Center — <code>/ops</code></a></li>
+<li><a href="#7-command-center-modules--click-by-click">Command Center modules — click by click</a></li>
+<li><a href="#8-reports--data-available-in-control-panel">Reports &amp; data available in Control Panel</a></li>
+<li><a href="#9-member-app-consumer-pwa">Member app (consumer PWA)</a></li>
+<li><a href="#10-backend--infrastructure">Backend &amp; infrastructure</a></li>
+<li><a href="#11-environment-variables-founder-reference">Environment variables (founder reference)</a></li>
+<li><a href="#12-cli-scripts--generated-reports">CLI scripts &amp; generated reports</a></li>
+<li><a href="#13-deploy--release-checklist">Deploy &amp; release checklist</a></li>
+<li><a href="#14-daily--weekly-founder-routines">Daily / weekly founder routines</a></li>
+<li><a href="#15-troubleshooting">Troubleshooting</a></li>
+<li><a href="#appendix-a--url-quick-reference">Appendix A — URL quick reference</a></li>
+<li><a href="#appendix-b--role-matrix">Appendix B — Role matrix</a></li>
+<li><a href="#appendix-c--npm-scripts">Appendix C — npm scripts</a></li>
+<li><a href="#appendix-d--external-dashboards">Appendix D — External dashboards</a></li>
+</ol>
+<hr/>
+<h2>1. Purpose &amp; how to use this manual</h2>
+<p>This manual is the <strong>primary training document</strong> for running Freedom Paws as founder, CEO, and developer. It covers:</p>
+<ul>
+<li>How the <strong>front end</strong> (PWA, Framer, partner/vet portals) connects to the <strong>back end</strong> (Supabase, Vercel, OpenAI, XRPL)</li>
+<li>Every <strong>URL and access point</strong></li>
+<li>The <strong>Command Center</strong> (<code>/ops</code>) — your control panel</li>
+<li><strong>Reports and KPIs</strong> you can view without writing SQL</li>
+<li><strong>Click-by-click</strong> tasks for operations you perform yourself</li>
+</ul>
+<p><strong>Companion manuals (separate files):</strong></p>
+<table>
+<tr><th>Manual</th><th>Audience</th></tr>
+<tr><td><code>Freedom-Paws-Shelter-Portal-Training-Manual-May-2026.md</code></td><td>Shelter staff &amp; admins</td></tr>
+<tr><td><code>Freedom-Paws-Vet-Portal-Training-Manual-May-2026.md</code></td><td>Veterinary advisors &amp; ViT Pro users</td></tr>
+</table>
+<hr/>
+<h2>2. System overview</h2>
+<p>Freedom Paws is a <strong>Next.js Progressive Web App</strong> on Vercel with <strong>Supabase</strong> (auth + Postgres + pgvector). Three user-facing surfaces share one codebase:</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│  CONSUMER PWA          PARTNER PORTAL       OPS + VIT PRO     │
+│  app.freedompawsinc.com   shelter.*.com    /ops  /vit-pro   │
+│  Members · ViT · Shop     Shelters · ID      Founder console  │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                    Supabase + OpenAI + XUMM/XRPL</code></pre>
+<table>
+<tr><th>Layer</th><th>Technology</th></tr>
+<tr><td>Hosting</td><td>Vercel</td></tr>
+<tr><td>Database / Auth</td><td>Supabase</td></tr>
+<tr><td>AI (ViT)</td><td>OpenAI GPT-4o-mini</td></tr>
+<tr><td>Payments</td><td>Xaman (XRP/RLUSD) · Stripe (planned)</td></tr>
+<tr><td>Email</td><td>Resend (magic links, match alerts)</td></tr>
+<tr><td>Marketing site</td><td>Framer → freedompawsinc.com</td></tr>
+</table>
+<hr/>
+<h2>3. URLs, domains &amp; surfaces</h2>
+<table>
+<tr><th>Surface</th><th>URL</th><th>Who uses it</th></tr>
+<tr><td><strong>Member app (PWA)</strong></td><td>https://app.freedompawsinc.com</td><td>Dog owners</td></tr>
+<tr><td><strong>Marketing</strong></td><td>https://freedompawsinc.com</td><td>Public (Framer)</td></tr>
+<tr><td><strong>Community (planned)</strong></td><td>https://freedompawsinc.org</td><td>Grants, donations</td></tr>
+<tr><td><strong>Partner / shelter portal</strong></td><td>https://shelter.freedompawsinc.com/partner</td><td>Shelter staff</td></tr>
+<tr><td><strong>Command Center</strong></td><td>https://app.freedompawsinc.com/ops</td><td>Founder (<code>fp_ops</code>)</td></tr>
+<tr><td><strong>ViT Pro (vet CDS)</strong></td><td>https://app.freedompawsinc.com/vit-pro</td><td>Advisors, vets, you</td></tr>
+<tr><td><strong>Public adoption TN</strong></td><td>https://app.freedompawsinc.com/adopt/tn</td><td>Public</td></tr>
+<tr><td><strong>Login (all)</strong></td><td>https://app.freedompawsinc.com/login</td><td>Everyone with account</td></tr>
+</table>
+<p><strong>Local dev:</strong> <code>npm run dev</code> → http://localhost:3000 (same routes).</p>
+<hr/>
+<h2>4. Access control &amp; roles</h2>
+<p>Roles live in Supabase <code>user_profiles.role</code>:</p>
+<table>
+<tr><th>Role</th><th>Access</th></tr>
+<tr><td><code>owner</code></td><td>Member app (default new user)</td></tr>
+<tr><td><code>shelter_staff</code></td><td>Partner portal · found intake · draft listings</td></tr>
+<tr><td><code>shelter_admin</code></td><td>Above + match review · publish listings</td></tr>
+<tr><td><code>vet_staff</code></td><td>ViT Pro portal <em>(when assigned)</em></td></tr>
+<tr><td><code>fp_ops</code></td><td><strong>Everything</strong> — <code>/ops</code>, match review, all partners</td></tr>
+</table>
+<p><strong>Founder access:</strong> Add your email to <code>FP_OPS_EMAILS</code> in Vercel env (comma-separated). New users with that email auto-get <code>fp_ops</code> on first login.</p>
+<p><strong>ViT Pro advisor access:</strong> Add email to <code>VIT_PRO_ADVISOR_EMAILS</code> (or assign <code>vet_staff</code> / use <code>fp_ops</code>).</p>
+<hr/>
+<h2>5. Sign-in (all portals)</h2>
+<h3>Click-by-click — first login as founder</h3>
+<ol>
+<li>Open <strong>https://app.freedompawsinc.com/login?next=/ops</strong></li>
+<li>Enter your email (must be in <code>FP_OPS_EMAILS</code>).</li>
+<li>Tap <strong>Send magic link</strong>.</li>
+<li><strong>Option A:</strong> Open email on same device → tap link once in <strong>Safari</strong> (not in Gmail in-app browser if it breaks).</li>
+<li><strong>Option B:</strong> Enter <strong>6-digit OTP</strong> from same email on login page → <strong>Verify code</strong>.</li>
+<li>You land on <strong>Command Center</strong> (<code>/ops</code>).</li>
+</ol>
+<h3>If sign-in fails</h3>
+<ul>
+<li>Confirm Supabase URL/keys in Vercel env.</li>
+<li>Confirm redirect URLs in Supabase dashboard include <code>app.freedompawsinc.com</code> and <code>shelter.freedompawsinc.com</code>.</li>
+<li>Use OTP fallback on login page.</li>
+<li>See <code>docs/Freedom-Paws-ID-Supabase-Setup-Checklist.md</code>.</li>
+</ul>
+<hr/>
+<h2>6. Command Center — <code>/ops</code></h2>
+<p><strong>URL:</strong> https://app.freedompawsinc.com/ops  </p>
+<p><strong>Nav bar:</strong> COMMAND · ADOPTION · MARKETING · SHELTER &amp; ID · WELLNESS · PRODUCT · SYSTEM</p>
+<h3>Home dashboard KPIs (live snapshot)</h3>
+<table>
+<tr><th>KPI</th><th>Meaning</th></tr>
+<tr><td><strong>TN pilot partners</strong></td><td>Count of TN shelter orgs in database</td></tr>
+<tr><td><strong>Available dogs</strong></td><td>Listings with status <code>available</code></td></tr>
+<tr><td><strong>Match queue</strong></td><td>Found-dog reports awaiting human review</td></tr>
+<tr><td><strong>Waitlist</strong></td><td><code>waitlist_signups</code> count (needs service role)</td></tr>
+</table>
+<h3>Quick actions (links on home)</h3>
+<table>
+<tr><th>Link</th><th>Goes to</th></tr>
+<tr><td>Partner portal</td><td><code>/partner</code></td></tr>
+<tr><td>ViT Pro CDS</td><td><code>/vit-pro</code></td></tr>
+<tr><td>Public adopt TN</td><td><code>/adopt/tn</code></td></tr>
+<tr><td>Match queue</td><td><code>/id/match</code></td></tr>
+<tr><td>Symptom admin</td><td><code>/admin/symptoms</code></td></tr>
+</table>
+<h3>Recent audit</h3>
+<p>Last <strong>15 actions</strong> from <code>audit_log</code> table (marketing toggles, feature flags, partner approvals).</p>
+<hr/>
+<h2>7. Command Center modules — click by click</h2>
+<h3>7.1 ADOPTION — <code>/ops/adoption</code></h3>
+<p><strong>Purpose:</strong> TN pilot partner health, listing pipeline, outreach approval gates.</p>
+<p><strong>Click-by-click — approve partner for marketing outreach</strong></p>
+<ol>
+<li>Go to <strong>https://app.freedompawsinc.com/ops/adoption</strong></li>
+<li>Scroll to TN pilot partner card (e.g. Memphis Animal Services).</li>
+<li>Find toggle <strong>Approve for outreach</strong> on the right.</li>
+<li>Click to turn <strong>ON</strong> (green).</li>
+<li>Setting saves to Supabase <code>ops_settings</code> — syncs to marketing gates.</li>
+</ol>
+<p><strong>Click-by-click — check public listing page</strong></p>
+<ol>
+<li>On partner card, click <strong>Public page</strong> (green link).</li>
+<li>Opens <code>/adopt/tn/{partner-slug}</code> in new tab.</li>
+<li>Verify dogs with status <strong>available</strong> or <strong>pending</strong> appear.</li>
+</ol>
+<p><strong>Listing pipeline counts:</strong> draft · available · pending · adopted · archived — all shelters combined.</p>
+<hr/>
+<h3>7.2 MARKETING — <code>/ops/marketing</code></h3>
+<p><strong>Purpose:</strong> Record intent for CRM/n8n automation. <strong>Does not send email from the UI</strong> (dormant by default).</p>
+<p><strong>Click-by-click — safe default check</strong></p>
+<ol>
+<li>Go to <strong>/ops/marketing</strong></li>
+<li>Confirm <strong>Emergency stop</strong> is <strong>ON</strong> (red/blocked badge = safe).</li>
+<li>Confirm <strong>Master marketing enabled</strong> is <strong>OFF</strong> unless you intentionally activate.</li>
+</ol>
+<p><strong>Click-by-click — enable Workflow D (when ready + n8n connected)</strong></p>
+<ol>
+<li>Read <code>docs/marketing/ACTIVATION-GATE.md</code> in repo first.</li>
+<li>Turn <strong>Emergency stop OFF</strong> only when n8n is wired.</li>
+<li>Turn <strong>Master enabled ON</strong>.</li>
+<li>Enable individual workflow toggles (Shelter onboarding, etc.).</li>
+<li>Run <code>npm run marketing:crm-export</code> locally to verify CSV — no send.</li>
+</ol>
+<p><strong>Generate draft outreach emails (local, no send)</strong></p>
+<pre><code>cd freedompaws-app
+npm run marketing:tn-outreach</code></pre>
+<p>Drafts appear in <code>docs/marketing/outbox/tn-pilot/</code>.</p>
+<hr/>
+<h3>7.3 SHELTER &amp; ID — <code>/ops/shelter-id</code></h3>
+<p><strong>Purpose:</strong> Freedom Paws ID stats + shortcuts to intake and match queue.</p>
+<p><strong>KPIs:</strong> Found reports · Pending reviews · Matched · ID enrollments</p>
+<p><strong>Click-by-click — review a pending match as founder</strong></p>
+<ol>
+<li>Go to <strong>/ops/shelter-id</strong></li>
+<li>Note <strong>Pending reviews</strong> count.</li>
+<li>Click <strong>Open match queue →</strong></li>
+<li>Follow <a href="#">Shelter Manual — Match Review</a> or:</li>
+</ol>
+<p>   - Select report in list</p>
+<p>   - Review candidate similarity scores</p>
+<p>   - Add optional notes</p>
+<p>   - Tap <strong>Approve</strong> or <strong>Reject</strong></p>
+<ol>
+<li>On approve: owner email sends if Resend + service role configured.</li>
+</ol>
+<hr/>
+<h3>7.4 WELLNESS — <code>/ops/wellness</code></h3>
+<p><strong>Purpose:</strong> Insurance + telehealth partner URL readiness.</p>
+<p><strong>Click-by-click — verify launch readiness</strong></p>
+<ol>
+<li>Go to <strong>/ops/wellness</strong></li>
+<li>Check green/red rows for:</li>
+</ol>
+<p>   - Insurance quote URL</p>
+<p>   - Insurance lost-dog URL</p>
+<p>   - Telehealth book URL</p>
+<ol>
+<li>Open <strong>https://app.freedompawsinc.com/api/wellness/config-status</strong> — <code>&quot;ready&quot;: true</code></li>
+<li>Fix missing vars in <strong>Vercel dashboard</strong> (not only <code>.env.local</code>).</li>
+</ol>
+<hr/>
+<h3>7.5 PRODUCT — <code>/ops/product</code></h3>
+<p><strong>Purpose:</strong> PWA version, feature flags, shop readiness.</p>
+<p><strong>Click-by-click — toggle a feature flag</strong></p>
+<ol>
+<li>Go to <strong>/ops/product</strong></li>
+<li>Under <strong>Feature flags</strong>, flip desired switch (e.g. insurance module).</li>
+<li>Change saves to Supabase immediately.</li>
+</ol>
+<p><strong>Click-by-click — review ViT symptom feedback</strong></p>
+<ol>
+<li>On Product page, click <strong>Symptom admin →</strong></li>
+<li>Enter admin password (from <code>SYMPTOM_ADMIN_PASSWORD</code> env).</li>
+<li>Approve or reject unknown symptom phrases for lexicon merge.</li>
+<li>Run locally: <code>npm run symptom:merge</code> then deploy.</li>
+</ol>
+<hr/>
+<h3>7.6 SYSTEM — <code>/ops/system</code></h3>
+<p><strong>Purpose:</strong> Infrastructure health snapshot.</p>
+<p><strong>Checklist rows:</strong></p>
+<table>
+<tr><th>Row</th><th>Must be green for production</th></tr>
+<tr><td>Supabase</td><td>Yes</td></tr>
+<tr><td>Resend API</td><td>Yes (email)</td></tr>
+<tr><td>Match owner email path</td><td>Yes (reunions)</td></tr>
+<tr><td>FP_OPS_EMAILS</td><td>Yes (your access)</td></tr>
+<tr><td>Service role key</td><td>Yes (waitlist, admin tasks)</td></tr>
+</table>
+<p><strong>External links:</strong> Vercel · Supabase · Resend · n8n</p>
+<hr/>
+<h2>8. Reports &amp; data available in Control Panel</h2>
+<table>
+<tr><th>Report / KPI</th><th>Where</th><th>Source</th></tr>
+<tr><td>TN partner list + listing counts</td><td>/ops/adoption</td><td><code>adoption_listings</code> + partners</td></tr>
+<tr><td>Listing pipeline (5 statuses)</td><td>/ops/adoption</td><td>Aggregated counts</td></tr>
+<tr><td>Partner outreach approvals</td><td>/ops/adoption toggles</td><td><code>ops_settings</code></td></tr>
+<tr><td>Marketing workflow states</td><td>/ops/marketing</td><td><code>ops_settings</code></td></tr>
+<tr><td>Found / pending / matched ID</td><td>/ops/shelter-id</td><td>ID tables</td></tr>
+<tr><td>Waitlist signups</td><td>/ops home</td><td><code>waitlist_signups</code></td></tr>
+<tr><td>Wellness config status</td><td>/ops/wellness + API</td><td>Env vars</td></tr>
+<tr><td>PWA version</td><td>/ops/product</td><td><code>lib/pwa-version.ts</code></td></tr>
+<tr><td>Xaman / Stripe ready</td><td>/ops/product</td><td>Env check</td></tr>
+<tr><td>Feature flags</td><td>/ops/product</td><td>Supabase</td></tr>
+<tr><td>Audit log (15 recent)</td><td>/ops home</td><td><code>audit_log</code></td></tr>
+<tr><td>ViT Pro module status</td><td>/vit-pro + API</td><td><code>/api/vit-pro/status</code></td></tr>
+</table>
+<h3>Reports you generate via CLI (not in UI)</h3>
+<table>
+<tr><th>Command</th><th>Output</th></tr>
+<tr><td><code>npm run marketing:crm-export</code></td><td>CRM CSV</td></tr>
+<tr><td><code>npm run marketing:tn-outreach</code></td><td>Draft emails in docs/outbox</td></tr>
+<tr><td><code>npm run vit-pro:benchmark</code></td><td>Benchmark CSV + JSON in <code>data/vit-pro/benchmark/results/</code></td></tr>
+<tr><td><code>npm run ops:verify</code></td><td>Launch verification script</td></tr>
+<tr><td><code>npm run binders:pdf</code></td><td>PDF binders to Documents</td></tr>
+</table>
+<hr/>
+<h2>9. Member app (consumer PWA)</h2>
+<table>
+<tr><th>Module</th><th>Path</th><th>Founder test URL</th></tr>
+<tr><td>Home</td><td><code>/</code></td><td>Landing + feature cards</td></tr>
+<tr><td>ViT Diagnostics</td><td><code>/diagnostics</code></td><td>Photo/video analyze</td></tr>
+<tr><td>Protocols</td><td><code>/protocols</code></td><td>10 protocol pages</td></tr>
+<tr><td>Token Shop</td><td><code>/token-shop</code></td><td>Xaman checkout</td></tr>
+<tr><td>Photo Booth</td><td><code>/photobooth</code></td><td>SuperBud editor</td></tr>
+<tr><td>Freedom Paws ID</td><td><code>/id</code></td><td>Hub</td></tr>
+<tr><td>ID Enroll</td><td><code>/id/enroll</code></td><td>Owner biometric enroll</td></tr>
+<tr><td>My Pets</td><td><code>/mypets</code></td><td>Vault</td></tr>
+<tr><td>Wellness</td><td><code>/wellness</code></td><td>Insurance + telehealth</td></tr>
+<tr><td>Monitor</td><td><code>/monitor</code></td><td>Camera beta</td></tr>
+<tr><td>Adopt TN</td><td><code>/adopt/tn</code></td><td>Public directory</td></tr>
+</table>
+<hr/>
+<h2>10. Backend &amp; infrastructure</h2>
+<h3>Supabase</h3>
+<ul>
+<li><strong>Migrations:</strong> <code>supabase/migrations/</code> — run via SQL Editor or <code>npm run ops:migrate</code></li>
+<li><strong>Combined script:</strong> <code>supabase/RUN_ALL_MIGRATIONS_001_004.sql</code></li>
+<li><strong>Partner bootstrap:</strong> <code>npm run partner:bootstrap</code></li>
+</ul>
+<h3>Vercel</h3>
+<ul>
+<li>Production deploys from <code>main</code> branch</li>
+<li>Env vars: <strong>Project Settings → Environment Variables</strong></li>
+<li>Domains: <code>app.freedompawsinc.com</code>, <code>shelter.freedompawsinc.com</code></li>
+</ul>
+<h3>Key API routes (founder debugging)</h3>
+<table>
+<tr><th>Route</th><th>Purpose</th></tr>
+<tr><td><code>POST /api/analyze</code></td><td>ViT wellness, identity, vit_pro</td></tr>
+<tr><td><code>GET /api/wellness/config-status</code></td><td>Partner URL readiness</td></tr>
+<tr><td><code>GET /api/vit-pro/status</code></td><td>ViT Pro module stats</td></tr>
+<tr><td><code>/api/id/match/*</code></td><td>Match queue CRUD</td></tr>
+<tr><td><code>/api/partner/listings/*</code></td><td>Adoption listings</td></tr>
+</table>
+<hr/>
+<h2>11. Environment variables (founder reference)</h2>
+<table>
+<tr><th>Variable</th><th>Purpose</th></tr>
+<tr><td><code>NEXT_PUBLIC_SUPABASE_URL</code></td><td>Supabase project</td></tr>
+<tr><td><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></td><td>Client auth</td></tr>
+<tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>Admin/waitlist/match email</td></tr>
+<tr><td><code>OPENAI_API_KEY</code></td><td>ViT vision</td></tr>
+<tr><td><code>FP_OPS_EMAILS</code></td><td>Founder ops access</td></tr>
+<tr><td><code>VIT_PRO_ADVISOR_EMAILS</code></td><td>Vet portal access</td></tr>
+<tr><td><code>VIT_PRO_ENABLED</code></td><td>Kill switch for ViT Pro</td></tr>
+<tr><td><code>RESEND_API_KEY</code></td><td>Transactional email</td></tr>
+<tr><td><code>XUMM_*</code></td><td>XRPL checkout</td></tr>
+<tr><td><code>NEXT_PUBLIC_APP_URL</code></td><td>https://app.freedompawsinc.com</td></tr>
+<tr><td>Wellness vars</td><td>See <code>/ops/wellness</code></td></tr>
+</table>
+<p><strong>Never commit secrets.</strong> Use Vercel for production; root <code>.env.local</code> for local dev only.</p>
+<hr/>
+<h2>12. CLI scripts &amp; generated reports</h2>
+<pre><code>npm run dev              # Local server
+npm run build            # Production build + PWA sync
+npm run ops:migrate      # Ops settings migration
+npm run ops:verify       # Launch checks
+npm run partner:bootstrap # Seed partner orgs
+npm run id:setup:check   # Supabase ID config
+npm run vit-pro:benchmark # ViT Pro 50-photo run
+npm run binders:pdf      # Regenerate PDF binders
+npm run symptom:test:all # Lexicon category tests</code></pre>
+<hr/>
+<h2>13. Deploy &amp; release checklist</h2>
+<ol>
+<li><code>npm run build</code> — passes locally</li>
+<li>Bump <code>PWA_VERSION</code> in <code>lib/pwa-version.ts</code> if user-facing change</li>
+<li><code>git push</code> to <code>main</code> → Vercel deploys</li>
+<li>Verify https://app.freedompawsinc.com/api/wellness/config-status</li>
+<li>Test login on iPhone (magic link + OTP)</li>
+<li>Check <code>/ops/system</code> — all green</li>
+</ol>
+<hr/>
+<h2>14. Daily / weekly founder routines</h2>
+<h3>Daily (5 min)</h3>
+<ul>
+<li>[ ] Open <code>/ops</code> — check match queue + available listings</li>
+<li>[ ] Vercel dashboard — last deploy green</li>
+</ul>
+<h3>Weekly</h3>
+<ul>
+<li>[ ] <code>/ops/adoption</code> — partners with 0 listings → follow up</li>
+<li>[ ] <code>/admin/symptoms</code> — clear feedback queue</li>
+<li>[ ] Review ViT Pro benchmark progress if advisor engaged</li>
+</ul>
+<h3>Pre-launch</h3>
+<ul>
+<li>[ ] LLC/trademark clearance</li>
+<li>[ ] Framer <code>/adopt</code> publish</li>
+<li>[ ] First real TN listing live</li>
+<li>[ ] Partner onboarding email (when marketing gate open)</li>
+</ul>
+<hr/>
+<h2>15. Troubleshooting</h2>
+<table>
+<tr><th>Problem</th><th>Fix</th></tr>
+<tr><td>Can't access <code>/ops</code></td><td>Add email to <code>FP_OPS_EMAILS</code>; re-login</td></tr>
+<tr><td>Magic link opens wrong page</td><td>Use <code>?next=/ops</code> on login URL</td></tr>
+<tr><td>Match email not sent</td><td>Check Resend + service role on <code>/ops/system</code></td></tr>
+<tr><td>Listings not public</td><td>Status must be <code>available</code> or <code>pending</code></td></tr>
+<tr><td>ViT analyze fails</td><td>Check <code>OPENAI_API_KEY</code> on Vercel</td></tr>
+<tr><td>Partner can't sign in</td><td>Supabase redirect URLs + shelter DNS</td></tr>
+</table>
+<hr/>
+<h2>Appendix A — URL quick reference</h2>
+<table>
+<tr><th>Name</th><th>URL</th></tr>
+<tr><td>App</td><td>https://app.freedompawsinc.com</td></tr>
+<tr><td>Ops</td><td>https://app.freedompawsinc.com/ops</td></tr>
+<tr><td>Partner</td><td>https://shelter.freedompawsinc.com/partner</td></tr>
+<tr><td>ViT Pro</td><td>https://app.freedompawsinc.com/vit-pro</td></tr>
+<tr><td>Adopt TN</td><td>https://app.freedompawsinc.com/adopt/tn</td></tr>
+<tr><td>Login</td><td>https://app.freedompawsinc.com/login</td></tr>
+<tr><td>Config status</td><td>https://app.freedompawsinc.com/api/wellness/config-status</td></tr>
+</table>
+<hr/>
+<h2>Appendix B — Role matrix</h2>
+<table>
+<tr><th>Action</th><th>owner</th><th>shelter_staff</th><th>shelter_admin</th><th>fp_ops</th></tr>
+<tr><td>Member app</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>Partner portal</td><td>—</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>Found intake</td><td>—</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>Match approve</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+<tr><td>Draft listing</td><td>—</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>Publish listing</td><td>—</td><td>—</td><td>✅</td><td>✅</td></tr>
+<tr><td>Command Center</td><td>—</td><td>—</td><td>—</td><td>✅</td></tr>
+<tr><td>ViT Pro</td><td>—</td><td>—</td><td>—</td><td>✅*</td></tr>
+</table>
+<p>*Advisors: <code>VIT_PRO_ADVISOR_EMAILS</code> or <code>vet_staff</code></p>
+<hr/>
+<h2>Appendix C — npm scripts</h2>
+<p>See <code>package.json</code> scripts section. Key: <code>dev</code>, <code>build</code>, <code>ops:migrate</code>, <code>ops:verify</code>, <code>partner:bootstrap</code>, <code>partner:migrate</code>, <code>vit-pro:benchmark</code>, <code>marketing:crm-export</code>, <code>marketing:tn-outreach</code>, <code>binders:pdf</code>.</p>
+<hr/>
+<h2>Appendix D — External dashboards</h2>
+<table>
+<tr><th>Service</th><th>URL</th></tr>
+<tr><td>Vercel</td><td>https://vercel.com/dashboard</td></tr>
+<tr><td>Supabase</td><td>https://supabase.com/dashboard</td></tr>
+<tr><td>Resend</td><td>https://resend.com/emails</td></tr>
+<tr><td>GitHub</td><td>https://github.com/MKC-PUG/FREEDOMPAWSWELLNESS</td></tr>
+</table>
+<hr/>
+<p><em>Freedom Paws Wellness © 2026 · Internal founder manual · Honor Buddy's Legacy</em></p>
+<div class="footer-note">Freedom Paws Wellness © 2026 · Honor Buddy's Legacy · Educational purposes only where applicable.</div>
+</body>
+</html>

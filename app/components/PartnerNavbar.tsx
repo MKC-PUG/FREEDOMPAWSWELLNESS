@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import BrandLogo from '@/app/components/BrandLogo';
 import { PARTNER_NAV } from '@/lib/partner/nav';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
@@ -75,22 +76,10 @@ export default function PartnerNavbar({ userEmail = null }: Props) {
       className="fp-nav sticky top-0 z-[100] bg-[#0A1625] border-b border-emerald-500/25"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-[var(--nav-bar-height)] py-2 sm:py-3 flex items-center justify-between gap-2 sm:gap-6">
-        <Link
-          href="/partner"
-          className="min-w-0 flex-1 leading-tight touch-manipulation"
-          prefetch={false}
-          onClick={closeMobileMenu}
-        >
-          <div className="font-bold text-base sm:text-xl tracking-tight truncate text-white">
-            Freedom Paws Adoption Network
-          </div>
-          <div className="hidden sm:block text-xs text-emerald-400/90 mt-0.5">
-            Partner portal · Tennessee pilot
-          </div>
-        </Link>
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 min-h-[var(--nav-bar-height)] py-1.5 sm:py-2 flex items-center gap-2 sm:gap-3">
+        <BrandLogo href="/partner" variant="partner" onClick={closeMobileMenu} />
 
-        <div className="fp-nav-desktop hidden md:flex items-center gap-3 lg:gap-5 text-[10px] lg:text-xs font-semibold tracking-wider">
+        <div className="fp-nav-desktop hidden md:flex flex-1 min-w-0 fp-nav-links-scroll items-center justify-end gap-3 lg:gap-5 text-[10px] lg:text-xs font-semibold tracking-wider">
           {navItems.map((l) => {
             const isActive =
               pathname === l.href ||
@@ -124,7 +113,7 @@ export default function PartnerNavbar({ userEmail = null }: Props) {
           ) : null}
         </div>
 
-        <div className="fp-nav-mobile flex shrink-0 items-center md:hidden">
+        <div className="fp-nav-mobile flex shrink-0 items-center md:hidden ml-auto">
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}

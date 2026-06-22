@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { adoptTnPath, appPath } from '@/lib/site-urls';
+import { BRAND_LOGO_NAV } from '@/lib/brand/paths';
 
 export default function PartnerFooter() {
   const year = new Date().getFullYear();
@@ -21,6 +23,13 @@ export default function PartnerFooter() {
           Freedom Paws member app
         </Link>
       </nav>
+      <Image
+        src={BRAND_LOGO_NAV}
+        alt="Freedom Paws"
+        width={56}
+        height={56}
+        className="mx-auto mb-4 h-12 w-auto object-contain opacity-90"
+      />
       <p>
         © {year} Freedom Paws Wellness · Partner portal · Not a government agency
       </p>

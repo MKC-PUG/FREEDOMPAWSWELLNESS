@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Appendix C — Protocol JSON Metadata</title>
+<style>
+@page { size: letter; margin: 0.75in; }
+@media print {
+  .page-break { page-break-before: always; break-before: page; }
+  h1, h2, h3 { break-after: avoid; }
+  table, pre, blockquote { break-inside: avoid; }
+}
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  max-width: 7.5in;
+  margin: 0 auto;
+  padding: 0.25in;
+}
+h1 { font-size: 22pt; color: #0A1428; margin-top: 0; border-bottom: 2px solid #F5C242; padding-bottom: 0.2em; }
+h2 { font-size: 16pt; color: #0A1428; margin-top: 1.2em; }
+h3 { font-size: 13pt; color: #333; }
+.cover-title { font-size: 28pt; text-align: center; border: none; color: #0A1428; }
+.cover-sub { text-align: center; font-size: 14pt; color: #555; }
+.cover-meta { text-align: center; margin-top: 2em; font-size: 11pt; }
+.hero-placeholder {
+  border: 2px dashed #ccc; background: #f8f8f8; text-align: center;
+  padding: 2em; margin: 1.5em 0; color: #888; font-size: 10pt;
+}
+table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 10pt; }
+th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #0A1428; color: #fff; }
+tr:nth-child(even) { background: #f6f6f6; }
+code { background: #f0f0f0; padding: 1px 4px; font-size: 9pt; border-radius: 3px; }
+pre {
+  background: #f4f4f4; border: 1px solid #ddd; padding: 10px;
+  font-size: 8.5pt; line-height: 1.35; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word;
+}
+blockquote {
+  border-left: 4px solid #F5C242; margin: 1em 0; padding: 0.5em 1em;
+  background: #fffbf0; color: #333;
+}
+ul, ol { margin: 0.5em 0; padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+a { color: #1565c0; }
+.doc-header {
+  font-size: 9pt; color: #666; border-bottom: 1px solid #ddd;
+  padding-bottom: 8px; margin-bottom: 16px;
+}
+.technical .doc-header { border-color: #0288d1; }
+.footer-note { font-size: 9pt; color: #666; margin-top: 2em; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body class="technical">
+<div class="doc-header">Appendix C — Protocol JSON Metadata · Freedom Paws Wellness · May 2026</div>
+<h1>Appendix C — Protocol JSON Metadata (All 10)</h1>
+<p><strong>Freedom Paws Wellness · Technical Master Binder Appendix · May 2026</strong>  </p>
+<p><strong>For:</strong> XRPL Grants · on-ledger MPT minting · IPFS metadata · counsel review</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Protocol JSON Metadata — All Ten Protocols</h1>
+<p><strong>Schema version:</strong> 1.0.0 · <strong>Token standard (planned):</strong> XLS-89 MPT · <strong>Utility classification:</strong> educational_access only</p>
+<p><strong>Global pricing:</strong> 18 RLUSD ≈ $18 USD · XRP live rate at checkout · Fallback 25 XRP</p>
+<hr/>
+<h2>1. max-movement</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;max-movement&quot;,
+  &quot;branded_title&quot;: &quot;Max Movement Pro – Joint Support&quot;,
+  &quot;spec_category&quot;: &quot;Joint &amp; Mobility Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Joint &amp; Mobility&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;lameness&quot;, &quot;stiffness&quot;, &quot;gait asymmetry&quot;, &quot;joint pain&quot;, &quot;hip dysplasia signs&quot;],
+    &quot;vision_regions&quot;: [&quot;gait&quot;, &quot;posture&quot;, &quot;body&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/max-movement&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=max-movement&amp;buy=1#max-movement&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/max-movement.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<div class="page-break"></div>
+<h2>2. freedom-calm</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;freedom-calm&quot;,
+  &quot;branded_title&quot;: &quot;Freedom Calm – Anxiety Relief&quot;,
+  &quot;spec_category&quot;: &quot;Cognitive &amp; Senior Support Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Cognitive &amp; Calm&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;anxiety&quot;, &quot;separation distress&quot;, &quot;pacing&quot;, &quot;senior cognitive decline&quot;, &quot;noise phobia&quot;],
+    &quot;vision_regions&quot;: [&quot;face&quot;, &quot;posture&quot;, &quot;gait&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/freedom-calm&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=freedom-calm&amp;buy=1#freedom-calm&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/freedom-calm.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<h2>3. liver-kidney-detox</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;liver-kidney-detox&quot;,
+  &quot;branded_title&quot;: &quot;Foundation Liver &amp; Kidney Detox&quot;,
+  &quot;spec_category&quot;: &quot;Heart &amp; Vital Organs Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Liver &amp; Kidney&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;lethargy&quot;, &quot;inappetence&quot;, &quot;coat dullness&quot;, &quot;increased thirst&quot;, &quot;weight change&quot;],
+    &quot;vision_regions&quot;: [&quot;body&quot;, &quot;eyes&quot;, &quot;coat&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/liver-kidney-detox&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=liver-kidney-detox&amp;buy=1#liver-kidney-detox&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/liver-kidney-detox.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<div class="page-break"></div>
+<h2>4. gut-balance</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;gut-balance&quot;,
+  &quot;branded_title&quot;: &quot;Buddy's Gut Balance &amp; Cleanse&quot;,
+  &quot;spec_category&quot;: &quot;Digestive Harmony Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Digestive Harmony&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;diarrhea&quot;, &quot;vomiting&quot;, &quot;gas&quot;, &quot;bloating&quot;, &quot;picky eating&quot;, &quot;anal gland issues&quot;],
+    &quot;vision_regions&quot;: [&quot;body&quot;, &quot;coat&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/gut-balance&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=gut-balance&amp;buy=1#gut-balance&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/gut-balance.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<h2>5. infrared-spine</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;infrared-spine&quot;,
+  &quot;branded_title&quot;: &quot;Red Light Spine &amp; Joint Support&quot;,
+  &quot;spec_category&quot;: &quot;Musculoskeletal Recovery Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Spine &amp; Recovery&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;back pain&quot;, &quot;stiff spine&quot;, &quot;recovery after injury&quot;, &quot;mobility restriction&quot;],
+    &quot;vision_regions&quot;: [&quot;posture&quot;, &quot;gait&quot;, &quot;body&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/infrared-spine&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=infrared-spine&amp;buy=1#infrared-spine&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/infrared-spine.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<div class="page-break"></div>
+<h2>6. allergy-shield</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;allergy-shield&quot;,
+  &quot;branded_title&quot;: &quot;Allergy Shield – Skin &amp; Coat Glow&quot;,
+  &quot;spec_category&quot;: &quot;Allergy &amp; Respiratory Relief Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Allergy &amp; Respiratory&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;itching&quot;, &quot;hot spots&quot;, &quot;rash&quot;, &quot;ear infections&quot;, &quot;seasonal allergies&quot;, &quot;sneezing&quot;],
+    &quot;vision_regions&quot;: [&quot;skin&quot;, &quot;coat&quot;, &quot;ears&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/allergy-shield&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=allergy-shield&amp;buy=1#allergy-shield&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/allergy-shield.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<h2>7. fresh-smile-dental</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;fresh-smile-dental&quot;,
+  &quot;branded_title&quot;: &quot;Fresh Smile Dental &amp; Oral Health&quot;,
+  &quot;spec_category&quot;: &quot;Holistic Wellness Baseline Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Dental &amp; Oral&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;bad breath&quot;, &quot;tartar&quot;, &quot;red gums&quot;, &quot;drooling&quot;, &quot;difficulty eating&quot;],
+    &quot;vision_regions&quot;: [&quot;oral&quot;, &quot;mouth&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/fresh-smile-dental&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=fresh-smile-dental&amp;buy=1#fresh-smile-dental&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/fresh-smile-dental.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<div class="page-break"></div>
+<h2>8. heart-strong</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;heart-strong&quot;,
+  &quot;branded_title&quot;: &quot;Heart Strong Cardio-Support&quot;,
+  &quot;spec_category&quot;: &quot;Heart &amp; Vital Organs Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Heart &amp; Vitals&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;cough&quot;, &quot;exercise intolerance&quot;, &quot;restlessness&quot;, &quot;fluid retention signs&quot;, &quot;pale gums&quot;],
+    &quot;vision_regions&quot;: [&quot;body&quot;, &quot;gait&quot;, &quot;gums&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/heart-strong&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=heart-strong&amp;buy=1#heart-strong&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/heart-strong.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<h2>9. patriot-immune</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;patriot-immune&quot;,
+  &quot;branded_title&quot;: &quot;Patriot Defender – Immunity &amp; Vitality&quot;,
+  &quot;spec_category&quot;: &quot;Immune Vitality Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Immune Vitality&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;recurrent infections&quot;, &quot;slow recovery&quot;, &quot;senior decline&quot;, &quot;low energy&quot;, &quot;working dog fatigue&quot;],
+    &quot;vision_regions&quot;: [&quot;body&quot;, &quot;coat&quot;, &quot;face&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/patriot-immune&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=patriot-immune&amp;buy=1#patriot-immune&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/patriot-immune.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<div class="page-break"></div>
+<h2>10. clear-vision</h2>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;clear-vision&quot;,
+  &quot;branded_title&quot;: &quot;Clear Vision Defender – Eye Health Protocol&quot;,
+  &quot;spec_category&quot;: &quot;Eye &amp; Vision Health Protocol&quot;,
+  &quot;spec_short&quot;: &quot;Eye &amp; Vision&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: { &quot;network&quot;: &quot;mainnet&quot;, &quot;royalty_bps&quot;: 500, &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot; },
+  &quot;pricing&quot;: { &quot;rlusd&quot;: 18, &quot;usd_display&quot;: 18, &quot;xrp_fallback&quot;: 25 },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;cloudy eyes&quot;, &quot;discharge&quot;, &quot;squinting&quot;, &quot;tear staining&quot;, &quot;bumping into objects&quot;],
+    &quot;vision_regions&quot;: [&quot;eyes&quot;]
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/clear-vision&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=clear-vision&amp;buy=1#clear-vision&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/clear-vision.png&quot;
+  },
+  &quot;legal&quot;: { &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;, &quot;classification&quot;: &quot;utility_token&quot; }
+}</code></pre>
+<hr/>
+<h2>Machine-readable bundle</h2>
+<p>Combined JSON array for grant submissions:  </p>
+<p><code>docs/binders/appendix/protocol-metadata-all-10.json</code></p>
+<hr/>
+<p><em>Freedom Paws Wellness © 2026 · Technical Master Binder Appendix C</em></p>
+<div class="footer-note">Freedom Paws Wellness © 2026 · Honor Buddy's Legacy · Educational purposes only where applicable.</div>
+</body>
+</html>

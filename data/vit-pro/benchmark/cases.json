@@ -1,0 +1,661 @@
+{
+  "version": "1.0.0",
+  "description": "50-photo benchmark — add images to data/vit-pro/benchmark/images/",
+  "passCriteria": {
+    "zeroMissedCriticalUrgent": true,
+    "advisorAgreementOnDifferentialsPct": 70,
+    "citationPresencePct": 100
+  },
+  "cases": [
+    {
+      "id": "bench-001",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-001.jpg",
+      "symptoms": "Red eye with mucoid discharge, squinting",
+      "signalmentNotes": "Sample case — add real signalment",
+      "status": "ready",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-002",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-002.jpg",
+      "symptoms": "Patchy hair loss on flank, mild scale",
+      "signalmentNotes": "Sample case — add real signalment",
+      "status": "ready",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-003",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-003.jpg",
+      "symptoms": "Brown calculus on carnassials",
+      "signalmentNotes": "Sample case — add real signalment",
+      "status": "ready",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-004",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-004.jpg",
+      "symptoms": "Acute squinting after walk, discharge OS",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-005",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-005.jpg",
+      "symptoms": "Itchy red patches on belly",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-006",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-006.jpg",
+      "symptoms": "Red gum line, difficulty chewing",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-007",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-007.jpg",
+      "symptoms": "Bilateral tearing, mild redness",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-008",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-008.jpg",
+      "symptoms": "Generalized itch, seasonal flare",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-009",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-009.jpg",
+      "symptoms": "Bad breath, heavy tartar",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-010",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-010.jpg",
+      "symptoms": "Cloudy cornea reported, pawing at eye",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-011",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-011.jpg",
+      "symptoms": "Hot spot on hind leg, licking",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-012",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-012.jpg",
+      "symptoms": "Drooling, oral odor, senior dog",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-013",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-013.jpg",
+      "symptoms": "Red eye with mucoid discharge, squinting",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-014",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-014.jpg",
+      "symptoms": "Patchy hair loss on flank, mild scale",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-015",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-015.jpg",
+      "symptoms": "Brown calculus on carnassials",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-016",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-016.jpg",
+      "symptoms": "Acute squinting after walk, discharge OS",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-017",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-017.jpg",
+      "symptoms": "Itchy red patches on belly",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-018",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-018.jpg",
+      "symptoms": "Red gum line, difficulty chewing",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-019",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-019.jpg",
+      "symptoms": "Bilateral tearing, mild redness",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-020",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-020.jpg",
+      "symptoms": "Generalized itch, seasonal flare",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-021",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-021.jpg",
+      "symptoms": "Bad breath, heavy tartar",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-022",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-022.jpg",
+      "symptoms": "Cloudy cornea reported, pawing at eye",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-023",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-023.jpg",
+      "symptoms": "Hot spot on hind leg, licking",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-024",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-024.jpg",
+      "symptoms": "Drooling, oral odor, senior dog",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-025",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-025.jpg",
+      "symptoms": "Red eye with mucoid discharge, squinting",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-026",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-026.jpg",
+      "symptoms": "Patchy hair loss on flank, mild scale",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-027",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-027.jpg",
+      "symptoms": "Brown calculus on carnassials",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-028",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-028.jpg",
+      "symptoms": "Acute squinting after walk, discharge OS",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-029",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-029.jpg",
+      "symptoms": "Itchy red patches on belly",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-030",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-030.jpg",
+      "symptoms": "Red gum line, difficulty chewing",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-031",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-031.jpg",
+      "symptoms": "Bilateral tearing, mild redness",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-032",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-032.jpg",
+      "symptoms": "Generalized itch, seasonal flare",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-033",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-033.jpg",
+      "symptoms": "Bad breath, heavy tartar",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-034",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-034.jpg",
+      "symptoms": "Cloudy cornea reported, pawing at eye",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-035",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-035.jpg",
+      "symptoms": "Hot spot on hind leg, licking",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-036",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-036.jpg",
+      "symptoms": "Drooling, oral odor, senior dog",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-037",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-037.jpg",
+      "symptoms": "Red eye with mucoid discharge, squinting",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-038",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-038.jpg",
+      "symptoms": "Patchy hair loss on flank, mild scale",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-039",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-039.jpg",
+      "symptoms": "Brown calculus on carnassials",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-040",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-040.jpg",
+      "symptoms": "Acute squinting after walk, discharge OS",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-041",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-041.jpg",
+      "symptoms": "Itchy red patches on belly",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-042",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-042.jpg",
+      "symptoms": "Red gum line, difficulty chewing",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-043",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-043.jpg",
+      "symptoms": "Bilateral tearing, mild redness",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-044",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-044.jpg",
+      "symptoms": "Generalized itch, seasonal flare",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-045",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-045.jpg",
+      "symptoms": "Bad breath, heavy tartar",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-046",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-046.jpg",
+      "symptoms": "Cloudy cornea reported, pawing at eye",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-047",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-047.jpg",
+      "symptoms": "Hot spot on hind leg, licking",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-048",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-048.jpg",
+      "symptoms": "Drooling, oral odor, senior dog",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-049",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-049.jpg",
+      "symptoms": "Red eye with mucoid discharge, squinting",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-050",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-050.jpg",
+      "symptoms": "Patchy hair loss on flank, mild scale",
+      "signalmentNotes": "",
+      "status": "pending",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": [],
+        "notes": ""
+      }
+    }
+  ]
+}

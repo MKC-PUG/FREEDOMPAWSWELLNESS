@@ -112,10 +112,10 @@ export default function TokenShopPage() {
 
           <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40">
             <Image
-              src="/images/token-shop/header.jpg"
-              alt="SuperBud and happy dogs by a Tennessee lake with XRP wellness tokens — Wellness, Freedom, Community"
+              src="/images/token-shop/header.png"
+              alt="SuperBud in a superhero cape with treasure chest of XRP tokens — Token Shop headline"
               width={1024}
-              height={771}
+              height={687}
               priority
               sizes="(max-width: 1024px) 100vw, 1024px"
               className="block w-full h-auto"

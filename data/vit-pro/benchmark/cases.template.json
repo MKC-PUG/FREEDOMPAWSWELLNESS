@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "description": "50-photo internal benchmark — advisor labels gold standard in advisorReview fields after ViT Pro run.",
+  "passCriteria": {
+    "zeroMissedCriticalUrgent": true,
+    "advisorAgreementOnDifferentialsPct": 70,
+    "citationPresencePct": 100
+  },
+  "cases": [
+    {
+      "id": "bench-001",
+      "region": "eye",
+      "imagePath": "data/vit-pro/benchmark/images/bench-001.jpg",
+      "symptoms": "Red eye with mucoid discharge, squinting left eye for 2 days",
+      "signalmentNotes": "Adult mixed breed, 6 years",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": ["Conjunctivitis", "KCS", "Corneal ulcer"],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-002",
+      "region": "skin",
+      "imagePath": "data/vit-pro/benchmark/images/bench-002.jpg",
+      "symptoms": "Itchy red patches on belly, licking paws",
+      "signalmentNotes": "Golden retriever, 4 years, seasonal flare",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": ["Atopic dermatitis", "Food allergy", "Pyoderma"],
+        "notes": ""
+      }
+    },
+    {
+      "id": "bench-003",
+      "region": "oral",
+      "imagePath": "data/vit-pro/benchmark/images/bench-003.jpg",
+      "symptoms": "Bad breath, brown tartar on back teeth, red gum line",
+      "signalmentNotes": "Small breed, 8 years",
+      "advisorReview": {
+        "urgentExpected": false,
+        "topDifferentials": ["Periodontal disease", "Gingivitis"],
+        "notes": ""
+      }
+    }
+  ],
+  "_instructions": "Copy this file to cases.json and add up to 50 cases. Place images in data/vit-pro/benchmark/images/. Run: npm run vit-pro:benchmark"
+}

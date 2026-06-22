@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { isPreviewMode } from '@/lib/site-mode';
+import { BRAND_LOGO_NAV } from '@/lib/brand/paths';
 import {
   framerGrantsUrl,
   framerMissionUrl,
@@ -99,6 +101,14 @@ export default function SiteFooter() {
           Vercel.
         </p>
       )}
+
+      <Image
+        src={BRAND_LOGO_NAV}
+        alt="Freedom Paws"
+        width={56}
+        height={56}
+        className="mx-auto mb-4 h-12 w-auto object-contain opacity-90"
+      />
 
       <p>© {year} Freedom Paws Wellness. All rights reserved.</p>
       <p className="mt-1">

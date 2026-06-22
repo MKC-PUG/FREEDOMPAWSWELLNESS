@@ -1,0 +1,71 @@
+{
+  "region": "skin",
+  "version": "1.0.0",
+  "protocolSlug": "allergy-shield",
+  "captureGuidance": [
+    "Photograph lesion at arm's length and one close-up with scale reference if possible.",
+    "Include body location in owner notes (e.g. ventral abdomen, pinna).",
+    "Avoid filters; use consistent lighting."
+  ],
+  "findingFields": [
+    {
+      "key": "lesionPresent",
+      "label": "Visible lesion or rash",
+      "type": "enum",
+      "values": ["absent", "localized", "multifocal", "generalized", "unknown"],
+      "description": "Distribution pattern of skin abnormality"
+    },
+    {
+      "key": "alopecia",
+      "label": "Alopecia",
+      "type": "enum",
+      "values": ["absent", "patchy", "regional", "diffuse", "unknown"],
+      "description": "Hair loss pattern"
+    },
+    {
+      "key": "erythema",
+      "label": "Erythema",
+      "type": "enum",
+      "values": ["absent", "mild", "marked", "unknown"],
+      "description": "Redness of skin"
+    },
+    {
+      "key": "crustOrScale",
+      "label": "Crust or scale",
+      "type": "enum",
+      "values": ["absent", "present", "unknown"],
+      "description": "Surface crusting or scaling"
+    },
+    {
+      "key": "pruritusReported",
+      "label": "Owner-reported itch",
+      "type": "enum",
+      "values": ["absent", "mild", "moderate", "severe", "unknown"],
+      "description": "From history / symptoms text"
+    }
+  ],
+  "differentialConsiderations": [
+    "Atopic dermatitis / environmental allergy",
+    "Flea allergy dermatitis",
+    "Food-responsive dermatitis",
+    "Pyoderma ( bacterial )",
+    "Demodicosis",
+    "Dermatophytosis ( ringworm )",
+    "Contact / irritant dermatitis",
+    "Neoplasia ( if solitary nodular lesion )"
+  ],
+  "suggestedDiagnostics": [
+    "Detailed dermatologic exam",
+    "Skin scrape ( mites )",
+    "Cytology ( infection vs allergy )",
+    "Fungal culture if indicated",
+    "Elimination diet trial if pruritus is chronic",
+    "Allergy workup if recurrent seasonal pattern"
+  ],
+  "urgentIndicators": [
+    "rapidly spreading erythema with systemic signs",
+    "facial angioedema",
+    "open draining tracts with pain",
+    " suspected autoimmune vesicular disease"
+  ]
+}

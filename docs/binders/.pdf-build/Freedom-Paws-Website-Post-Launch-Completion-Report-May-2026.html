@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Website Post-Launch Completion Report</title>
+<style>
+@page { size: letter; margin: 0.75in; }
+@media print {
+  .page-break { page-break-before: always; break-before: page; }
+  h1, h2, h3 { break-after: avoid; }
+  table, pre, blockquote { break-inside: avoid; }
+}
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  max-width: 7.5in;
+  margin: 0 auto;
+  padding: 0.25in;
+}
+h1 { font-size: 22pt; color: #0A1428; margin-top: 0; border-bottom: 2px solid #F5C242; padding-bottom: 0.2em; }
+h2 { font-size: 16pt; color: #0A1428; margin-top: 1.2em; }
+h3 { font-size: 13pt; color: #333; }
+.cover-title { font-size: 28pt; text-align: center; border: none; color: #0A1428; }
+.cover-sub { text-align: center; font-size: 14pt; color: #555; }
+.cover-meta { text-align: center; margin-top: 2em; font-size: 11pt; }
+.hero-placeholder {
+  border: 2px dashed #ccc; background: #f8f8f8; text-align: center;
+  padding: 2em; margin: 1.5em 0; color: #888; font-size: 10pt;
+}
+table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 10pt; }
+th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #0A1428; color: #fff; }
+tr:nth-child(even) { background: #f6f6f6; }
+code { background: #f0f0f0; padding: 1px 4px; font-size: 9pt; border-radius: 3px; }
+pre {
+  background: #f4f4f4; border: 1px solid #ddd; padding: 10px;
+  font-size: 8.5pt; line-height: 1.35; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word;
+}
+blockquote {
+  border-left: 4px solid #F5C242; margin: 1em 0; padding: 0.5em 1em;
+  background: #fffbf0; color: #333;
+}
+ul, ol { margin: 0.5em 0; padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+a { color: #1565c0; }
+.doc-header {
+  font-size: 9pt; color: #666; border-bottom: 1px solid #ddd;
+  padding-bottom: 8px; margin-bottom: 16px;
+}
+.technical .doc-header { border-color: #0288d1; }
+.footer-note { font-size: 9pt; color: #666; margin-top: 2em; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body class="general">
+<div class="doc-header">Website Post-Launch Completion Report · Freedom Paws Wellness · May 2026</div>
+<h1 class="cover-title">Freedom Paws Wellness</h1>
+<h1>Website (Framer) — Post-Launch Completion Report</h1>
+<p><strong>Date:</strong> May 29, 2026  </p>
+<p><strong>Last updated:</strong> June 20, 2026  </p>
+<p><strong>Document purpose:</strong> Single detailed report of everything needed to <strong>complete the marketing website</strong> (<code>freedompawsinc.com</code>) for Freedom Paws Wellness after launch — plus a <strong>full inventory of app surfaces and modules</strong> shipped since this report was first written. Includes status from all session work, hired-contractor handoff, post-launch maintenance, and Framer wiring for new product areas.  </p>
+<p><strong>App (separate surface):</strong> <code>https://app.freedompawsinc.com</code> — PWA <strong>v78</strong> — engineering completion tracked in <code>Freedom-Paws-Launch-Master-Checklist-June-2026.md</code>.</p>
+<p><strong>Related docs (read in this order):</strong></p>
+<ul>
+<li><code>Framer-CTA-Link-Map.md</code> — every button URL (Section 14 = ID page)</li>
+<li><code>Framer-Adopt-Page-Wiring-Guide-June-2026.md</code> — <strong>NEW</strong> <code>/adopt</code> marketing page</li>
+<li><code>Framer-Phone-Layout-Inspection-and-Gotchas-June-2026.md</code> — layout fix + <strong>§6 Agent lexicon</strong></li>
+<li><code>ops/INFRASTRUCTURE-BUILDOUT-FRAMER-DNS-WELLNESS.md</code> — Phases 1–3 build order</li>
+<li><code>Today-Session-Founder-Checklists-June-2026.md</code> — T5 Framer pass</li>
+<li><code>Framer-and-DNS-Manual-Setup-Guide.md</code> — DNS + click-by-click</li>
+<li><code>Protocol-Price-Source-of-Truth.md</code> — prices must match app</li>
+<li><code>Freedom-Paws-Launch-Master-Checklist-June-2026.md</code> — full launch gates (app + website)</li>
+</ul>
+<hr/>
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#1-executive-summary">Executive summary</a></li>
+<li><a href="#2-two-surfaces--website-vs-app-expanded">Two surfaces — website vs app (expanded)</a></li>
+<li><a href="#3-website-completion-gates">Website completion gates</a></li>
+<li><a href="#4-what-is-already-done-on-the-website">What is already done on the website</a></li>
+<li><a href="#5-critical-blocker--id--tool-box-page-layout">Critical blocker — ID &amp; Tool Box page layout</a></li>
+<li><a href="#6-page-by-page-completion-checklist">Page-by-page completion checklist</a></li>
+<li><a href="#7-id-page--copy-option-a-tennessee-pilot">ID page — copy (Option A, Tennessee pilot)</a></li>
+<li><a href="#8-id-page--link-map-every-clickable">ID page — link map (every clickable)</a></li>
+<li><a href="#9-id-page--layout-fix-contractor-brief">ID page — layout fix (contractor brief)</a></li>
+<li><a href="#10-homepage--global-nav">Homepage &amp; global nav</a></li>
+<li><a href="#11-protocol-pages-all-10">Protocol pages (all 10)</a></li>
+<li><a href="#12-protocol-overview--framer-token-shop-page">Protocol Overview + Framer Token Shop page</a></li>
+<li><a href="#13-supporting-framer-pages">Supporting Framer pages</a></li>
+<li><a href="#14-new--framer-adopt-page-adoption-network">NEW — Framer <code>/adopt</code> page (Adoption Network)</a></li>
+<li><a href="#15-dns-publish-and-iphone-test-gates">DNS, publish, and iPhone test gates</a></li>
+<li><a href="#16-post-launch-website-maintenance">Post-launch website maintenance</a></li>
+<li><a href="#17-what-the-website-must-never-do">What the website must never do</a></li>
+<li><a href="#18-handoff-package-for-hired-framer-help">Handoff package for hired Framer help</a></li>
+<li><a href="#19-definition-of-website-complete">Definition of “website complete”</a></li>
+<li><a href="#20-app--backend--modules-added-since-may-29-2026">App &amp; backend — modules added since May 29, 2026</a></li>
+<li><a href="#21-framer-updates-required-for-new-app-modules">Framer updates required for new app modules</a></li>
+<li><a href="#22-after-website--return-to-app-build-summary">After website — return to app build (summary)</a></li>
+<li><a href="#23-documentation--training-package-new">Documentation &amp; training package (new)</a></li>
+</ol>
+<hr/>
+<h2>1. Executive summary</h2>
+<table>
+<tr><th>Area</th><th>Status</th><th>Owner</th></tr>
+<tr><td><strong>Domains &amp; DNS</strong></td><td>✅ Live — <code>freedompawsinc.com</code> (Framer) + <code>app.freedompawsinc.com</code> (Vercel) + <code>shelter.freedompawsinc.com</code> (Vercel)</td><td>Done</td></tr>
+<tr><td><strong>Canonical shop decision</strong></td><td>✅ App <code>/token-shop</code> only — Framer never processes payment</td><td>Done</td></tr>
+<tr><td><strong>Homepage CTAs (T5 Part 1)</strong></td><td>✅ Reported complete — ViT, Enroll ID, nav, middle tools</td><td>Founder</td></tr>
+<tr><td><strong>Protocol Overview + 10 detail pages</strong></td><td>🟡 Verify buy/view links per Section 4 table</td><td>Founder / contractor</td></tr>
+<tr><td><strong>ID &amp; Tool Box page copy</strong></td><td>🟡 Option A compliance copy largely applied</td><td>Founder</td></tr>
+<tr><td><strong>ID &amp; Tool Box page layout (Phone)</strong></td><td>🔴 <strong>Blocked</strong> — overlap, clip, black gaps</td><td><strong>Hired Framer help</strong></td></tr>
+<tr><td><strong>Framer <code>/adopt</code> page</strong></td><td>🔴 <strong>Not built</strong> — app directory live at <code>/adopt/tn</code></td><td>Founder</td></tr>
+<tr><td><strong>Shelters page → partner portal link</strong></td><td>🟡 Update copy + link to <code>shelter.freedompawsinc.com/partner</code></td><td>Founder</td></tr>
+<tr><td><strong>Wellness partners (Framer teasers)</strong></td><td>🟡 Optional links when insurance/telehealth URLs live</td><td>Founder</td></tr>
+<tr><td><strong>ID page iPhone 6-tap test</strong></td><td>🔴 Cannot pass until layout fixed</td><td>After layout</td></tr>
+<tr><td><strong>Framer Publish (final)</strong></td><td>🔴 Pending layout + <code>/adopt</code> + final link audit</td><td>After layout</td></tr>
+<tr><td><strong>Monthly sync (prices/slugs)</strong></td><td>🟡 Ongoing</td><td>Founder + engineering</td></tr>
+</table>
+<p><strong>Bottom line (May 29 baseline):</strong> The marketing website was <strong>~75% complete</strong>. Copy and routing strategy were documented. The <strong>remaining launch blocker for the website</strong> was the <strong>Phone layout</strong> on <code>/freedom-paws-id-toolbox</code> plus a final <strong>publish + iPhone test pass</strong>.</p>
+<p><strong>Bottom line (June 20 update):</strong> The <strong>app</strong> has advanced significantly (PWA <strong>v73 → v78</strong>). New surfaces — <strong>Ops Command Center</strong>, <strong>Shelter Partner Portal</strong>, <strong>ViT Pro</strong>, <strong>TN Adoption Directory</strong>, <strong>Wellness module</strong>, <strong>ID found/match workflows</strong> — are <strong>live in engineering</strong> but require <strong>new Framer marketing pages and link updates</strong> (Sections 14, 21). Website completion is now <strong>~70%</strong> when counting new Framer work; original pages unchanged except <code>/adopt</code> and shelter cross-links.</p>
+<hr/>
+<h2>2. Two surfaces — website vs app (expanded)</h2>
+<h3>Original two-surface model (May 29)</h3>
+<table>
+<tr><th>Surface</th><th>URL</th><th>Role</th><th>Who fixes layout bugs</th></tr>
+<tr><td><strong>Website (Framer)</strong></td><td><code>https://freedompawsinc.com</code></td><td>SEO, grants, mission, protocol stories, ID marketing page</td><td>Framer editor or contractor</td></tr>
+<tr><td><strong>App (Next.js PWA)</strong></td><td><code>https://app.freedompawsinc.com</code></td><td>ViT, Photo Booth, My Pets, shop, Xaman pay, ID enroll</td><td>Cursor / engineering</td></tr>
+</table>
+<h3>Current multi-surface model (June 20)</h3>
+<table>
+<tr><th>Surface</th><th>URL</th><th>Role</th><th>Framer links here?</th></tr>
+<tr><td><strong>Marketing (Framer)</strong></td><td><code>https://freedompawsinc.com</code></td><td>SEO, grants, mission, protocol stories, adoption story</td><td>—</td></tr>
+<tr><td><strong>Member app (PWA)</strong></td><td><code>https://app.freedompawsinc.com</code></td><td>ViT, Photo Booth, My Pets, shop, protocols, wellness, adopt directory</td><td>✅ Yes</td></tr>
+<tr><td><strong>Partner / shelter portal</strong></td><td><code>https://shelter.freedompawsinc.com/partner</code></td><td>Found intake, match review, adoption listings</td><td>✅ From <code>/adopt</code>, <code>/shelters</code></td></tr>
+<tr><td><strong>Ops Command Center</strong></td><td><code>https://app.freedompawsinc.com/ops</code></td><td>Founder KPIs, marketing gates, adoption stats</td><td>❌ Internal only</td></tr>
+<tr><td><strong>ViT Pro (vet CDS)</strong></td><td><code>https://app.freedompawsinc.com/vit-pro</code></td><td>Clinical decision support for advisors</td><td>❌ Internal / advisor onboarding</td></tr>
+<tr><td><strong>Community (planned)</strong></td><td><code>https://freedompawsinc.org</code></td><td>Grants, donations</td><td>🟡 Future</td></tr>
+</table>
+<p><strong>Permanent rule:</strong> All <strong>buy</strong> and <strong>wallet</strong> actions happen in the <strong>app</strong>. Framer <strong>learn</strong> pages link to Framer detail (<code>/protocol-N</code>); <strong>buy</strong> buttons link to <code>{APP}/token-shop?protocol={slug}&amp;buy=1#{slug}</code>. <strong>Live adoptable dogs</strong> always link to <code>{APP}/adopt/tn</code> — never duplicate inventory in Framer.</p>
+<p><code>{APP}</code> = <code>https://app.freedompawsinc.com</code>  </p>
+<p><code>{FRAMER}</code> = <code>https://freedompawsinc.com</code>  </p>
+<p><code>{PARTNER}</code> = <code>https://shelter.freedompawsinc.com</code></p>
+<hr/>
+<h2>3. Website completion gates</h2>
+<table>
+<tr><th>#</th><th>Gate</th><th>Pass criteria</th><th>Status</th></tr>
+<tr><td>W1</td><td><strong>Homepage</strong></td><td>Hero CTAs + nav + protocol grid buy/view links → app or Framer correctly</td><td>🟡 Verify</td></tr>
+<tr><td>W2</td><td><strong>Protocol Overview</strong></td><td>10 cards — each View Link ≠ <code>/protocol-1</code> for all</td><td>🟡 Verify</td></tr>
+<tr><td>W3</td><td><strong>10 protocol detail pages</strong></td><td>Buy button → app with correct slug</td><td>🟡 Verify</td></tr>
+<tr><td>W4</td><td><strong>Framer Token Shop page</strong></td><td>Teaser only; buy → app</td><td>🟡 Verify</td></tr>
+<tr><td>W5</td><td><strong>ID &amp; Tool Box page</strong></td><td>Option A copy + all links + <strong>Phone layout scrolls to footer</strong></td><td>🔴 Layout</td></tr>
+<tr><td>W6</td><td><strong>Footer / mission pages</strong></td><td>Grants, veterans, shelters, contact load</td><td>🟢 Likely OK</td></tr>
+<tr><td>W7</td><td><strong>Framer <code>/adopt</code> page</strong></td><td>Story + CTA → <code>{APP}/adopt/tn</code>; partner sign-in → <code>{PARTNER}/partner</code></td><td>🔴 <strong>NEW</strong></td></tr>
+<tr><td>W8</td><td><strong><code>/shelters</code> page update</strong></td><td>TN pilot story + partner portal link + adopt CTA</td><td>🟡 <strong>NEW</strong></td></tr>
+<tr><td>W9</td><td><strong>Publish</strong></td><td>Framer Publish after W1–W8</td><td>🔴</td></tr>
+<tr><td>W10</td><td><strong>iPhone tests</strong></td><td>Section 10 + Section 15D checklists in <code>Framer-CTA-Link-Map.md</code> + <code>/adopt</code> 4-tap test</td><td>🔴</td></tr>
+<tr><td>W11</td><td><strong>Monthly sync</strong></td><td>10 slugs + $18 / 25 XRP teaser matches app</td><td>🟡 Ongoing</td></tr>
+</table>
+<hr/>
+<h2>4. What is already done on the website</h2>
+<h3>Strategic / architectural (do not redo)</h3>
+<ul>
+<li>[x] Two-domain split: marketing on Framer, product on app subdomain</li>
+<li>[x] Canonical Token Shop = app only (<code>Framer-vs-App-Shop-XRPL-Strategy-and-Session-Thread-June-2026.md</code>)</li>
+<li>[x] <code>Framer-CTA-Link-Map.md</code> — permanent routing guide</li>
+<li>[x] App footer links back to Framer grants/mission/veterans/shelters</li>
+<li>[x] Protocol slug map (10 protocols) aligned with <code>lib/shop/protocol-catalog.ts</code></li>
+</ul>
+<h3>T5 Part 1 — Homepage (founder reported DONE)</h3>
+<ul>
+<li>[x] Hero: <strong>Try ViT AI</strong> → <code>{APP}/diagnostics</code></li>
+<li>[x] Hero: <strong>Enroll Freedom Paws ID</strong> → <code>{APP}/id/enroll</code></li>
+<li>[x] Nav wired (Protocols, Token Shop → app, ID &amp; Tool Box → Framer page)</li>
+<li>[x] Middle section tool cards → Photo Booth, My Pets (app URLs)</li>
+<li>[x] Protocol cards → Framer detail → buy in app (unchanged flow)</li>
+</ul>
+<h3>T5 Part 2 — ID page copy (largely done; layout not)</h3>
+<ul>
+<li>[x] Hero rename toward <strong>Add your pet in the app</strong></li>
+<li>[x] Softened auto-enroll, IPFS, alerts language (Option A)</li>
+<li>[x] Live demo → ViT (not lost-dog match)</li>
+<li>[x] Stats toward <strong>10 / 24/7 / Tennessee Pilot</strong> (verify exact text on canvas)</li>
+<li>[x] Privacy + disclaimer lines added or drafted</li>
+<li>[ ] <strong>Phone layout</strong> — see Section 5 (blocker)</li>
+<li>[ ] Final <strong>Publish</strong> + 6-tap iPhone test</li>
+</ul>
+<h3>NOT done on Framer (app is ready — Framer pending)</h3>
+<ul>
+<li>[ ] <strong><code>/adopt</code> marketing page</strong> — see Section 14</li>
+<li>[ ] <strong>Nav item “Adopt”</strong> → <code>{FRAMER}/adopt</code> or direct <code>{APP}/adopt/tn</code></li>
+<li>[ ] <strong><code>/shelters</code> refresh</strong> — partner portal + live directory CTAs</li>
+<li>[ ] <strong>Wellness partner teasers</strong> — optional insurance/telehealth links when env live</li>
+</ul>
+<hr/>
+<h2>5. Critical blocker — ID &amp; Tool Box page layout</h2>
+<p><strong>Page:</strong> <code>{FRAMER}/freedom-paws-id-toolbox</code>  </p>
+<p><strong>Symptom (Phone breakpoint):</strong> Stack overlap; canvas too short; Privacy / stats / footer clipped or drawn on top of each other; huge black gap between headline and buttons.</p>
+<p><strong>Root cause (diagnosed):</strong></p>
+<table>
+<tr><th>Rank</th><th>Cause</th></tr>
+<tr><td>1</td><td>Section stacks <strong>Position: Absolute</strong> or identical <strong>Top</strong> Y values</td></tr>
+<tr><td>2</td><td><code>Bottom CTAs</code> component — <code>CTA Token Shop</code> + <code>CTA Protocols</code> overlap inside nested <strong>Tap</strong> wrappers</td></tr>
+<tr><td>3</td><td><code>Stack - Privacy</code> was Absolute (e.g. Top ~5690) — not in document flow</td></tr>
+<tr><td>4</td><td>Parent fixed height + <strong>Overflow Hidden</strong> clipping tail sections</td></tr>
+<tr><td>5</td><td>Phone breakpoint overrides missing for Gap / Height / Direction</td></tr>
+</table>
+<p><strong>Content is not missing</strong> — Layers panel shows Privacy, stats, footer; they are <strong>overlapped or clipped</strong>.</p>
+<p><strong>Recommended fix (nuclear — fastest for contractor):</strong></p>
+<ol>
+<li><strong>Phone breakpoint only.</strong></li>
+<li><strong>Delete <code>Bottom CTAs</code></strong> component block.</li>
+<li>Add <strong>2 plain buttons</strong> in <strong>Header</strong> (not components): Shop → <code>{APP}/token-shop</code>; Protocols → <code>/protocol-overview</code>.</li>
+<li><strong>Stack - Privacy:</strong> Position <strong>Relative</strong>, Padding-top <strong>48+</strong>, Height <strong>Fit</strong>.</li>
+<li><strong>Stack - Stats:</strong> Position <strong>Relative</strong>, Direction <strong>Vertical</strong> (or single line for launch).</li>
+<li>Parent <strong>Stack:</strong> Gap <strong>56</strong>, Vertical, Fit, Relative, Overflow <strong>Visible</strong>.</li>
+<li><strong>Preview</strong> full scroll → <strong>Publish</strong>.</li>
+<li>Run <strong>6-tap test</strong> (Section 8).</li>
+</ol>
+<p><strong>Full inspection procedure:</strong> <code>Framer-Phone-Layout-Inspection-and-Gotchas-June-2026.md</code>  </p>
+<p><strong>Agent vocabulary for future sessions:</strong> same doc <strong>§6 Lexicon</strong></p>
+<h3>Canonical layer order (target)</h3>
+<pre><code>Stack (Parent — Gap 56, Vertical, Fit, Relative)
+  Community Impact: &quot;Every Freedom Pa...&quot;
+  Image
+  Stack (Header wrapper)
+    Header
+      &quot;Protect Your Dog Today&quot;
+      [Plain Button: Shop] → {APP}/token-shop
+      [Plain Button: Explore Protocols] → /protocol-overview
+  Stack - Privacy
+  Stack - Stats
+    (10 Protocols / 24/7 App Access / Tennessee Pilot)
+Footer (page root — NOT inside clipped parent)</code></pre>
+<hr/>
+<h2>6. Page-by-page completion checklist</h2>
+<p>Use this as the master website punch list. Check each box after <strong>Publish</strong> + iPhone verify.</p>
+<table>
+<tr><th>Page (Framer)</th><th>Copy</th><th>Links</th><th>Phone layout</th><th>Publish</th><th>iPhone test</th></tr>
+<tr><td><code>/</code> (Home)</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/protocol-overview</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/protocol-1</code> … <code>/protocol-10</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/token-shop</code> (Framer teaser)</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/freedom-paws-id-toolbox</code></td><td>☐</td><td>☐</td><td><strong>🔴</strong></td><td>☐</td><td>☐</td></tr>
+<tr><td><strong><code>/adopt</code></strong> <em>(NEW)</em></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/about-buddys-story</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/community-impact</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/how-recovery-works</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/contact</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/faq</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/grants</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/mission</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/veterans</code></td><td>☐</td><td>☐</td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td><code>/shelters</code></td><td>☐</td><td>☐ <strong>update</strong></td><td>☐</td><td>☐</td><td>☐</td></tr>
+</table>
+<hr/>
+<h2>7. ID page — copy (Option A, Tennessee pilot)</h2>
+<p>Apply on <code>/freedom-paws-id-toolbox</code>. Source: <code>Framer-CTA-Link-Map.md</code> Section 14A + session decisions.</p>
+<table>
+<tr><th>Section</th><th>Launch-safe copy</th></tr>
+<tr><td>Hero button</td><td><strong>Add your pet in the app</strong> (not “Upload”)</td></tr>
+<tr><td>Hero subline</td><td><em>ViT Diagnostics &amp; My Pets available now. Full ID matching rolling out soon.</em></td></tr>
+<tr><td>Auto-enroll</td><td><strong>Planned:</strong> protocol members will enroll in the Freedom Paws ID database.</td></tr>
+<tr><td>IPFS</td><td><strong>Designed for</strong> private decentralized storage (IPFS) — coming soon.</td></tr>
+<tr><td>Alerts</td><td><strong>Owner alerts</strong> on match (coming soon).</td></tr>
+<tr><td>QR / shelter portal</td><td><strong>QR &amp; shelter portal</strong> — staff tools at <code>{PARTNER}/partner</code> <em>(update from “roadmap” when live)</em></td></tr>
+<tr><td>Tool Box intro</td><td><strong>Your pet’s digital health hub</strong> — ViT &amp; My Pets in the app today; full vault on IPFS (planned).</td></tr>
+<tr><td>Live demo headline</td><td><strong>Try ViT AI Now</strong> — same vision tech as future ID matching</td></tr>
+<tr><td>Live demo sub</td><td>Upload a photo in the app to test <strong>ViT Diagnostics</strong> (not lost-dog ID match yet).</td></tr>
+<tr><td>Step 1 product name</td><td><strong>Any Freedom Paws protocol</strong> (not “Recovery Plus” unless SKU exists)</td></tr>
+<tr><td>Stats row</td><td><strong>10 Protocols</strong> · <strong>24/7 App Access</strong> · <strong>Tennessee Pilot</strong> (no unverified 1K+ / 88%)</td></tr>
+<tr><td>Privacy</td><td>Add: <em>Biometric ID enrollment will require explicit consent (planned).</em></td></tr>
+<tr><td>Bottom disclaimer</td><td><em>Freedom Paws ID is not a government pet license. Not veterinary advice.</em></td></tr>
+<tr><td>Tennessee framing</td><td>Community Impact section may reference TN pilot where appropriate</td></tr>
+</table>
+<hr/>
+<h2>8. ID page — link map (every clickable)</h2>
+<p><strong>New tab: OFF</strong> for all <code>{APP}</code> and <code>{PARTNER}</code> URLs.</p>
+<h3>Hero</h3>
+<table>
+<tr><th>Element</th><th>URL</th></tr>
+<tr><td><strong>Add your pet in the app</strong></td><td><code>{APP}/mypets</code></td></tr>
+<tr><td><strong>Enroll Freedom Paws ID</strong></td><td><code>{APP}/id/enroll</code></td></tr>
+<tr><td>Optional <strong>Try ViT AI</strong></td><td><code>{APP}/diagnostics</code></td></tr>
+<tr><td>Optional <strong>ID hub</strong></td><td><code>{APP}/id</code></td></tr>
+</table>
+<h3>Tool Box grid</h3>
+<table>
+<tr><th>Button</th><th>URL</th></tr>
+<tr><td>Medical Records</td><td><code>{APP}/mypets</code></td></tr>
+<tr><td>ViT Scans</td><td><code>{APP}/diagnostics</code></td></tr>
+<tr><td>Vaccinations</td><td><code>{APP}/mypets</code></td></tr>
+<tr><td>Daily Notes</td><td><code>{APP}/mypets</code></td></tr>
+</table>
+<p>Caption under grid: <em>Full encrypted vault &amp; IPFS sync — coming soon.</em></p>
+<h3>Live demo</h3>
+<table>
+<tr><th>Element</th><th>URL</th></tr>
+<tr><td><strong>Try Live AI Demo</strong></td><td><code>{APP}/diagnostics</code></td></tr>
+<tr><td>Upload / sample thumbnails (if clickable)</td><td><code>{APP}/diagnostics</code></td></tr>
+</table>
+<h3>Protect Your Dog Today (bottom CTAs)</h3>
+<table>
+<tr><th>Element</th><th>URL</th></tr>
+<tr><td><strong>Get lifetime access</strong> (rename from Recovery Plus if needed)</td><td><code>{APP}/token-shop</code></td></tr>
+<tr><td><strong>Explore All Protocols</strong></td><td><code>/protocol-overview</code></td></tr>
+</table>
+<h3>Nav</h3>
+<table>
+<tr><th>Item</th><th>URL</th></tr>
+<tr><td><strong>ID &amp; Tool Box</strong></td><td>Stays on <code>/freedom-paws-id-toolbox</code></td></tr>
+<tr><td><strong>Token Shop</strong></td><td><code>{APP}/token-shop</code></td></tr>
+<tr><td><strong>Adopt</strong> <em>(NEW — add to nav)</em></td><td><code>{FRAMER}/adopt</code> or <code>{APP}/adopt/tn</code></td></tr>
+</table>
+<h3>iPhone 6-tap test (must pass before website gate W5 closes)</h3>
+<table>
+<tr><th>#</th><th>Tap</th><th>Must open</th></tr>
+<tr><td>1</td><td>Add your pet in the app</td><td><code>{APP}/mypets</code></td></tr>
+<tr><td>2</td><td>Try Live AI Demo</td><td><code>{APP}/diagnostics</code></td></tr>
+<tr><td>3</td><td>Medical Records</td><td><code>{APP}/mypets</code></td></tr>
+<tr><td>4</td><td>Explore All Protocols</td><td><code>/protocol-overview</code></td></tr>
+<tr><td>5</td><td>Shop / lifetime access</td><td><code>{APP}/token-shop</code></td></tr>
+<tr><td>6</td><td>Nav ID &amp; Tool Box</td><td>Stays on Framer ID page</td></tr>
+</table>
+<hr/>
+<h2>9. ID page — layout fix (contractor brief)</h2>
+<p><strong>Scope:</strong> Phone breakpoint on <code>/freedom-paws-id-toolbox</code> only. Desktop may already look fine — still verify after Phone fix.</p>
+<h3>Phase 1 — Unclip page</h3>
+<ol>
+<li>Select outermost content <strong>Stack</strong> (PageBody equivalent).</li>
+<li>Height → <strong>Fit contents</strong></li>
+<li>Overflow → <strong>Visible</strong></li>
+<li>Clip Content → <strong>Off</strong></li>
+</ol>
+<h3>Phase 2 — Document flow</h3>
+<ol>
+<li>For Community Impact → Stats sections: <strong>Position Relative</strong>; clear <strong>Pin</strong>; remove manual <strong>Y</strong>.</li>
+<li>Confirm each section pushes the next down on canvas.</li>
+</ol>
+<h3>Phase 3 — Reorder / extract</h3>
+<ol>
+<li>Privacy and Stats must be <strong>siblings</strong> below Header — not nested inside Community Impact with clip.</li>
+<li>Order: Community Impact → Image → Header (Protect + buttons) → Privacy → Stats → Footer.</li>
+</ol>
+<h3>Phase 4 — Replace broken CTA components</h3>
+<ol>
+<li>Delete <code>Bottom CTAs</code> (and nested <code>Tap - Token Shop CTA</code>, <code>CTA Token Shop</code>, <code>CTA Protocols</code>).</li>
+<li>Insert two plain Framer buttons with URLs from Section 8.</li>
+</ol>
+<h3>Phase 5 — Verify + publish</h3>
+<ol>
+<li>Phone <strong>Preview</strong> — scroll Hero → Footer without overlap.</li>
+<li><strong>Publish</strong> Framer site.</li>
+<li>Real iPhone Safari test — Section 8 table.</li>
+</ol>
+<p><strong>Time estimate for experienced Framer contractor:</strong> 1–2 hours if nuclear reset path is used.</p>
+<hr/>
+<h2>10. Homepage &amp; global nav</h2>
+<p>Source: <code>Framer-CTA-Link-Map.md</code> Section 9.</p>
+<h3>Hero CTAs</h3>
+<table>
+<tr><th>Priority</th><th>Label</th><th>URL</th></tr>
+<tr><td>Primary</td><td><strong>Try ViT AI free</strong></td><td><code>{APP}/diagnostics</code></td></tr>
+<tr><td>Secondary</td><td><strong>Enroll Freedom Paws ID</strong></td><td><code>{APP}/id/enroll</code></td></tr>
+</table>
+<h3>Nav <em>(June 20 — add Adopt)</em></h3>
+<table>
+<tr><th>Nav item</th><th>Link</th></tr>
+<tr><td>About / Buddy's Story</td><td>Framer page</td></tr>
+<tr><td>Protocols Overview</td><td><code>/protocol-overview</code></td></tr>
+<tr><td><strong>Adopt</strong> <em>(NEW)</em></td><td><code>{FRAMER}/adopt</code></td></tr>
+<tr><td>Community Impact</td><td>Framer page</td></tr>
+<tr><td><strong>Token Shop</strong></td><td><code>{APP}/token-shop</code></td></tr>
+<tr><td><strong>ID &amp; Tool Box</strong></td><td><code>/freedom-paws-id-toolbox</code></td></tr>
+<tr><td>Grants FAQ</td><td>Framer page</td></tr>
+<tr><td><strong>Connect Wallet</strong></td><td><code>{APP}/token-shop</code></td></tr>
+</table>
+<h3>Mid-page sections</h3>
+<table>
+<tr><th>Section</th><th>Wire to</th></tr>
+<tr><td>10 protocol cards — Learn More</td><td><code>/protocol-1</code> … <code>/protocol-10</code></td></tr>
+<tr><td>10 protocol cards — Buy (if present)</td><td><code>{APP}/token-shop?protocol={slug}&amp;buy=1#{slug}</code></td></tr>
+<tr><td>Token Shop block</td><td><code>{APP}/token-shop</code></td></tr>
+<tr><td>Freedom Paws ID block</td><td><code>{APP}/id</code> + optional Enroll → <code>{APP}/id/enroll</code></td></tr>
+<tr><td><strong>Adoption Network block</strong> <em>(NEW)</em></td><td><code>{APP}/adopt/tn</code></td></tr>
+</table>
+<h3>Homepage iPhone test (Section 10 of CTA map)</h3>
+<table>
+<tr><th>#</th><th>Test</th></tr>
+<tr><td>1</td><td>Protocol Overview card #1 bone → Max Movement Framer detail</td></tr>
+<tr><td>2</td><td>Card #3 bone → Liver &amp; Kidney (not Max Movement)</td></tr>
+<tr><td>3</td><td>Detail page buy → app Token Shop correct card</td></tr>
+<tr><td>4</td><td>Pay with Xaman button visible / pulsed</td></tr>
+<tr><td>5</td><td>Framer Token Shop card buy → same</td></tr>
+<tr><td>6</td><td>Homepage ViT → <code>{APP}/diagnostics</code></td></tr>
+<tr><td>7</td><td><strong>Adopt CTA → <code>{APP}/adopt/tn</code></strong> <em>(NEW)</em></td></tr>
+</table>
+<hr/>
+<h2>11. Protocol pages (all 10)</h2>
+<p>For <strong>each</strong> <code>/protocol-1</code> through <code>/protocol-10</code>:</p>
+<table>
+<tr><th>Step</th><th>Action</th></tr>
+<tr><td>1</td><td>Confirm hero title matches Section 4 table in <code>Framer-CTA-Link-Map.md</code></td></tr>
+<tr><td>2</td><td>Main buy button → URL from Section 4 <strong>Buy link</strong> column</td></tr>
+<tr><td>3</td><td>Label: <strong>Get lifetime access in the app</strong> or <strong>Pay with Xaman in the app</strong></td></tr>
+<tr><td>4</td><td>New tab: <strong>OFF</strong></td></tr>
+<tr><td>5</td><td>Optional: <strong>Browse all protocols in app</strong> → <code>{APP}/protocols</code></td></tr>
+<tr><td>6</td><td>Price teaser text only: <em>Lifetime access · $18 USD · pay in XRP via Xaman in the app</em></td></tr>
+</table>
+<h3>Slug reference (must match app)</h3>
+<table>
+<tr><th>#</th><th>Framer page</th><th>App slug</th></tr>
+<tr><td>1</td><td><code>/protocol-1</code></td><td><code>max-movement</code></td></tr>
+<tr><td>2</td><td><code>/protocol-2</code></td><td><code>freedom-calm</code></td></tr>
+<tr><td>3</td><td><code>/protocol-3</code></td><td><code>liver-kidney-detox</code></td></tr>
+<tr><td>4</td><td><code>/protocol-4</code></td><td><code>gut-balance</code></td></tr>
+<tr><td>5</td><td><code>/protocol-5</code></td><td><code>fresh-smile-dental</code></td></tr>
+<tr><td>6</td><td><code>/protocol-6</code></td><td><code>heart-strong</code></td></tr>
+<tr><td>7</td><td><code>/protocol-7</code></td><td><code>infrared-spine</code></td></tr>
+<tr><td>8</td><td><code>/protocol-8</code></td><td><code>allergy-shield</code></td></tr>
+<tr><td>9</td><td><code>/protocol-9</code></td><td><code>patriot-immune</code></td></tr>
+<tr><td>10</td><td><code>/protocol-10</code></td><td><code>clear-vision</code></td></tr>
+</table>
+<hr/>
+<h2>12. Protocol Overview + Framer Token Shop page</h2>
+<h3>Protocol Overview (<code>/protocol-overview</code>)</h3>
+<p><strong>One-time component setup</strong> (Section 5 of CTA map):</p>
+<ul>
+<li>Protocol Card component must have <strong><code>View Link</code></strong> and <strong><code>Buy Link</code></strong> properties.</li>
+<li>Bone Button → bound to <strong><code>View Link</code></strong> — never hardcoded <code>/protocol-1</code> on component master.</li>
+</ul>
+<p><strong>Per card (10 instances):</strong></p>
+<table>
+<tr><th>Card</th><th>View Link</th><th>Buy Link</th></tr>
+<tr><td>1</td><td><code>/protocol-1</code></td><td><code>{APP}/token-shop?protocol=max-movement&amp;buy=1#max-movement</code></td></tr>
+<tr><td>…</td><td>…</td><td>…</td></tr>
+<tr><td>10</td><td><code>/protocol-10</code></td><td><code>{APP}/token-shop?protocol=clear-vision&amp;buy=1#clear-vision</code></td></tr>
+</table>
+<h3>Framer Token Shop page (<code>/token-shop</code>)</h3>
+<ul>
+<li>Same card pattern as Protocol Overview.</li>
+<li>Page copy (“25 XRP or 18 RLUSD”) = <strong>text only</strong> — not a payment link.</li>
+<li>Optional bottom button: <strong>Open full Token Shop in app</strong> → <code>{APP}/token-shop</code></li>
+</ul>
+<hr/>
+<h2>13. Supporting Framer pages</h2>
+<p>These pages support SEO, grants, and trust. No app checkout on these pages.</p>
+<table>
+<tr><th>Page</th><th>Purpose</th><th>App links (if any)</th></tr>
+<tr><td><code>/about-buddys-story</code></td><td>Origin story</td><td>Optional CTA → <code>{APP}/</code></td></tr>
+<tr><td><code>/community-impact</code></td><td>Veterans, give-back</td><td>Optional → <code>{APP}/token-shop</code></td></tr>
+<tr><td><code>/how-recovery-works</code></td><td>Education</td><td>Link to <code>/protocol-overview</code></td></tr>
+<tr><td><code>/contact</code></td><td>Contact form / email</td><td>None required</td></tr>
+<tr><td><code>/faq</code></td><td>FAQs</td><td>Link to app help routes if mentioned</td></tr>
+<tr><td><code>/grants</code></td><td>10% give-back story</td><td>Footer standard</td></tr>
+<tr><td><code>/mission</code></td><td>Mission statement</td><td>Footer standard</td></tr>
+<tr><td><code>/veterans</code></td><td>Patriotic mission</td><td>Footer standard</td></tr>
+<tr><td><code>/shelters</code></td><td>Shelter pilot story</td><td><strong>Update:</strong> <code>{PARTNER}/partner</code> + <code>{APP}/adopt/tn</code></td></tr>
+</table>
+<p><strong>Footer (site-wide on ID page and others):</strong></p>
+<table>
+<tr><th>Link</th><th>Destination</th></tr>
+<tr><td>Our Story</td><td><code>/about-buddys-story</code></td></tr>
+<tr><td>Patriotic Mission / Veterans</td><td><code>/community-impact</code></td></tr>
+<tr><td>Plans / Supplements</td><td><code>/protocol-overview</code></td></tr>
+<tr><td><strong>Adopt in Tennessee</strong> <em>(NEW)</em></td><td><code>{FRAMER}/adopt</code></td></tr>
+<tr><td>Resources</td><td><code>/how-recovery-works</code></td></tr>
+<tr><td>Contact</td><td><code>/contact</code></td></tr>
+<tr><td>FAQ</td><td><code>/faq</code></td></tr>
+<tr><td>Success Stories</td><td><code>/community-impact</code></td></tr>
+<tr><td>Instagram / Facebook</td><td>Real profile URLs</td></tr>
+</table>
+<hr/>
+<h2>14. NEW — Framer <code>/adopt</code> page (Adoption Network)</h2>
+<p><strong>Status:</strong> App directory <strong>live</strong> — Framer marketing page <strong>not built</strong>  </p>
+<p><strong>Full guide:</strong> <code>Framer-Adopt-Page-Wiring-Guide-June-2026.md</code></p>
+<h3>Routing rule (do not change)</h3>
+<table>
+<tr><th>Job</th><th>Where</th><th>URL</th></tr>
+<tr><td>Live adoptable dogs</td><td>App only</td><td><code>{APP}/adopt/tn</code></td></tr>
+<tr><td>Marketing story</td><td>Framer</td><td><code>{FRAMER}/adopt</code></td></tr>
+<tr><td>Partner staff tools</td><td>Partner host</td><td><code>{PARTNER}/partner</code></td></tr>
+</table>
+<h3>Minimum Framer build checklist</h3>
+<table>
+<tr><th>Step</th><th>Action</th></tr>
+<tr><td>1</td><td>Create page slug <strong><code>/adopt</code></strong></td></tr>
+<tr><td>2</td><td>Hero button → <code>{APP}/adopt/tn</code> (new tab <strong>OFF</strong>)</td></tr>
+<tr><td>3</td><td>Optional: 6 TN partner text links → <code>{APP}/adopt/tn/{slug}</code></td></tr>
+<tr><td>4</td><td>Secondary: “Shelter partners” → <code>{FRAMER}/shelters</code></td></tr>
+<tr><td>5</td><td>Optional: “Partner sign-in” → <code>{PARTNER}/partner</code></td></tr>
+<tr><td>6</td><td>Add <strong>Adopt</strong> to site nav</td></tr>
+<tr><td>7</td><td>Phone preview + Publish</td></tr>
+<tr><td>8</td><td>iPhone 4-tap test (hero CTA, bottom CTA, partner link, nav Adopt)</td></tr>
+</table>
+<h3>Suggested hero copy</h3>
+<p><strong>Eyebrow:</strong> Freedom Paws Adoption Network  </p>
+<p><strong>Headline:</strong> Find your next dog in Tennessee  </p>
+<p><strong>Subhead:</strong> Live adoptable dogs from municipal shelters and private rescues in our Tennessee pilot — updated when partners publish.  </p>
+<p><strong>Button:</strong> Browse adoptable dogs in Tennessee →</p>
+<hr/>
+<h2>15. DNS, publish, and iPhone test gates</h2>
+<h3>DNS (verify all three hosts)</h3>
+<table>
+<tr><th>Record</th><th>Points to</th></tr>
+<tr><td><code>freedompawsinc.com</code></td><td>Framer</td></tr>
+<tr><td><code>app.freedompawsinc.com</code></td><td>Vercel (CNAME)</td></tr>
+<tr><td><code>shelter.freedompawsinc.com</code></td><td>Vercel (CNAME) — <strong>NEW since May 29</strong></td></tr>
+</table>
+<p>Vercel env: <code>NEXT_PUBLIC_APP_URL=https://app.freedompawsinc.com</code>  </p>
+<p>Optional: <code>NEXT_PUBLIC_PARTNER_HOST=shelter.freedompawsinc.com</code></p>
+<p>Supabase auth redirect URLs must include <strong>both</strong> <code>app.</code> and <code>shelter.</code> subdomains.</p>
+<h3>Publish sequence (final launch day)</h3>
+<ol>
+<li>Complete W1–W8 checklists above.</li>
+<li>Framer → <strong>Publish</strong> (wait for completion).</li>
+<li>iPhone Safari: run Section 10 + <code>/adopt</code> tests.</li>
+<li>PWA home screen: open app → confirm Token Shop + <code>/adopt/tn</code> work.</li>
+<li>Partner portal: <code>{PARTNER}/partner</code> loads with emerald partner UI.</li>
+<li>Optional: coordinate announcement with <code>NEXT_PUBLIC_SITE_MODE=public</code> (legal gate).</li>
+</ol>
+<hr/>
+<h2>16. Post-launch website maintenance</h2>
+<h3>Monthly (first Monday of month)</h3>
+<ul>
+<li>[ ] 10 slugs match <code>app/token-shop/shop-items.ts</code></li>
+<li>[ ] Framer <code>/protocol-{N}</code> titles match CTA map Section 4</li>
+<li>[ ] All Buy Link URLs use <code>https://app.freedompawsinc.com</code></li>
+<li>[ ] Price teaser: $18 USD / 25 XRP matches <code>SHOP_PRICE</code></li>
+<li>[ ] Test 3 buy deep links on iPhone</li>
+<li>[ ] Test <code>{APP}/adopt/tn</code> loads current listings</li>
+<li>[ ] <code>{PARTNER}/partner</code> sign-in works for test shelter account</li>
+<li>[ ] No Framer page hosts checkout or wallet connect</li>
+</ul>
+<h3>When app ships new features (update Framer copy + links)</h3>
+<table>
+<tr><th>App feature ships</th><th>Website update</th></tr>
+<tr><td>ID enroll live</td><td>Soften “planned” → live copy; demo link → <code>{APP}/id/enroll</code></td></tr>
+<tr><td>IPFS vault</td><td>Tool Box deep links; remove “coming soon” where true</td></tr>
+<tr><td>Chip scanner Track 2</td><td>Add <code>{APP}/id/scan</code> only after live — never before</td></tr>
+<tr><td>New protocol #11</td><td>Add Framer <code>/protocol-11</code> + slug row in CTA map + app catalog</td></tr>
+<tr><td><strong>Adoption listings live</strong></td><td><strong><code>/adopt</code> page + <code>/shelters</code> update</strong> — <strong>DONE in app; Framer pending</strong></td></tr>
+<tr><td><strong>Wellness insurance live</strong></td><td>Optional Framer wellness teaser → <code>{APP}/wellness</code></td></tr>
+<tr><td><strong>ViT Pro advisor program</strong></td><td>No public Framer page — advisor onboarding only</td></tr>
+</table>
+<hr/>
+<h2>17. What the website must never do</h2>
+<ul>
+<li>Process Xaman / XRP / RLUSD payment</li>
+<li>Host canonical Token Shop checkout</li>
+<li><strong>Host live adoption listings</strong> (inventory is app SSR only)</li>
+<li>Hardcode same Bone Button link on component master for all protocols</li>
+<li>Link “Click Here To View” directly to <code>&amp;buy=1</code> URLs</li>
+<li>Use <code>protocol-1</code> style paths on the <strong>app</strong> domain (app uses <strong>slugs</strong> only)</li>
+<li>Claim live ID match, IPFS vault, or chip scan before app features ship</li>
+<li>Expose Ops Command Center or ViT Pro on public marketing pages</li>
+</ul>
+<hr/>
+<h2>18. Handoff package for hired Framer help</h2>
+<p>Give your contractor these files (all in <code>freedompaws-app/docs/</code>):</p>
+<table>
+<tr><th>File</th><th>Why</th></tr>
+<tr><td><strong>This report</strong></td><td>Master punch list</td></tr>
+<tr><td><code>Framer-CTA-Link-Map.md</code></td><td>Every URL</td></tr>
+<tr><td><code>Framer-Adopt-Page-Wiring-Guide-June-2026.md</code></td><td><strong>NEW</strong> <code>/adopt</code> page</td></tr>
+<tr><td><code>Framer-Phone-Layout-Inspection-and-Gotchas-June-2026.md</code></td><td>Layout fix + §6 lexicon</td></tr>
+<tr><td><code>Protocol-Price-Source-of-Truth.md</code></td><td>Prices</td></tr>
+</table>
+<p><strong>Contractor task list (minimum):</strong></p>
+<ol>
+<li>Fix Phone layout on <code>/freedom-paws-id-toolbox</code> (Section 9).</li>
+<li>Build <code>/adopt</code> page (Section 14).</li>
+<li>Update <code>/shelters</code> + nav with adopt + partner portal links.</li>
+<li>Verify all links in Section 8.</li>
+<li>Run 6-tap iPhone test (ID page) + 4-tap test (<code>/adopt</code>).</li>
+<li>Spot-check Protocol Overview card #3 ≠ card #1 link bug.</li>
+<li>Publish.</li>
+</ol>
+<p><strong>Acceptance criteria:</strong> Phone Preview scrolls ID page top to footer with no overlap; all taps open correct destinations; <code>/adopt</code> primary CTA opens live TN directory.</p>
+<hr/>
+<h2>19. Definition of “website complete”</h2>
+<p>The <strong>Framer marketing website</strong> is complete when <strong>all</strong> are true:</p>
+<table>
+<tr><th>#</th><th>Criterion</th></tr>
+<tr><td>1</td><td>Homepage + nav CTAs open correct app routes</td></tr>
+<tr><td>2</td><td>Protocol Overview — 10 cards with correct View + Buy links</td></tr>
+<tr><td>3</td><td>All 10 protocol detail pages — buy → correct app slug</td></tr>
+<tr><td>4</td><td>Framer Token Shop teaser — buy → app only</td></tr>
+<tr><td>5</td><td>ID &amp; Tool Box — Option A copy + all links + <strong>Phone layout passes scroll test</strong></td></tr>
+<tr><td>6</td><td><strong><code>/adopt</code> page live — CTA → <code>{APP}/adopt/tn</code></strong></td></tr>
+<tr><td>7</td><td><strong><code>/shelters</code> updated — partner portal + adopt CTAs</strong></td></tr>
+<tr><td>8</td><td>Footer / mission pages load; social links real</td></tr>
+<tr><td>9</td><td>Framer <strong>Published</strong> after final audit</td></tr>
+<tr><td>10</td><td>iPhone tests Section 10 + <code>/adopt</code> pass</td></tr>
+<tr><td>11</td><td>Monthly sync doc acknowledged for ongoing ops</td></tr>
+</table>
+<p><strong>Not required for website v1:</strong> Rebuilding entire site in Next.js; custom Framer checkout; live chip-scanner marketing claims; public ViT Pro pages.</p>
+<hr/>
+<h2>20. App &amp; backend — modules added since May 29, 2026</h2>
+<blockquote><strong>Note:</strong> These ship in the <strong>Next.js app</strong>, not Framer. Listed here so the founder knows what exists, what Framer must link to, and what stays internal.</blockquote>
+<h3>Platform &amp; auth</h3>
+<table>
+<tr><th>Module</th><th>Route / URL</th><th>Status</th><th>Notes</th></tr>
+<tr><td>PWA version bump</td><td>—</td><td>✅ <strong>v78</strong></td><td>Was v73 at report creation</td></tr>
+<tr><td>Magic link + <strong>OTP fallback login</strong></td><td><code>/login</code></td><td>✅</td><td>6-digit code on same page</td></tr>
+<tr><td>Multi-surface routing</td><td>middleware</td><td>✅</td><td>consumer · partner · ops · vitpro</td></tr>
+<tr><td>Service worker</td><td><code>public/sw.js</code></td><td>✅</td><td>Network-only for <code>/ops</code>, <code>/vit-pro</code>, <code>/partner</code></td></tr>
+</table>
+<h3>Ops Command Center <em>(founder only)</em></h3>
+<table>
+<tr><th>Module</th><th>Route</th><th>Status</th></tr>
+<tr><td>Command home</td><td><code>/ops</code></td><td>✅ KPIs, audit log, quick links</td></tr>
+<tr><td>Adoption Network</td><td><code>/ops/adoption</code></td><td>✅ TN partners, listing pipeline, outreach toggles</td></tr>
+<tr><td>Marketing automation</td><td><code>/ops/marketing</code></td><td>✅ Emergency stop, workflow toggles (dormant)</td></tr>
+<tr><td>Shelter &amp; ID</td><td><code>/ops/shelter-id</code></td><td>✅ Found/match stats, shortcuts</td></tr>
+<tr><td>Wellness config</td><td><code>/ops/wellness</code></td><td>✅ Insurance + telehealth readiness</td></tr>
+<tr><td>Product</td><td><code>/ops/product</code></td><td>✅ Feature flags, PWA version, symptom admin link</td></tr>
+<tr><td>System</td><td><code>/ops/system</code></td><td>✅ Supabase, Resend, env health</td></tr>
+</table>
+<p><strong>Access:</strong> <code>fp_ops</code> role + <code>FP_OPS_EMAILS</code> env.</p>
+<h3>Adoption Network — TN Pilot</h3>
+<table>
+<tr><th>Module</th><th>Route / URL</th><th>Status</th></tr>
+<tr><td>Public TN directory</td><td><code>{APP}/adopt/tn</code></td><td>✅ SSR from Supabase</td></tr>
+<tr><td>Shelter page</td><td><code>{APP}/adopt/tn/{shelterSlug}</code></td><td>✅</td></tr>
+<tr><td>Dog detail</td><td><code>{APP}/adopt/tn/{shelterSlug}/{listingSlug}</code></td><td>✅</td></tr>
+<tr><td>Partner dashboard</td><td><code>{PARTNER}/partner</code></td><td>✅</td></tr>
+<tr><td>Listings CRUD</td><td><code>{PARTNER}/partner/listings</code></td><td>✅ draft · available · pending · adopted</td></tr>
+<tr><td>New / edit listing</td><td><code>{PARTNER}/partner/listings/new</code>, <code>…/edit</code></td><td>✅ photo upload</td></tr>
+<tr><td>6 TN pilot orgs</td><td>Supabase migration <code>009</code></td><td>✅ municipal + private</td></tr>
+</table>
+<h3>Freedom Paws ID — shelter workflows</h3>
+<table>
+<tr><th>Module</th><th>Route</th><th>Status</th></tr>
+<tr><td>ID hub</td><td><code>/id</code></td><td>✅</td></tr>
+<tr><td>Owner enroll</td><td><code>/id/enroll</code></td><td>✅</td></tr>
+<tr><td>Found dog intake</td><td><code>/id/found</code></td><td>✅ photo + video</td></tr>
+<tr><td>Match review queue</td><td><code>/id/match</code></td><td>✅ human approve before owner email</td></tr>
+<tr><td>Shelter dashboard</td><td><code>/id/shelter</code></td><td>✅</td></tr>
+<tr><td>Chip scan (Track 2)</td><td><code>/id/scan</code></td><td>🟡 MVP route — hardware pending</td></tr>
+<tr><td>Lookup / public pet page</td><td><code>/id/lookup</code>, <code>/id/p/[slug]</code></td><td>✅</td></tr>
+<tr><td>Match owner email</td><td>Resend API</td><td>✅ when env configured</td></tr>
+</table>
+<h3>ViT Pro — veterinary CDS <em>(V0)</em></h3>
+<table>
+<tr><th>Module</th><th>Route</th><th>Status</th></tr>
+<tr><td>ViT Pro home</td><td><code>/vit-pro</code></td><td>✅</td></tr>
+<tr><td>CDS analyze</td><td><code>/vit-pro/analyze</code></td><td>✅ eye · skin · oral</td></tr>
+<tr><td>Benchmark</td><td><code>/vit-pro/benchmark</code></td><td>✅ advisor validation</td></tr>
+<tr><td>Corpus browser</td><td><code>/vit-pro/corpus</code></td><td>✅ RAG reference</td></tr>
+<tr><td>Dual output Tier A/B</td><td>API <code>mode=vit_pro</code></td><td>✅ owner vs vet layers</td></tr>
+<tr><td>Access control</td><td><code>VIT_PRO_ADVISOR_EMAILS</code></td><td>✅</td></tr>
+</table>
+<p><strong>Not on Framer</strong> — advisor onboarding via training manual only.</p>
+<h3>Wellness module</h3>
+<table>
+<tr><th>Module</th><th>Route</th><th>Status</th></tr>
+<tr><td>Wellness hub</td><td><code>/wellness</code></td><td>✅</td></tr>
+<tr><td>Insurance partner</td><td><code>/wellness/partners/insurance</code></td><td>🟡 env-gated</td></tr>
+<tr><td>Telehealth partner</td><td><code>/wellness/partners/telehealth</code></td><td>🟡 env-gated</td></tr>
+<tr><td>Safe products</td><td><code>/wellness/safe-products</code></td><td>✅</td></tr>
+<tr><td>Config status API</td><td><code>/api/wellness/config-status</code></td><td>✅</td></tr>
+</table>
+<h3>Consumer app (existing + enhanced)</h3>
+<table>
+<tr><th>Module</th><th>Route</th><th>Status</th></tr>
+<tr><td>ViT Diagnostics</td><td><code>/diagnostics</code></td><td>✅ photo + video</td></tr>
+<tr><td>SuperBud Photo Booth</td><td><code>/photobooth</code></td><td>✅</td></tr>
+<tr><td>My Pets + vault</td><td><code>/mypets</code>, <code>/mypets/[id]/vault</code></td><td>✅</td></tr>
+<tr><td>Protocols (10)</td><td><code>/protocols</code>, <code>/protocols/[slug]</code></td><td>✅</td></tr>
+<tr><td>Token Shop (Xaman)</td><td><code>/token-shop</code></td><td>✅</td></tr>
+<tr><td>Monitor beta</td><td><code>/monitor</code></td><td>🟡 relay pending</td></tr>
+<tr><td>Symptom admin</td><td><code>/admin/symptoms</code></td><td>✅</td></tr>
+<tr><td>Waitlist</td><td><code>/waitlist</code></td><td>✅</td></tr>
+<tr><td>Terms / Privacy</td><td><code>/terms</code>, <code>/privacy</code></td><td>✅</td></tr>
+</table>
+<h3>Marketing automation (backend — dormant)</h3>
+<table>
+<tr><th>Component</th><th>Location</th><th>Status</th></tr>
+<tr><td>CRM export script</td><td><code>npm run marketing:crm-export</code></td><td>✅ no send</td></tr>
+<tr><td>TN outreach drafts</td><td><code>npm run marketing:tn-outreach</code></td><td>✅</td></tr>
+<tr><td>Draft emails</td><td><code>docs/marketing/outbox/tn-pilot/</code></td><td>✅ 6 partners</td></tr>
+<tr><td>n8n templates</td><td><code>docs/automation/n8n/</code></td><td>✅</td></tr>
+<tr><td>Ops marketing toggles</td><td><code>/ops/marketing</code></td><td>✅ emergency stop ON</td></tr>
+</table>
+<h3>Documentation &amp; training <em>(new since May 29)</em></h3>
+<table>
+<tr><th>Deliverable</th><th>Location</th></tr>
+<tr><td>General Master Binder (MD + PDF)</td><td><code>docs/binders/</code> + Documents folder</td></tr>
+<tr><td>Technical Master Binder (MD + PDF)</td><td><code>docs/binders/</code></td></tr>
+<tr><td>Appendices A–C (PDF)</td><td>Token Shop, ViT Pro advisor, protocol JSON</td></tr>
+<tr><td>Founder / CEO / Developer manual</td><td><code>docs/training/</code> + PDF</td></tr>
+<tr><td>Shelter portal training manual</td><td><code>docs/training/</code> + PDF</td></tr>
+<tr><td>ViT Pro vet portal training manual</td><td><code>docs/training/</code> + PDF</td></tr>
+<tr><td>PDF generator</td><td><code>npm run binders:pdf</code></td></tr>
+<tr><td>ViT Pro business plan + benchmark guide</td><td><code>docs/ops/</code></td></tr>
+<tr><td>Adoption kickoff runbooks</td><td><code>docs/ops/</code></td></tr>
+<tr><td>Infrastructure Phases 1–3 guide</td><td><code>docs/ops/INFRASTRUCTURE-BUILDOUT-FRAMER-DNS-WELLNESS.md</code></td></tr>
+</table>
+<h3>Supabase migrations (cumulative)</h3>
+<table>
+<tr><th>Migration area</th><th>Purpose</th></tr>
+<tr><td>ID + enrollments + pgvector</td><td>Biometric matching</td></tr>
+<tr><td>Partner orgs TN pilot</td><td>6 shelters</td></tr>
+<tr><td>Adoption listings</td><td>Public directory</td></tr>
+<tr><td>Ops settings</td><td>Marketing toggles, feature flags, audit log</td></tr>
+<tr><td>Auth profiles + roles</td><td>shelter_staff, shelter_admin, fp_ops, vet_staff</td></tr>
+</table>
+<p>Run: <code>supabase/RUN_ALL_MIGRATIONS_001_004.sql</code> or individual files in <code>supabase/migrations/</code>.</p>
+<hr/>
+<h2>21. Framer updates required for new app modules</h2>
+<p>Priority order for founder / contractor after ID layout fix:</p>
+<table>
+<tr><th>Priority</th><th>Framer change</th><th>App target</th><th>Guide</th></tr>
+<tr><td><strong>P0</strong></td><td>Fix ID page Phone layout</td><td>—</td><td>Section 9</td></tr>
+<tr><td><strong>P1</strong></td><td>Create <strong><code>/adopt</code></strong> page</td><td><code>{APP}/adopt/tn</code></td><td><code>Framer-Adopt-Page-Wiring-Guide-June-2026.md</code></td></tr>
+<tr><td><strong>P1</strong></td><td>Add <strong>Adopt</strong> to site nav</td><td><code>{FRAMER}/adopt</code></td><td>Section 14</td></tr>
+<tr><td><strong>P2</strong></td><td>Update <strong><code>/shelters</code></strong></td><td><code>{PARTNER}/partner</code> + <code>{APP}/adopt/tn</code></td><td>Section 13</td></tr>
+<tr><td><strong>P2</strong></td><td>ID page: shelter portal copy</td><td><code>{PARTNER}/partner</code></td><td>Section 7</td></tr>
+<tr><td><strong>P3</strong></td><td>Homepage adoption block</td><td><code>{APP}/adopt/tn</code></td><td>Section 10</td></tr>
+<tr><td><strong>P3</strong></td><td>Footer “Adopt in Tennessee”</td><td><code>{FRAMER}/adopt</code></td><td>Section 13</td></tr>
+<tr><td><strong>P4</strong></td><td>Wellness teaser (when URLs live)</td><td><code>{APP}/wellness</code></td><td><code>/ops/wellness</code> config</td></tr>
+<tr><td><strong>—</strong></td><td>ViT Pro</td><td><strong>No Framer page</strong></td><td>Internal only</td></tr>
+<tr><td><strong>—</strong></td><td>Ops Command Center</td><td><strong>No Framer page</strong></td><td>Internal only</td></tr>
+</table>
+<hr/>
+<h2>22. After website — return to app build (summary)</h2>
+<p>Website completion is <strong>Framer-only</strong>. The <strong>app</strong> (<code>freedompaws-app</code>, PWA <strong>v78</strong>) has separate engineering tracks.</p>
+<h3>App launch gates (June 20 status)</h3>
+<table>
+<tr><th>Track</th><th>Status</th><th>Next engineering focus</th></tr>
+<tr><td><strong>A — ViT</strong></td><td>🟢</td><td>Prod iPhone verify; weekly symptom admin queue</td></tr>
+<tr><td><strong>B — Photo Booth</strong></td><td>🟡</td><td>Phase 4 JPG assets; iPhone sign-off</td></tr>
+<tr><td><strong>C — My Pets + vault</strong></td><td>🟢</td><td>Optional per-pet protocol tracking</td></tr>
+<tr><td><strong>D — Monitor relay</strong></td><td>🔴</td><td>Cloud relay — launch blocker for members</td></tr>
+<tr><td><strong>E — Framer integration</strong></td><td>🟡</td><td><code>/adopt</code> + deep-link smoke test after Framer publish</td></tr>
+<tr><td><strong>F — ID Track 2</strong></td><td>🟡</td><td>HID scanner MVP <code>/id/scan</code> after hardware</td></tr>
+<tr><td><strong>G — Adoption Network</strong></td><td>🟢</td><td><strong>Shipped</strong> — listings + partner portal; Framer <code>/adopt</code> pending</td></tr>
+<tr><td><strong>H — Ops Command Center</strong></td><td>🟢</td><td><strong>Shipped</strong> — founder training manual available</td></tr>
+<tr><td><strong>I — ViT Pro V0</strong></td><td>🟢</td><td><strong>Shipped</strong> — advisor benchmark + corpus; not public</td></tr>
+<tr><td><strong>J — Legal + payments</strong></td><td>🔴</td><td>Terms counsel; Stripe webhook; <code>SITE_MODE=public</code></td></tr>
+<tr><td><strong>K — Marketing go-live</strong></td><td>🔴</td><td>After gates + LLC; n8n dormant until activation gate</td></tr>
+</table>
+<h3>Recommended next Cursor session (app)</h3>
+<ol>
+<li>Production build verify (<code>npm run build</code>).</li>
+<li>Framer <code>/adopt</code> + <code>/shelters</code> publish (founder / contractor).</li>
+<li>Deep-link smoke test: Framer → <code>{APP}/adopt/tn</code>, <code>{PARTNER}/partner</code>.</li>
+<li>First real TN listing published by pilot partner.</li>
+<li>ViT Pro advisor benchmark review (<code>npm run vit-pro:benchmark</code>).</li>
+<li>Monitor relay spike when hardware ready.</li>
+</ol>
+<p><strong>Primary engineering doc:</strong> <code>Freedom-Paws-Launch-Master-Checklist-June-2026.md</code>  </p>
+<p><strong>Founder ops manual:</strong> <code>docs/training/Freedom-Paws-Founder-CEO-Developer-Manual-May-2026.md</code></p>
+<hr/>
+<h2>23. Documentation &amp; training package (new)</h2>
+<p>Regenerate all PDFs: <code>npm run binders:pdf</code>  </p>
+<p>Output: <code>~/Documents/Freedom Paws Wellness/</code></p>
+<table>
+<tr><th>PDF</th><th>Audience</th></tr>
+<tr><td>Freedom-Paws-GENERAL-Master-Binder-May-2026.pdf</td><td>Public, grants, marketing</td></tr>
+<tr><td>Freedom-Paws-TECHNICAL-Master-Binder-May-2026.pdf</td><td>Grants, attorneys, XRPL</td></tr>
+<tr><td>Freedom-Paws-Founder-CEO-Developer-Manual-May-2026.pdf</td><td>Founder / ops</td></tr>
+<tr><td>Freedom-Paws-Shelter-Portal-Training-Manual-May-2026.pdf</td><td>Shelter onboarding</td></tr>
+<tr><td>Freedom-Paws-Vet-Portal-Training-Manual-May-2026.pdf</td><td>ViT Pro advisors</td></tr>
+</table>
+<p>Index: <code>docs/binders/PDF-PACKAGE-INDEX.md</code></p>
+<hr/>
+<h2>Quick reference — URLs</h2>
+<table>
+<tr><th>Purpose</th><th>URL</th></tr>
+<tr><td>Marketing site</td><td><code>https://freedompawsinc.com</code></td></tr>
+<tr><td>App (PWA)</td><td><code>https://app.freedompawsinc.com</code></td></tr>
+<tr><td>Partner portal</td><td><code>https://shelter.freedompawsinc.com/partner</code></td></tr>
+<tr><td>ViT</td><td><code>{APP}/diagnostics</code></td></tr>
+<tr><td>Photo Booth</td><td><code>{APP}/photobooth</code></td></tr>
+<tr><td>My Pets</td><td><code>{APP}/mypets</code></td></tr>
+<tr><td>Token Shop</td><td><code>{APP}/token-shop</code></td></tr>
+<tr><td>ID enroll</td><td><code>{APP}/id/enroll</code></td></tr>
+<tr><td>ID hub</td><td><code>{APP}/id</code></td></tr>
+<tr><td><strong>Adopt TN (live)</strong></td><td><code>{APP}/adopt/tn</code></td></tr>
+<tr><td><strong>Framer adopt story</strong></td><td><code>{FRAMER}/adopt</code> <em>(build pending)</em></td></tr>
+<tr><td>Ops Command Center</td><td><code>{APP}/ops</code> <em>(internal)</em></td></tr>
+<tr><td>ViT Pro</td><td><code>{APP}/vit-pro</code> <em>(advisors)</em></td></tr>
+<tr><td>Wellness</td><td><code>{APP}/wellness</code></td></tr>
+<tr><td>Framer protocols</td><td><code>/protocol-overview</code></td></tr>
+<tr><td>ID marketing page</td><td><code>/freedom-paws-id-toolbox</code></td></tr>
+</table>
+<hr/>
+<p><em>Freedom Paws Wellness — Honor Buddy's Legacy</em>  </p>
+<p><em>Website post-launch completion report — May 29, 2026 · Updated June 20, 2026</em></p>
+<div class="footer-note">Freedom Paws Wellness © 2026 · Honor Buddy's Legacy · Educational purposes only where applicable.</div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+{
+  "version": "2026.06.1",
+  "licenseNote": "Chunks are Freedom Paws–authored summaries for RAG retrieval. Full texts remain at cited URLs. Merck and AAHA content is referenced, not reproduced.",
+  "sources": [
+    {
+      "id": "merck-conjunctivitis-canine",
+      "title": "Conjunctivitis in Dogs — Overview",
+      "source": "Merck Veterinary Manual (reference link)",
+      "url": "https://www.merckvetmanual.com/eye-diseases-and-disorders-of-dogs/conjunctivitis-in-dogs",
+      "regions": ["eye"],
+      "keywords": ["conjunctivitis", "discharge", "red eye", "squint", "epiphora", "blepharospasm"],
+      "chunk": "Canine conjunctivitis presents with conjunctival hyperemia, discharge (serous, mucoid, or purulent), and blepharospasm. Differential includes KCS, corneal ulcer, uveitis, and glaucoma. Fluorescein stain and Schirmer tear test are core diagnostics."
+    },
+    {
+      "id": "merck-kcs-canine",
+      "title": "Keratoconjunctivitis Sicca (Dry Eye)",
+      "source": "Merck Veterinary Manual (reference link)",
+      "url": "https://www.merckvetmanual.com/eye-diseases-and-disorders-of-dogs/keratoconjunctivitis-sicca-dry-eye-in-dogs",
+      "regions": ["eye"],
+      "keywords": ["dry eye", "kcs", "mucoid discharge", "corneal pigment", "schirmer", "tearing"],
+      "chunk": "KCS causes reduced tear production with mucoid discharge, corneal drying, and potential ulceration. Schirmer tear test confirms diagnosis. Chronic cases may show corneal vascularization or pigmentation."
+    },
+    {
+      "id": "merck-corneal-ulcer",
+      "title": "Corneal Ulcers and Abrasions",
+      "source": "Merck Veterinary Manual (reference link)",
+      "url": "https://www.merckvetmanual.com/eye-diseases-and-disorders-of-dogs/corneal-ulcers-and-abrasions-in-dogs",
+      "regions": ["eye"],
+      "keywords": ["corneal ulcer", "fluorescein", "squinting", "cloudy cornea", "pain", "blepharospasm"],
+      "chunk": "Corneal ulcers cause pain, blepharospasm, and fluorescein uptake. Cannot be ruled out by photo alone. Deep or infected ulcers require prompt veterinary care."
+    },
+    {
+      "id": "aaha-skin-allergy-overview",
+      "title": "Allergic Skin Disease — Client Education Concepts",
+      "source": "AAHA / general dermatology guidelines (paraphrased)",
+      "url": "https://www.aaha.org/",
+      "regions": ["skin"],
+      "keywords": ["allergy", "atopy", "itch", "pruritus", "seasonal", "hot spot", "erythema"],
+      "chunk": "Canine allergic dermatitis often presents with pruritus, erythema, and recurrent secondary pyoderma. Flea, food, and environmental allergens are common triggers. Cytology helps distinguish infection from primary allergy."
+    },
+    {
+      "id": "merck-pyoderma-canine",
+      "title": "Bacterial Pyoderma in Dogs",
+      "source": "Merck Veterinary Manual (reference link)",
+      "url": "https://www.merckvetmanual.com/integumentary-system/integumentary-system-introduction/bacterial-pyoderma-in-dogs",
+      "regions": ["skin"],
+      "keywords": ["pyoderma", "pustule", "crust", "collarette", "infection", "hot spot"],
+      "chunk": "Superficial pyoderma shows papules, pustules, and epidermal collarettes. Deep pyoderma may present with nodules and draining tracts. Cytology and culture guide antibiotic choice."
+    },
+    {
+      "id": "merck-demodicosis",
+      "title": "Demodicosis in Dogs",
+      "source": "Merck Veterinary Manual (reference link)",
+      "url": "https://www.merckvetmanual.com/integumentary-system/integumentary-system-introduction/demodicosis-in-dogs",
+      "regions": ["skin"],
+      "keywords": ["demodex", "mange", "alopecia", "patchy hair loss", "young dog"],
+      "chunk": "Demodicosis causes patchy to diffuse alopecia, often without significant pruritus initially. Skin scrape confirms mites. Juvenile-onset forms differ from adult immunosuppression-associated disease."
+    },
+    {
+      "id": "merck-ringworm",
+      "title": "Dermatophytosis (Ringworm)",
+      "source": "Merck Veterinary Manual (reference link)",
+      "url": "https://www.merckvetmanual.com/integumentary-system/integumentary-system-introduction/dermatophytosis-in-dogs-and-cats",
+      "regions": ["skin"],
+      "keywords": ["ringworm", "dermatophyte", "circular lesion", "alopecia", "scale"],
+      "chunk": "Dermatophytosis causes circular alopecia with scaling; some lesions are pruritic. Wood's lamp is insensitive in dogs; fungal culture is preferred for confirmation."
+    },
+    {
+      "id": "aaha-dental-periodontal",
+      "title": "Periodontal Disease Staging Concepts",
+      "source": "AAHA Dental Guidelines (paraphrased)",
+      "url": "https://www.aaha.org/globalassets/02-guidelines/dental/aaha_dental_guidelines.pdf",
+      "regions": ["oral"],
+      "keywords": ["tartar", "gingivitis", "periodontal", "dental", "halitosis", "calculus"],
+      "chunk": "Periodontal disease progresses from gingivitis to attachment loss. Visual tartar grade correlates loosely with need for professional cleaning. Full assessment requires probing and dental radiographs under anesthesia."
+    },
+    {
+      "id": "merck-periodontal-disease",
+      "title": "Periodontal Disease in Dogs",
+      "source": "Merck Veterinary Manual (reference link)",
+      "url": "https://www.merckvetmanual.com/digestive-system/diseases-of-the-mouth-in-small-animals/periodontal-disease-in-dogs",
+      "regions": ["oral"],
+      "keywords": ["periodontal", "gingivitis", "tooth", "oral pain", "fracture"],
+      "chunk": "Periodontal disease includes plaque, calculus, gingivitis, and periodontitis. Oral pain may reduce appetite. Fractured teeth with pulp exposure require extraction or endodontic therapy."
+    },
+    {
+      "id": "fp-severe-urgency-policy",
+      "title": "Freedom Paws Urgent Assessment Policy",
+      "source": "Freedom Paws internal — severe conditions DB",
+      "url": "",
+      "regions": ["eye", "skin", "oral"],
+      "keywords": ["urgent", "emergency", "severe", "acute", "worsening"],
+      "chunk": "ViT Pro uses conservative urgency escalation: when severe-condition congruency meets threshold, recommend prompt veterinary evaluation. Never state that a serious condition is ruled out based on photo alone."
+    },
+    {
+      "id": "acvo-basic-diagnostics",
+      "title": "Basic Ophthalmic Diagnostics",
+      "source": "ACVO public education (reference)",
+      "url": "https://www.acvo.org/",
+      "regions": ["eye"],
+      "keywords": ["schirmer", "fluorescein", "tonometry", "ophthalmic exam"],
+      "chunk": "Core ophthalmic diagnostics include menace response, dazzle reflex, fluorescein stain, Schirmer tear test, and tonometry when glaucoma is suspected."
+    },
+    {
+      "id": "fp-cds-framing",
+      "title": "ViT Pro CDS Language Standard",
+      "source": "Freedom Paws ViT Pro Phase V0",
+      "url": "",
+      "regions": ["eye", "skin", "oral"],
+      "keywords": ["differential", "consideration", "cds", "decision support"],
+      "chunk": "Reports use decision-support language: findings suggest consideration of listed differentials. Confidence bands (low/medium/high) reflect photo-limited certainty. Definitive diagnosis requires in-clinic examination and appropriate diagnostics."
+    }
+  ]
+}

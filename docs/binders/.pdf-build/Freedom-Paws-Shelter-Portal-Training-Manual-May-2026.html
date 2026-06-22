@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Shelter Portal Training Manual</title>
+<style>
+@page { size: letter; margin: 0.75in; }
+@media print {
+  .page-break { page-break-before: always; break-before: page; }
+  h1, h2, h3 { break-after: avoid; }
+  table, pre, blockquote { break-inside: avoid; }
+}
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  max-width: 7.5in;
+  margin: 0 auto;
+  padding: 0.25in;
+}
+h1 { font-size: 22pt; color: #0A1428; margin-top: 0; border-bottom: 2px solid #F5C242; padding-bottom: 0.2em; }
+h2 { font-size: 16pt; color: #0A1428; margin-top: 1.2em; }
+h3 { font-size: 13pt; color: #333; }
+.cover-title { font-size: 28pt; text-align: center; border: none; color: #0A1428; }
+.cover-sub { text-align: center; font-size: 14pt; color: #555; }
+.cover-meta { text-align: center; margin-top: 2em; font-size: 11pt; }
+.hero-placeholder {
+  border: 2px dashed #ccc; background: #f8f8f8; text-align: center;
+  padding: 2em; margin: 1.5em 0; color: #888; font-size: 10pt;
+}
+table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 10pt; }
+th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #0A1428; color: #fff; }
+tr:nth-child(even) { background: #f6f6f6; }
+code { background: #f0f0f0; padding: 1px 4px; font-size: 9pt; border-radius: 3px; }
+pre {
+  background: #f4f4f4; border: 1px solid #ddd; padding: 10px;
+  font-size: 8.5pt; line-height: 1.35; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word;
+}
+blockquote {
+  border-left: 4px solid #F5C242; margin: 1em 0; padding: 0.5em 1em;
+  background: #fffbf0; color: #333;
+}
+ul, ol { margin: 0.5em 0; padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+a { color: #1565c0; }
+.doc-header {
+  font-size: 9pt; color: #666; border-bottom: 1px solid #ddd;
+  padding-bottom: 8px; margin-bottom: 16px;
+}
+.technical .doc-header { border-color: #0288d1; }
+.footer-note { font-size: 9pt; color: #666; margin-top: 2em; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body class="general">
+<div class="doc-header">Shelter Portal Training Manual · Freedom Paws Wellness · May 2026</div>
+<h1 class="cover-title">Freedom Paws — Shelter Portal Training Manual</h1>
+<p><strong>Version:</strong> 1.0  </p>
+<p><strong>Date:</strong> May 2026  </p>
+<p><strong>Audience:</strong> Tennessee pilot shelter staff and shelter administrators  </p>
+<p><strong>Portal URL:</strong> https://shelter.freedompawsinc.com/partner  </p>
+<hr/>
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#1-welcome--what-this-portal-does">Welcome &amp; what this portal does</a></li>
+<li><a href="#2-before-you-start--requirements">Before you start — requirements</a></li>
+<li><a href="#3-signing-in--click-by-click">Signing in — click by click</a></li>
+<li><a href="#4-partner-dashboard-overview">Partner dashboard overview</a></li>
+<li><a href="#5-task-found-dog-intake">Task: Found dog intake</a></li>
+<li><a href="#6-task-match-review-queue-admins-only">Task: Match review queue (admins only)</a></li>
+<li><a href="#7-task-view-adoption-listings">Task: View adoption listings</a></li>
+<li><a href="#8-task-create-a-new-adoption-listing">Task: Create a new adoption listing</a></li>
+<li><a href="#9-task-edit-an-existing-listing">Task: Edit an existing listing</a></li>
+<li><a href="#10-task-publish-a-dog-to-the-public-directory">Task: Publish a dog to the public directory</a></li>
+<li><a href="#11-task-mark-a-dog-as-pending-or-adopted">Task: Mark a dog as pending or adopted</a></li>
+<li><a href="#12-roles-staff-vs-admin">Roles: staff vs admin</a></li>
+<li><a href="#13-public-pages-your-listings-appear-on">Public pages your listings appear on</a></li>
+<li><a href="#14-privacy--safety-rules">Privacy &amp; safety rules</a></li>
+<li><a href="#15-troubleshooting">Troubleshooting</a></li>
+<li><a href="#appendix-a--url-quick-reference">Appendix A — URL quick reference</a></li>
+<li><a href="#appendix-b--listing-status-definitions">Appendix B — Listing status definitions</a></li>
+<li><a href="#appendix-c--role-permissions-matrix">Appendix C — Role permissions matrix</a></li>
+<li><a href="#appendix-d--glossary">Appendix D — Glossary</a></li>
+<li><a href="#appendix-e--getting-help">Appendix E — Getting help</a></li>
+</ol>
+<hr/>
+<h2>1. Welcome &amp; what this portal does</h2>
+<p>The <strong>Freedom Paws Partner Portal</strong> is your shelter's workspace for the Tennessee adoption pilot. From one dashboard you can:</p>
+<table>
+<tr><th>Tool</th><th>What it does</th></tr>
+<tr><td><strong>Found dog intake</strong></td><td>Submit a photo or short video of a found dog; the system searches enrolled pets for possible matches</td></tr>
+<tr><td><strong>Match review queue</strong></td><td><em>(Admins)</em> Approve or reject match candidates before any pet owner is contacted</td></tr>
+<tr><td><strong>Adoption listings</strong></td><td>Create and manage adoptable dog profiles shown on the public TN directory</td></tr>
+</table>
+<p>The portal uses the <strong>same database</strong> as the Freedom Paws member app, so ID matching works across all enrolled pets in the network.</p>
+<hr/>
+<h2>2. Before you start — requirements</h2>
+<ul>
+<li>[ ] Your shelter email has been <strong>invited</strong> by Freedom Paws (you receive a welcome email)</li>
+<li>[ ] You use a <strong>smartphone or computer</strong> with a modern browser (Safari, Chrome, Edge)</li>
+<li>[ ] For found intake: ability to take a <strong>clear photo</strong> or <strong>short video</strong> (8 seconds or less) of the dog</li>
+<li>[ ] For listings: at least <strong>one good photo</strong> of each adoptable dog</li>
+</ul>
+<p><strong>Supported browsers:</strong> Safari (iPhone recommended for camera), Chrome, Firefox, Edge.</p>
+<hr/>
+<h2>3. Signing in — click by click</h2>
+<h3>First-time sign-in</h3>
+<ol>
+<li>Open <strong>https://shelter.freedompawsinc.com/partner</strong> on your phone or computer.</li>
+<li>You see the <strong>Partner dashboard</strong> with a green <strong>Sign in →</strong> button.</li>
+<li>Tap <strong>Sign in →</strong>.</li>
+<li>You are taken to the login page (<code>/login?next=/partner</code>).</li>
+<li>Type your <strong>work email address</strong> (the one Freedom Paws registered).</li>
+<li>Tap <strong>Send magic link</strong>.</li>
+<li>Check your email inbox (and spam folder).</li>
+<li><strong>Option A — Magic link:</strong> Tap the link in the email <strong>once</strong>. Use Safari on iPhone if the link does not open correctly inside Gmail.</li>
+<li><strong>Option B — 6-digit code:</strong> Return to the login page and enter the <strong>6-digit code</strong> from the same email. Tap <strong>Verify code</strong>.</li>
+<li>After success, you land on the <strong>Partner dashboard</strong> with your email and role shown.</li>
+</ol>
+<h3>Returning sign-in</h3>
+<ol>
+<li>Go to <strong>https://shelter.freedompawsinc.com/partner</strong></li>
+<li>If your session expired, tap <strong>Sign in →</strong> and repeat steps 5–10 above.</li>
+</ol>
+<h3>Sign-out</h3>
+<ul>
+<li>Close the browser tab, or clear site data. There is no separate sign-out button on the partner dashboard in V0.</li>
+</ul>
+<hr/>
+<h2>4. Partner dashboard overview</h2>
+<p>After sign-in, the dashboard shows:</p>
+<table>
+<tr><th>Section</th><th>What you see</th></tr>
+<tr><td><strong>Header</strong></td><td>&quot;Freedom Paws Adoption Network&quot; · Partner dashboard</td></tr>
+<tr><td><strong>Account card</strong></td><td>Your email · Role (<code>shelter_staff</code> or <code>shelter_admin</code>) · Organization name</td></tr>
+<tr><td><strong>Stats grid</strong> <em>(admins/reviewers only)</em></td><td>Found reports · Pending reviews · Matched · Pilot partners</td></tr>
+<tr><td><strong>Action cards</strong></td><td>Found dog intake · Match review queue · Adoption listings</td></tr>
+<tr><td><strong>TN pilot partners list</strong></td><td>All participating shelters in the pilot</td></tr>
+</table>
+<h3>Main action cards</h3>
+<table>
+<tr><th>Card</th><th>Link</th><th>Who can use</th></tr>
+<tr><td><strong>Found dog intake →</strong></td><td><code>/id/found</code></td><td>All signed-in staff</td></tr>
+<tr><td><strong>Match review queue →</strong></td><td><code>/id/match</code></td><td>Shelter admin + Freedom Paws ops only</td></tr>
+<tr><td><strong>Adoption listings →</strong></td><td><code>/partner/listings</code></td><td>All signed-in staff</td></tr>
+</table>
+<hr/>
+<h2>5. Task: Found dog intake</h2>
+<p><strong>Purpose:</strong> When your shelter takes in a found dog, submit media so the system can search for enrolled Freedom Paws ID pets.</p>
+<p><strong>Who:</strong> Any signed-in shelter staff or admin.</p>
+<h3>Click-by-click instructions</h3>
+<ol>
+<li>From the <strong>Partner dashboard</strong>, tap <strong>Found dog intake →</strong> (amber card).</li>
+</ol>
+<p>   - Or go directly to <strong>https://shelter.freedompawsinc.com/id/found</strong></p>
+<ol>
+<li>Wait for the page to load pilot shelters (usually pre-selected to your org).</li>
+<li><strong>Select shelter</strong> from the dropdown if more than one appears.</li>
+<li><em>(Optional)</em> Type <strong>notes</strong> — location found, collar color, temperament, etc.</li>
+<li><strong>Add media</strong> — choose one method:</li>
+</ol>
+<p>   - <strong>Photo from library:</strong> Tap <strong>Choose photo</strong> → pick from camera roll.</p>
+<p>   - <strong>Take photo:</strong> Tap <strong>Use camera</strong> → take a clear side or front view of the dog's face.</p>
+<p>   - <strong>Video:</strong> Tap <strong>Upload video</strong> → select MP4/MOV/WebM under <strong>25 MB</strong> and <strong>8 seconds or less</strong>.</p>
+<ol>
+<li>Confirm a <strong>preview</strong> appears on screen.</li>
+<li>Tap <strong>Submit for matching</strong> (or equivalent submit button).</li>
+<li>Wait for processing (may take 10–30 seconds).</li>
+<li><strong>Review results:</strong></li>
+</ol>
+<p>   - <strong>Candidate count</strong> — how many possible matches were found</p>
+<p>   - <strong>Top matches</strong> — pet name, Freedom Paws ID, similarity score</p>
+<ol>
+<li>If candidates exist, they go to the <strong>Match review queue</strong> for admin approval before any owner contact.</li>
+</ol>
+<h3>Photo tips for best matches</h3>
+<ul>
+<li>Good lighting, dog facing camera</li>
+<li>Minimal blur; one dog in frame</li>
+<li>Include distinctive markings if visible</li>
+</ul>
+<h3>Video tips</h3>
+<ul>
+<li>Short clip (3–8 seconds), dog moving or turning head</li>
+<li>Stable camera, good light</li>
+<li>File under 25 MB</li>
+</ul>
+<h3>After submission</h3>
+<ul>
+<li>You do <strong>not</strong> contact owners directly from this screen.</li>
+<li>An <strong>admin</strong> must approve matches in the review queue.</li>
+<li>Freedom Paws sends owner email only <strong>after approval</strong>.</li>
+</ul>
+<hr/>
+<h2>6. Task: Match review queue (admins only)</h2>
+<p><strong>Purpose:</strong> Human review is required before any pet owner is notified. This protects privacy and prevents false reunions.</p>
+<p><strong>Who:</strong> <code>shelter_admin</code> or Freedom Paws operations staff only.  </p>
+<p><strong>Staff without admin role</strong> see a message: <em>&quot;Match review requires shelter admin or FP ops.&quot;</em></p>
+<h3>Click-by-click instructions</h3>
+<ol>
+<li>From the <strong>Partner dashboard</strong>, tap <strong>Match review queue →</strong> (green card).</li>
+</ol>
+<p>   - Or go to <strong>https://shelter.freedompawsinc.com/id/match</strong></p>
+<ol>
+<li>The page shows <strong>Review candidates</strong> with a list of found-dog <strong>reports</strong> on the left (or top on mobile).</li>
+<li>Each report shows: shelter name, date, candidate count, pending count.</li>
+<li><strong>Tap a report</strong> to select it.</li>
+<li>The <strong>candidates panel</strong> loads with:</li>
+</ol>
+<p>   - Similarity score (threshold <strong>0.72</strong> for surfacing)</p>
+<p>   - Freedom Paws ID</p>
+<p>   - Pet name and breed</p>
+<p>   - Review status (pending, approved, rejected)</p>
+<ol>
+<li>Compare the found dog media (if shown) with candidate details.</li>
+<li><em>(Optional)</em> Type <strong>review notes</strong> in the notes field (internal record).</li>
+<li>For each candidate, choose one action:</li>
+</ol>
+<p>   - Tap <strong>Approve</strong> — if you believe this is a valid match</p>
+<p>   - Tap <strong>Reject</strong> — if not a match</p>
+<p>   - Tap <strong>Needs more info</strong> — if uncertain (no owner email sent)</p>
+<ol>
+<li>On <strong>Approve</strong>, watch for confirmation toast:</li>
+</ol>
+<p>   - <em>&quot;Match approved — owner notified by email.&quot;</em> — success</p>
+<p>   - <em>&quot;Match approved — owner email not sent...&quot;</em> — contact Freedom Paws support</p>
+<ol>
+<li>Repeat for other pending candidates on the same report.</li>
+<li>Select the next report in the queue and repeat steps 4–10.</li>
+</ol>
+<h3>Important rules</h3>
+<ul>
+<li><strong>Never</strong> call or email an owner yourself using Freedom Paws data unless directed by your admin policy.</li>
+<li>One approved match per found report is typical; reject clearly wrong candidates.</li>
+<li>All decisions are logged for audit.</li>
+</ul>
+<hr/>
+<h2>7. Task: View adoption listings</h2>
+<p><strong>Purpose:</strong> See all dogs your shelter has entered in the adoption system.</p>
+<h3>Click-by-click instructions</h3>
+<ol>
+<li>From the <strong>Partner dashboard</strong>, tap <strong>Adoption listings →</strong> (green card).</li>
+</ol>
+<p>   - Or go to <strong>https://shelter.freedompawsinc.com/partner/listings</strong></p>
+<ol>
+<li>The page header shows <strong>Adoption listings</strong> with a <strong>New listing →</strong> button.</li>
+<li>Scroll through your listings. Each card shows:</li>
+</ol>
+<p>   - Primary photo (or &quot;No photo&quot;)</p>
+<p>   - Display name</p>
+<p>   - Status badge (Draft, Available, Pending, Adopted, Archived)</p>
+<p>   - Breed and shelter name</p>
+<ol>
+<li>On each card:</li>
+</ol>
+<p>   - Tap <strong>Edit</strong> — open the edit form</p>
+<p>   - Tap <strong>Public page ↗</strong> — <em>(only if status is Available or Pending)</em> opens the public adopt page in a new tab</p>
+<h3>Empty state</h3>
+<p>If you see <em>&quot;No listings yet&quot;</em>, tap <strong>New listing →</strong> (see Section 8).</p>
+<hr/>
+<h2>8. Task: Create a new adoption listing</h2>
+<p><strong>Purpose:</strong> Add an adoptable dog profile. Draft listings are <strong>private</strong> until an admin publishes them.</p>
+<p><strong>Who:</strong> Any signed-in staff can create drafts. Only <strong>shelter_admin</strong> can set status to Available.</p>
+<h3>Click-by-click instructions</h3>
+<ol>
+<li>Go to <strong>Partner → Adoption listings</strong> (Section 7).</li>
+<li>Tap <strong>New listing →</strong> (green button, top of page).</li>
+</ol>
+<p>   - URL: <code>/partner/listings/new</code></p>
+<ol>
+<li>Fill in the form fields:</li>
+</ol>
+<table>
+<tr><th>Field</th><th>Instructions</th></tr>
+<tr><td><strong>Display name</strong></td><td>Dog's public name, e.g. &quot;Buddy&quot;</td></tr>
+<tr><td><strong>Primary breed</strong></td><td>Select from dropdown</td></tr>
+<tr><td><strong>Secondary breed</strong></td><td>Appears only if primary is &quot;Mixed&quot;</td></tr>
+<tr><td><strong>Sex</strong></td><td>Male / Female / Unknown</td></tr>
+<tr><td><strong>Age band</strong></td><td>Puppy / Young / Adult / Senior</td></tr>
+<tr><td><strong>Size</strong></td><td>Small / Medium / Large / Extra large</td></tr>
+<tr><td><strong>Bio</strong></td><td>Short adoption description (personality, needs, good with kids, etc.)</td></tr>
+</table>
+<ol>
+<li><strong>Add photos:</strong></li>
+</ol>
+<p>   - Tap <strong>Add photo</strong> or <strong>Upload</strong></p>
+<p>   - Select from library or take new photo</p>
+<p>   - Wait for upload to complete (compressed automatically)</p>
+<p>   - Add multiple photos if desired</p>
+<p>   - Tap a photo to set it as <strong>primary</strong> (main image on public page)</p>
+<ol>
+<li><strong>Status</strong> <em>(admin only)</em>: Leave as <strong>Draft</strong> until ready to publish (Section 10).</li>
+<li>Tap <strong>Save listing</strong> (bottom of form).</li>
+<li>You return to the <strong>All listings</strong> page; your new dog appears with <strong>Draft</strong> badge.</li>
+</ol>
+<h3>If photo upload fails</h3>
+<ul>
+<li>Ensure you are signed in</li>
+<li>Try a smaller image or different browser</li>
+<li>Contact Freedom Paws if error persists</li>
+</ul>
+<hr/>
+<h2>9. Task: Edit an existing listing</h2>
+<h3>Click-by-click instructions</h3>
+<ol>
+<li>Go to <strong>Partner → Adoption listings</strong>.</li>
+<li>Find the dog card and tap <strong>Edit</strong>.</li>
+<li>Update any fields (name, bio, breeds, photos).</li>
+<li>To <strong>remove a photo:</strong> tap remove/delete on that thumbnail.</li>
+<li>To <strong>change primary photo:</strong> tap <strong>Set as primary</strong> on the desired image.</li>
+<li>Tap <strong>Save listing</strong>.</li>
+<li>Confirm changes on the listings list.</li>
+</ol>
+<hr/>
+<h2>10. Task: Publish a dog to the public directory</h2>
+<p><strong>Purpose:</strong> Make a dog visible on <strong>https://app.freedompawsinc.com/adopt/tn</strong></p>
+<p><strong>Who:</strong> <strong>Shelter admin only.</strong> Staff can draft; admin publishes.</p>
+<h3>Click-by-click instructions</h3>
+<ol>
+<li>Open the listing via <strong>Edit</strong> (Section 9).</li>
+<li>Scroll to <strong>Status</strong> dropdown.</li>
+<li>Change status from <strong>Draft</strong> to <strong>Available</strong>.</li>
+<li>Ensure at least <strong>one photo</strong> is uploaded and a <strong>primary photo</strong> is set.</li>
+<li>Tap <strong>Save listing</strong>.</li>
+<li>Return to listings list — badge should show <strong>Available</strong> (green).</li>
+<li>Tap <strong>Public page ↗</strong> to verify the dog appears on your shelter's public page.</li>
+<li>Share the public URL with your marketing team or post to social media.</li>
+</ol>
+<h3>What the public sees</h3>
+<ul>
+<li>Dogs with status <strong>Available</strong> or <strong>Pending</strong> appear on the TN directory.</li>
+<li><strong>Draft</strong>, <strong>Adopted</strong>, and <strong>Archived</strong> dogs are <strong>not</strong> shown publicly.</li>
+</ul>
+<hr/>
+<h2>11. Task: Mark a dog as pending or adopted</h2>
+<h3>Mark pending (application in progress)</h3>
+<ol>
+<li><strong>Edit</strong> the listing.</li>
+<li>Set <strong>Status</strong> to <strong>Pending</strong>.</li>
+<li><strong>Save listing</strong>.</li>
+<li>Dog remains visible on public directory with pending indication.</li>
+</ol>
+<h3>Mark adopted (success!)</h3>
+<ol>
+<li><strong>Edit</strong> the listing.</li>
+<li>Set <strong>Status</strong> to <strong>Adopted</strong>.</li>
+<li><strong>Save listing</strong>.</li>
+<li>Dog is <strong>removed</strong> from public available list.</li>
+</ol>
+<h3>Archive (no longer active)</h3>
+<ol>
+<li><strong>Edit</strong> the listing.</li>
+<li>Set <strong>Status</strong> to <strong>Archived</strong>.</li>
+<li><strong>Save listing</strong>.</li>
+</ol>
+<hr/>
+<h2>12. Roles: staff vs admin</h2>
+<table>
+<tr><th>Task</th><th>shelter_staff</th><th>shelter_admin</th></tr>
+<tr><td>Sign in to portal</td><td>✅</td><td>✅</td></tr>
+<tr><td>Found dog intake</td><td>✅</td><td>✅</td></tr>
+<tr><td>Match review / approve</td><td>❌</td><td>✅</td></tr>
+<tr><td>Create draft listing</td><td>✅</td><td>✅</td></tr>
+<tr><td>Upload photos</td><td>✅</td><td>✅</td></tr>
+<tr><td>Publish (Available)</td><td>❌</td><td>✅</td></tr>
+<tr><td>Mark Pending / Adopted</td><td>❌</td><td>✅</td></tr>
+</table>
+<p>If you need admin access, ask your shelter director to contact <strong>Freedom Paws</strong> to upgrade your account role.</p>
+<hr/>
+<h2>13. Public pages your listings appear on</h2>
+<table>
+<tr><th>Page</th><th>URL pattern</th></tr>
+<tr><td>TN directory (all partners)</td><td>https://app.freedompawsinc.com/adopt/tn</td></tr>
+<tr><td>Your shelter page</td><td>https://app.freedompawsinc.com/adopt/tn/{your-shelter-slug}</td></tr>
+<tr><td>Individual dog</td><td>https://app.freedompawsinc.com/adopt/tn/{shelter-slug}/{dog-slug}</td></tr>
+</table>
+<p>Your shelter slug is assigned by Freedom Paws during onboarding (e.g. <code>memphis-animal-services</code>).</p>
+<hr/>
+<h2>14. Privacy &amp; safety rules</h2>
+<ol>
+<li><strong>No direct owner contact</strong> from found-dog matches until admin approval and system email.</li>
+<li><strong>Do not share</strong> Freedom Paws IDs or owner information outside authorized staff.</li>
+<li><strong>Photos</strong> of adoptable dogs should not include people's faces without consent.</li>
+<li><strong>Accurate bios</strong> — disclose bite history, medical needs, and behavior honestly.</li>
+<li>Report suspected system errors or inappropriate matches to Freedom Paws immediately.</li>
+</ol>
+<hr/>
+<h2>15. Troubleshooting</h2>
+<table>
+<tr><th>Problem</th><th>What to do</th></tr>
+<tr><td>&quot;Sign in&quot; button keeps appearing</td><td>Request new magic link; try 6-digit OTP</td></tr>
+<tr><td>Magic link won't open</td><td>Copy link → paste in Safari</td></tr>
+<tr><td>Can't see Match review queue</td><td>You need shelter_admin role</td></tr>
+<tr><td>Can't change listing to Available</td><td>You need shelter_admin role</td></tr>
+<tr><td>Photo won't upload</td><td>Check connection; try smaller image</td></tr>
+<tr><td>Video rejected</td><td>Must be ≤8 sec, ≤25 MB, MP4/MOV/WebM</td></tr>
+<tr><td>Dog not on public site</td><td>Status must be Available or Pending; wait 1–2 min and refresh</td></tr>
+<tr><td>Wrong shelter on intake</td><td>Select correct shelter from dropdown before submit</td></tr>
+</table>
+<hr/>
+<h2>Appendix A — URL quick reference</h2>
+<table>
+<tr><th>Page</th><th>URL</th></tr>
+<tr><td>Partner dashboard</td><td>https://shelter.freedompawsinc.com/partner</td></tr>
+<tr><td>Login</td><td>https://shelter.freedompawsinc.com/login?next=/partner</td></tr>
+<tr><td>Found intake</td><td>https://shelter.freedompawsinc.com/id/found</td></tr>
+<tr><td>Match queue</td><td>https://shelter.freedompawsinc.com/id/match</td></tr>
+<tr><td>All listings</td><td>https://shelter.freedompawsinc.com/partner/listings</td></tr>
+<tr><td>New listing</td><td>https://shelter.freedompawsinc.com/partner/listings/new</td></tr>
+<tr><td>Public TN adopt</td><td>https://app.freedompawsinc.com/adopt/tn</td></tr>
+</table>
+<hr/>
+<h2>Appendix B — Listing status definitions</h2>
+<table>
+<tr><th>Status</th><th>Meaning</th><th>Public visible?</th></tr>
+<tr><td><strong>Draft</strong></td><td>Work in progress, partner eyes only</td><td>No</td></tr>
+<tr><td><strong>Available</strong></td><td>Ready for adoption</td><td>Yes</td></tr>
+<tr><td><strong>Pending</strong></td><td>Application/adoption in progress</td><td>Yes</td></tr>
+<tr><td><strong>Adopted</strong></td><td>Successfully placed</td><td>No</td></tr>
+<tr><td><strong>Archived</strong></td><td>Removed from active pipeline</td><td>No</td></tr>
+</table>
+<hr/>
+<h2>Appendix C — Role permissions matrix</h2>
+<p>See Section 12 for the full matrix. Summary:</p>
+<ul>
+<li><strong>Staff</strong> = intake + drafts</li>
+<li><strong>Admin</strong> = intake + match approval + publish + status changes</li>
+</ul>
+<hr/>
+<h2>Appendix D — Glossary</h2>
+<table>
+<tr><th>Term</th><th>Definition</th></tr>
+<tr><td><strong>Freedom Paws ID</strong></td><td>Biometric pet enrollment in the member app</td></tr>
+<tr><td><strong>Found report</strong></td><td>A submitted found-dog intake record</td></tr>
+<tr><td><strong>Candidate</strong></td><td>A possible ID match above similarity threshold</td></tr>
+<tr><td><strong>Match queue</strong></td><td>Admin workflow to approve/reject candidates</td></tr>
+<tr><td><strong>Listing</strong></td><td>An adoptable dog profile</td></tr>
+<tr><td><strong>TN pilot</strong></td><td>Tennessee shelter adoption network phase</td></tr>
+<tr><td><strong>Similarity score</strong></td><td>0–1 match confidence; 0.72+ surfaces for review</td></tr>
+</table>
+<hr/>
+<h2>Appendix E — Getting help</h2>
+<table>
+<tr><th>Need</th><th>Contact</th></tr>
+<tr><td>Account / role changes</td><td>Freedom Paws founder (see welcome email)</td></tr>
+<tr><td>Technical issues</td><td>Same + include screenshot and URL</td></tr>
+<tr><td>False match / safety concern</td><td>Flag immediately in match notes + email support</td></tr>
+</table>
+<p><strong>Portal footer reminder:</strong> <em>Partner portal · shelter.freedompawsinc.com · Same database as member ID matching</em></p>
+<hr/>
+<p><em>Freedom Paws Wellness © 2026 · Shelter partner training manual · Tennessee pilot</em></p>
+<div class="footer-note">Freedom Paws Wellness © 2026 · Honor Buddy's Legacy · Educational purposes only where applicable.</div>
+</body>
+</html>

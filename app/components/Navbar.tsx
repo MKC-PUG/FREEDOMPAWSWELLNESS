@@ -4,21 +4,22 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import BrandLogo from '@/app/components/BrandLogo';
 
 const discordInviteUrl = process.env.NEXT_PUBLIC_FP_DISCORD_INVITE_URL?.trim() || '';
 
 const navLinks = [
   { label: 'HOME', href: '/' },
   { label: 'VIT DIAGNOSTICS', href: '/diagnostics' },
-  { label: 'SUPERBUD PHOTO BOOTH', href: '/photobooth' },
+  { label: 'PHOTO BOOTH', href: '/photobooth' },
   { label: 'MY PETS', href: '/mypets' },
   { label: 'FREEDOM PAWS ID', href: '/id' },
   { label: 'WELLNESS', href: '/wellness' },
-  { label: 'PROTOCOL OVERVIEW', href: '/protocols' },
-  { label: 'MONITOR MY DOG', href: '/monitor' },
+  { label: 'PROTOCOLS', href: '/protocols' },
+  { label: 'MONITOR', href: '/monitor' },
   discordInviteUrl
-    ? { label: 'COMMUNITY DISCORD', href: discordInviteUrl, external: true }
-    : { label: 'JOIN COMMUNITY', href: '/waitlist' },
+    ? { label: 'DISCORD', href: discordInviteUrl, external: true }
+    : { label: 'COMMUNITY', href: '/waitlist' },
   { label: 'TOKEN SHOP', href: '/token-shop' },
 ] as const;
 
@@ -61,20 +62,10 @@ export default function Navbar() {
       className="fp-nav sticky top-0 z-[100] bg-[#0A1625] border-b border-white/10"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-[var(--nav-bar-height)] py-2 sm:py-3 flex items-center justify-between gap-2 sm:gap-6">
-        <Link
-          href="/"
-          className="min-w-0 flex-1 leading-tight touch-manipulation"
-          prefetch={false}
-          onClick={closeMobileMenu}
-        >
-          <div className="font-bold text-base sm:text-2xl tracking-tight truncate text-white">
-            Freedom Paws Wellness
-          </div>
-          <div className="hidden sm:block text-xs text-amber-400 mt-0.5">Honor Buddy&apos;s Legacy</div>
-        </Link>
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 min-h-[var(--nav-bar-height)] py-1.5 sm:py-2 flex items-center gap-2 sm:gap-3">
+        <BrandLogo href="/" variant="consumer" onClick={closeMobileMenu} />
 
-        <div className="fp-nav-desktop hidden md:flex items-center gap-3 lg:gap-5 text-[10px] lg:text-xs font-semibold tracking-wider">
+        <div className="fp-nav-desktop hidden md:flex flex-1 min-w-0 fp-nav-links-scroll items-center justify-end gap-2 lg:gap-3 xl:gap-4 text-[9px] lg:text-[10px] xl:text-xs font-semibold tracking-wide pr-1">
           {navLinks.map((l) => {
             const isExternal = 'external' in l && l.external;
             const isActive =
@@ -89,7 +80,7 @@ export default function Navbar() {
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/80 hover:text-white transition-colors whitespace-nowrap py-2"
+                  className="text-white/80 hover:text-white transition-colors whitespace-nowrap py-2 shrink-0"
                 >
                   {l.label}
                 </a>
@@ -102,8 +93,8 @@ export default function Navbar() {
                 prefetch={false}
                 className={
                   isActive
-                    ? 'text-amber-400 whitespace-nowrap py-2'
-                    : 'text-white/80 hover:text-white transition-colors whitespace-nowrap py-2'
+                    ? 'text-amber-400 whitespace-nowrap py-2 shrink-0'
+                    : 'text-white/80 hover:text-white transition-colors whitespace-nowrap py-2 shrink-0'
                 }
               >
                 {l.label}
@@ -112,11 +103,11 @@ export default function Navbar() {
           })}
         </div>
 
-        <div className="fp-nav-mobile flex shrink-0 items-center gap-2 sm:gap-3 md:hidden">
+        <div className="fp-nav-mobile flex shrink-0 items-center gap-2 md:hidden ml-auto">
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
-            className="relative z-[101] inline-flex shrink-0 items-center justify-center min-w-[48px] min-h-[48px] w-12 h-12 rounded-lg border border-white/15 bg-[#0A1625] text-white text-2xl leading-none active:bg-white/20 touch-manipulation select-none"
+            className="relative z-[101] inline-flex shrink-0 items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 rounded-lg border border-white/15 bg-[#0A1625] text-white text-xl leading-none active:bg-white/20 touch-manipulation select-none"
             style={{ WebkitTapHighlightColor: 'transparent' }}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
@@ -129,7 +120,7 @@ export default function Navbar() {
             id="connect-wallet"
             href="/token-shop"
             prefetch={false}
-            className="relative z-[101] bg-amber-400 active:bg-amber-300 text-black text-[10px] font-bold px-3 min-h-[48px] inline-flex items-center rounded-xl whitespace-nowrap touch-manipulation"
+            className="relative z-[101] bg-amber-400 active:bg-amber-300 text-black text-[10px] font-bold px-3 min-h-[44px] inline-flex items-center rounded-xl whitespace-nowrap touch-manipulation"
           >
             WALLET
           </Link>
@@ -139,9 +130,9 @@ export default function Navbar() {
           id="connect-wallet-desktop"
           href="/token-shop"
           prefetch={false}
-          className="hidden md:inline-flex bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold px-6 py-3 rounded-xl whitespace-nowrap transition-colors"
+          className="hidden md:inline-flex shrink-0 bg-amber-400 hover:bg-amber-300 text-black text-[10px] xl:text-xs font-bold px-4 xl:px-6 py-2.5 xl:py-3 rounded-xl whitespace-nowrap transition-colors"
         >
-          CONNECT WALLET
+          WALLET
         </Link>
       </div>
 

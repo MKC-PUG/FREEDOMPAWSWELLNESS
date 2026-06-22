@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Freedom Paws Technical Master Binder</title>
+<style>
+@page { size: letter; margin: 0.75in; }
+@media print {
+  .page-break { page-break-before: always; break-before: page; }
+  h1, h2, h3 { break-after: avoid; }
+  table, pre, blockquote { break-inside: avoid; }
+}
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  max-width: 7.5in;
+  margin: 0 auto;
+  padding: 0.25in;
+}
+h1 { font-size: 22pt; color: #0A1428; margin-top: 0; border-bottom: 2px solid #F5C242; padding-bottom: 0.2em; }
+h2 { font-size: 16pt; color: #0A1428; margin-top: 1.2em; }
+h3 { font-size: 13pt; color: #333; }
+.cover-title { font-size: 28pt; text-align: center; border: none; color: #0A1428; }
+.cover-sub { text-align: center; font-size: 14pt; color: #555; }
+.cover-meta { text-align: center; margin-top: 2em; font-size: 11pt; }
+.hero-placeholder {
+  border: 2px dashed #ccc; background: #f8f8f8; text-align: center;
+  padding: 2em; margin: 1.5em 0; color: #888; font-size: 10pt;
+}
+table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 10pt; }
+th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #0A1428; color: #fff; }
+tr:nth-child(even) { background: #f6f6f6; }
+code { background: #f0f0f0; padding: 1px 4px; font-size: 9pt; border-radius: 3px; }
+pre {
+  background: #f4f4f4; border: 1px solid #ddd; padding: 10px;
+  font-size: 8.5pt; line-height: 1.35; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word;
+}
+blockquote {
+  border-left: 4px solid #F5C242; margin: 1em 0; padding: 0.5em 1em;
+  background: #fffbf0; color: #333;
+}
+ul, ol { margin: 0.5em 0; padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+a { color: #1565c0; }
+.doc-header {
+  font-size: 9pt; color: #666; border-bottom: 1px solid #ddd;
+  padding-bottom: 8px; margin-bottom: 16px;
+}
+.technical .doc-header { border-color: #0288d1; }
+.footer-note { font-size: 9pt; color: #666; margin-top: 2em; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body class="technical">
+<div class="doc-header">Freedom Paws Technical Master Binder · Freedom Paws Wellness · May 2026</div>
+<h1 class="cover-title">Freedom Paws Wellness LLC — TECHNICAL MASTER DOCUMENT BINDER</h1>
+<p><strong>Version:</strong> 2.0 (Comprehensive Update)  </p>
+<p><strong>Date:</strong> May 2026  </p>
+<p><strong>Audience:</strong> Attorneys · Grant reviewers · Accelerators · Technical partners · Strategic acquirers  </p>
+<p><strong>Classification:</strong> Confidential — distribute under NDA when marked  </p>
+<p><strong>Companion document:</strong> <em>General Master Binder</em> (public/community/marketing only)</p>
+<hr/>
+<h2>How to print as PDF</h2>
+<ol>
+<li>Copy into Google Docs or Word · 1-inch margins · 11–12 pt Arial/Calibri.  </li>
+<li>Page breaks at each <code>[PAGE BREAK]</code>.  </li>
+<li>Appendices may be rotated landscape for tables.  </li>
+<li>Redact §Security and §Environment before public release.</li>
+</ol>
+<hr/>
+<h2>TABLE OF CONTENTS</h2>
+<table>
+<tr><th>§</th><th>Section</th></tr>
+<tr><td>1</td><td>Cover</td></tr>
+<tr><td>2</td><td>Executive Summary</td></tr>
+<tr><td>3</td><td>Entity, Legal &amp; Compliance Status</td></tr>
+<tr><td>4</td><td>Platform Architecture Overview</td></tr>
+<tr><td>5</td><td>Technology Stack &amp; Infrastructure</td></tr>
+<tr><td>6</td><td>Module Technical Specifications (Live)</td></tr>
+<tr><td>7</td><td>ViT Diagnostics — Public Tier</td></tr>
+<tr><td>8</td><td>ViT Pro™ — Veterinary CDS (Phase V0)</td></tr>
+<tr><td>9</td><td>Freedom Paws ID — Track 1 &amp; Track 2</td></tr>
+<tr><td>10</td><td>Adoption Network &amp; Partner Portal</td></tr>
+<tr><td>11</td><td>Token Shop — XRPL / Xaman / Stripe</td></tr>
+<tr><td>12</td><td>XRPL Token Standards — MPT &amp; Dynamic NFT</td></tr>
+<tr><td>13</td><td>Ops Command Center</td></tr>
+<tr><td>14</td><td>Data, Privacy &amp; Security</td></tr>
+<tr><td>15</td><td>Intellectual Property &amp; Patent Strategy</td></tr>
+<tr><td>16</td><td>Competitive Landscape</td></tr>
+<tr><td>17</td><td>Build Value &amp; Replacement Cost</td></tr>
+<tr><td>18</td><td>Financial Projections (2026–2030)</td></tr>
+<tr><td>19</td><td>ViT Pro Financial Addendum (2026–2030)</td></tr>
+<tr><td>20</td><td>Valuation Summary</td></tr>
+<tr><td>21</td><td>Roadmap — Dissected by Quarter</td></tr>
+<tr><td>22</td><td>Grant &amp; Capital Use Framework</td></tr>
+<tr><td>23</td><td>Technical Appendix — Protocol JSON Metadata</td></tr>
+<tr><td>24</td><td>Technical Appendix — API Surface</td></tr>
+<tr><td>25</td><td>Risk Register</td></tr>
+<tr><td>26</td><td>Contact &amp; Document Control</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Freedom Paws Wellness LLC</h1>
+<h2>Technical Master Binder</h2>
+<p><strong>For Attorneys, Grant Reviewers, Accelerators, and Technical Partners</strong></p>
+<p>May 2026 · Version 2.0</p>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td><strong>Entity</strong></td><td>Freedom Paws Wellness LLC <em>(Wyoming — in formation / legal review)</em></td></tr>
+<tr><td><strong>Product</strong></td><td>Everything-app PWA for dog wellness, ID, adoption</td></tr>
+<tr><td><strong>Primary app</strong></td><td>https://app.freedompawsinc.com</td></tr>
+<tr><td><strong>Build value (Jun 2026 est.)</strong></td><td>~$266K replacement cost · ~$1.0–1.5M planning valuation</td></tr>
+<tr><td><strong>Classification</strong></td><td>Utility tokens · Educational CDS · Not investment contracts</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Executive Summary</h1>
+<p>Freedom Paws Wellness LLC is building the <strong>first phone-first “everything app for dogs”</strong> combining:</p>
+<ol>
+<li><strong>ViT AI diagnostics</strong> (wellness tier live; vet CDS tier in validation)  </li>
+<li><strong>Ten holistic educational protocols</strong> (XRPL tokenized access)  </li>
+<li><strong>Freedom Paws ID</strong> — biometric reunion for unchipped dogs  </li>
+<li><strong>Shelter adoption network</strong> — TN pilot → national  </li>
+<li><strong>SuperBud Photo Booth</strong> — community acquisition  </li>
+<li><strong>Partner rails</strong> — insurance + holistic telehealth affiliates  </li>
+</ol>
+<h3>Technical differentiation</h3>
+<table>
+<tr><th>Capability</th><th>Freedom Paws</th><th>Typical competitor</th></tr>
+<tr><td>AI photo/video → protocol mapping</td><td>✅ Native</td><td>Partial (Yipara, etc.)</td></tr>
+<tr><td>Biometric ID without chip</td><td>✅ Pilot</td><td>None at scale</td></tr>
+<tr><td>Shelter match + human review</td><td>✅ Built</td><td>Registries only (chip)</td></tr>
+<tr><td>Vet-grade CDS + owner wellness dual tier</td><td>✅ Phase V0</td><td>None integrated</td></tr>
+<tr><td>XRPL-native protocol commerce</td><td>✅ Live Xaman</td><td>None</td></tr>
+<tr><td>Full PWA (no app store gate)</td><td>✅</td><td>Most use native apps</td></tr>
+</table>
+<h3>Traction (May 2026)</h3>
+<table>
+<tr><th>Metric</th><th>Status</th></tr>
+<tr><td>Production PWA</td><td>Live (preview mode pre-LLC)</td></tr>
+<tr><td>iPhone-validated Xaman checkout</td><td>✅ Mainnet</td></tr>
+<tr><td>Supabase ID migrations</td><td>001–004 deployed</td></tr>
+<tr><td>Shelter partner DNS + magic-link auth</td><td>✅</td></tr>
+<tr><td>Wellness partner URLs</td><td>✅ Configured</td></tr>
+<tr><td>ViT Pro portal</td><td>✅ Phase V0 foundation</td></tr>
+<tr><td>TN adoption infrastructure</td><td>✅ Ready for listings</td></tr>
+</table>
+<h3>Capital thesis</h3>
+<ul>
+<li><strong>~$266K</strong> fair-market dev already built (self-build savings vs agency)  </li>
+<li><strong>Whitespace</strong> in holistic wellness + unchipped ID + integrated ViT  </li>
+<li><strong>Multiple revenue lanes:</strong> protocol shop, membership, affiliates, shelter B2B, ViT Pro SaaS  </li>
+<li><strong>Mission-aligned grants:</strong> veteran dogs, shelter technology, XRPL ecosystem  </li>
+</ul>
+<hr/>
+<div class="page-break"></div>
+<h1>Entity, Legal &amp; Compliance Status</h1>
+<table>
+<tr><th>Item</th><th>Status</th><th>Notes</th></tr>
+<tr><td><strong>Wyoming LLC</strong></td><td>In progress</td><td>Launch gated on trademark/LLC counsel</td></tr>
+<tr><td><strong>Operating Agreement</strong></td><td>In progress</td><td>Custom OA with utility-token framing</td></tr>
+<tr><td><strong>Trademarks</strong></td><td>Planned</td><td>Freedom Paws Wellness™, SuperBud™, ViT Pro™</td></tr>
+<tr><td><strong>Utility token classification</strong></td><td>Counsel review</td><td>MPT = educational access only; not investment</td></tr>
+<tr><td><strong>ViT public tier</strong></td><td>Educational disclaimer live</td><td>Not diagnosis</td></tr>
+<tr><td><strong>ViT Pro tier</strong></td><td>CDS for licensed vets</td><td>Not SaMD at launch; avoid diagnosis claims</td></tr>
+<tr><td><strong>Biometric consent</strong></td><td>Template ready</td><td><code>Freedom-Paws-ID-Biometric-Consent-Template</code></td></tr>
+<tr><td><strong>Terms / Privacy</strong></td><td>Pre-launch</td><td>Counsel review before public index</td></tr>
+<tr><td><strong>Give-back policy</strong></td><td>Defined</td><td>10% net → 50% veteran orgs / 50% shelters</td></tr>
+</table>
+<h3>Uniform disclaimer (all surfaces)</h3>
+<blockquote>Educational tool only. Not veterinary medical advice, diagnosis, or treatment. MPTs grant educational access only — not investment products.</blockquote>
+<h3>Regulatory pathways (future)</h3>
+<table>
+<tr><th>Product</th><th>US framing</th><th>Trigger for escalation</th></tr>
+<tr><td>Tier A ViT</td><td>Wellness / education</td><td>Current</td></tr>
+<tr><td>ViT Pro CDS</td><td>Clinical decision support (vet-only)</td><td>Current target</td></tr>
+<tr><td>ViT Pro as SaMD</td><td>FDA device</td><td>Only if diagnostic claims + funded validation</td></tr>
+</table>
+<p><strong>Legal budget (Year 1 est.):</strong> $15K–$40K veterinary regulatory + general counsel.</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Platform Architecture Overview</h1>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                        USER SURFACES                             │
+├──────────────┬──────────────┬──────────────┬────────────────────┤
+│ Consumer PWA │ Partner PWA  │ Ops Console  │ ViT Pro Portal     │
+│ app.fp.com   │ shelter.*    │ /ops         │ /vit-pro           │
+└──────┬───────┴──────┬───────┴──────┬───────┴─────────┬──────────┘
+       │              │              │                 │
+       ▼              ▼              ▼                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              Next.js 16 App Router (TypeScript)                  │
+│  app/ routes · lib/ domain logic · API routes · middleware     │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │
+       ┌───────────────────────┼───────────────────────┐
+       ▼                       ▼                       ▼
+┌─────────────┐        ┌─────────────┐        ┌─────────────┐
+│  Supabase   │        │   OpenAI    │        │    XRPL     │
+│  Auth + PG  │        │  GPT-4o-mini│        │   Xaman     │
+│  pgvector   │        │   Vision    │        │  XUMM API   │
+└─────────────┘        └─────────────┘        └─────────────┘
+       │                       │
+       ▼                       ▼
+┌─────────────┐        ┌─────────────┐
+│   Vercel    │        │  ViT Pro    │
+│   Edge/CDN  │        │  RAG corpus │
+└─────────────┘        └─────────────┘</code></pre>
+<h3>Surface routing</h3>
+<table>
+<tr><th>Path prefix</th><th>Surface header</th><th>Shell</th></tr>
+<tr><td><code>/ops</code></td><td><code>ops</code></td><td>OpsNavbar</td></tr>
+<tr><td><code>/vit-pro</code></td><td><code>vitpro</code></td><td>VitProNavbar</td></tr>
+<tr><td><code>/partner</code></td><td><code>partner</code></td><td>PartnerNavbar</td></tr>
+<tr><td><code>shelter.*</code> host</td><td><code>partner</code></td><td>PartnerNavbar</td></tr>
+<tr><td>Default</td><td><code>consumer</code></td><td>Navbar</td></tr>
+</table>
+<h3>Codebase scale (Jun 2026)</h3>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>TypeScript/TSX (app + lib)</td><td>~20,600+ lines</td></tr>
+<tr><td>App routes</td><td>23+</td></tr>
+<tr><td>Supabase migrations</td><td>001–004 (ID + partner + ops)</td></tr>
+<tr><td>Public assets</td><td>185+</td></tr>
+<tr><td>Internal docs</td><td>90+ markdown files</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Technology Stack &amp; Infrastructure</h1>
+<table>
+<tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+<tr><td><strong>Frontend</strong></td><td>Next.js 16, React 19, Tailwind 4</td><td>PWA UI</td></tr>
+<tr><td><strong>Hosting</strong></td><td>Vercel</td><td>HTTPS, edge, preview deploys</td></tr>
+<tr><td><strong>Database</strong></td><td>Supabase (Postgres)</td><td>Auth, profiles, listings, embeddings</td></tr>
+<tr><td><strong>Vector search</strong></td><td>pgvector</td><td>ID similarity matching</td></tr>
+<tr><td><strong>AI vision</strong></td><td>OpenAI GPT-4o-mini</td><td>ViT structured JSON</td></tr>
+<tr><td><strong>AI RAG (ViT Pro)</strong></td><td>Keyword retrieval V0 → embeddings V1</td><td>Literature citations</td></tr>
+<tr><td><strong>Payments</strong></td><td>XUMM/Xaman (XRP, RLUSD)</td><td>Primary protocol checkout</td></tr>
+<tr><td><strong>Payments (alt)</strong></td><td>Stripe</td><td>Card checkout <em>(rolling out)</em></td></tr>
+<tr><td><strong>PWA</strong></td><td>Service worker v78</td><td>Offline shell, cache versioning</td></tr>
+<tr><td><strong>Marketing</strong></td><td>Framer</td><td>freedompawsinc.com</td></tr>
+<tr><td><strong>Email</strong></td><td>Resend</td><td>Transactional <em>(partner auth)</em></td></tr>
+<tr><td><strong>Monitor</strong></td><td>go2rtc</td><td>WebRTC camera relay POC</td></tr>
+</table>
+<h3>Environment &amp; domains</h3>
+<table>
+<tr><th>Domain</th><th>Role</th></tr>
+<tr><td>app.freedompawsinc.com</td><td>Canonical PWA</td></tr>
+<tr><td>freedompawsinc.com</td><td>Framer marketing</td></tr>
+<tr><td>shelter.freedompawsinc.com</td><td>Partner portal</td></tr>
+<tr><td>freedompawsinc.org</td><td><strong>Recommended</strong> grants/community</td></tr>
+</table>
+<h3>Infrastructure phases (complete)</h3>
+<table>
+<tr><th>Phase</th><th>Deliverable</th><th>Status</th></tr>
+<tr><td>1</td><td>Framer <code>/adopt</code> wired to app</td><td>✅ Saved (pre-publish)</td></tr>
+<tr><td>2</td><td>Shelter DNS + partner auth</td><td>✅ Production verified</td></tr>
+<tr><td>3</td><td>Wellness partner env URLs</td><td>✅ <code>config-status: ready</code></td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Module Technical Specifications (Live)</h1>
+<table>
+<tr><th>Module</th><th>Key paths</th><th>Completion</th></tr>
+<tr><td><strong>PWA platform</strong></td><td><code>public/sw.js</code>, <code>lib/pwa-version.ts</code>, manifests</td><td>95%</td></tr>
+<tr><td><strong>ViT Diagnostics</strong></td><td><code>app/diagnostics/</code>, <code>lib/ai/*</code></td><td>90%</td></tr>
+<tr><td><strong>Protocols</strong></td><td><code>app/protocols/</code>, <code>lib/ai/protocol-registry.ts</code></td><td>90%</td></tr>
+<tr><td><strong>Token Shop</strong></td><td><code>app/token-shop/</code>, <code>lib/shop/*</code></td><td>90%</td></tr>
+<tr><td><strong>Photo Booth</strong></td><td><code>app/photobooth/</code>, imgly bg removal</td><td>85%</td></tr>
+<tr><td><strong>Freedom Paws ID T1</strong></td><td><code>app/id/*</code>, migrations 001–004</td><td>95%</td></tr>
+<tr><td><strong>Partner portal</strong></td><td><code>app/partner/*</code></td><td>90%</td></tr>
+<tr><td><strong>Adoption public</strong></td><td><code>app/adopt/*</code></td><td>85%</td></tr>
+<tr><td><strong>Ops console</strong></td><td><code>app/ops/*</code></td><td>90%</td></tr>
+<tr><td><strong>ViT Pro V0</strong></td><td><code>lib/vit-pro/<em></code>, <code>app/vit-pro/</em></code></td><td>Foundation</td></tr>
+<tr><td><strong>Monitor</strong></td><td><code>app/monitor/*</code>, go2rtc</td><td>50%</td></tr>
+<tr><td><strong>My Pets vault</strong></td><td><code>app/mypets/*</code></td><td>40%</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>ViT Diagnostics — Public Tier (Technical)</h1>
+<h3>Pipeline</h3>
+<pre><code>Photo/video upload
+  → Quality gate (lib/vit/media-quality-gate.ts)
+  → Video: 3–5 frames (lib/vit/extract-video-frames.ts)
+  → OpenAI vision (lib/ai/vision-analyze.ts)
+  → Symptom lexicon normalize (lib/ai/normalize-symptoms.ts)
+  → Protocol rank top-2 (lib/ai/rank-protocols.ts)
+  → Urgent assessment (lib/ai/urgent-assessment.ts) — ≥80% congruency
+  → API response (app/api/analyze/route.ts mode=wellness)</code></pre>
+<h3>API</h3>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>Endpoint</td><td><code>POST /api/analyze</code></td></tr>
+<tr><td>Mode</td><td><code>wellness</code> (default)</td></tr>
+<tr><td>Input</td><td>multipart: <code>image</code>, <code>symptoms</code>, optional <code>frame_*</code>, <code>mediaType</code></td></tr>
+<tr><td>Output</td><td><code>AnalyzeApiResponse</code> — protocols, urgency, visual findings</td></tr>
+</table>
+<h3>Safety gates</h3>
+<ul>
+<li>Confidence capped ≤92%  </li>
+<li><code>vetUrgent</code> server-side from severe-conditions DB  </li>
+<li>Mild/moderate vs urgent separation  </li>
+<li>Educational disclaimer on every response  </li>
+</ul>
+<h3>Cost per scan (est.)</h3>
+<table>
+<tr><th>Tier</th><th>API cost</th></tr>
+<tr><td>Photo</td><td>$0.02–0.05</td></tr>
+<tr><td>Video (5 frames)</td><td>$0.05–0.10</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>ViT Pro™ — Veterinary CDS (Phase V0)</h1>
+<p><strong>Portal:</strong> <code>/vit-pro</code> · <strong>API mode:</strong> <code>vit_pro</code> · <strong>Status:</strong> Foundation — advisor validation over 3–4 months pre-production.</p>
+<h3>Dual-output architecture</h3>
+<pre><code>Same media + history
+  → Region detect (eye | skin | oral)
+  → Rubric-aware vision pass
+  → RAG corpus retrieve (12+ open/licensed refs)
+  → VitProFullReport (internal)
+  → Tier B: vet JSON + citations + emrPlainText
+  → Tier A: simplified public JSON (no citations)</code></pre>
+<h3>Key files</h3>
+<table>
+<tr><th>Path</th><th>Purpose</th></tr>
+<tr><td><code>lib/vit-pro/types.ts</code></td><td>Dual-output schemas</td></tr>
+<tr><td><code>lib/vit-pro/rubrics/*.json</code></td><td>Eye, skin, oral rubrics</td></tr>
+<tr><td><code>lib/vit-pro/corpus/manifest.json</code></td><td>RAG sources</td></tr>
+<tr><td><code>lib/vit-pro/vit-pro-analyze.ts</code></td><td>Orchestrator</td></tr>
+<tr><td><code>app/vit-pro/(protected)/*</code></td><td>Advisor portal</td></tr>
+</table>
+<h3>Access control</h3>
+<ul>
+<li>Roles: <code>fp_ops</code>, <code>vet_staff</code>, or <code>VIT_PRO_ADVISOR_EMAILS</code> env allowlist  </li>
+<li>Env kill switch: <code>VIT_PRO_ENABLED=false</code>  </li>
+</ul>
+<h3>Validation plan</h3>
+<table>
+<tr><th>Level</th><th>Scope</th><th>Cost</th></tr>
+<tr><td>L1</td><td>50-photo internal benchmark</td><td>$0–2K</td></tr>
+<tr><td>L2</td><td>3-clinic pilot, 100 cases</td><td>$25–40K</td></tr>
+<tr><td>L3</td><td>Formal study + university</td><td>$60–75K+</td></tr>
+</table>
+<h3>Build estimate (full module)</h3>
+<table>
+<tr><th>Item</th><th>Hours</th><th>Cash (self-build Y1)</th></tr>
+<tr><td>Engineering</td><td>680–1,000</td><td>Founder + Cursor</td></tr>
+<tr><td>Non-engineering</td><td>—</td><td>$35–108K</td></tr>
+<tr><td><strong>All-in to pilot</strong></td><td>—</td><td><strong>$50–190K</strong></td></tr>
+</table>
+<h3>Y5 ViT Pro revenue (conservative, integrated)</h3>
+<table>
+<tr><th>Year</th><th>ViT-attributed revenue</th></tr>
+<tr><td>Y1</td><td>~$92K</td></tr>
+<tr><td>Y3</td><td>~$1.12M</td></tr>
+<tr><td>Y5</td><td>~$2.56M</td></tr>
+</table>
+<p><em>Full model: <code>ViT-PRO-BUSINESS-PLAN-AND-ROADMAP-June-2026.md</code></em></p>
+<hr/>
+<div class="page-break"></div>
+<h1>Freedom Paws ID — Track 1 &amp; Track 2</h1>
+<h3>Track 1 — Biometric (live)</h3>
+<table>
+<tr><th>Component</th><th>Implementation</th></tr>
+<tr><td>Enroll UI</td><td><code>/id/enroll</code></td></tr>
+<tr><td>Found intake</td><td><code>/id/found</code></td></tr>
+<tr><td>Match review</td><td><code>/id/match</code> (human approval)</td></tr>
+<tr><td>Embeddings</td><td>pgvector in Supabase</td></tr>
+<tr><td>Vision regions</td><td>eyes, face, body, posture, gait</td></tr>
+<tr><td>Default threshold</td><td>0.72 (tunable)</td></tr>
+<tr><td>Analyze mode</td><td><code>identity</code> on <code>/api/analyze</code></td></tr>
+</table>
+<h3>Track 2 — Microchip scanner <em>(in development)</em></h3>
+<table>
+<tr><th>Item</th><th>Detail</th></tr>
+<tr><td>Hardware</td><td>HomeAgain WorldScan Plus, PetScanner BLE <em>(ordered)</em></td></tr>
+<tr><td>App routes</td><td><code>/id/scan</code>, lookup, kit — MVP pending hardware QA</td></tr>
+<tr><td>Registry</td><td>AAHA lookup UX beta</td></tr>
+<tr><td>Retail kit plan</td><td><code>TRACK-2-RETAIL-SCANNER-KIT-PLAN-June-20-2026.md</code></td></tr>
+</table>
+<h3>Pilot timeline</h3>
+<table>
+<tr><th>Date</th><th>Milestone</th></tr>
+<tr><td>Oct 1, 2026</td><td>CA/TN biometric pilot live</td></tr>
+<tr><td>Jan 1, 2027</td><td>National promotion mode</td></tr>
+<tr><td>Dec 31, 2026</td><td>15 shelter partners target</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Adoption Network &amp; Partner Portal</h1>
+<h3>Public adoption</h3>
+<ul>
+<li>Route: <code>/adopt/tn</code>, <code>/adopt/tn/[partner-slug]</code>  </li>
+<li>Data: Supabase partner listings  </li>
+<li>Framer: <code>freedompawsinc.com/adopt</code> → app CTAs  </li>
+</ul>
+<h3>Partner portal</h3>
+<ul>
+<li>URL: <code>shelter.freedompawsinc.com/partner</code>  </li>
+<li>Auth: Supabase magic link + OTP fallback  </li>
+<li>Features: Listings CRUD, dashboard  </li>
+<li>Roles: <code>shelter_admin</code>, <code>shelter_staff</code>  </li>
+</ul>
+<h3>TN pilot partners (6)</h3>
+<p>Memphis Animal Services · Metro Animal Care &amp; Control · Young-Williams · New Leash on Life · Humane Society Sumner County · Safe Place for Animals</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Token Shop — XRPL / Xaman / Stripe</h1>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>Canonical price</td><td><strong>18 RLUSD ≈ $18 USD</strong></td></tr>
+<tr><td>XRP</td><td>Live CoinGecko conversion (~2 min refresh)</td></tr>
+<tr><td>Fallback XRP</td><td>25 XRP if rate API down</td></tr>
+<tr><td>Wallet</td><td>Xaman (XUMM SDK)</td></tr>
+<tr><td>Unlock storage</td><td><code>localStorage</code> device unlock + server webhook <em>(planned)</em></td></tr>
+<tr><td>Code authority</td><td><code>lib/shop/protocol-catalog.ts</code>, <code>app/token-shop/shop-items.ts</code></td></tr>
+</table>
+<h3>Checkout flow</h3>
+<pre><code>Select protocol → XUMM payload (/api/xumm/*) → User signs in Xaman
+  → Payment to treasury → Device unlock → Protocol content accessible</code></pre>
+<h3>Stripe (secondary rail)</h3>
+<ul>
+<li>Task C on roadmap — membership gates + card checkout  </li>
+<li>Reduces friction for non-crypto users at launch  </li>
+</ul>
+<hr/>
+<div class="page-break"></div>
+<h1>XRPL Token Standards — MPT &amp; Dynamic NFT</h1>
+<p><em>For counsel and XRPL grant reviewers.</em></p>
+<h3>Multi-Purpose Token (MPT) — XLS-89</h3>
+<table>
+<tr><th>Property</th><th>Planned implementation</th></tr>
+<tr><td>Standard</td><td>XRPL XLS-89 MPT</td></tr>
+<tr><td>Utility</td><td>Protocol educational access</td></tr>
+<tr><td>Royalties</td><td>5–10% to impact treasury</td></tr>
+<tr><td>Transfer</td><td>Holder-to-holder per XRPL rules</td></tr>
+<tr><td>Classification</td><td>Utility — not investment contract</td></tr>
+</table>
+<h3>Dynamic NFT — NFToken</h3>
+<table>
+<tr><th>Property</th><th>Planned implementation</th></tr>
+<tr><td>Flag</td><td><code>tfMutable</code> (0x00000010)</td></tr>
+<tr><td>Use</td><td>Updatable pet wellness record</td></tr>
+<tr><td>Metadata</td><td>JSON on IPFS / URIL generator</td></tr>
+<tr><td>Status</td><td>Roadmap post-core launch</td></tr>
+</table>
+<h3>Patriotic DAO governance</h3>
+<table>
+<tr><th>Element</th><th>Plan</th></tr>
+<tr><td>Tool</td><td>Snapshot</td></tr>
+<tr><td>Weight</td><td>MPT holdings + community rules</td></tr>
+<tr><td>Scope</td><td>Impact fund allocation votes</td></tr>
+<tr><td>Status</td><td>Post-LLC · post-first sales volume</td></tr>
+</table>
+<p><strong>Note:</strong> Live checkout today uses XUMM payment payloads for protocol unlock; full on-ledger MPT minting is <strong>roadmap</strong> aligned with XRPL Grants milestones.</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Ops Command Center</h1>
+<p><strong>URL:</strong> <code>/ops</code> · <strong>Access:</strong> <code>fp_ops</code> role + <code>FP_OPS_EMAILS</code> env</p>
+<table>
+<tr><th>Module</th><th>Path</th><th>Function</th></tr>
+<tr><td>Home</td><td><code>/ops</code></td><td>KPIs, department links</td></tr>
+<tr><td>Adoption</td><td><code>/ops/adoption</code></td><td>TN pilot stats</td></tr>
+<tr><td>Marketing</td><td><code>/ops/marketing</code></td><td>Automation controls (dormant)</td></tr>
+<tr><td>Shelter &amp; ID</td><td><code>/ops/shelter-id</code></td><td>Match queue</td></tr>
+<tr><td>Wellness</td><td><code>/ops/wellness</code></td><td>Partner URL config</td></tr>
+<tr><td>Product</td><td><code>/ops/product</code></td><td>PWA version, features</td></tr>
+<tr><td>System</td><td><code>/ops/system</code></td><td>Supabase, env health</td></tr>
+<tr><td>ViT Pro</td><td><code>/vit-pro</code></td><td>CDS foundation portal</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Data, Privacy &amp; Security</h1>
+<table>
+<tr><th>Data class</th><th>Storage</th><th>Access</th></tr>
+<tr><td>User auth</td><td>Supabase Auth</td><td>RLS policies</td></tr>
+<tr><td>User profiles</td><td><code>user_profiles</code></td><td>Role-based</td></tr>
+<tr><td>ViT analysis</td><td>Symptom feedback store</td><td>Admin review queue</td></tr>
+<tr><td>ID embeddings</td><td>pgvector</td><td>Shelter review only for matches</td></tr>
+<tr><td>Partner listings</td><td>Supabase</td><td>Partner RLS</td></tr>
+<tr><td>Pet photos (ViT)</td><td>Transient analyze</td><td>Not long-term medical record without consent</td></tr>
+<tr><td>ViT Pro reports</td><td>API response</td><td>Advisor portal; audit log V1</td></tr>
+</table>
+<h3>Security practices</h3>
+<ul>
+<li>Service role keys server-only (never client)  </li>
+<li>Partner/ops routes auth-gated  </li>
+<li>Preview mode robots blocking pre-launch  </li>
+<li>BAA templates for ViT Pro clinic data <em>(V1)</em>  </li>
+<li>Security audit budget: $6–9K (ViT Pro Y1)  </li>
+</ul>
+<h3>HIPAA note</h3>
+<p>Freedom Paws is <strong>not a covered entity</strong>. ViT Pro clinic workflows may require BAA-adjacent handling if PHI stored — legal review before national vet rollout.</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Intellectual Property &amp; Patent Strategy</h1>
+<p><em>Not legal advice — counsel must confirm.</em></p>
+<h3>IP stack</h3>
+<table>
+<tr><th>Type</th><th>Asset</th><th>Status</th></tr>
+<tr><td><strong>Trademark</strong></td><td>Freedom Paws Wellness™, SuperBud™, ViT Pro™</td><td>Filing planned</td></tr>
+<tr><td><strong>Copyright</strong></td><td>Code, protocol text, images</td><td>Automatic</td></tr>
+<tr><td><strong>Trade secret</strong></td><td>Symptom lexicon, rubrics, RAG curation, congruency thresholds</td><td>Active</td></tr>
+<tr><td><strong>Provisional patent</strong></td><td>Integrated capture → ID + dual-tier ViT + protocol fusion</td><td>Recommended pre-B2B marketing</td></tr>
+</table>
+<h3>Potentially patentable (narrow)</h3>
+<ul>
+<li>Unified media session → biometric ID + Tier A + Tier B + protocol map  </li>
+<li>Congruency-gated urgency fusion (<code>urgent-assessment.ts</code>)  </li>
+<li>Owner→vet tier handoff with audit version ID  </li>
+<li>Gait capture protocol <em>(if novel vs prior art)</em>  </li>
+</ul>
+<h3>Weak / crowded prior art</h3>
+<ul>
+<li>Generic AI pet triage  </li>
+<li>RAG + PDF medical reports  </li>
+<li>Photo symptom checkers (Yipara, VetPati, PetMD)  </li>
+</ul>
+<h3>Prior art search terms</h3>
+<p><code>veterinary symptom checker AI</code> · <code>pet vision mobile</code> · <code>clinical decision support veterinary</code> · <code>dog lameness smartphone video</code></p>
+<p><strong>Patent budget:</strong> Provisional $2–5K · Utility $10–25K over 2–4 years</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Competitive Landscape</h1>
+<table>
+<tr><th>Company</th><th>Strength</th><th>Gap vs Freedom Paws</th></tr>
+<tr><td><strong>Chewy</strong></td><td>Logistics, scale</td><td>No holistic protocols; no biometric ID</td></tr>
+<tr><td><strong>Pawp / Vetster</strong></td><td>Telehealth</td><td>No ViT→protocol; no ID/adoption</td></tr>
+<tr><td><strong>Whistle / Fi</strong></td><td>GPS hardware</td><td>No wellness AI; no protocols</td></tr>
+<tr><td><strong>Yipara / VetPati</strong></td><td>Photo triage</td><td>No ID, adoption, XRPL, vet CDS tier</td></tr>
+<tr><td><strong>Zoetis Imagyst</strong></td><td>Lab AI</td><td>Not phone-first consumer</td></tr>
+<tr><td><strong>Microchip registries</strong></td><td>Chip lookup</td><td>No unchipped biometric wedge</td></tr>
+</table>
+<p><strong>Whitespace:</strong> AI triage → holistic protocol → identity → reunion → affiliate protection in <strong>one PWA</strong>.</p>
+<p><strong>Dominance rating:</strong> 7.5/10 niche · 5.5/10 vs Chewy head-on <em>(internal assessment)</em>.</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Build Value &amp; Replacement Cost</h1>
+<p><strong>As of June 10, 2026</strong> — module-based agency estimate at $150/hr blended.</p>
+<table>
+<tr><th>Module</th><th>Contract value built</th></tr>
+<tr><td>PWA platform</td><td>$14,250</td></tr>
+<tr><td>ViT Diagnostics</td><td>$37,800</td></tr>
+<tr><td>Photo Booth</td><td>$40,800</td></tr>
+<tr><td>Protocols</td><td>$13,500</td></tr>
+<tr><td>Token Shop</td><td>$25,200</td></tr>
+<tr><td>Monitor</td><td>$10,500</td></tr>
+<tr><td>My Pets</td><td>$4,800</td></tr>
+<tr><td>Freedom Paws ID T1</td><td>$85,500</td></tr>
+<tr><td>Admin / symptoms</td><td>$8,100</td></tr>
+<tr><td>Docs / DevOps</td><td>$8,500</td></tr>
+<tr><td>Framer + brand</td><td>$16,900</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>~$266,000</strong></td></tr>
+</table>
+<p><strong>Remaining to launch (est.):</strong> $80–120K contract equivalent (Monitor relay, legal, Stripe, Track 2 MVP, QA).</p>
+<p><strong>ViT Pro add-on (full module):</strong> $102–150K contract · $50–190K all-in with validation.</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Financial Projections — Platform (Base Case)</h1>
+<p><em>From 10-Year Vision &amp; 5-Year Competitive Model — estimates not guarantees.</em></p>
+<h3>Revenue assumptions</h3>
+<table>
+<tr><th>Assumption</th><th>Value</th></tr>
+<tr><td>Core membership</td><td>$9.99/mo</td></tr>
+<tr><td>Protocol price</td><td>~$18</td></tr>
+<tr><td>Payment processing</td><td>3%</td></tr>
+<tr><td>Give-back reserve</td><td>10% net</td></tr>
+<tr><td>Free:paid ratio</td><td>~2:1 narrowing over time</td></tr>
+</table>
+<h3>Annual summary</h3>
+<table>
+<tr><th>Year</th><th>Paying members</th><th>Annual revenue</th><th>Valuation range</th></tr>
+<tr><td><strong>2026</strong></td><td>280</td><td>$21K</td><td>$1–2M</td></tr>
+<tr><td><strong>2027</strong></td><td>1,450</td><td>$158K</td><td>$2–5M</td></tr>
+<tr><td><strong>2028</strong></td><td>3,600</td><td>$463K</td><td>$4–10M</td></tr>
+<tr><td><strong>2029</strong></td><td>7,000</td><td>$975K</td><td>$8–20M</td></tr>
+<tr><td><strong>2030</strong></td><td>12,800</td><td>$1.83M</td><td>$15–35M</td></tr>
+</table>
+<h3>Revenue mix (mature)</h3>
+<table>
+<tr><th>Lane</th><th>Share</th></tr>
+<tr><td>Protocol shop + membership</td><td>40%</td></tr>
+<tr><td>Affiliates (insurance, telehealth, whole-food)</td><td>35%</td></tr>
+<tr><td>Shelter B2B + ID</td><td>15%</td></tr>
+<tr><td>ViT Pro B2B</td><td>10% (growing)</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>ViT Pro Financial Addendum</h1>
+<h3>Pricing (planned)</h3>
+<table>
+<tr><th>Plan</th><th>Price</th><th>Includes</th></tr>
+<tr><td>Practice Starter</td><td>$199/mo</td><td>5 seats, 200 scans</td></tr>
+<tr><td>Practice Pro</td><td>$299/mo</td><td>10 seats, 500 scans</td></tr>
+<tr><td>Overage</td><td>$0.75/scan</td><td>Above quota</td></tr>
+</table>
+<h3>ViT-attributed revenue (conservative)</h3>
+<table>
+<tr><th>Year</th><th>Total ViT-attributed</th></tr>
+<tr><td>Y1</td><td>$92K</td></tr>
+<tr><td>Y2</td><td>$408K</td></tr>
+<tr><td>Y3</td><td>$1.12M</td></tr>
+<tr><td>Y5</td><td>$2.56M</td></tr>
+</table>
+<h3>Standalone ViT Pro Y5</h3>
+<p>~$1.91M revenue · $15–23M SaaS valuation at 8–12× ARR</p>
+<h3>Strategic acquisition premium</h3>
+<p>Zoetis / IDEXX / Mars-Kinship: +30–50% over SaaS multiple for validated CDS + data flywheel.</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Valuation Summary</h1>
+<h3>Today (May–Jun 2026)</h3>
+<table>
+<tr><th>Method</th><th>Range</th></tr>
+<tr><td>Replacement cost</td><td>$400–700K</td></tr>
+<tr><td>Berkus pre-revenue</td><td>$750K–1.5M</td></tr>
+<tr><td>Strategic option</td><td>$1–2M</td></tr>
+<tr><td><strong>Planning valuation</strong></td><td><strong>$1.0–1.5M</strong></td></tr>
+</table>
+<h3>With ViT Pro optionality</h3>
+<p>Post-V0 advisor validation: +$0.5–2M option value  </p>
+<p>At scale (Y3 integrated): +$5–15M  </p>
+<h3>Y10 stretch (2035)</h3>
+<table>
+<tr><th>Case</th><th>Revenue</th><th>Valuation</th></tr>
+<tr><td>Base</td><td>$5.35M</td><td>$45–110M</td></tr>
+<tr><td>Stretch</td><td>$8–12M</td><td>$80–150M</td></tr>
+</table>
+<p><em>Not a 409A appraisal.</em></p>
+<hr/>
+<div class="page-break"></div>
+<h1>Roadmap — Dissected</h1>
+<h3>Q3 2026 (now)</h3>
+<ul>
+<li>[x] Infrastructure phases 1–3  </li>
+<li>[x] ViT Pro Phase V0 foundation + portal  </li>
+<li>[ ] LLC/trademark clearance  </li>
+<li>[ ] Framer <code>/adopt</code> publish  </li>
+<li>[ ] First TN demo listing  </li>
+<li>[ ] ViT Pro advisor recruited  </li>
+<li>[ ] Shelter pilot outreach (dormant until launch gate)  </li>
+</ul>
+<h3>Q4 2026</h3>
+<ul>
+<li>[ ] Public launch post-legal  </li>
+<li>[ ] Founding member campaign  </li>
+<li>[ ] ID biometric pilot Oct 1  </li>
+<li>[ ] ViT Pro 50-photo benchmark complete  </li>
+<li>[ ] Track 2 hardware QA  </li>
+</ul>
+<h3>2027 H1</h3>
+<ul>
+<li>[ ] ViT Pro V1 — PDF, billing, 3-clinic pilot  </li>
+<li>[ ] Track 2 scanner MVP  </li>
+<li>[ ] Stripe membership live  </li>
+<li>[ ] First give-back distribution  </li>
+</ul>
+<h3>2027 H2 – 2030</h3>
+<ul>
+<li>[ ] 15+ shelter partners  </li>
+<li>[ ] ViT Pro gait module  </li>
+<li>[ ] MPT on-ledger minting + DAO Snapshot  </li>
+<li>[ ] Monitor production relay  </li>
+<li>[ ] National ID promotion Jan 2027  </li>
+</ul>
+<hr/>
+<div class="page-break"></div>
+<h1>Grant &amp; Capital Use Framework</h1>
+<h3>XRPL Grants alignment</h3>
+<table>
+<tr><th>Milestone</th><th>Deliverable</th></tr>
+<tr><td>M1</td><td>Xaman checkout live ✅</td></tr>
+<tr><td>M2</td><td>Protocol catalog + treasury ✅</td></tr>
+<tr><td>M3</td><td>MPT issuance + royalty routing</td></tr>
+<tr><td>M4</td><td>Dynamic NFT wellness record</td></tr>
+<tr><td>M5</td><td>DAO Snapshot governance</td></tr>
+</table>
+<h3>Use of funds (illustrative $250K seed/grant)</h3>
+<table>
+<tr><th>Category</th><th>%</th><th>Amount</th></tr>
+<tr><td>ViT Pro validation + legal</td><td>25%</td><td>$62K</td></tr>
+<tr><td>Track 2 scanner pilot kits</td><td>20%</td><td>$50K</td></tr>
+<tr><td>Shelter onboarding (TN→national)</td><td>20%</td><td>$50K</td></tr>
+<tr><td>Marketing launch (grassroots)</td><td>15%</td><td>$38K</td></tr>
+<tr><td>Monitor production relay</td><td>10%</td><td>$25K</td></tr>
+<tr><td>Reserve</td><td>10%</td><td>$25K</td></tr>
+</table>
+<h3>Grant narrative hooks</h3>
+<ul>
+<li><strong>Veteran service dog wellness</strong> — Patriot Immune + give-back  </li>
+<li><strong>Shelter technology</strong> — unchipped reunion  </li>
+<li><strong>XRPL utility</strong> — real commerce not speculation  </li>
+<li><strong>Rural/veteran access</strong> — PWA, no app store, phone-first  </li>
+</ul>
+<p><strong>Contact:</strong> grants@freedompawsinc.com</p>
+<hr/>
+<div class="page-break"></div>
+<h1>Technical Appendix — Protocol JSON Metadata (Sample)</h1>
+<p><em>Representative on-ledger / IPFS metadata schema for one protocol. Repeat pattern for all 10 slugs.</em></p>
+<pre><code>{
+  &quot;schema_version&quot;: &quot;1.0.0&quot;,
+  &quot;protocol_slug&quot;: &quot;max-movement&quot;,
+  &quot;branded_title&quot;: &quot;Max Movement Pro – Joint Support&quot;,
+  &quot;spec_category&quot;: &quot;Joint &amp; Mobility Protocol&quot;,
+  &quot;utility_type&quot;: &quot;educational_access&quot;,
+  &quot;token_standard&quot;: &quot;MPT_XLS89&quot;,
+  &quot;xrpl&quot;: {
+    &quot;network&quot;: &quot;mainnet&quot;,
+    &quot;currency_display&quot;: &quot;FPMAX&quot;,
+    &quot;royalty_bps&quot;: 500,
+    &quot;impact_treasury&quot;: &quot;TBD_POST_LLC&quot;
+  },
+  &quot;pricing&quot;: {
+    &quot;rlusd&quot;: 18,
+    &quot;usd_display&quot;: 18,
+    &quot;xrp_fallback&quot;: 25
+  },
+  &quot;vit_mapping&quot;: {
+    &quot;primary_signals&quot;: [&quot;lameness&quot;, &quot;stiffness&quot;, &quot;gait asymmetry&quot;, &quot;hip dysplasia signs&quot;],
+    &quot;vision_regions&quot;: [&quot;gait&quot;, &quot;posture&quot;, &quot;body&quot;],
+    &quot;urgent_redirect&quot;: true
+  },
+  &quot;content&quot;: {
+    &quot;detail_route&quot;: &quot;/protocols/max-movement&quot;,
+    &quot;shop_deep_link&quot;: &quot;/token-shop?protocol=max-movement#max-movement&quot;,
+    &quot;hero_image&quot;: &quot;/images/protocols/max-movement.png&quot;
+  },
+  &quot;legal&quot;: {
+    &quot;disclaimer&quot;: &quot;Educational only. Not veterinary advice.&quot;,
+    &quot;classification&quot;: &quot;utility_token&quot;
+  },
+  &quot;metadata_uri&quot;: &quot;ipfs://freedom-paws/protocols/max-movement/v1.json&quot;
+}</code></pre>
+<p><strong>All 10 slugs:</strong> <code>max-movement</code>, <code>freedom-calm</code>, <code>liver-kidney-detox</code>, <code>gut-balance</code>, <code>infrared-spine</code>, <code>allergy-shield</code>, <code>fresh-smile-dental</code>, <code>heart-strong</code>, <code>patriot-immune</code>, <code>clear-vision</code></p>
+<hr/>
+<div class="page-break"></div>
+<h1>Technical Appendix — API Surface (Selected)</h1>
+<table>
+<tr><th>Endpoint</th><th>Method</th><th>Purpose</th></tr>
+<tr><td><code>/api/analyze</code></td><td>POST</td><td>ViT wellness, identity, vit_pro</td></tr>
+<tr><td><code>/api/vit-pro/status</code></td><td>GET</td><td>Module status (auth)</td></tr>
+<tr><td><code>/api/wellness/config-status</code></td><td>GET</td><td>Partner URL readiness</td></tr>
+<tr><td><code>/api/xumm/*</code></td><td>POST</td><td>XRPL checkout payloads</td></tr>
+<tr><td><code>/api/pricing/live</code></td><td>GET</td><td>XRP/USD live rate</td></tr>
+<tr><td><code>/api/symptom-feedback</code></td><td>POST</td><td>ViT feedback queue</td></tr>
+<tr><td>Partner auth</td><td>Supabase</td><td>Magic link + OTP</td></tr>
+</table>
+<h3>Analyze modes</h3>
+<table>
+<tr><th>Mode</th><th>Audience</th><th>Output</th></tr>
+<tr><td><code>wellness</code></td><td>Members</td><td>Protocol recommendations</td></tr>
+<tr><td><code>identity</code></td><td>ID enroll/found</td><td>Region descriptors</td></tr>
+<tr><td><code>vit_pro</code></td><td>Advisors/vets</td><td>CDS report + optional public tier</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Risk Register</h1>
+<table>
+<tr><th>Risk</th><th>Severity</th><th>Mitigation</th></tr>
+<tr><td>LLC/trademark delay</td><td>Medium</td><td>Preview mode; NDA for partners</td></tr>
+<tr><td>ViT hallucination</td><td>High</td><td>Disclaimers, urgency gates, ViT Pro RAG citations</td></tr>
+<tr><td>FDA SaMD reclassification</td><td>High</td><td>CDS framing; vet-only strong claims</td></tr>
+<tr><td>XRPL liquidity / UX</td><td>Medium</td><td>Stripe secondary rail</td></tr>
+<tr><td>Shelter adoption friction</td><td>Medium</td><td>Free pilot; human match review</td></tr>
+<tr><td>Competitor copy features</td><td>Medium</td><td>Integrated moat (ID + adoption + protocols)</td></tr>
+<tr><td>API cost at scale</td><td>Medium</td><td>Metering, ViT Pro subscription pricing</td></tr>
+<tr><td>False ID match</td><td>High</td><td>Human approval; threshold tuning</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Contact &amp; Document Control</h1>
+<table>
+<tr><th>Purpose</th><th>Contact</th></tr>
+<tr><td>General / technical</td><td>info@freedompawsinc.com</td></tr>
+<tr><td>Grants / capital</td><td>grants@freedompawsinc.com</td></tr>
+<tr><td>Legal</td><td><em>(counsel TBD post-LLC)</em></td></tr>
+<tr><td>Partners</td><td>partners@freedompawsinc.com</td></tr>
+</table>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td><strong>Document</strong></td><td>Technical Master Binder v2.0</td></tr>
+<tr><td><strong>Date</strong></td><td>May 2026</td></tr>
+<tr><td><strong>Repo</strong></td><td><code>docs/binders/Freedom-Paws-TECHNICAL-Master-Binder-May-2026.md</code></td></tr>
+<tr><td><strong>Documents folder</strong></td><td><code>~/Documents/Freedom Paws Wellness/</code></td></tr>
+<tr><td><strong>Redact before public</strong></td><td>§14 Security detail, §18–20 financials, §22 capital table, API keys</td></tr>
+</table>
+<hr/>
+<div class="page-break"></div>
+<h1>Data Room — PDF Package (Technical)</h1>
+<table>
+<tr><th>PDF file</th><th>Audience</th></tr>
+<tr><td><strong>Freedom-Paws-TECHNICAL-Master-Binder-May-2026.pdf</strong></td><td>Attorneys · accelerators · <strong>XRPL Grants</strong></td></tr>
+<tr><td><strong>Appendix-B-ViT-Pro-Advisor-Sheet.pdf</strong></td><td>Veterinary advisor · regulatory counsel</td></tr>
+<tr><td><strong>Appendix-C-Protocol-JSON-Metadata-All-10.pdf</strong></td><td>XRPL Grants · on-ledger metadata</td></tr>
+<tr><td><strong>protocol-metadata-all-10.json</strong></td><td>Machine-readable grant submission</td></tr>
+</table>
+<p><strong>General binder (separate):</strong> <code>Freedom-Paws-GENERAL-Master-Binder-May-2026.pdf</code> + <strong>Appendix A</strong> Token Shop one-pager — public only.</p>
+<p>All PDFs: <code>~/Documents/Freedom Paws Wellness/</code></p>
+<hr/>
+<p><em>Freedom Paws Wellness LLC — Technical Master Binder v2.0 — Honor Buddy's Legacy.</em></p>
+<p><em>Estimates and forward-looking statements are not guarantees. Licensed veterinarians remain responsible for diagnosis and treatment. Consult qualified counsel before token issuance or medical product claims.</em></p>
+<div class="footer-note">Freedom Paws Wellness © 2026 · Honor Buddy's Legacy · Educational purposes only where applicable.</div>
+</body>
+</html>

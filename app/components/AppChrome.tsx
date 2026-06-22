@@ -4,6 +4,7 @@ import { getServerUser } from '@/lib/supabase/server';
 import Navbar from './Navbar';
 import PartnerNavbar from './PartnerNavbar';
 import OpsNavbar from './OpsNavbar';
+import VitProNavbar from './VitProNavbar';
 import SiteFooter from './SiteFooter';
 import PartnerFooter from './PartnerFooter';
 
@@ -11,6 +12,7 @@ export default async function AppChrome({ children }: { children: React.ReactNod
   const surface = await getAppSurface();
   const partner = surface === 'partner';
   const ops = surface === 'ops';
+  const vitpro = surface === 'vitpro';
 
   let partnerUserEmail: string | null = null;
   if (partner && isSupabaseConfigured()) {
@@ -20,9 +22,17 @@ export default async function AppChrome({ children }: { children: React.ReactNod
 
   return (
     <>
-      {ops ? <OpsNavbar /> : partner ? <PartnerNavbar userEmail={partnerUserEmail} /> : <Navbar />}
+      {vitpro ? (
+        <VitProNavbar />
+      ) : ops ? (
+        <OpsNavbar />
+      ) : partner ? (
+        <PartnerNavbar userEmail={partnerUserEmail} />
+      ) : (
+        <Navbar />
+      )}
       {children}
-      {ops ? null : partner ? <PartnerFooter /> : <SiteFooter />}
+      {ops || vitpro ? null : partner ? <PartnerFooter /> : <SiteFooter />}
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import BrandLogo from '@/app/components/BrandLogo';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function AdminLoginPage() {
         onSubmit={(e) => void submit(e)}
         className="w-full max-w-md rounded-3xl border border-[#F5C242]/30 bg-[#1F2A44] p-8"
       >
+        <BrandLogo href="/" variant="consumer" size="hero" className="mx-auto mb-6" />
         <h1 className="text-3xl font-bold mb-2">Admin Login</h1>
         <p className="text-sm text-white/60 mb-6">Symptom lexicon review queue</p>
 

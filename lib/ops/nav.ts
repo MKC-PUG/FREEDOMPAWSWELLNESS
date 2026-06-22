@@ -12,6 +12,7 @@ export const OPS_NAV = [
 
 export const OPS_QUICK_LINKS = [
   { label: 'Partner portal', href: '/partner' },
+  { label: 'ViT Pro CDS', href: '/vit-pro' },
   { label: 'Public adopt TN', href: '/adopt/tn', external: false },
   { label: 'Match queue', href: '/id/match' },
   { label: 'Symptom admin', href: '/admin/symptoms' },

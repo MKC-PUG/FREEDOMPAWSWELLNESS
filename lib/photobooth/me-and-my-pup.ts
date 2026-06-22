@@ -1108,7 +1108,7 @@ export function variantBackgroundUrls(
   return [];
 }
 
-export const ME_AND_MY_PUP_LOGO_URL = '/images/icon-192.png';
+export const ME_AND_MY_PUP_LOGO_URL = '/images/brand/logo-paw.png';
 
 export function variantUsesLogo(variant: MeAndMyPupVariant): boolean {
   return variant === 'love-this-app';

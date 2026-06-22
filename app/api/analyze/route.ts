@@ -7,12 +7,14 @@ import {
   isValidAnalyzeImage,
 } from '@/lib/ai/media-utils';
 import type { AnalyzeMode } from '@/lib/id/types';
-import { toAnalyzeApiResponse, toIdentityAnalyzeApiResponse } from '@/lib/ai/types';
+import { toAnalyzeApiResponse, toIdentityAnalyzeApiResponse, toVitProAnalyzeApiResponse } from '@/lib/ai/types';
 import { getApprovedAliases, recordAnalysis } from '@/lib/symptom-feedback-store';
+import { analyzeVitPro } from '@/lib/vit-pro/vit-pro-analyze';
+import { parseVitProRegionHint } from '@/lib/vit-pro/detect-region';
 
 function parseAnalyzeMode(raw: string): AnalyzeMode {
   const mode = raw.trim().toLowerCase();
-  if (mode === 'identity' || mode === 'both') return mode;
+  if (mode === 'identity' || mode === 'both' || mode === 'vit_pro') return mode;
   return 'wellness';
 }
 
@@ -69,6 +71,35 @@ export async function POST(request: NextRequest) {
           usedVision: identity.usedVision,
           mediaType: identity.mediaType,
           frameCount: identity.frameCount,
+        })
+      );
+    }
+
+    if (mode === 'vit_pro') {
+      const signalmentNotes = (formData.get('signalmentNotes') || '').toString().trim() || undefined;
+      const regionHint = parseVitProRegionHint((formData.get('vitRegion') || '').toString());
+      const outputTier = (formData.get('outputTier') || 'vet').toString().trim().toLowerCase();
+
+      const vitResult = await analyzeVitPro({
+        symptoms,
+        frames,
+        mediaType,
+        signalmentNotes,
+        regionHint,
+      });
+
+      if (!vitResult.success || !vitResult.vet) {
+        return NextResponse.json(
+          { success: false, error: vitResult.error || 'ViT Pro analysis failed' },
+          { status: vitResult.error?.includes('not enabled') ? 503 : 400 }
+        );
+      }
+
+      const analysisId = vitResult.vet.reportId;
+      return NextResponse.json(
+        toVitProAnalyzeApiResponse(analysisId, vitResult.vet, {
+          includePublic: outputTier === 'both',
+          publicOutput: vitResult.public,
         })
       );
     }

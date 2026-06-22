@@ -126,7 +126,7 @@ export type IdentityAnalysisResult = {
   disclaimer: string;
 };
 
-export type AnalyzeMode = 'wellness' | 'identity' | 'both';
+export type AnalyzeMode = 'wellness' | 'identity' | 'both' | 'vit_pro';
 
 /** Default match threshold — tune during CA/TN pilot */
 export const ID_MATCH_THRESHOLD_DEFAULT = 0.72;

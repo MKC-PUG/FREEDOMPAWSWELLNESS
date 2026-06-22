@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/sync-pwa-version.mjs && node scripts/fetch-imgly-bg-assets.mjs && node scripts/generate-maskable-icon.mjs && next build --webpack",
+    "build": "node scripts/sync-pwa-version.mjs && node scripts/generate-brand-assets.mjs && node scripts/fetch-imgly-bg-assets.mjs && node scripts/generate-maskable-icon.mjs && next build --webpack",
     "start": "next start",
     "start:mobile": "npm run build && npm run stop:mobile && next start -H 0.0.0.0 -p 3000",
     "stop:mobile": "lsof -ti:3000 | xargs kill 2>/dev/null || true",
@@ -19,10 +19,14 @@
     "partner:bootstrap": "node scripts/partner-bootstrap.mjs",
     "marketing:crm-export": "node scripts/marketing/export-crm-sheet.mjs",
     "marketing:tn-outreach": "node scripts/marketing/generate-tn-pilot-outreach.mjs",
+    "ops:migrate": "node scripts/run-ops-migrations.mjs",
+    "ops:verify": "node scripts/ops-launch-verify.mjs",
     "id:backfill-intake-mirror": "npx tsx scripts/backfill-intake-mirror.ts",
     "id:test:intake-fusion": "npx tsx scripts/test-intake-fusion.ts",
     "vercel:env:push": "node scripts/vercel-env-push.mjs",
-    "lint": "eslint"
+    "vit-pro:benchmark": "npx tsx scripts/vit-pro-run-benchmark.ts",
+    "binders:pdf": "node scripts/binders/generate-all-binder-pdfs.mjs",
+    "brand:assets": "node scripts/generate-brand-assets.mjs"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",

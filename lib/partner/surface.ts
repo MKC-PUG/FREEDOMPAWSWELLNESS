@@ -10,9 +10,15 @@ export const PARTNER_PATH_PREFIX = '/partner';
 /** FP ops command center — any host. */
 export const OPS_PATH_PREFIX = '/ops';
 
+/** ViT Pro veterinary CDS portal — any host. */
+export const VIT_PRO_PATH_PREFIX = '/vit-pro';
+
 export function surfaceFromPathname(pathname: string): AppSurface | null {
   if (pathname === OPS_PATH_PREFIX || pathname.startsWith(`${OPS_PATH_PREFIX}/`)) {
     return 'ops';
+  }
+  if (pathname === VIT_PRO_PATH_PREFIX || pathname.startsWith(`${VIT_PRO_PATH_PREFIX}/`)) {
+    return 'vitpro';
   }
   if (pathname === PARTNER_PATH_PREFIX || pathname.startsWith(`${PARTNER_PATH_PREFIX}/`)) {
     return 'partner';
@@ -30,6 +36,7 @@ export async function getAppSurface(): Promise<AppSurface> {
   const h = await headers();
   const marked = h.get(FP_SURFACE_HEADER);
   if (marked === 'ops') return 'ops';
+  if (marked === 'vitpro') return 'vitpro';
   if (marked === 'partner') return 'partner';
   if (marked === 'consumer') return 'consumer';
   const host = h.get('host') ?? '';

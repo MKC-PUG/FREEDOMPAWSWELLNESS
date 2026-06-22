@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>ViT Pro Vet Portal Training Manual</title>
+<style>
+@page { size: letter; margin: 0.75in; }
+@media print {
+  .page-break { page-break-before: always; break-before: page; }
+  h1, h2, h3 { break-after: avoid; }
+  table, pre, blockquote { break-inside: avoid; }
+}
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+  max-width: 7.5in;
+  margin: 0 auto;
+  padding: 0.25in;
+}
+h1 { font-size: 22pt; color: #0A1428; margin-top: 0; border-bottom: 2px solid #F5C242; padding-bottom: 0.2em; }
+h2 { font-size: 16pt; color: #0A1428; margin-top: 1.2em; }
+h3 { font-size: 13pt; color: #333; }
+.cover-title { font-size: 28pt; text-align: center; border: none; color: #0A1428; }
+.cover-sub { text-align: center; font-size: 14pt; color: #555; }
+.cover-meta { text-align: center; margin-top: 2em; font-size: 11pt; }
+.hero-placeholder {
+  border: 2px dashed #ccc; background: #f8f8f8; text-align: center;
+  padding: 2em; margin: 1.5em 0; color: #888; font-size: 10pt;
+}
+table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 10pt; }
+th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #0A1428; color: #fff; }
+tr:nth-child(even) { background: #f6f6f6; }
+code { background: #f0f0f0; padding: 1px 4px; font-size: 9pt; border-radius: 3px; }
+pre {
+  background: #f4f4f4; border: 1px solid #ddd; padding: 10px;
+  font-size: 8.5pt; line-height: 1.35; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word;
+}
+blockquote {
+  border-left: 4px solid #F5C242; margin: 1em 0; padding: 0.5em 1em;
+  background: #fffbf0; color: #333;
+}
+ul, ol { margin: 0.5em 0; padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+a { color: #1565c0; }
+.doc-header {
+  font-size: 9pt; color: #666; border-bottom: 1px solid #ddd;
+  padding-bottom: 8px; margin-bottom: 16px;
+}
+.technical .doc-header { border-color: #0288d1; }
+.footer-note { font-size: 9pt; color: #666; margin-top: 2em; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body class="technical">
+<div class="doc-header">ViT Pro Vet Portal Training Manual · Freedom Paws Wellness · May 2026</div>
+<h1 class="cover-title">Freedom Paws — ViT Pro Veterinary Portal Training Manual</h1>
+<p><strong>Version:</strong> 1.0  </p>
+<p><strong>Date:</strong> May 2026  </p>
+<p><strong>Audience:</strong> Veterinary advisors, clinical reviewers, and authorized vet staff  </p>
+<p><strong>Portal URL:</strong> https://app.freedompawsinc.com/vit-pro  </p>
+<hr/>
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#1-welcome--what-vit-pro-is">Welcome &amp; what ViT Pro is</a></li>
+<li><a href="#2-before-you-start--access-requirements">Before you start — access requirements</a></li>
+<li><a href="#3-signing-in--click-by-click">Signing in — click by click</a></li>
+<li><a href="#4-vit-pro-dashboard-overview">ViT Pro dashboard overview</a></li>
+<li><a href="#5-task-run-a-clinical-cds-analysis">Task: Run a clinical CDS analysis</a></li>
+<li><a href="#6-task-choose-body-region--signalment">Task: Choose body region &amp; signalment</a></li>
+<li><a href="#7-task-capture-or-upload-media">Task: Capture or upload media</a></li>
+<li><a href="#8-task-read-tier-a-vs-tier-b-output">Task: Read Tier A vs Tier B output</a></li>
+<li><a href="#9-task-run-benchmark-cases-advisors">Task: Run benchmark cases (advisors)</a></li>
+<li><a href="#10-task-browse-clinical-corpu">Task: Browse clinical corpus</a></li>
+<li><a href="#11-clinical-workflow--documentation-standards">Clinical workflow &amp; documentation standards</a></li>
+<li><a href="#12-privacy-liability--scope-limits">Privacy, liability &amp; scope limits</a></li>
+<li><a href="#13-troubleshooting">Troubleshooting</a></li>
+<li><a href="#appendix-a--url-quick-reference">Appendix A — URL quick reference</a></li>
+<li><a href="#appendix-b--body-regions--rubrics">Appendix B — Body regions &amp; rubrics</a></li>
+<li><a href="#appendix-c--output-tier-comparison">Appendix C — Output tier comparison</a></li>
+<li><a href="#appendix-d--glossary">Appendix D — Glossary</a></li>
+<li><a href="#appendix-e--advisor-onboarding-checklist">Appendix E — Advisor onboarding checklist</a></li>
+</ol>
+<hr/>
+<h2>1. Welcome &amp; what ViT Pro is</h2>
+<p><strong>ViT Pro</strong> (Veterinary Intelligence Technology — Professional) is Freedom Paws' <strong>clinical decision support (CDS)</strong> module for licensed veterinary professionals and designated advisors.</p>
+<table>
+<tr><th>Aspect</th><th>Description</th></tr>
+<tr><td><strong>Purpose</strong></td><td>Structured vision-AI analysis of eye, skin, and oral findings with rubric-scored output</td></tr>
+<tr><td><strong>Not a substitute for</strong></td><td>Physical exam, diagnostics, or veterinary judgment</td></tr>
+<tr><td><strong>Dual output</strong></td><td><strong>Tier A</strong> (owner-safe summary) · <strong>Tier B</strong> (full clinical detail for vets)</td></tr>
+<tr><td><strong>Evidence layer</strong></td><td>Keyword RAG retrieval from an curated clinical corpus (V0)</td></tr>
+</table>
+<p>This portal is separate from the <strong>consumer ViT Diagnostics</strong> module (<code>/diagnostics</code>) used by pet owners.</p>
+<hr/>
+<h2>2. Before you start — access requirements</h2>
+<p>You need <strong>one</strong> of the following:</p>
+<table>
+<tr><th>Access method</th><th>How it is granted</th></tr>
+<tr><td><strong>Advisor email</strong></td><td>Your email added to <code>VIT_PRO_ADVISOR_EMAILS</code> by Freedom Paws</td></tr>
+<tr><td><strong>Vet staff role</strong></td><td><code>vet_staff</code> assigned in Supabase <code>user_profiles</code></td></tr>
+<tr><td><strong>FP ops</strong></td><td>Founder/ops accounts (<code>fp_ops</code>) — full access</td></tr>
+</table>
+<p>Additional requirements:</p>
+<ul>
+<li>[ ] <code>VIT_PRO_ENABLED=true</code> in production environment</li>
+<li>[ ] Valid Freedom Paws account (same login as member app)</li>
+<li>[ ] Device with camera <strong>or</strong> ability to upload clinical photos / short video</li>
+</ul>
+<p><strong>If you see &quot;Access restricted&quot;</strong> — contact Freedom Paws to add your email before retrying.</p>
+<hr/>
+<h2>3. Signing in — click by click</h2>
+<h3>First-time sign-in</h3>
+<ol>
+<li>Open <strong>https://app.freedompawsinc.com/vit-pro</strong></li>
+<li>If not signed in, you are redirected to login with return path <code>/vit-pro</code>.</li>
+<li>Enter your <strong>authorized email address</strong>.</li>
+<li>Tap <strong>Send magic link</strong>.</li>
+<li>Check email for magic link <strong>or</strong> 6-digit OTP code.</li>
+<li><strong>Option A:</strong> Tap magic link once (Safari recommended on iPhone).</li>
+<li><strong>Option B:</strong> Enter 6-digit code on login page → <strong>Verify code</strong>.</li>
+<li>You land on the <strong>ViT Pro</strong> home dashboard with navigation: <strong>Overview · Analyze · Benchmark · Corpus</strong>.</li>
+</ol>
+<h3>Bookmark for daily use</h3>
+<p>Save: <strong>https://app.freedompawsinc.com/vit-pro/analyze</strong></p>
+<hr/>
+<h2>4. ViT Pro dashboard overview</h2>
+<p>After sign-in, the <strong>ViT Pro navbar</strong> shows:</p>
+<table>
+<tr><th>Nav item</th><th>Path</th><th>Purpose</th></tr>
+<tr><td><strong>Overview</strong></td><td><code>/vit-pro</code></td><td>Module status, version, access confirmation</td></tr>
+<tr><td><strong>Analyze</strong></td><td><code>/vit-pro/analyze</code></td><td>Run CDS on photo or video</td></tr>
+<tr><td><strong>Benchmark</strong></td><td><code>/vit-pro/benchmark</code></td><td>Advisor validation against case library</td></tr>
+<tr><td><strong>Corpus</strong></td><td><code>/vit-pro/corpus</code></td><td>Browse indexed clinical reference material</td></tr>
+</table>
+<p>The overview page may show API status from <code>/api/vit-pro/status</code> (case counts, corpus manifest version).</p>
+<hr/>
+<h2>5. Task: Run a clinical CDS analysis</h2>
+<p><strong>Purpose:</strong> Submit clinical media and receive structured Tier A / Tier B reports.</p>
+<p><strong>Primary URL:</strong> https://app.freedompawsinc.com/vit-pro/analyze</p>
+<h3>Click-by-click instructions</h3>
+<ol>
+<li>Sign in (Section 3).</li>
+<li>Tap <strong>Analyze</strong> in the top navigation (or go to <code>/vit-pro/analyze</code>).</li>
+<li>Complete <strong>Section 6</strong> (region + signalment) before uploading media.</li>
+<li>Complete <strong>Section 7</strong> (media upload).</li>
+<li>Tap <strong>Run ViT Pro analysis</strong> (or <strong>Analyze</strong>).</li>
+<li>Wait for processing — typically <strong>15–45 seconds</strong> depending on media and load.</li>
+<li>Results appear in two panels (Section 8):</li>
+</ol>
+<p>   - <strong>Tier A — Owner / client summary</strong></p>
+<p>   - <strong>Tier B — Clinical detail</strong></p>
+<ol>
+<li>Review findings, rubric scores, and retrieved corpus citations.</li>
+<li>Document your clinical decision in your PIMS — <strong>do not rely on screen copy alone</strong> for medical records without vet review.</li>
+<li><em>(Optional)</em> Screenshot or export per your clinic policy.</li>
+</ol>
+<h3>Re-run with different region</h3>
+<ol>
+<li>Change <strong>Body region</strong> dropdown.</li>
+<li>Upload new or same media if appropriate.</li>
+<li>Tap <strong>Analyze</strong> again.</li>
+</ol>
+<hr/>
+<h2>6. Task: Choose body region &amp; signalment</h2>
+<p>Before analyzing, set clinical context:</p>
+<h3>Body region (required)</h3>
+<table>
+<tr><th>Region</th><th>Typical use</th></tr>
+<tr><td><strong>Eye</strong></td><td>Conjunctiva, cornea, discharge, erythema</td></tr>
+<tr><td><strong>Skin</strong></td><td>Lesions, alopecia, masses, inflammation</td></tr>
+<tr><td><strong>Oral</strong></td><td>Gingiva, teeth, mucosa</td></tr>
+</table>
+<p><strong>Click-by-click:</strong></p>
+<ol>
+<li>On the Analyze page, find <strong>Body region</strong> dropdown.</li>
+<li>Select <strong>Eye</strong>, <strong>Skin</strong>, or <strong>Oral</strong> matching your media.</li>
+<li>Wrong region reduces rubric accuracy — always match media to region.</li>
+</ol>
+<h3>Signalment notes (recommended)</h3>
+<p>Free-text field for species-relevant context:</p>
+<ul>
+<li>Species (canine/feline), breed, age, sex</li>
+<li>Duration of signs</li>
+<li>Prior treatments</li>
+<li>Relevant history (allergies, medications)</li>
+</ul>
+<p><strong>Click-by-click:</strong></p>
+<ol>
+<li>Tap <strong>Signalment notes</strong> text area.</li>
+<li>Type concise clinical context (e.g. &quot;7yo MN Golden Retriever, 2wk bilateral ocular discharge, no prior dx&quot;).</li>
+<li>Notes are sent with the API request to improve CDS narrative quality.</li>
+</ol>
+<hr/>
+<h2>7. Task: Capture or upload media</h2>
+<h3>Photo — click by click</h3>
+<ol>
+<li>On Analyze page, ensure <strong>Photo</strong> mode is selected (if toggle exists).</li>
+<li>Tap <strong>Choose photo</strong> or <strong>Use camera</strong>.</li>
+<li>Frame the affected area clearly:</li>
+</ol>
+<p>   - <strong>Eye:</strong> close enough to see conjunctiva/cornea; both eyes if comparing</p>
+<p>   - <strong>Skin:</strong> include lesion margins; coin/ruler for scale if possible</p>
+<p>   - <strong>Oral:</strong> lift lip or open mouth; good lighting; avoid blur</p>
+<ol>
+<li>Confirm preview thumbnail appears.</li>
+<li>Proceed to <strong>Run analysis</strong>.</li>
+</ol>
+<h3>Video — click by click</h3>
+<ol>
+<li>Select <strong>Video</strong> upload option if available.</li>
+<li>Choose file: <strong>MP4, MOV, or WebM</strong></li>
+<li>Limits: <strong>≤ 25 MB</strong>, <strong>≤ 8 seconds</strong></li>
+<li>Stable clip showing the affected area (blink, lesion movement, etc.).</li>
+<li>System extracts up to <strong>5 frames</strong> for analysis.</li>
+<li>Confirm poster preview appears.</li>
+<li>Proceed to <strong>Run analysis</strong>.</li>
+</ol>
+<h3>Media quality checklist</h3>
+<ul>
+<li>[ ] In focus, well lit</li>
+<li>[ ] Region fills most of frame</li>
+<li>[ ] No heavy filters or extreme color correction</li>
+<li>[ ] Single patient per submission</li>
+</ul>
+<hr/>
+<h2>8. Task: Read Tier A vs Tier B output</h2>
+<p>After analysis completes, review both tiers:</p>
+<h3>Tier A — Owner / client summary</h3>
+<p><strong>Audience:</strong> Pet owners, front desk, client communications.</p>
+<p>Typical contents:</p>
+<ul>
+<li>Plain-language summary of visible findings</li>
+<li>General urgency guidance (e.g. monitor vs seek care soon)</li>
+<li><strong>No</strong> raw differential diagnosis list or internal rubric scores</li>
+</ul>
+<p><strong>Use when:</strong> Drafting client handouts, explaining why recheck is recommended.</p>
+<h3>Tier B — Clinical detail</h3>
+<p><strong>Audience:</strong> Licensed veterinarians and advisors.</p>
+<p>Typical contents:</p>
+<ul>
+<li>Structured findings mapped to <strong>clinical rubric</strong> (eye / skin / oral JSON rubrics)</li>
+<li>Scored categories with severity hints</li>
+<li><strong>Retrieved corpus excerpts</strong> — reference snippets from knowledge base</li>
+<li>Differential considerations (CDS support, not definitive dx)</li>
+<li>Suggested follow-up diagnostics (where rubric applies)</li>
+</ul>
+<p><strong>Use when:</strong> Clinical review, case discussion, benchmark scoring, advisor feedback to Freedom Paws.</p>
+<h3>Side-by-side review workflow</h3>
+<ol>
+<li>Read <strong>Tier B</strong> first for clinical accuracy.</li>
+<li>Compare rubric scores to your visual assessment of the media.</li>
+<li>Read <strong>Tier A</strong> — verify it is appropriately conservative for client use.</li>
+<li>If Tier A is too alarming or too dismissive, note for advisor feedback (Appendix E).</li>
+</ol>
+<hr/>
+<h2>9. Task: Run benchmark cases (advisors)</h2>
+<p><strong>Purpose:</strong> Validate ViT Pro against a fixed library of ~50 annotated cases for accuracy studies and V1 readiness.</p>
+<p><strong>URL:</strong> https://app.freedompawsinc.com/vit-pro/benchmark</p>
+<h3>Click-by-click — portal review</h3>
+<ol>
+<li>Navigate to <strong>Benchmark</strong> in ViT Pro nav.</li>
+<li>Page lists benchmark case summaries (region, expected findings category).</li>
+<li>Select a case to view expected vs system output <em>(UI may show case ID and status)</em>.</li>
+<li>Record discrepancies per advisor protocol.</li>
+</ol>
+<h3>Click-by-click — CLI batch run (technical advisors)</h3>
+<p>Freedom Paws ops may run locally:</p>
+<pre><code>cd freedompaws-app
+npm run vit-pro:benchmark</code></pre>
+<p>Results save to <code>data/vit-pro/benchmark/results/</code> as CSV + JSON.</p>
+<h3>Scoring guidance</h3>
+<table>
+<tr><th>Result</th><th>Action</th></tr>
+<tr><td>Rubric aligns with expert label</td><td>Mark pass</td></tr>
+<tr><td>Minor wording difference</td><td>Note; may still pass</td></tr>
+<tr><td>Wrong region or missed critical finding</td><td>Mark fail + case ID</td></tr>
+<tr><td>Unsafe Tier A language</td><td>Flag critical — email Freedom Paws immediately</td></tr>
+</table>
+<p>See repo doc: <code>docs/ops/ViT-PRO-V0-BENCHMARK-GUIDE.md</code></p>
+<hr/>
+<h2>10. Task: Browse clinical corpus</h2>
+<p><strong>Purpose:</strong> Inspect reference material indexed for RAG retrieval (V0 keyword matching).</p>
+<p><strong>URL:</strong> https://app.freedompawsinc.com/vit-pro/corpus</p>
+<h3>Click-by-click instructions</h3>
+<ol>
+<li>Tap <strong>Corpus</strong> in navigation.</li>
+<li>Browse manifest entries — titles, regions, source tags.</li>
+<li>Select an entry to read excerpt <em>(if detail view enabled)</em>.</li>
+<li>Cross-reference with citations shown in Tier B output after an analysis.</li>
+<li>Report outdated or incorrect references to Freedom Paws for corpus update.</li>
+</ol>
+<p><strong>Note:</strong> V1 may upgrade to vector RAG; V0 uses keyword retrieval from <code>corpus/manifest.json</code>.</p>
+<hr/>
+<h2>11. Clinical workflow &amp; documentation standards</h2>
+<h3>Recommended clinic workflow</h3>
+<pre><code>Client presents with concern
+        ↓
+Vet captures standardized photo/video
+        ↓
+ViT Pro Analyze (correct region + signalment)
+        ↓
+Vet reviews Tier B → forms dx plan
+        ↓
+Tier A adapted for client communication (optional)
+        ↓
+Record in PIMS: &quot;CDS adjunct used; vet confirmed findings&quot;</code></pre>
+<h3>Documentation standards</h3>
+<ul>
+<li>Always record <strong>date, vet name, region analyzed, and media type</strong></li>
+<li>State that output is <strong>CDS adjunct</strong>, not standalone diagnosis</li>
+<li>Retain original media in PIMS per clinic policy</li>
+<li>Do not enter client PHI into signalment notes beyond what is necessary</li>
+</ul>
+<hr/>
+<h2>12. Privacy, liability &amp; scope limits</h2>
+<table>
+<tr><th>Rule</th><th>Detail</th></tr>
+<tr><td><strong>Licensed use</strong></td><td>Tier B intended for veterinary professionals</td></tr>
+<tr><td><strong>No emergency triage</strong></td><td>Critical cases require immediate standard of care</td></tr>
+<tr><td><strong>Data handling</strong></td><td>Media sent to OpenAI API per Freedom Paws privacy policy</td></tr>
+<tr><td><strong>Advisory role</strong></td><td>Advisors provide feedback; Freedom Paws owns product decisions</td></tr>
+<tr><td><strong>Kill switch</strong></td><td>Module can be disabled via <code>VIT_PRO_ENABLED=false</code></td></tr>
+</table>
+<p>ViT Pro <strong>does not</strong> replace:</p>
+<ul>
+<li>Physical examination</li>
+<li>Cytology, culture, imaging, or lab work</li>
+<li>Regulatory reporting obligations</li>
+</ul>
+<hr/>
+<h2>13. Troubleshooting</h2>
+<table>
+<tr><th>Problem</th><th>What to do</th></tr>
+<tr><td>Access restricted</td><td>Confirm email in <code>VIT_PRO_ADVISOR_EMAILS</code>; re-login</td></tr>
+<tr><td>Analyze button disabled</td><td>Select region + upload media first</td></tr>
+<tr><td>Analysis timeout</td><td>Retry; check network; shorten video</td></tr>
+<tr><td>Empty Tier B</td><td>Report to Freedom Paws with case ID/time</td></tr>
+<tr><td>Wrong rubric applied</td><td>Verify body region matches media</td></tr>
+<tr><td>Video rejected</td><td>≤8 sec, ≤25 MB, MP4/MOV/WebM</td></tr>
+<tr><td>Benchmark case missing</td><td>Confirm <code>data/vit-pro/benchmark/cases.json</code> deployed</td></tr>
+</table>
+<hr/>
+<h2>Appendix A — URL quick reference</h2>
+<table>
+<tr><th>Page</th><th>URL</th></tr>
+<tr><td>ViT Pro home</td><td>https://app.freedompawsinc.com/vit-pro</td></tr>
+<tr><td>Analyze</td><td>https://app.freedompawsinc.com/vit-pro/analyze</td></tr>
+<tr><td>Benchmark</td><td>https://app.freedompawsinc.com/vit-pro/benchmark</td></tr>
+<tr><td>Corpus</td><td>https://app.freedompawsinc.com/vit-pro/corpus</td></tr>
+<tr><td>Login</td><td>https://app.freedompawsinc.com/login?next=/vit-pro</td></tr>
+<tr><td>Status API</td><td>https://app.freedompawsinc.com/api/vit-pro/status</td></tr>
+<tr><td>Consumer ViT (not Pro)</td><td>https://app.freedompawsinc.com/diagnostics</td></tr>
+</table>
+<hr/>
+<h2>Appendix B — Body regions &amp; rubrics</h2>
+<table>
+<tr><th>Region</th><th>Rubric file</th><th>Example findings</th></tr>
+<tr><td>Eye</td><td><code>lib/vit-pro/rubrics/eye.json</code></td><td>Discharge, erythema, corneal opacity</td></tr>
+<tr><td>Skin</td><td><code>lib/vit-pro/rubrics/skin.json</code></td><td>Erythema, alopecia, papules, masses</td></tr>
+<tr><td>Oral</td><td><code>lib/vit-pro/rubrics/oral.json</code></td><td>Gingivitis, calculus, ulceration</td></tr>
+</table>
+<p>Each rubric defines scored categories used in Tier B output.</p>
+<hr/>
+<h2>Appendix C — Output tier comparison</h2>
+<table>
+<tr><th>Feature</th><th>Tier A (Public)</th><th>Tier B (Vet)</th></tr>
+<tr><td>Plain summary</td><td>✅</td><td>✅</td></tr>
+<tr><td>Rubric scores</td><td>❌</td><td>✅</td></tr>
+<tr><td>Corpus citations</td><td>Limited</td><td>✅ Full</td></tr>
+<tr><td>Differential list</td><td>❌</td><td>✅</td></tr>
+<tr><td>Diagnostic suggestions</td><td>General</td><td>Detailed</td></tr>
+<tr><td>Safe for client email</td><td>✅</td><td>❌</td></tr>
+</table>
+<p>API parameter: <code>outputTier=both</code> (default for authorized users).</p>
+<hr/>
+<h2>Appendix D — Glossary</h2>
+<table>
+<tr><th>Term</th><th>Definition</th></tr>
+<tr><td><strong>CDS</strong></td><td>Clinical Decision Support</td></tr>
+<tr><td><strong>ViT</strong></td><td>Vision Intelligence Technology</td></tr>
+<tr><td><strong>RAG</strong></td><td>Retrieval-Augmented Generation — corpus lookup + LLM</td></tr>
+<tr><td><strong>Rubric</strong></td><td>Structured scoring template per body region</td></tr>
+<tr><td><strong>Signalment</strong></td><td>Species, age, sex, breed, history</td></tr>
+<tr><td><strong>Tier A</strong></td><td>Owner-safe output layer</td></tr>
+<tr><td><strong>Tier B</strong></td><td>Full veterinary output layer</td></tr>
+<tr><td><strong>Benchmark</strong></td><td>Fixed case library for accuracy validation</td></tr>
+</table>
+<hr/>
+<h2>Appendix E — Advisor onboarding checklist</h2>
+<p>Freedom Paws completes:</p>
+<ul>
+<li>[ ] Add advisor email to <code>VIT_PRO_ADVISOR_EMAILS</code> in Vercel</li>
+<li>[ ] Confirm <code>VIT_PRO_ENABLED=true</code></li>
+<li>[ ] Send this manual + NDA/advisor agreement (if applicable)</li>
+<li>[ ] Schedule 30-min walkthrough on <code>/vit-pro/analyze</code></li>
+</ul>
+<p>Advisor completes:</p>
+<ul>
+<li>[ ] Successful login to <code>/vit-pro</code></li>
+<li>[ ] Run 3 test analyses (eye, skin, oral)</li>
+<li>[ ] Review Tier A vs Tier B on each</li>
+<li>[ ] Score 5 benchmark cases</li>
+<li>[ ] Submit feedback template to Freedom Paws</li>
+<li>[ ] Confirm understanding of scope limits (Section 12)</li>
+</ul>
+<p><strong>Feedback contact:</strong> Freedom Paws founder (see advisor welcome email)</p>
+<hr/>
+<p><em>Freedom Paws Wellness © 2026 · ViT Pro veterinary training manual · V0 · Honor Buddy's Legacy</em></p>
+<div class="footer-note">Freedom Paws Wellness © 2026 · Honor Buddy's Legacy · Educational purposes only where applicable.</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{
+  "region": "oral",
+  "version": "1.0.0",
+  "protocolSlug": "fresh-smile-dental",
+  "captureGuidance": [
+    "Lift lip gently to expose maxillary premolars and canine.",
+    "Capture lateral and frontal views if the dog allows.",
+    "Note halitosis in owner symptoms when present."
+  ],
+  "findingFields": [
+    {
+      "key": "tartarGrade",
+      "label": "Tartar grade (estimate)",
+      "type": "enum",
+      "values": ["0_none", "1_mild", "2_moderate", "3_heavy", "unknown"],
+      "description": "Visual tartar index 0–3 from oral photo"
+    },
+    {
+      "key": "gingivalColor",
+      "label": "Gingival color",
+      "type": "enum",
+      "values": ["pink", "red", "pale", "unknown"],
+      "description": "Gum color visible at margin"
+    },
+    {
+      "key": "gingivalInflammation",
+      "label": "Gingival inflammation",
+      "type": "enum",
+      "values": ["absent", "mild", "marked", "unknown"],
+      "description": "Redness or swelling at gum line"
+    },
+    {
+      "key": "toothFractureVisible",
+      "label": "Fractured tooth visible",
+      "type": "enum",
+      "values": ["no", "yes", "unknown"],
+      "description": "Obvious crown fracture on photo"
+    },
+    {
+      "key": "halitosisReported",
+      "label": "Halitosis reported",
+      "type": "enum",
+      "values": ["absent", "mild", "marked", "unknown"],
+      "description": "From owner history"
+    }
+  ],
+  "differentialConsiderations": [
+    "Periodontal disease",
+    "Gingivitis",
+    "Tooth fracture / pulp exposure",
+    "Oral mass ( cannot confirm without exam )",
+    "Stomatitis",
+    "Retained deciduous tooth ( pediatric )"
+  ],
+  "suggestedDiagnostics": [
+    "Complete oral exam under sedation if dental procedure planned",
+    "Dental radiographs ( full mouth )",
+    "Periodontal probing",
+    "Cytology or biopsy of mass lesions"
+  ],
+  "urgentIndicators": [
+    "facial swelling with oral pain",
+    " inability to eat with acute onset",
+    " bleeding oral mass",
+    " suspected jaw fracture"
+  ]
+}

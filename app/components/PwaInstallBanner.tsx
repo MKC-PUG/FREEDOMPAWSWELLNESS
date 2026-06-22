@@ -1,6 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
+import { BRAND_LOGO_NAV } from '@/lib/brand/paths';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -60,10 +62,22 @@ export default function PwaInstallBanner() {
   if (deferred) {
     return (
       <div className="mx-4 mb-4 rounded-2xl border border-amber-400/40 bg-[#0F1E38]/95 p-4 shadow-lg">
-        <p className="text-sm font-semibold text-amber-400">Install Freedom Paws</p>
-        <p className="mt-1 text-xs text-white/55 leading-relaxed">
-          Add to your home screen for quick access to Photo Booth, protocols, and diagnostics.
-        </p>
+        <div className="flex items-center gap-3">
+          <Image
+            src={BRAND_LOGO_NAV}
+            alt=""
+            width={48}
+            height={48}
+            className="h-11 w-auto shrink-0 object-contain"
+            aria-hidden
+          />
+          <div>
+            <p className="text-sm font-semibold text-amber-400">Install Freedom Paws</p>
+            <p className="mt-1 text-xs text-white/55 leading-relaxed">
+              Add to your home screen for quick access to Photo Booth, protocols, and diagnostics.
+            </p>
+          </div>
+        </div>
         <div className="mt-3 flex gap-2">
           <button
             type="button"

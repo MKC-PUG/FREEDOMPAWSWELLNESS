@@ -1,0 +1,69 @@
+{
+  "region": "eye",
+  "version": "1.0.0",
+  "protocolSlug": "clear-vision",
+  "captureGuidance": [
+    "Use natural light; avoid direct flash on the cornea.",
+    "Capture both eyes at similar angles when possible.",
+    "Note if the dog is squinting or pawing at the eye."
+  ],
+  "findingFields": [
+    {
+      "key": "cornealClarity",
+      "label": "Corneal clarity",
+      "type": "enum",
+      "values": ["clear", "hazy", "cloudy", "unknown"],
+      "description": "Estimate of corneal transparency from photo"
+    },
+    {
+      "key": "dischargeType",
+      "label": "Discharge type",
+      "type": "enum",
+      "values": ["none", "serous", "mucoid", "purulent", "unknown"],
+      "description": "Visible ocular discharge if present"
+    },
+    {
+      "key": "blepharospasm",
+      "label": "Squinting / blepharospasm",
+      "type": "enum",
+      "values": ["absent", "mild", "marked", "unknown"],
+      "description": "Eyelid closure or squinting suggestive of discomfort"
+    },
+    {
+      "key": "epiphora",
+      "label": "Epiphora (tearing)",
+      "type": "enum",
+      "values": ["absent", "mild", "marked", "unknown"],
+      "description": "Visible tear staining or wetness below medial canthus"
+    },
+    {
+      "key": "conjunctivalHyperemia",
+      "label": "Conjunctival redness",
+      "type": "enum",
+      "values": ["absent", "mild", "marked", "unknown"],
+      "description": "Redness of conjunctiva visible in photo"
+    }
+  ],
+  "differentialConsiderations": [
+    "Conjunctivitis ( infectious / allergic )",
+    "Keratoconjunctivitis sicca (dry eye)",
+    "Corneal ulcer or abrasion",
+    "Uveitis",
+    "Glaucoma (cannot rule out without IOP)",
+    "Foreign body / eyelash abnormality"
+  ],
+  "suggestedDiagnostics": [
+    "Complete ophthalmic exam",
+    "Fluorescein stain",
+    "Schirmer tear test",
+    "Intraocular pressure if indicated",
+    "Corneal cytology if discharge is purulent"
+  ],
+  "urgentIndicators": [
+    "marked blepharospasm",
+    "cloudy cornea",
+    "sudden vision loss reported",
+    "proptosis",
+    "acute purulent discharge with pain"
+  ]
+}

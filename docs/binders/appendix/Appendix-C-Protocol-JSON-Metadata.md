@@ -1,0 +1,315 @@
+# Appendix C — Protocol JSON Metadata (All 10)
+
+**Freedom Paws Wellness · Technical Master Binder Appendix · May 2026**  
+**For:** XRPL Grants · on-ledger MPT minting · IPFS metadata · counsel review
+
+---
+
+[PAGE BREAK]
+
+# Protocol JSON Metadata — All Ten Protocols
+
+**Schema version:** 1.0.0 · **Token standard (planned):** XLS-89 MPT · **Utility classification:** educational_access only
+
+**Global pricing:** 18 RLUSD ≈ $18 USD · XRP live rate at checkout · Fallback 25 XRP
+
+---
+
+## 1. max-movement
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "max-movement",
+  "branded_title": "Max Movement Pro – Joint Support",
+  "spec_category": "Joint & Mobility Protocol",
+  "spec_short": "Joint & Mobility",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["lameness", "stiffness", "gait asymmetry", "joint pain", "hip dysplasia signs"],
+    "vision_regions": ["gait", "posture", "body"]
+  },
+  "content": {
+    "detail_route": "/protocols/max-movement",
+    "shop_deep_link": "/token-shop?protocol=max-movement&buy=1#max-movement",
+    "hero_image": "/images/protocols/max-movement.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+[PAGE BREAK]
+
+## 2. freedom-calm
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "freedom-calm",
+  "branded_title": "Freedom Calm – Anxiety Relief",
+  "spec_category": "Cognitive & Senior Support Protocol",
+  "spec_short": "Cognitive & Calm",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["anxiety", "separation distress", "pacing", "senior cognitive decline", "noise phobia"],
+    "vision_regions": ["face", "posture", "gait"]
+  },
+  "content": {
+    "detail_route": "/protocols/freedom-calm",
+    "shop_deep_link": "/token-shop?protocol=freedom-calm&buy=1#freedom-calm",
+    "hero_image": "/images/protocols/freedom-calm.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+## 3. liver-kidney-detox
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "liver-kidney-detox",
+  "branded_title": "Foundation Liver & Kidney Detox",
+  "spec_category": "Heart & Vital Organs Protocol",
+  "spec_short": "Liver & Kidney",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["lethargy", "inappetence", "coat dullness", "increased thirst", "weight change"],
+    "vision_regions": ["body", "eyes", "coat"]
+  },
+  "content": {
+    "detail_route": "/protocols/liver-kidney-detox",
+    "shop_deep_link": "/token-shop?protocol=liver-kidney-detox&buy=1#liver-kidney-detox",
+    "hero_image": "/images/protocols/liver-kidney-detox.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+[PAGE BREAK]
+
+## 4. gut-balance
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "gut-balance",
+  "branded_title": "Buddy's Gut Balance & Cleanse",
+  "spec_category": "Digestive Harmony Protocol",
+  "spec_short": "Digestive Harmony",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["diarrhea", "vomiting", "gas", "bloating", "picky eating", "anal gland issues"],
+    "vision_regions": ["body", "coat"]
+  },
+  "content": {
+    "detail_route": "/protocols/gut-balance",
+    "shop_deep_link": "/token-shop?protocol=gut-balance&buy=1#gut-balance",
+    "hero_image": "/images/protocols/gut-balance.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+## 5. infrared-spine
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "infrared-spine",
+  "branded_title": "Red Light Spine & Joint Support",
+  "spec_category": "Musculoskeletal Recovery Protocol",
+  "spec_short": "Spine & Recovery",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["back pain", "stiff spine", "recovery after injury", "mobility restriction"],
+    "vision_regions": ["posture", "gait", "body"]
+  },
+  "content": {
+    "detail_route": "/protocols/infrared-spine",
+    "shop_deep_link": "/token-shop?protocol=infrared-spine&buy=1#infrared-spine",
+    "hero_image": "/images/protocols/infrared-spine.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+[PAGE BREAK]
+
+## 6. allergy-shield
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "allergy-shield",
+  "branded_title": "Allergy Shield – Skin & Coat Glow",
+  "spec_category": "Allergy & Respiratory Relief Protocol",
+  "spec_short": "Allergy & Respiratory",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["itching", "hot spots", "rash", "ear infections", "seasonal allergies", "sneezing"],
+    "vision_regions": ["skin", "coat", "ears"]
+  },
+  "content": {
+    "detail_route": "/protocols/allergy-shield",
+    "shop_deep_link": "/token-shop?protocol=allergy-shield&buy=1#allergy-shield",
+    "hero_image": "/images/protocols/allergy-shield.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+## 7. fresh-smile-dental
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "fresh-smile-dental",
+  "branded_title": "Fresh Smile Dental & Oral Health",
+  "spec_category": "Holistic Wellness Baseline Protocol",
+  "spec_short": "Dental & Oral",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["bad breath", "tartar", "red gums", "drooling", "difficulty eating"],
+    "vision_regions": ["oral", "mouth"]
+  },
+  "content": {
+    "detail_route": "/protocols/fresh-smile-dental",
+    "shop_deep_link": "/token-shop?protocol=fresh-smile-dental&buy=1#fresh-smile-dental",
+    "hero_image": "/images/protocols/fresh-smile-dental.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+[PAGE BREAK]
+
+## 8. heart-strong
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "heart-strong",
+  "branded_title": "Heart Strong Cardio-Support",
+  "spec_category": "Heart & Vital Organs Protocol",
+  "spec_short": "Heart & Vitals",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["cough", "exercise intolerance", "restlessness", "fluid retention signs", "pale gums"],
+    "vision_regions": ["body", "gait", "gums"]
+  },
+  "content": {
+    "detail_route": "/protocols/heart-strong",
+    "shop_deep_link": "/token-shop?protocol=heart-strong&buy=1#heart-strong",
+    "hero_image": "/images/protocols/heart-strong.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+## 9. patriot-immune
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "patriot-immune",
+  "branded_title": "Patriot Defender – Immunity & Vitality",
+  "spec_category": "Immune Vitality Protocol",
+  "spec_short": "Immune Vitality",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["recurrent infections", "slow recovery", "senior decline", "low energy", "working dog fatigue"],
+    "vision_regions": ["body", "coat", "face"]
+  },
+  "content": {
+    "detail_route": "/protocols/patriot-immune",
+    "shop_deep_link": "/token-shop?protocol=patriot-immune&buy=1#patriot-immune",
+    "hero_image": "/images/protocols/patriot-immune.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+[PAGE BREAK]
+
+## 10. clear-vision
+
+```json
+{
+  "schema_version": "1.0.0",
+  "protocol_slug": "clear-vision",
+  "branded_title": "Clear Vision Defender – Eye Health Protocol",
+  "spec_category": "Eye & Vision Health Protocol",
+  "spec_short": "Eye & Vision",
+  "utility_type": "educational_access",
+  "token_standard": "MPT_XLS89",
+  "xrpl": { "network": "mainnet", "royalty_bps": 500, "impact_treasury": "TBD_POST_LLC" },
+  "pricing": { "rlusd": 18, "usd_display": 18, "xrp_fallback": 25 },
+  "vit_mapping": {
+    "primary_signals": ["cloudy eyes", "discharge", "squinting", "tear staining", "bumping into objects"],
+    "vision_regions": ["eyes"]
+  },
+  "content": {
+    "detail_route": "/protocols/clear-vision",
+    "shop_deep_link": "/token-shop?protocol=clear-vision&buy=1#clear-vision",
+    "hero_image": "/images/protocols/clear-vision.png"
+  },
+  "legal": { "disclaimer": "Educational only. Not veterinary advice.", "classification": "utility_token" }
+}
+```
+
+---
+
+## Machine-readable bundle
+
+Combined JSON array for grant submissions:  
+`docs/binders/appendix/protocol-metadata-all-10.json`
+
+---
+
+*Freedom Paws Wellness © 2026 · Technical Master Binder Appendix C*

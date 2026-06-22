@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import BrandLogo from '@/app/components/BrandLogo';
 import { OPS_NAV } from '@/lib/ops/nav';
 
 function isActive(pathname: string, href: string, exact?: boolean) {
@@ -45,15 +46,10 @@ export default function OpsNavbar() {
       className="fp-nav sticky top-0 z-[100] bg-[#0A1428] border-b border-[#F5C242]/30"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-[var(--nav-bar-height)] py-2 sm:py-3 flex items-center justify-between gap-2">
-        <Link href="/ops" className="min-w-0 flex-1 leading-tight touch-manipulation" prefetch={false}>
-          <div className="font-bold text-base sm:text-lg tracking-tight truncate text-white">
-            Freedom Paws Command Center
-          </div>
-          <div className="hidden sm:block text-xs text-[#F5C242]/90 mt-0.5">FP Ops · Owner console</div>
-        </Link>
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 min-h-[var(--nav-bar-height)] py-1.5 sm:py-2 flex items-center gap-2 sm:gap-3">
+        <BrandLogo href="/ops" variant="ops" />
 
-        <div className="hidden lg:flex items-center gap-1">
+        <div className="hidden lg:flex flex-1 min-w-0 fp-nav-links-scroll items-center justify-end gap-1">
           {OPS_NAV.map((item) => (
             <Link
               key={item.href}
@@ -72,7 +68,7 @@ export default function OpsNavbar() {
 
         <button
           type="button"
-          className="lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg border border-white/15 text-white touch-manipulation"
+          className="lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg border border-white/15 text-white touch-manipulation ml-auto shrink-0"
           aria-label="Open ops menu"
           onClick={() => setMenuOpen(true)}
         >

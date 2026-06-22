@@ -94,6 +94,12 @@ export default async function OpsHomePage() {
                 status: 'ready',
               },
               {
+                href: '/vit-pro',
+                title: 'ViT Pro CDS',
+                stat: 'Phase V0 foundation',
+                status: 'ready' as const,
+              },
+              {
                 href: '/ops/system',
                 title: 'System',
                 stat: overview.system.supabaseReady ? 'Supabase OK' : 'Check env',
