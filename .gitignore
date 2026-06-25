@@ -46,3 +46,6 @@ next-env.d.ts
 /data/symptom-feedback/
 .tmp-imgly-bg/
 public/imgly-bg-removal/
+
+# copyright deposit PDF generator (scripts/generate-copyright-code-deposit.mjs)
+docs/binders/.pdf-build/
