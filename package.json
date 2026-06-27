@@ -16,6 +16,7 @@
     "id:setup:check": "node scripts/id-supabase-setup.mjs --check",
     "id:setup:migrate": "node scripts/id-supabase-setup.mjs --migrations-only",
     "partner:migrate": "node scripts/run-partner-migrations.mjs",
+    "pilot:migrate": "node scripts/run-migration-013.mjs",
     "partner:bootstrap": "node scripts/partner-bootstrap.mjs",
     "marketing:crm-export": "node scripts/marketing/export-crm-sheet.mjs",
     "marketing:tn-outreach": "node scripts/marketing/generate-tn-pilot-outreach.mjs",
