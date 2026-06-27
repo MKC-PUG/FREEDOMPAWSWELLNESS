@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
+import PwaNavLink from '@/app/components/PwaNavLink';
 import { protocolDetailHref, tokenShopHref } from '../lib/routes';
 import { protocols } from './protocols';
 
@@ -72,13 +73,12 @@ export default function ProtocolsPage() {
 
         <div className="mt-14 text-center">
           <p className="text-white/70 mb-4">Ready to purchase lifetime access?</p>
-          <Link
+          <PwaNavLink
             href={tokenShopHref()}
-            prefetch={false}
             className="inline-flex items-center justify-center min-h-[52px] bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 text-black text-base font-bold px-10 py-4 rounded-full transition-colors touch-manipulation"
           >
             Visit Token Shop →
-          </Link>
+          </PwaNavLink>
         </div>
       </div>
     </div>

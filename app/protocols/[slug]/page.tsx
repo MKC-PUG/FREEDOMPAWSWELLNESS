@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import BackLink from '@/app/components/BackLink';
+import PwaNavLink from '@/app/components/PwaNavLink';
 import ProtocolAffiliatePicks from '@/app/components/protocols/ProtocolAffiliatePicks';
 import { getProtocolAffiliateSection } from '@/lib/protocols/affiliates';
 import { protocols } from '../protocols';
@@ -184,12 +185,12 @@ export default async function ProtocolDetailPage({
                 </p>
               ))}
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
+                <PwaNavLink
                   href={tokenShopHref(slug)}
-                  className="bg-[#F5C242] hover:bg-amber-300 text-black text-lg font-bold px-12 py-4 rounded-full transition-colors"
+                  className="bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 text-black text-lg font-bold px-12 py-4 rounded-full transition-colors touch-manipulation min-h-[52px] inline-flex items-center justify-center"
                 >
                   {detail.access.buyLabel}
-                </Link>
+                </PwaNavLink>
                 <Link
                   href={protocolOverviewHref()}
                   className="text-sm text-white/60 hover:text-white transition-colors"

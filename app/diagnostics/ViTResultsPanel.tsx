@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
+import PwaNavLink from '@/app/components/PwaNavLink';
 import ViTWellnessFunnel from '@/app/components/diagnostics/ViTWellnessFunnel';
+import { tokenShopHref } from '@/app/lib/routes';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { protocols } from '@/app/protocols/protocols';
 import { protocolDisplayName } from '@/lib/ai/symptom-lexicon';
@@ -80,20 +81,20 @@ function ProtocolCard({
       <ConfidenceBar value={rec.confidenceValue} tone={tone} />
       <div className="mt-5 flex flex-col sm:flex-row gap-3">
         {rec.slug && (
-          <Link
+          <PwaNavLink
             href={`/protocols/${rec.slug}`}
-            className="flex-1 text-center rounded-xl border border-[#F5C242]/40 bg-[#F5C242]/10 px-4 py-3 text-sm font-semibold text-[#F5C242] hover:bg-[#F5C242]/20 transition"
+            className="flex-1 text-center rounded-xl border border-[#F5C242]/40 bg-[#F5C242]/10 px-4 py-3 text-sm font-semibold text-[#F5C242] hover:bg-[#F5C242]/20 transition touch-manipulation min-h-[48px] flex items-center justify-center"
           >
             Protocol details →
-          </Link>
+          </PwaNavLink>
         )}
         {rec.slug && (
-          <Link
-            href={`/token-shop#${rec.slug}`}
-            className="flex-1 text-center rounded-xl bg-[#F5C242] px-4 py-3 text-sm font-bold text-black hover:bg-[#F5C242]/90 transition"
+          <PwaNavLink
+            href={tokenShopHref(rec.slug)}
+            className="flex-1 text-center rounded-xl bg-[#F5C242] px-4 py-3 text-sm font-bold text-black hover:bg-[#F5C242]/90 active:bg-amber-300 transition touch-manipulation min-h-[48px] flex items-center justify-center"
           >
             View in Token Shop
-          </Link>
+          </PwaNavLink>
         )}
       </div>
     </div>

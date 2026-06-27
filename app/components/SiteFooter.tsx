@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import PwaNavLink from '@/app/components/PwaNavLink';
 import { isPreviewMode } from '@/lib/site-mode';
 import { BRAND_LOGO_PAW } from '@/lib/brand/paths';
 import {
@@ -71,9 +72,9 @@ export default function SiteFooter() {
         <span className="text-white/20" aria-hidden>
           |
         </span>
-        <Link href="/token-shop" className="hover:text-[#F5C242] transition-colors">
+        <PwaNavLink href="/token-shop" className="hover:text-[#F5C242] transition-colors touch-manipulation">
           Token Shop (App)
-        </Link>
+        </PwaNavLink>
         <span className="text-white/20" aria-hidden>
           |
         </span>
