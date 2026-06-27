@@ -171,10 +171,10 @@ const LANDMARK_THEMES: PhotoBoothTheme[] = [
     stickers: [],
   },
   {
-    id: 'landmark-golden-gate',
-    name: 'Golden Gate',
-    emoji: '🌉',
-    background: BG('bg-landmark-golden-gate.jpg'),
+    id: 'heaven-gates',
+    name: 'Heaven Gates',
+    emoji: '👼',
+    background: BG('bg-heaven-gates.jpg'),
     stickers: [],
   },
 ];

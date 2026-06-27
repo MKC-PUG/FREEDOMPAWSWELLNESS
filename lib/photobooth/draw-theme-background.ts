@@ -51,6 +51,9 @@ export function drawThemeBackground(
     case 'holiday-christmas':
       drawHolidayChristmas(ctx, w, h);
       break;
+    case 'heaven-gates':
+      drawHeavenGates(ctx, w, h);
+      break;
     default:
       ctx.fillStyle = '#0A1625';
       ctx.fillRect(0, 0, w, h);
@@ -237,4 +240,87 @@ function drawHolidayChristmas(ctx: CanvasRenderingContext2D, w: number, h: numbe
     ctx.arc(((i * 113) % 1000) / 1000 * w, ((i * 67) % 600) / 1000 * h, 1.2, 0, Math.PI * 2);
     ctx.fill();
   }
+}
+
+/** Heavenly golden entry gates — canvas fallback until bg-heaven-gates.jpg is added. */
+function drawHeavenGates(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const sky = ctx.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, '#1e3a8a');
+  sky.addColorStop(0.35, '#7c3aed');
+  sky.addColorStop(0.65, '#fbbf24');
+  sky.addColorStop(1, '#fef3c7');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, w, h);
+
+  const ray = ctx.createRadialGradient(w * 0.5, h * 0.38, w * 0.02, w * 0.5, h * 0.38, w * 0.75);
+  ray.addColorStop(0, 'rgba(255,255,255,0.55)');
+  ray.addColorStop(0.45, 'rgba(251,191,36,0.25)');
+  ray.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = ray;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  for (let i = 0; i < 28; i += 1) {
+    ctx.beginPath();
+    ctx.arc(((i * 97) % 1000) / 1000 * w, ((i * 53) % 500) / 1000 * h, 1 + (i % 3) * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const cloudY = h * 0.72;
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  for (const cx of [w * 0.15, w * 0.38, w * 0.62, w * 0.85]) {
+    ctx.beginPath();
+    ctx.ellipse(cx, cloudY, w * 0.14, h * 0.06, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(cx - w * 0.06, cloudY + h * 0.02, w * 0.09, h * 0.045, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(cx + w * 0.06, cloudY + h * 0.02, w * 0.09, h * 0.045, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const gateW = w * 0.52;
+  const gateH = h * 0.42;
+  const gateX = (w - gateW) / 2;
+  const gateY = h * 0.28;
+  const pillarW = gateW * 0.12;
+
+  const gold = ctx.createLinearGradient(gateX, gateY, gateX + gateW, gateY + gateH);
+  gold.addColorStop(0, '#fde68a');
+  gold.addColorStop(0.45, '#f59e0b');
+  gold.addColorStop(1, '#b45309');
+  ctx.fillStyle = gold;
+  ctx.fillRect(gateX, gateY + gateH * 0.15, pillarW, gateH * 0.85);
+  ctx.fillRect(gateX + gateW - pillarW, gateY + gateH * 0.15, pillarW, gateH * 0.85);
+
+  ctx.beginPath();
+  ctx.moveTo(gateX, gateY + gateH * 0.15);
+  ctx.quadraticCurveTo(gateX + gateW * 0.5, gateY - gateH * 0.05, gateX + gateW, gateY + gateH * 0.15);
+  ctx.lineTo(gateX + gateW - pillarW, gateY + gateH * 0.15);
+  ctx.quadraticCurveTo(gateX + gateW * 0.5, gateY + gateH * 0.02, gateX + pillarW, gateY + gateH * 0.15);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.strokeStyle = '#fef3c7';
+  ctx.lineWidth = Math.max(2, w * 0.004);
+  for (let i = 1; i <= 4; i += 1) {
+    const barY = gateY + gateH * (0.22 + i * 0.14);
+    ctx.beginPath();
+    ctx.moveTo(gateX + pillarW * 0.3, barY);
+    ctx.lineTo(gateX + gateW - pillarW * 0.3, barY);
+    ctx.stroke();
+  }
+
+  const pathGrad = ctx.createLinearGradient(0, h * 0.55, 0, h);
+  pathGrad.addColorStop(0, 'rgba(254,243,199,0.5)');
+  pathGrad.addColorStop(1, 'rgba(255,255,255,0.95)');
+  ctx.fillStyle = pathGrad;
+  ctx.beginPath();
+  ctx.moveTo(w * 0.5 - w * 0.12, h);
+  ctx.lineTo(w * 0.5 + w * 0.12, h);
+  ctx.lineTo(w * 0.5 + w * 0.06, h * 0.58);
+  ctx.lineTo(w * 0.5 - w * 0.06, h * 0.58);
+  ctx.closePath();
+  ctx.fill();
 }

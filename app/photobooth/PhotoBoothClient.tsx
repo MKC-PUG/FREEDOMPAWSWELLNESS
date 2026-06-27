@@ -151,7 +151,8 @@ export default function PhotoBoothClient({
   const setPhotoUrl = useCallback((url: string | null, options?: { keepEditor?: boolean }) => {
     if (
       blobUrlRef.current?.startsWith('blob:') &&
-      blobUrlRef.current !== originalPhotoUrlRef.current
+      blobUrlRef.current !== originalPhotoUrlRef.current &&
+      blobUrlRef.current !== preAiCostumeUrlRef.current
     ) {
       URL.revokeObjectURL(blobUrlRef.current);
       blobUrlRef.current = null;
@@ -279,6 +280,12 @@ export default function PhotoBoothClient({
     }
     if (ownerBlobUrlRef.current?.startsWith('blob:')) {
       URL.revokeObjectURL(ownerBlobUrlRef.current);
+    }
+    if (
+      preAiCostumeUrlRef.current?.startsWith('blob:') &&
+      preAiCostumeUrlRef.current !== originalPhotoUrlRef.current
+    ) {
+      URL.revokeObjectURL(preAiCostumeUrlRef.current);
     }
     originalPhotoUrlRef.current = null;
     preAiCostumeUrlRef.current = null;
@@ -488,7 +495,15 @@ export default function PhotoBoothClient({
         });
 
         if (!preAiCostumeUrlRef.current) {
-          preAiCostumeUrlRef.current = petImageUrl;
+          if (petImageUrl.startsWith('blob:')) {
+            const restoreBlob = await fetch(petImageUrl).then((r) => {
+              if (!r.ok) throw new Error('Could not read pet photo');
+              return r.blob();
+            });
+            preAiCostumeUrlRef.current = URL.createObjectURL(restoreBlob);
+          } else {
+            preAiCostumeUrlRef.current = petImageUrl;
+          }
         }
 
         // AI often returns the original room/scene baked in — re-cutout so only the
@@ -534,10 +549,11 @@ export default function PhotoBoothClient({
 
   const handleRestoreAiCostume = useCallback(() => {
     if (!preAiCostumeUrlRef.current) return;
+    setError('');
     setPhotoUrl(preAiCostumeUrlRef.current, { keepEditor: true });
     preAiCostumeUrlRef.current = null;
     setAiCostumeApplied(false);
-    setShareMsg('Removed AI costume — your original pet photo is back.');
+    setShareMsg('Removed AI costume — your cutout pet is back on this background.');
   }, [setPhotoUrl]);
 
   const handleRestoreOriginal = useCallback(() => {

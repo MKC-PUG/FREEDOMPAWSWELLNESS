@@ -1,4 +1,4 @@
-/** Holiday AI costume definitions for Photo Booth Phase 3 (Replicate FLUX Kontext). */
+/** Holiday & hero AI costume definitions for Photo Booth (Replicate FLUX Kontext). */
 
 export type AiCostumeId =
   | 'new-years'
@@ -11,7 +11,13 @@ export type AiCostumeId =
   | 'veterans-marines'
   | 'halloween'
   | 'thanksgiving'
-  | 'christmas';
+  | 'christmas'
+  | 'fireman'
+  | 'policeman'
+  | 'cowboy'
+  | 'nurse'
+  | 'diver'
+  | 'angel';
 
 export type AiCostume = {
   id: AiCostumeId;
@@ -104,6 +110,48 @@ export const AI_COSTUMES: AiCostume[] = [
     themeId: 'holiday-christmas',
     prompt: `Christmas costume: Santa hat, red and white scarf or reindeer antlers headband — cozy holiday look. ${PRESERVE}`,
   },
+  {
+    id: 'fireman',
+    name: 'Firefighter',
+    emoji: '🚒',
+    themeId: 'lake-legend',
+    prompt: `Complete firefighter costume on the pet: red turnout coat with reflective yellow-silver stripes, firefighter helmet with shield badge, professional photoreal K-9 style. ${PRESERVE}`,
+  },
+  {
+    id: 'policeman',
+    name: 'Police Officer',
+    emoji: '👮',
+    themeId: 'lake-legend',
+    prompt: `Complete police officer uniform on the pet: navy police cap, navy uniform shirt with badge, duty belt with holster and sidearm prop — photoreal costume sized for a dog or cat. ${PRESERVE}`,
+  },
+  {
+    id: 'cowboy',
+    name: 'Cowboy',
+    emoji: '🤠',
+    themeId: 'lake-legend',
+    prompt: `Complete western cowboy costume: brown cowboy hat, red bandana, leather vest or chaps, cowboy boots on paws if visible — photoreal rodeo style. ${PRESERVE}`,
+  },
+  {
+    id: 'nurse',
+    name: 'Nurse',
+    emoji: '👩‍⚕️',
+    themeId: 'wellness-warrior',
+    prompt: `Complete nurse costume: white nurse cap with cross emblem, light blue scrubs or white nurse dress, stethoscope prop around neck — caring medical look, photoreal. ${PRESERVE}`,
+  },
+  {
+    id: 'diver',
+    name: 'Scuba Diver',
+    emoji: '🤿',
+    themeId: 'ocean-boat',
+    prompt: `Complete scuba diver costume: black wetsuit, diving mask and snorkel on face, swim fins on paws if visible — photoreal underwater adventurer look. ${PRESERVE}`,
+  },
+  {
+    id: 'angel',
+    name: 'Angel',
+    emoji: '👼',
+    themeId: 'heaven-gates',
+    prompt: `Complete angel costume: large white feather wings spread behind the pet, glowing golden halo above head, soft white satin ribbon — heavenly photoreal look. ${PRESERVE}`,
+  },
 ];
 
 export type AiCostumeGroup = {
@@ -116,6 +164,8 @@ export const AI_COSTUME_GROUPS: AiCostumeGroup[] = [
   { label: 'Spring', costumeIds: ['st-patricks', 'easter', 'cinco-de-mayo'] },
   { label: 'Summer & Patriot', costumeIds: ['july-4th', 'veterans-army', 'veterans-navy', 'veterans-marines'] },
   { label: 'Fall', costumeIds: ['halloween', 'thanksgiving'] },
+  { label: 'Heroes & Roles', costumeIds: ['fireman', 'policeman', 'nurse', 'diver', 'cowboy'] },
+  { label: 'Heaven & Spirit', costumeIds: ['angel'] },
 ];
 
 export function getAiCostume(id: string): AiCostume | undefined {
