@@ -24,7 +24,7 @@ export type AiCostume = {
 };
 
 const PRESERVE =
-  "Keep the pet's exact face, breed, fur colors, body shape, pose and expression identical. Photorealistic pet photo. Do not blur or distort the pet. Do not change the background unless the costume requires a small accessory only on the pet.";
+  "Keep the pet's exact face, breed, fur colors, body shape, pose and expression identical. Add costume accessories on the pet only. Replace the entire background with flat pure white (#FFFFFF) — no floor, rug, furniture, walls, or scenery. Pet only on white. Photorealistic pet photo. Do not blur or distort the pet.";
 
 export const AI_COSTUMES: AiCostume[] = [
   {

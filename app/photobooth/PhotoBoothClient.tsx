@@ -486,16 +486,34 @@ export default function PhotoBoothClient({
           if (!r.ok) throw new Error('Could not read AI image');
           return r.blob();
         });
-        const outUrl = URL.createObjectURL(outBlob);
 
         if (!preAiCostumeUrlRef.current) {
           preAiCostumeUrlRef.current = petImageUrl;
         }
 
-        setThemeId(costume.themeId);
+        // AI often returns the original room/scene baked in — re-cutout so only the
+        // costumed pet floats on the member's chosen Photo Booth background.
+        setAiCostumeProgress('Cleaning Magic Look edges…');
+        let finalBlob = outBlob;
+        try {
+          const { removePetBackground } = await import('@/lib/photobooth/remove-background');
+          const cutout = await removePetBackground(outBlob, (p) => {
+            setAiCostumeProgress(
+              p.percent > 0 ? `Cutout ${p.percent}%` : 'Cleaning edges…'
+            );
+          });
+          finalBlob = await trimPetCutoutBlob(cutout);
+        } catch {
+          /* use AI output if second cutout fails */
+        }
+
+        const outUrl = URL.createObjectURL(finalBlob);
+
         if (!editorActive) {
+          setThemeId(costume.themeId);
           setEditorActive(true);
         }
+        setFrameId('none');
         setPhotoUrl(outUrl, { keepEditor: true });
         setAiCostumeApplied(true);
         setCutoutApplied(true);

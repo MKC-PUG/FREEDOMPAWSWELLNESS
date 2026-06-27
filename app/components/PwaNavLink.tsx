@@ -1,17 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import { navigatePwa } from '@/lib/pwa-nav';
 
 type Props = Omit<ComponentPropsWithoutRef<typeof Link>, 'href' | 'prefetch'> & {
   href: string;
   children: ReactNode;
 };
 
-/** Same-origin nav with router.push — reliable on iOS installed PWA (see Navbar mobile menu). */
+/** Same-origin nav — hard navigation when leaving Photo Booth / iOS PWA. */
 export default function PwaNavLink({ href, onClick, children, className, ...rest }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <Link
@@ -24,7 +26,7 @@ export default function PwaNavLink({ href, onClick, children, className, ...rest
         onClick?.(e);
         if (e.defaultPrevented) return;
         e.preventDefault();
-        router.push(href);
+        navigatePwa(href, router, { currentPath: pathname });
       }}
       {...rest}
     >

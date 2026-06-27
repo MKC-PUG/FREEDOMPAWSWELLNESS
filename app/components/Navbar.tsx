@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import BrandLogo from '@/app/components/BrandLogo';
+import { clearPwaBodyScrollLock, navigatePwa } from '@/lib/pwa-nav';
 
 const discordInviteUrl = process.env.NEXT_PUBLIC_FP_DISCORD_INVITE_URL?.trim() || '';
 
@@ -34,8 +35,8 @@ export default function Navbar() {
   const navigateFromMenu = useCallback(
     (href: string) => {
       closeMobileMenu();
-      if (href === pathname) return;
-      router.push(href);
+      clearPwaBodyScrollLock();
+      navigatePwa(href, router, { currentPath: pathname });
     },
     [closeMobileMenu, pathname, router]
   );
@@ -53,7 +54,7 @@ export default function Navbar() {
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prev || '';
     };
   }, [menuOpen]);
 
@@ -121,6 +122,10 @@ export default function Navbar() {
             href="/token-shop"
             prefetch={false}
             className="relative z-[101] bg-amber-400 active:bg-amber-300 text-black text-[10px] font-bold px-3 min-h-[44px] inline-flex items-center rounded-xl whitespace-nowrap touch-manipulation"
+            onClick={(e) => {
+              e.preventDefault();
+              navigatePwa('/token-shop', router, { currentPath: pathname });
+            }}
           >
             WALLET
           </Link>
@@ -142,13 +147,16 @@ export default function Navbar() {
           <>
             <button
               type="button"
-              className="fp-mobile-menu-backdrop fixed inset-0 z-[200] bg-black/60 md:hidden touch-manipulation"
+              className="fp-mobile-menu-backdrop fixed inset-0 z-[299] bg-black/60 md:hidden touch-manipulation"
               aria-label="Close menu"
-              onClick={closeMobileMenu}
+              onClick={() => {
+                closeMobileMenu();
+                clearPwaBodyScrollLock();
+              }}
             />
             <div
               id="mobile-menu"
-              className="fp-mobile-menu-panel fixed left-0 right-0 z-[201] border-t border-white/10 bg-[#0A1625] shadow-xl shadow-black/40 overflow-y-auto md:hidden"
+              className="fp-mobile-menu-panel fixed left-0 right-0 z-[300] border-t border-white/10 bg-[#0A1625] shadow-xl shadow-black/40 overflow-y-auto md:hidden"
               style={{
                 top: 'var(--nav-total-height)',
                 maxHeight: 'calc(100dvh - var(--nav-total-height))',
