@@ -393,7 +393,7 @@ Same media + history
 
 | Date | Milestone |
 |------|-----------|
-| Oct 1, 2026 | CA/TN biometric pilot live |
+| Oct 1, 2026 | Tennessee biometric pilot live |
 | Jan 1, 2027 | National promotion mode |
 | Dec 31, 2026 | 15 shelter partners target |
 

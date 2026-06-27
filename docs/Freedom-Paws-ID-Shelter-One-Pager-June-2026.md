@@ -2,7 +2,7 @@
 
 ## Freedom Paws ID — Shelter One-Pager
 
-**Pilot:** California & Tennessee · **Oct 1, 2026**  
+**Pilot:** Tennessee · **Oct 1, 2026**  
 **Contact:** Freedom Paws Inc. · `{APP}`
 
 ---
@@ -73,7 +73,7 @@ Staff reviews candidates → Approve → Owner emailed → Reunion
 
 | Date | Milestone |
 |------|-----------|
-| Oct 1, 2026 | CA/TN biometric pilot live |
+| Oct 1, 2026 | Tennessee biometric pilot live |
 | Dec 31, 2026 | 15 shelter partners target |
 | Jan 1, 2027 | National promotion mode |
 
@@ -81,7 +81,7 @@ Staff reviews candidates → Approve → Owner emailed → Reunion
 
 ### Next step
 
-Email **pilot@freedompawsinc.com** (update with live address) with shelter name, state (CA/TN), and estimated monthly intakes.
+Email **pilot@freedompawsinc.com** (update with live address) with shelter name, state (Tennessee), and estimated monthly intakes.
 
 **App:** `{APP}/id/shelter`  
 **Owner enroll:** `{APP}/id/enroll`

@@ -29,7 +29,7 @@ Freedom Paws is a wellness-first PWA for U.S. dog owners — free ViT AI diagnos
 **Proof points (June 2026):**
 - Live app: [app.freedompawsinc.com](https://app.freedompawsinc.com)
 - Partner standards: [app.freedompawsinc.com/wellness/partners/insurance](https://app.freedompawsinc.com/wellness/partners/insurance)
-- ID pilot: CA/TN shelter intake → human match review → owner alert (E2E verified)
+- ID pilot: Tennessee shelter intake → human match review → owner alert (E2E verified)
 - Mission: prevention & natural wellness — **not** pharmaceutical-first marketing
 
 **What we need from partner:**
@@ -68,7 +68,7 @@ https://app.freedompawsinc.com/wellness/partners/insurance
 
 We'd welcome a 15-minute alignment call to discuss tracked deep links, member discount, and co-marketing that stays wellness-first (no pharmaceutical-first messaging).
 
-I'm applying via Impact as well. Happy to share funnel screenshots and our CA/TN shelter ID pilot timeline.
+I'm applying via Impact as well. Happy to share funnel screenshots and our Tennessee shelter ID pilot timeline.
 
 Best,
 [Your name]
@@ -124,7 +124,7 @@ partners@freedompawsinc.com
 ### Affiliate form — message field (short)
 
 ```
-Freedom Paws Wellness PWA at app.freedompawsinc.com — ViT AI diagnostics, holistic protocols, Freedom Paws ID lost-dog matching (human review). Seeking tracked affiliate links for quote + lost-pet + urgent care funnels. Standards: app.freedompawsinc.com/wellness/partners/insurance. CA/TN shelter ID pilot 2026. Audience: U.S. wellness-first dog owners.
+Freedom Paws Wellness PWA at app.freedompawsinc.com — ViT AI diagnostics, holistic protocols, Freedom Paws ID lost-dog matching (human review). Seeking tracked affiliate links for quote + lost-pet + urgent care funnels. Standards: app.freedompawsinc.com/wellness/partners/insurance. Tennessee shelter ID pilot 2026. Audience: U.S. wellness-first dog owners.
 ```
 
 ---
@@ -176,7 +176,7 @@ partners@freedompawsinc.com
 ```
 Hi [Name / team],
 
-Following up on my note from last week. Freedom Paws is moving forward with shelter ID pilot outreach in CA/TN and preparing to activate our in-app insurance module as soon as we have a signed affiliate with tracked URLs.
+Following up on my note from last week. Freedom Paws is moving forward with shelter ID pilot outreach in Tennessee and preparing to activate our in-app insurance module as soon as we have a signed affiliate with tracked URLs.
 
 Standards recap: https://app.freedompawsinc.com/wellness/partners/insurance
 

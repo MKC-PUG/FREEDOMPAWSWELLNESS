@@ -131,9 +131,9 @@ A suburban family uses **Photo Booth** for adoption day, enrolls **Freedom Paws 
 
 | Qtr | Calendar | Total members | Paying | New paying | Revenue | Expenses | Net after give-back | Valuation est. | Product / ops landmarks | Growth / social | Mission / events |
 |-----|----------|---------------|--------|------------|---------|----------|---------------------|----------------|-------------------------|-------------------|------------------|
-| **Y1 Q1** | 2026 Q3 | 80 | 0 | 0 | $0 | $3,500 | −$3,500 | $1.0M | LLC/TM track; Supabase migrations 001–004; ID Track 1 QA | Waitlist landing page; 3 teaser Reels (“What ViT sees”) | Select 3 CA/TN shelter pilot prospects |
+| **Y1 Q1** | 2026 Q3 | 80 | 0 | 0 | $0 | $3,500 | −$3,500 | $1.0M | LLC/TM track; Supabase migrations 001–004; ID Track 1 QA | Waitlist landing page; 3 teaser Reels (“What ViT sees”) | Select 3 Tennessee shelter pilot prospects |
 | **Y1 Q2** | 2026 Q4 | 350 | 45 | 45 | $2,025 | $2,800 | −$836 | $1.2M | **Public preview launch**; Monitor cloud relay POC; Stripe test mode | **Founding 500 campaign** starts; 3 posts/week Instagram; Facebook senior-dog groups | File first grant LOI; announce 10% give-back formula (counsel) |
-| **Y1 Q3** | 2027 Q1 | 750 | 130 | 85 | $6,000 | $4,200 | $1,620 | $1.5M | **Freedom Paws ID biometric pilot live (Oct 1)**; `/id/enroll` Framer CTAs | First reunion story Reel (even if test); Photo Booth UGC contest | **CA/TN shelter pilot kickoff** (3 partners); veteran org intro call |
+| **Y1 Q3** | 2027 Q1 | 750 | 130 | 85 | $6,000 | $4,200 | $1,620 | $1.5M | **Freedom Paws ID biometric pilot live (Oct 1)**; `/id/enroll` Framer CTAs | First reunion story Reel (even if test); Photo Booth UGC contest | **Tennessee shelter pilot kickoff** (3 partners); veteran org intro call |
 | **Y1 Q4** | 2027 Q2 | 1,400 | 280 | 150 | $13,000 | $5,800 | $4,126 | $2.0M | **Break-even quarter**; My Pets vault MVP; Terms + Privacy live | 250+ paying milestone post; local vet QR cards (10 clinics) | **First give-back distribution** (50/50); adoption event Photo Booth |
 
 ---
@@ -280,7 +280,7 @@ A suburban family uses **Photo Booth** for adoption day, enrolls **Freedom Paws 
 
 | Year | Anchor event |
 |------|--------------|
-| Y1 | CA/TN shelter pilot kickoff + founding 500 |
+| Y1 | Tennessee shelter pilot kickoff + founding 500 |
 | Y2 | First press reunion story + 1,000 paying |
 | Y3 | Annual impact report + grant submission |
 | Y4 | National adoption day virtual + 6,000 paying |

@@ -39,7 +39,7 @@ export default function ShelterDashboardClient({ role, isReviewer }: Props) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
             Shelter portal
           </p>
-          <h1 className="mt-2 text-2xl font-bold">CA / TN pilot dashboard</h1>
+          <h1 className="mt-2 text-2xl font-bold">Tennessee pilot dashboard</h1>
           <p className="mt-2 text-sm text-white/60">
             Role: <span className="text-amber-300">{role}</span>
           </p>
@@ -111,7 +111,7 @@ export default function ShelterDashboardClient({ role, isReviewer }: Props) {
         </ul>
 
         <p className="mt-8 text-center text-[10px] text-white/40 leading-relaxed">
-          {stats?.pilotShelters ?? 3} pilot shelters · California &amp; Tennessee
+          {stats?.pilotShelters ?? 6} Tennessee pilot partners · expanding after validation
         </p>
       </div>
     </div>

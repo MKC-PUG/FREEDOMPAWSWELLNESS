@@ -8,7 +8,7 @@ import EnrollSetupRequired from '../enroll/EnrollSetupRequired';
 
 export const metadata: Metadata = {
   title: 'Report Found Dog • Freedom Paws ID',
-  description: 'Shelter found-dog intake — CA/TN pilot with biometric match search.',
+  description: 'Shelter found-dog intake — Tennessee pilot with biometric match search.',
 };
 
 export default async function IdFoundPage() {

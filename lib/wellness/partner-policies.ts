@@ -145,7 +145,7 @@ export const INSURANCE_PARTNER_POLICY: PartnerPolicyDoc = {
     title: 'How to apply',
     body: `Email ${CONTACT} with the subject line “Insurance Affiliate — Freedom Paws”. Include your affiliate program overview, proposed financial structure, tracking link capabilities, and lost-pet/urgent-care product details.`,
     bullets: [
-      '1. Intro call — mission alignment & pilot geography (CA/TN).',
+      '1. Intro call — mission alignment & Tennessee pilot geography (expanding after validation).',
       '2. Legal review — affiliate agreement + disclosure approval.',
       '3. Technical — provide quote, lost-dog, and urgent URLs for env configuration.',
       '4. QA — test flows from ViT, ID enroll, and /wellness hub.',

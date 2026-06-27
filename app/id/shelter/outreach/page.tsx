@@ -5,7 +5,7 @@ import BackLink from '@/app/components/BackLink';
 export const metadata: Metadata = {
   title: 'Shelter Outreach Kit • Freedom Paws ID',
   description:
-    'Pilot proof points, E2E runbook summary, and LOI template for California and Tennessee shelter partners.',
+    'Pilot proof points, E2E runbook summary, and LOI template for Tennessee shelter partners.',
 };
 
 const proofPoints = [
@@ -14,8 +14,8 @@ const proofPoints = [
     detail: 'Same-dog photo test: 87% similarity after intake-mirror embedding (up from 74% baseline). Human review → owner email delivered.',
   },
   {
-    label: 'Pilot regions',
-    detail: 'California and Tennessee shelters — biometric ID for unchipped dogs before microchip Track 2 (Oct 2026+).',
+    label: 'Pilot region',
+    detail: 'Tennessee shelters first — six Adoption Network partners. Biometric ID for unchipped dogs before microchip Track 2 (Oct 2026+). Additional states after pilot validation.',
   },
   {
     label: 'Human-in-the-loop',
@@ -102,10 +102,10 @@ export default function ShelterOutreachPage() {
         <section className="rounded-2xl border border-white/10 bg-[#0A1428]/60 p-5 text-center">
           <h2 className="text-sm font-bold text-white/90">Request LOI &amp; demo</h2>
           <p className="mt-2 text-sm text-white/60 leading-relaxed">
-            Email us with your shelter name, state (CA or TN), and estimated monthly intakes.
+            Email us with your shelter name, Tennessee county, and estimated monthly intakes.
           </p>
           <a
-            href="mailto:shelter@freedompawsinc.com?subject=Freedom%20Paws%20ID%20Pilot%20LOI&body=Shelter%20name%3A%0AState%20(CA%20or%20TN)%3A%0AMonthly%20intakes%20(estimate)%3A%0AContact%20name%20%26%20role%3A%0APreferred%20demo%20time%3A"
+            href="mailto:shelter@freedompawsinc.com?subject=Freedom%20Paws%20ID%20Pilot%20LOI&body=Shelter%20name%3A%0ACounty%20(TN)%3A%0AMonthly%20intakes%20(estimate)%3A%0AContact%20name%20%26%20role%3A%0APreferred%20demo%20time%3A"
             className="mt-4 inline-flex min-h-[48px] items-center justify-center rounded-2xl bg-[#F5C242] px-6 text-sm font-bold text-black hover:bg-amber-300 transition"
           >
             Email shelter@freedompawsinc.com →

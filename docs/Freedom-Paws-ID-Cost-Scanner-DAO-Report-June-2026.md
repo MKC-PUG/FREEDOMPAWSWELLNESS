@@ -35,7 +35,7 @@ Freedom Paws ID is a **two-track program**: biometric reunion (Track 1, Oct 2026
 | Backend + auth + My Pets server | 120 | $18,000 | 1 | Supabase — you build; contract for security review only |
 | Biometric enroll + embeddings | 120 | $18,000 | 1 | Highest complexity; pgvector |
 | Found dog + match queue | 80 | $12,000 | 1 | Human review queue essential |
-| Shelter portal | 80 | $12,000 | 1 | CA/TN pilot UX |
+| Shelter portal | 80 | $12,000 | 1 | Tennessee pilot UX |
 | Security + load test | 40 | $6,000 | 1 | Contract recommended before Jan launch |
 | **Track 1 subtotal** | **580** | **$87,000** | | |
 | Chip BLE + scan UX | 60 | $9,000 | 2 | HID keyboard MVP first (no BLE required Day 1) |
@@ -63,7 +63,7 @@ Freedom Paws ID is a **two-track program**: biometric reunion (Track 1, Oct 2026
 | Phase | Budget | Focus |
 |-------|--------|-------|
 | Pre-pilot (Jul–Sep 2026) | $2,000 | “What ViT sees” — eyes, face, gait |
-| Biometric pilot PR (Oct–Dec 2026) | $5,000 | CA/TN shelter diaries |
+| Biometric pilot PR (Oct–Dec 2026) | $5,000 | Tennessee shelter diaries |
 | Chip launch (Dec 2026–Jan 2027) | $4,000 | Scanner waitlist → kit |
 | 90-day promotion (Jan–Mar 2027) | $9,000 | “Unchipped isn’t unseen” national |
 | **Marketing total** | **$20,000** | |
@@ -222,7 +222,7 @@ Track 2 **starts Week 18** (Oct 9, 2026) — gated on biometric pilot progress O
 |---------|-------|------|----------------|----------|
 | Retail (app shop) | $129 | $85 | $44 | Owners, vets, public |
 | Shelter pilot subsidy (50% off) | $64.50 | $85 | **−$20.50** | First 2 scanners/shelter — acquisition cost |
-| **DAO full donation** | $0 revenue | $85–$120 | **−$85 to −$120** | CA/TN onboarding — mission spend |
+| **DAO full donation** | $0 revenue | $85–$120 | **−$85 to −$120** | Tennessee onboarding — mission spend |
 | Vet bundle (scanner + 10 enroll credits) | $199 | $85 + $5 digital | ~$109 | Higher margin, stickier |
 
 ### 4.4 Year 1 scanner P&L (illustrative)
@@ -254,7 +254,7 @@ Assumptions: 200 launch units; **60% DAO-donated to shelters (120 units)**; **40
 
 | DAO line item | Est. cost | Purpose |
 |---------------|-----------|---------|
-| Pilot shelter scanner donations (30 units) | $3,600 | CA/TN — 2 scanners per pilot shelter |
+| Pilot shelter scanner donations (30 units) | $3,600 | Tennessee — 2 scanners per pilot shelter |
 | Expanded shelter donations (90 units) | $7,650 | Scale to 20 shelters by Jan 2027 |
 | Shelter onboarding labor | $5,000 | Training, setup calls, PDF guides |
 | Biometric enroll sponsorship | $3,000 | Free enroll events — 500 × ~$6 API cost |
@@ -273,7 +273,7 @@ Assumptions: 200 launch units; **60% DAO-donated to shelters (120 units)**; **40
 | 30-day check-in | 0.5 | $0–$38 |
 | **Per shelter (cash)** | **6 hrs** | **$0–$450** + **2 donated scanners ($170–$240 COGS)** |
 
-**3 pilot shelters (CA/TN):** ~$510–$2,070 onboarding + $6,360 hardware (if 2 scanners each at $120)  
+**3 pilot shelters (Tennessee):** ~$510–$2,070 onboarding + $6,360 hardware (if 2 scanners each at $120)  
 **20 shelters by Jan 2027:** scale linearly — **DAO should reserve $35k–$45k** for hardware + onboarding in Year 1.
 
 ### 5.3 What shelters receive (DAO package)
@@ -315,7 +315,7 @@ Shelters can pilot **without scanners** Oct 2026 — photo-based found-dog match
 |------|-----------|
 | Jun 10, 2026 | Engineering start — `/id` scaffold + identity prompts |
 | Aug 15, 2026 | ViT multi-region + gait beta |
-| **Oct 1, 2026** | **Biometric shelter pilot** (CA/TN) |
+| **Oct 1, 2026** | **Biometric shelter pilot** (Tennessee) |
 | Oct 9, 2026 | Track 2 scanner dev begins (Week 18) |
 | Dec 15, 2026 | Chip module complete |
 | **Jan 1, 2027** | **Full promotion mode** |
@@ -328,7 +328,7 @@ Shelters can pilot **without scanners** Oct 2026 — photo-based found-dog match
 | # | Item | Recommendation |
 |---|------|----------------|
 | **I** | Scanner retail price | **$129** |
-| **J** | Match threshold | **0.72** (tune in CA/TN pilot) |
+| **J** | Match threshold | **0.72** (tune in Tennessee pilot) |
 | **New** | DAO scanner donation cap Year 1 | Suggest **120 units max** then 50% subsidy |
 | **New** | Shelter onboarding SLA | 6 hrs/shelter founder labor or $450 contract cap |
 

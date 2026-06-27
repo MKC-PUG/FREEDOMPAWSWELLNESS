@@ -247,7 +247,7 @@ Owner enrolls at home → Shelter photographs found dog → Staff review match �
 
 - **Human approval required** before any owner contact  
 - **Privacy by design** — no owner PII on public pages  
-- **Pilot regions:** California & Tennessee · target **Oct 1, 2026** full pilot  
+- **Pilot regions:** Tennessee · target **Oct 1, 2026** full pilot  
 
 ## Track 2 — Microchip scanner kits *(in development)*
 
@@ -455,7 +455,7 @@ Yes. Pet photos and wellness history are stored with **owner-controlled** privac
 
 ### Can shelters join for free?
 
-**Pilot partners** receive free ID and listing access during CA/TN pilot. Contact **grants@freedompawsinc.com**.
+**Pilot partners** receive free ID and listing access during Tennessee pilot. Contact **grants@freedompawsinc.com**.
 
 ### What is ViT Pro?
 

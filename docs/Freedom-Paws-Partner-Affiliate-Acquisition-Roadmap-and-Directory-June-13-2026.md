@@ -114,13 +114,13 @@ The **CSV directory** provides 50 ranked targets per category with apply URLs an
 |:----:|--------|----------:|
 | 1 | Email **AHVMA** re: directory / conference intro | $0–$500 sponsor inquiry |
 | 2 | BD email **sales@airvet.com** + Vetster support@vetster.com | $0 |
-| 3 | Screen: lifestyle-first consult %, CA/TN coverage, ER escalation policy | $0 |
+| 3 | Screen: lifestyle-first consult %, Tennessee pilot market coverage, ER escalation policy | $0 |
 | 4 | Negotiate $15–35/consult + ≥10% member discount | $0 |
 | 5 | Legal telehealth disclaimer review | **$300–$800** |
 | 6 | Configure telehealth env vars + deploy | $0 |
 | 7 | Co-post with 3 integrative Instagram vets (P2P) | **$0–$300** gifted protocol access |
 
-**Holistic vet P2B (direct):** Google Maps “integrative veterinarian” + Tennessee + California → call 10 practices → offer ViT + referral rev share. **Cost:** founder time + travel **$200–$800** regional trip.
+**Holistic vet P2B (direct):** Google Maps “integrative veterinarian” + Tennessee first (expand nationally) → call 10 practices → offer ViT + referral rev share. **Cost:** founder time + travel **$200–$800** regional trip.
 
 ---
 
@@ -161,7 +161,7 @@ The **CSV directory** provides 50 ranked targets per category with apply URLs an
 
 | Step | Action | Est. cost |
 |:----:|--------|----------:|
-| 1 | Email top 20 from CSV (CA/TN weighted) | $0 |
+| 1 | Email top 20 from CSV (Tennessee pilot weighted) | $0 |
 | 2 | Attach [Shelter One-Pager](./Freedom-Paws-ID-Shelter-One-Pager-June-2026.md) + E2E runbook | $0 |
 | 3 | 30-min Zoom demo `/id/found` + `/id/match` | $0 |
 | 4 | Sign LOI (no fee pilot) | $0 |

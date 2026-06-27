@@ -13,7 +13,7 @@ const cards = [
   {
     icon: '🛡️',
     title: 'Freedom Paws ID',
-    desc: 'Biometric pet identity — enroll eyes, face & gait for lost-dog matching (CA/TN pilot)',
+    desc: 'Biometric pet identity — enroll eyes, face & gait for lost-dog matching (Tennessee pilot)',
     cta: 'OPEN ID HUB →',
     href: '/id',
   },

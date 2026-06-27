@@ -56,7 +56,7 @@ export default function Track2Planned({ title, subtitle, icon, targetDate, bulle
         </div>
 
         <p className="mt-8 text-center text-[10px] text-white/40 leading-relaxed">
-          Biometric pilot launches Oct 1, 2026 (CA/TN). Track 2 ships after pilot validation.
+          Biometric pilot launches Oct 1, 2026 (Tennessee). Track 2 ships after pilot validation.
           Phones cannot read implanted microchips — hardware scanner required.
         </p>
       </div>

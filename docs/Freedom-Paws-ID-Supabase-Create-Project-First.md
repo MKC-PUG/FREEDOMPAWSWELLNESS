@@ -11,7 +11,7 @@ Do this once, then run `npm run id:setup` to finish steps 1–3 automatically.
 3. **Organization:** your personal org (or create one).
 4. **Name:** `freedom-paws-id` (or any name).
 5. **Database password:** generate a **strong password** and **save it in a password manager** — you need it for migrations.
-6. **Region:** choose closest to you (e.g. `West US` for California pilot).
+6. **Region:** choose closest to you (e.g. ``East US` for Tennessee partners).
 7. Wait ~2 minutes for the project to finish provisioning (green status).
 
 ---

@@ -60,7 +60,7 @@ Use on `/freedom-paws-id-toolbox` and app footers:
 | Deletion | Owner revocation removes enrollment embeddings; shelter may request intake deletion via FP ops |
 | Security | TLS in transit; RLS on Supabase tables; no public owner PII on QR cards |
 | Breach | Notify shelter within 72 hours of confirmed breach affecting pilot data |
-| Pilot scope | CA/TN shelters only through Dec 31, 2026 unless extended in writing |
+| Pilot scope | Tennessee shelters only through Dec 31, 2026 unless extended in writing |
 
 ---
 

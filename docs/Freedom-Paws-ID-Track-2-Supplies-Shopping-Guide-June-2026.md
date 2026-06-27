@@ -55,7 +55,7 @@ Minimum to start `/id/scan` HID keyboard integration and chip-on-profile storage
 
 ## 3. Phase F2 — Pilot / shelter kit (2–5 units)
 
-For CA/TN shelter pilot after MVP validates.
+For Tennessee shelter pilot after MVP validates.
 
 | # | Supply | Qty | Source | URL / contact | Notes |
 |---|--------|-----|--------|---------------|-------|

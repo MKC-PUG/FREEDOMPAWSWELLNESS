@@ -923,7 +923,7 @@ Slide 1: 40% of intakes unchipped. Slide 2: Photo → AI match. Slide 3: Human r
 | C | Full promotion date | **Jan 1, 2027** (moved up from Feb 1) |
 | D | Auth + database | **Supabase** (founder agrees if best for success) |
 | E | Vector search | **pgvector** (founder agrees if best for success) |
-| F | Shelter pilot regions | **California / Tennessee** |
+| F | Shelter pilot regions | **Tennessee** |
 | G | Engineering budget | **Self-build**; contract when necessary |
 | H | Framer copy | Pre-launch timeframe; keep “planned” until live |
 | I | Scanner retail price | *Pending* (recommendation: **$129**) |

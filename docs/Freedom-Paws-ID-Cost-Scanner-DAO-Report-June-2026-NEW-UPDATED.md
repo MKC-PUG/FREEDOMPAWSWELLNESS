@@ -96,7 +96,7 @@ Unchanged from master roadmap — **hardware spend deferred** until Week 18; **D
 | Week | Dates | Deliverable |
 |------|-------|-------------|
 | 18 | Oct 9–15, 2026 | Track 2 kickoff; order dev scanners |
-| 22 | Nov 6–12, 2026 | **First DAO shelter donations ship** (CA/TN) |
+| 22 | Nov 6–12, 2026 | **First DAO shelter donations ship** (Tennessee) |
 | 27 | Dec 11–17, 2026 | Chip module complete; volume order |
 | 29 | Jan 1, 2027 | Promotion mode |
 
@@ -123,7 +123,7 @@ Unchanged from master roadmap — **hardware spend deferred** until Week 18; **D
 
 **Qualifying shelter (DAO donation):**
 - Signed shelter DPA + biometric consent workflow
-- CA/TN pilot priority, then national waitlist
+- Tennessee pilot priority, then national waitlist
 - **2 free scanners** per partner (Track 2)
 - **50 free owner enrollments** per adoption event (API cost from DAO)
 - **6 hrs onboarding** (DAO-funded if contracted)
@@ -161,7 +161,7 @@ To recover **186 donated units** at $44 margin: **~372 retail units** — confir
 | DAO line item | Est. cost | Notes |
 |---------------|-----------|-------|
 | **Phase A — Biometric pilot ops** | $1,200 | OpenAI + Supabase + Resend (500 enroll / 25 found) |
-| **Phase A — Shelter onboarding (3 CA/TN)** | $2,250 | 3 × $750 fully loaded (contract training optional) |
+| **Phase A — Shelter onboarding (6 TN)** | $2,250 | 3 × $750 fully loaded (contract training optional) |
 | **Phase A — Enroll sponsorship** | $3,000 | 500 free enrolls × ~$6 API |
 | **Phase A — Pilot PR & materials** | $5,000 | Reunion stories, adoption QR cards |
 | **Phase A — Legal share (DPA/consent)** | $6,000 | Biometric infrastructure |
@@ -187,7 +187,7 @@ To recover **186 donated units** at $44 margin: **~372 retail units** — confir
 | 30-day success check-in | $75 | — |
 | **Per shelter DAO total** | **~$750–$1,275** | **$700+ hardware value** |
 
-**3 pilot shelters (CA/TN):** ~$2,250–$3,825 onboarding + **$0 scanner cost in Phase A**  
+**3 pilot shelters (Tennessee):** ~$2,250–$3,825 onboarding + **$0 scanner cost in Phase A**  
 **20 shelters by Jan 2027:** ~$15k–$25k onboarding + **~$3,400–$4,800** scanner COGS (40 units @ volume)
 
 ### 5.4 DAO vs product build — separate treasuries
@@ -205,7 +205,7 @@ DAO may also receive **XRPL protocol revenue allocations** — document as in-ki
 | Metric | Oct 2026 target | Jan 2027 target |
 |--------|-----------------|-----------------|
 | Biometric enrollments | 500 | 3,000 |
-| Active shelter partners | 3 (CA/TN) | 20 |
+| Active shelter partners | 3 (Tennessee) | 20 |
 | Documented reunions | 1+ | 5+ |
 | Cost per enrollment (DAO) | ~$6–$12 | ~$4–$8 (scale) |
 | Cost per shelter onboarded | ~$750–$1,275 | ~$750 |
@@ -229,7 +229,7 @@ DAO may also receive **XRPL protocol revenue allocations** — document as in-ki
 |------|-----------|
 | Jun 10, 2026 | Supabase + enroll steps 1–5 + identity API **shipped** |
 | Aug 15, 2026 | ViT gait beta; enroll steps 6–9 |
-| **Oct 1, 2026** | Biometric pilot (CA/TN) — **DAO Phase A** |
+| **Oct 1, 2026** | Biometric pilot (Tennessee) — **DAO Phase A** |
 | Nov 2026 | **DAO Phase B** — first scanner donations |
 | **Jan 1, 2027** | Full promotion |
 
@@ -253,7 +253,7 @@ DAO may also receive **XRPL protocol revenue allocations** — document as in-ki
 2. **Plan 80/15/5 distribution** — donation / subsidy / retail — matching founder intent.
 3. **Measure DAO ROI** on enrollments and reunions, not scanner gross margin.
 4. **Lock retail at $129** for the 5% public channel — replenishment only.
-5. **Phase A first** — CA/TN pilot runs without scanner spend; DAO focuses on training + enroll sponsorship.
+5. **Phase A first** — Tennessee pilot runs without scanner spend; DAO focuses on training + enroll sponsorship.
 
 ---
 

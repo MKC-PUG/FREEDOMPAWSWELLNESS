@@ -111,7 +111,7 @@ If any fail, follow [`Freedom-Paws-ID-Supabase-Setup-Checklist.md`](./Freedom-Pa
 
 ## After first successful E2E
 
-1. Announce internally — pilot ready for **3 CA/TN shelter LOIs**
+1. Announce internally — pilot ready for **3 Tennessee shelter LOIs**
 2. Use screenshots in shelter one-pager outreach
 3. Optional: Reel/post “How Freedom Paws ID match review works” (human approval emphasis)
 4. Mark complete in [`Freedom-Paws-Partner-Acquisition-Marketing-Plan-June-13-2026.md`](./Freedom-Paws-Partner-Acquisition-Marketing-Plan-June-13-2026.md) Week 11–12 calendar

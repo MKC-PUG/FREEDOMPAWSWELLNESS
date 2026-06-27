@@ -34,7 +34,7 @@ Freedom Paws grows through **trust-first distribution**: daily utility (ViT, My 
 |:--------:|----------|-----------|
 | 1 | **Pet insurance affiliate** | Highest $/conversion; pairs with ViT urgent + ID |
 | 2 | **Holistic telehealth** | Closes ViT → consult loop; weekly retention |
-| 3 | **Shelter pilot (CA/TN)** | Reunion proof = national credibility |
+| 3 | **Shelter pilot (Tennessee)** | Reunion proof = national credibility |
 | 4 | **Veteran dog organizations** | Mission moat + B2B2C seats |
 | 5 | **Protocol / whole-food affiliates** | Supports Token Shop + education |
 | 6 | **Non-toxic chews & toys** | Low-friction affiliate; allergy/gut cross-sell |
@@ -99,7 +99,7 @@ Research (mission fit) → Warm intro or targeted email → 15-min alignment cal
 | Step | Action | Owner | Done when |
 |:----:|--------|-------|-----------|
 | 1 | Shortlist AHVMA-aligned platforms (Section 5) | Founder | 5 targets |
-| 2 | Verify DVM licensing + CA/TN coverage | Partner | Written confirmation |
+| 2 | Verify DVM licensing + Tennessee pilot market coverage | Partner | Written confirmation |
 | 3 | Confirm emergency escalation policy in writing | Legal | Clause approved |
 | 4 | Negotiate $15–35/consult referral + ≥10% member discount | Founder | Signed referral deal |
 | 5 | Configure `NEXT_PUBLIC_FP_TELEHEALTH_*` | Engineering | Live booking link |
@@ -158,7 +158,7 @@ Research (mission fit) → Warm intro or targeted email → 15-min alignment cal
 
 ### 3E. Shelter recruitment → utilization
 
-**Goal:** 3 active CA/TN pilots by Oct 2026; 15 by end 2026; 75 by Year 5.
+**Goal:** 6 active Tennessee pilot partners by Oct 2026; 15 by end 2026; 75 by Year 5.
 
 | Step | Action | Done when |
 |:----:|--------|-----------|
@@ -250,7 +250,7 @@ Research (mission fit) → Warm intro or targeted email → 15-min alignment cal
 | ★★★ | **AHVMA** (American Holistic VMA) | Directory of integrative DVMs | ahvma.org — conference sponsor / member referral |
 | ★★★ | **Vetster** (integrative filter) | Marketplace; per-consult fees | vetster.com business development |
 | ★★ | **AirVet** | Telehealth scale; negotiate holistic subset | airvet.com partnerships |
-| ★★ | **Holistic Vet Connect** / regional integrative clinics | Direct CA/TN practitioners | Cold email + ViT demo |
+| ★★ | **Holistic Vet Connect** / regional integrative clinics | Direct Tennessee practitioners first | Cold email + ViT demo |
 | ★★ | **Pawsitive Wellness**-type integrative tele-practices | Small practices — flexible rev share | Local search + Instagram DVMs |
 | ★ | **University integrative programs** (e.g. UF integrative med) | Credibility; not always commercial | Academic partnership letter |
 
@@ -312,24 +312,23 @@ Research (mission fit) → Warm intro or targeted email → 15-min alignment cal
 
 ## 6. Recruitment: shelters & veteran groups
 
-### Shelter targets — California (pilot)
+### Shelter targets — Tennessee (pilot — active)
 
 | Priority | Organization / type | Why |
 |:--------:|---------------------|-----|
-| ★★★ | **Best Friends Network** partners in CA | No-kill alignment; national PR |
-| ★★★ | **SF SPCA**, **East Bay SPCA** | Tech-forward; media visibility |
-| ★★ | **County shelters** open to software pilots | High intake volume |
-| ★★ | **Rescue groups** (pull-based fosters) | Flexible; fast decisions |
-| ★ | **California Animal Welfare Association (CalAnimals)** | Conference booth; bulk intro |
-
-### Shelter targets — Tennessee (pilot)
-
-| Priority | Organization / type | Why |
-|:--------:|---------------------|-----|
-| ★★★ | **Humane Society of Tennessee Valley** | Regional hub |
-| ★★★ | **Nashville Humane**, **Young-Williams** | Volume + events |
-| ★★ | **Smoky Mountain area rescues** | Buddy’s Legacy geography |
+| ★★★ | **Memphis Animal Services**, **Metro ACC**, **Young-Williams** | TN Adoption Network municipal partners (live in app) |
+| ★★★ | **Humane Society of Sumner County**, **New Leash on Life**, **Safe Place for Animals** | TN private pilot partners (live in app) |
+| ★★★ | **Humane Society of Tennessee Valley** | Regional hub (expansion) |
+| ★★ | **Smoky Mountain area rescues** | Buddy's Legacy geography |
 | ★★ | **Agency rescue coalitions** | Multi-org training one session |
+
+### Shelter targets — future expansion (post-TN pilot)
+
+| Priority | Organization / type | Why |
+|:--------:|---------------------|-----|
+| ★★★ | **Best Friends Network** partners | No-kill alignment; national PR after TN proof |
+| ★★ | **West Coast municipal / county shelters** | After first public reunion story |
+| ★ | **State shelter associations (national)** | Conference announcements when expanding |
 
 ### Shelter grants & credibility (apply, not “partner sell”)
 
@@ -338,7 +337,7 @@ Research (mission fit) → Warm intro or targeted email → 15-min alignment cal
 | **Petco Love** | Adoption + ID pilot funding |
 | **Maddie’s Fund** | Foster/intake innovation |
 | **ASPCA** | Select grants; align mission carefully |
-| **State shelter associations** | CA/TN — pilot announcements |
+| **State shelter associations** | TN first — pilot announcements; expand after reunion proof |
 
 ---
 
@@ -363,7 +362,7 @@ Research (mission fit) → Warm intro or targeted email → 15-min alignment cal
 
 | Week | Insurance | Telehealth | Nutrition affiliate | Shelters | Veterans |
 |------|-----------|------------|---------------------|----------|----------|
-| 1–2 | Apply Embrace, Pets Best, Spot | List 5 AHVMA telehealth targets | Apply Honest Kitchen, Open Farm | Email 10 CA/TN shelters | Email K9s For Warriors, VetDogs |
+| 1–2 | Apply Embrace, Pets Best, Spot | List 5 AHVMA telehealth targets | Apply Honest Kitchen, Open Farm | Email 6 TN pilot shelters | Email K9s For Warriors, VetDogs |
 | 3–4 | Follow-up calls | 2 intro calls | — | 3 discovery calls | 1 intro call |
 | 5–6 | Negotiate discount + URLs | Share partner standards PDF | 1 link live on Gut Balance | Sign 1 LOI | Draft MOU |
 | 7–8 | Legal review | Legal review | Apply West Paw affiliate | Train pilot staff | Veteran Framer CTA |

@@ -70,7 +70,7 @@ Freedom Paws occupies a **unique whitespace**: the only wellness-first, mission-
 | **Holistic protocol library (10)** | ● | ○ | ○ | ○ | ○ | ○ | ○ |
 | **Tokenized / crypto protocol shop** | ● XRPL | ○ | ○ | ○ | ○ | ○ | ○ |
 | **Biometric pet ID (no chip)** | ● pilot | ○ | ○ | ○ | ○ | ○ | ○ |
-| **Lost-dog shelter match network** | ● CA/TN | ○ | ○ | ○ | ○ | · GPS | ○ |
+| **Lost-dog shelter match network** | ● Tennessee pilot | ○ | ○ | ○ | ○ | · GPS | ○ |
 | **Pet insurance affiliate** | ● module | · own | · bundle | · bundle | ○ | ○ | ○ |
 | **Holistic telehealth referral** | ● module | · Chewy Vet | ○ | ○ | ● generic | ○ | ● |
 | **Urgent triage (severe DB, ≥80%)** | ● | ○ | ○ | ○ | · | ○ | · |
@@ -145,7 +145,7 @@ Freedom Paws will **not** dominate by out-spending Chewy on dog food. It **can**
 | Priority | Action | Dominance lever |
 |:--------:|--------|-----------------|
 | P0 | Sign **1 insurance + 1 holistic telehealth** affiliate with member discount | Revenue + funnel completion |
-| P0 | **First real reunion** via ID pilot (CA/TN) + press | Credibility moat |
+| P0 | **First real reunion** via ID pilot (Tennessee) + press | Credibility moat |
 | P0 | Framer hero CTAs → `/diagnostics` + `/id/enroll` live | Acquisition |
 | P1 | Founding 500 membership campaign ($9.99/mo) | Recurring base |
 | P1 | ViT free unlimited + protocol upsell | Daily opens |
@@ -157,7 +157,7 @@ Freedom Paws will **not** dominate by out-spending Chewy on dog food. It **can**
 |:--------:|--------|-----------------|
 | P0 | Scale to **720+ paying**; break $65K semi-annual revenue | PMF signal |
 | P0 | **20 shelter waitlist** → 6–10 active partners | B2B pipeline |
-| P1 | Grooming affiliate pilot in CA/TN (commission only) | Marketplace seed |
+| P1 | Grooming affiliate pilot in Tennessee (commission only) | Marketplace seed |
 | P1 | ID premium tier ($2.99/mo) + lost-dog insurance deep link | LTV |
 | P2 | Monitor relay production (10 → 100 users) | Stickiness |
 

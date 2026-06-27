@@ -2,7 +2,7 @@
 
 **Version:** 1.0 · June 2026  
 **Audience:** Shelter directors, intake staff, FP ops  
-**Pilot target:** Oct 1, 2026 · California & Tennessee
+**Pilot target:** Oct 1, 2026 · Tennessee
 
 ---
 

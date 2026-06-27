@@ -5,7 +5,7 @@ import BackLink from '@/app/components/BackLink';
 export const metadata: Metadata = {
   title: 'Freedom Paws ID • Biometric Pet Identity',
   description:
-    'Enroll your dog with ViT vision — eyes, face, body, posture, and gait — for lost-dog matching. Shelter pilot: California & Tennessee.',
+    'Enroll your dog with ViT vision — eyes, face, body, posture, and gait — for lost-dog matching. Shelter pilot: Tennessee.',
 };
 
 const hubCards = [
@@ -36,7 +36,7 @@ const hubCards = [
   {
     icon: '🏠',
     title: 'Report Found Dog',
-    desc: 'CA/TN pilot intake — photo or video, auto similarity search, human review.',
+    desc: 'Tennessee pilot intake — photo or video, auto similarity search, human review.',
     cta: 'SHELTER INTAKE →',
     href: '/id/found',
     status: 'live' as const,
@@ -68,7 +68,7 @@ const hubCards = [
   {
     icon: '📋',
     title: 'Shelter Outreach Kit',
-    desc: 'E2E proof points, pilot steps, and LOI email template for CA/TN partners.',
+    desc: 'E2E proof points, pilot steps, and LOI email template for Tennessee partners.',
     cta: 'OUTREACH KIT →',
     href: '/id/shelter/outreach',
     status: 'live' as const,
@@ -144,8 +144,8 @@ export default function FreedomPawsIdPage() {
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-white/70">
             ViT vision for <strong className="text-white/90">unchipped dogs</strong> — eyes,
-            face, body, posture, and gait. Shelter pilot: California &amp; Tennessee.
-            Microchip module follows after Oct 2026 pilot.
+            face, body, posture, and gait. Tennessee shelter pilot — expanding to additional
+            states after validation. Microchip module follows after Oct 2026 pilot.
           </p>
         </header>
 

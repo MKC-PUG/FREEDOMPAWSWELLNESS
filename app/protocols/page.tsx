@@ -9,9 +9,21 @@ export default function ProtocolsPage() {
     <div className="min-h-screen bg-[#0A1428] text-white">
       <div className="max-w-7xl mx-auto px-6 py-8 sm:py-14">
         <BackLink />
-        {/* Header */}
+        {/* Header — image first, then title */}
         <header className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+          <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40 max-w-4xl mx-auto">
+            <Image
+              src="/images/protocols/superbud-10-protocols.png"
+              alt="SuperBud and friends — 10 protocols to stay healthy"
+              width={1024}
+              height={687}
+              priority
+              sizes="(max-width: 896px) 100vw, 896px"
+              className="block w-full h-auto"
+            />
+          </div>
+
+          <h1 className="mt-8 text-4xl md:text-5xl font-bold tracking-tight">
             Our 10 Tokenized Holistic Protocols.
           </h1>
           <p className="mt-3 text-lg md:text-xl text-white/80">
@@ -20,18 +32,6 @@ export default function ProtocolsPage() {
           <p className="mt-1 text-sm font-semibold tracking-wide text-[#F5C242]">
             Powered By The XRP Ledger
           </p>
-
-          <div className="mt-8 rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40 max-w-4xl mx-auto">
-            <Image
-              src="/images/protocols/header-photo.png"
-              alt="SuperBud holding an XRP coin surrounded by a group of happy dogs by a Tennessee lake"
-              width={886}
-              height={666}
-              priority
-              sizes="(max-width: 896px) 100vw, 896px"
-              className="block w-full h-auto"
-            />
-          </div>
         </header>
 
         {/* Protocol cards */}

@@ -53,7 +53,7 @@ Freedom Paws can become the trusted **daily app for dog parents** by sequencing 
 | Freedom Paws ID | Trust, identity, lost-dog, shelter network |
 | My Pets vault | Profile, records, subscription anchor |
 | 10 protocols + Token Shop | Differentiated wellness (not commodity Chewy) |
-| Shelter pilot (CA/TN) | Supply + credibility for boarding/rehoming |
+| Shelter pilot (Tennessee) | Supply + credibility for boarding/rehoming |
 | Supabase + app PWA | Platform spine for partners/APIs |
 
 **Gap vs Chewy/Rover:** logistics, vet licenses, nationwide supply, payment scale.
@@ -155,7 +155,7 @@ Freedom Paws can become the trusted **daily app for dog parents** by sequencing 
 
 - Only after user trusts app for **their** dog (ID + ViT + My Pets)
 
-**Freedom Paws fit:** **Medium now** — need local supply in CA/TN; differentiate with **ID-verified pet passport**
+**Freedom Paws fit:** **Medium now** — need local supply in Tennessee; differentiate with **ID-verified pet passport**
 
 **5-year role**
 
@@ -182,7 +182,7 @@ Freedom Paws can become the trusted **daily app for dog parents** by sequencing 
 
 - Travel, holidays; shelter partners as trusted boarders
 
-**Freedom Paws fit:** **Good in CA/TN pilot** — shelters/rescues as vetted supply
+**Freedom Paws fit:** **Good in Tennessee pilot** — shelters/rescues as vetted supply
 
 **5-year role**
 
@@ -275,7 +275,7 @@ Freedom Paws can become the trusted **daily app for dog parents** by sequencing 
 | Phase | When | Focus | Revenue type |
 |-------|------|--------|--------------|
 | **1** | 2026–27 (pilot) | ID + ViT + My Pets; insurance affiliate; telehealth partner | CPA + consult fees |
-| **2** | 2027–28 | Grooming + boarding in CA/TN; food subscription (curated); protocol shop | Commission + recurring |
+| **2** | 2027–28 | Grooming + boarding in Tennessee; food subscription (curated); protocol shop | Commission + recurring |
 | **3** | 2028–29 | Walking + full marketplace; ID-verified providers | GMV take rate |
 | **4** | 2029–31 | Own margin where defensible (protocol nutrition, ID premium, shelter SaaS) | Subscription + SaaS |
 
@@ -289,7 +289,7 @@ Assumes focused execution, pilot → regional → national:
 |------|-------------------|----------------------|--------------------------------|
 | **2026** | 2k–10k (pilot) | Protocol shop, insurance CPA, grants | $50k–250k |
 | **2027** | 25k–75k | + telehealth, insurance scale, first bookings | $500k–1.5M |
-| **2028** | 100k–250k | Marketplace CA/TN; food subs; ID premium | $2M–6M |
+| **2028** | 100k–250k | Marketplace TN+; food subs; ID premium | $2M–6M |
 | **2029** | 300k–600k | Multi-city marketplace; B2B/employer channels | $6M–15M |
 | **2030–31** | 750k–1.5M | National services + recurring nutrition + brand partnerships | $15M–40M+ |
 
@@ -374,7 +374,7 @@ Freedom Paws ID  →   Protocol food sub  ←   Health records
 2. **Insurance:** Sign 1–2 affiliate programs; add “Get a quote” after ViT high-concern results
 3. **Telehealth:** Evaluate Vetster / AirVet / FirstVet partner embed API
 4. **Document partner requirements** in repo before building marketplace
-5. **Do not** start Rover-clone until CA/TN ID enrollment density proves demand
+5. **Do not** start Rover-clone until Tennessee ID enrollment density proves demand
 
 ---
 

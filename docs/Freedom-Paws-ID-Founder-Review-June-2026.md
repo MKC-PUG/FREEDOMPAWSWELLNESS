@@ -131,7 +131,7 @@
 | **C** | Full promotion date | **Jan 1, 2027** (moved up from Feb 1) |
 | **D** | Auth + DB stack | **Supabase** (if best for success — founder agrees) |
 | **E** | Vector search | **pgvector** (if best for success — founder agrees) |
-| **F** | Shelter pilot regions | **California / Tennessee** |
+| **F** | Shelter pilot regions | **Tennessee** |
 | **G** | Engineering budget | **Self-build**; contract when necessary |
 | **H** | Framer copy | Do for **pre-launch timeframe**; keep “planned” until live |
 | **I** | Scanner retail price | *Pending* |

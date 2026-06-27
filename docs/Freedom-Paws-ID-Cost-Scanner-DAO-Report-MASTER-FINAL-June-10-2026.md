@@ -93,7 +93,7 @@ Freedom Paws ID is a **two-track program**: biometric reunion (Track 1, Oct 2026
 | Phase | Budget | Focus |
 |-------|--------|-------|
 | Pre-pilot (Jul–Sep 2026) | $2,000 | “What ViT sees” — eyes, face, gait |
-| Biometric pilot PR (Oct–Dec 2026) | $5,000 | CA/TN shelter diaries |
+| Biometric pilot PR (Oct–Dec 2026) | $5,000 | Tennessee shelter diaries |
 | Chip launch (Dec 2026–Jan 2027) | $4,000 | Scanner waitlist → kit |
 | 90-day promotion (Jan–Mar 2027) | $9,000 | “Unchipped isn’t unseen” national |
 | **Marketing total** | **$20,000** | |
@@ -258,7 +258,7 @@ Freedom Paws ID is a **two-track program**: biometric reunion (Track 1, Oct 2026
 
 **Qualifying shelter (mission donation):**
 - Signed shelter DPA + biometric consent workflow  
-- CA/TN pilot priority, then national waitlist  
+- Tennessee pilot priority, then national waitlist  
 - **2 free scanners** per partner (Track 2)  
 - **50 sponsored owner enrollments** per adoption event  
 - **6 hrs onboarding** (mission-funded if contracted)  
@@ -318,7 +318,7 @@ Token Shop sales  +  Affiliate income
 | Mission line item | Est. cost | Funding source |
 |-------------------|-----------|----------------|
 | **Phase A — Biometric pilot ops** | $1,200 | Shop + affiliate net |
-| **Phase A — Shelter onboarding (3 CA/TN)** | $2,250 | Shop + affiliate net |
+| **Phase A — Shelter onboarding (6 TN)** | $2,250 | Shop + affiliate net |
 | **Phase A — Enroll sponsorship** | $3,000 | Shop + affiliate net |
 | **Phase A — Pilot PR & materials** | $5,000 | Shop + affiliate net |
 | **Phase A — Legal share (DPA/consent)** | $6,000 | Shop + affiliate net |
@@ -355,7 +355,7 @@ Token Shop sales  +  Affiliate income
 | 30-day success check-in | $75 | — |
 | **Per shelter total** | **~$750–$1,275** | **$700+ hardware value** |
 
-**3 pilot shelters (CA/TN):** ~$2,250–$3,825 onboarding + **$0 scanner in Phase A**  
+**3 pilot shelters (Tennessee):** ~$2,250–$3,825 onboarding + **$0 scanner in Phase A**  
 **20 shelters by Jan 2027:** ~$15k–$25k onboarding + scanner COGS from Phase B
 
 ### 5.6 ROI metrics (mission pool — not scanner margin)
@@ -363,7 +363,7 @@ Token Shop sales  +  Affiliate income
 | Metric | Oct 2026 target | Jan 2027 target |
 |--------|-----------------|-----------------|
 | Biometric enrollments | 500 | 3,000 |
-| Active shelter partners | 3 (CA/TN) | 20 |
+| Active shelter partners | 3 (Tennessee) | 20 |
 | Documented reunions | 1+ | 5+ |
 | Cost per enrollment (mission) | ~$6–$12 | ~$4–$8 (scale) |
 | Cost per shelter onboarded | ~$750–$1,275 | ~$750 |
@@ -392,7 +392,7 @@ Token Shop sales  +  Affiliate income
 |------|-----------|
 | Jun 10, 2026 | Track 1 **shipped** — enroll, found, match, shelter, settings |
 | Aug 15, 2026 | ViT gait polish; pilot QA |
-| **Oct 1, 2026** | **Biometric shelter pilot** (CA/TN) — Phase A |
+| **Oct 1, 2026** | **Biometric shelter pilot** (Tennessee) — Phase A |
 | Nov 2026 | **Phase B** — first scanner donations |
 | **Jan 1, 2027** | **Full promotion mode** |
 | Q2 2027 | SMS alerts; scale shelters |
@@ -419,7 +419,7 @@ Token Shop sales  +  Affiliate income
 2. **Document 10% give-back** at checkout and Framer — 5% / 5% split; attorney fixes eligible revenue base.
 3. **Plan 80/15/5 scanner distribution** — mission donation / subsidy / retail.
 4. **Measure mission ROI** on enrollments and reunions, not scanner gross margin.
-5. **Phase A first** — CA/TN biometric pilot without scanner spend; grow Token Shop revenue before Phase B hardware order.
+5. **Phase A first** — Tennessee biometric pilot without scanner spend; grow Token Shop revenue before Phase B hardware order.
 6. **Lock retail at $129** on Token Shop for public scanner channel.
 
 ---

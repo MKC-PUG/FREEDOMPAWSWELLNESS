@@ -128,8 +128,9 @@ export type IdentityAnalysisResult = {
 
 export type AnalyzeMode = 'wellness' | 'identity' | 'both' | 'vit_pro';
 
-/** Default match threshold — tune during CA/TN pilot */
+/** Default match threshold — tune during Tennessee shelter pilot */
 export const ID_MATCH_THRESHOLD_DEFAULT = 0.72;
 
 /** Pilot regions (founder decision F) */
-export const ID_PILOT_STATES = ['California', 'Tennessee'] as const;
+/** Shelter ID pilot states — add via migration when expanding beyond Tennessee */
+export const ID_PILOT_STATES = ['Tennessee'] as const;
