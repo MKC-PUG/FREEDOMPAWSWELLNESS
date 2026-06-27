@@ -54,6 +54,9 @@ export function drawThemeBackground(
     case 'heaven-gates':
       drawHeavenGates(ctx, w, h);
       break;
+    case 'stairway-to-heaven':
+      drawStairwayToHeaven(ctx, w, h);
+      break;
     default:
       ctx.fillStyle = '#0A1625';
       ctx.fillRect(0, 0, w, h);
@@ -242,7 +245,7 @@ function drawHolidayChristmas(ctx: CanvasRenderingContext2D, w: number, h: numbe
   }
 }
 
-/** Heavenly golden entry gates — canvas fallback until bg-heaven-gates.jpg is added. */
+/** Heavenly golden entry gates — canvas fallback until bg-heaven-gates.png loads. */
 function drawHeavenGates(ctx: CanvasRenderingContext2D, w: number, h: number) {
   const sky = ctx.createLinearGradient(0, 0, 0, h);
   sky.addColorStop(0, '#1e3a8a');
@@ -323,4 +326,55 @@ function drawHeavenGates(ctx: CanvasRenderingContext2D, w: number, h: number) {
   ctx.lineTo(w * 0.5 - w * 0.06, h * 0.58);
   ctx.closePath();
   ctx.fill();
+}
+
+/** Marble stairs into light — canvas fallback until bg-stairway-to-heaven.png loads. */
+function drawStairwayToHeaven(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  const sky = ctx.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, '#fef9c3');
+  sky.addColorStop(0.35, '#fde68a');
+  sky.addColorStop(0.7, '#93c5fd');
+  sky.addColorStop(1, '#e0f2fe');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, w, h);
+
+  const glow = ctx.createRadialGradient(w * 0.5, h * 0.08, 0, w * 0.5, h * 0.08, w * 0.55);
+  glow.addColorStop(0, 'rgba(255,255,255,0.95)');
+  glow.addColorStop(0.5, 'rgba(254,240,138,0.35)');
+  glow.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, w, h);
+
+  const steps = 7;
+  for (let i = 0; i < steps; i += 1) {
+    const t = i / steps;
+    const stepW = w * (0.22 + t * 0.56);
+    const stepH = h * 0.055;
+    const stepY = h * (0.38 + t * 0.52);
+    const stepX = (w - stepW) / 2;
+    const marble = ctx.createLinearGradient(stepX, stepY, stepX + stepW, stepY + stepH);
+    marble.addColorStop(0, '#f8fafc');
+    marble.addColorStop(0.5, '#e2e8f0');
+    marble.addColorStop(1, '#cbd5e1');
+    ctx.fillStyle = marble;
+    ctx.fillRect(stepX, stepY, stepW, stepH);
+    ctx.strokeStyle = 'rgba(148,163,184,0.45)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(stepX, stepY, stepW, stepH);
+  }
+
+  ctx.fillStyle = 'rgba(255,255,255,0.75)';
+  for (let i = 0; i < 10; i += 1) {
+    ctx.beginPath();
+    ctx.ellipse(
+      ((i * 113) % 1000) / 1000 * w,
+      h * (0.55 + ((i * 67) % 300) / 1000),
+      w * 0.08,
+      h * 0.035,
+      0,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+  }
 }

@@ -161,7 +161,7 @@ const HOLIDAY_THEMES: PhotoBoothTheme[] = [
   },
 ];
 
-/** Real-photo adventures & landmarks — only themes with JPGs in /backgrounds/ (add more later). */
+/** Real-photo adventures & spirit scenes — JPG/PNG in /backgrounds/. */
 const LANDMARK_THEMES: PhotoBoothTheme[] = [
   {
     id: 'ocean-boat',
@@ -173,8 +173,15 @@ const LANDMARK_THEMES: PhotoBoothTheme[] = [
   {
     id: 'heaven-gates',
     name: 'Heaven Gates',
-    emoji: '👼',
-    background: BG('bg-heaven-gates.jpg'),
+    emoji: '🚪',
+    background: BG('bg-heaven-gates.png'),
+    stickers: [],
+  },
+  {
+    id: 'stairway-to-heaven',
+    name: 'Stairway to Heaven',
+    emoji: '🪜',
+    background: BG('bg-stairway-to-heaven.png'),
     stickers: [],
   },
 ];
