@@ -84,10 +84,10 @@ const hubCards = [
   {
     icon: '📡',
     title: 'Microchip Scan',
-    desc: 'Universal scanner for 125 / 128 / 134.2 kHz chips — Track 2 (after biometric pilot).',
-    cta: 'TRACK 2 PREVIEW →',
+    desc: 'Scan or paste 9/10/15-digit chip IDs — link to biometric Freedom Paws ID (WorldScan wedge supported).',
+    cta: 'SCAN CHIP →',
     href: '/id/scan',
-    status: 'planned' as const,
+    status: 'live' as const,
   },
   {
     icon: '🔍',

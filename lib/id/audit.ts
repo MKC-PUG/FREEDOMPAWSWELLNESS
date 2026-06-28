@@ -6,6 +6,8 @@ export type AuditAction =
   | 'match.owner_email.sent'
   | 'enrollment.revoked'
   | 'found.report.submit'
+  | 'chip.link'
+  | 'chip.scan'
   | 'ops.settings.update'
   | 'ops.marketing.approval';
 

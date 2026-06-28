@@ -79,6 +79,7 @@ export function getIdConfigStatus(): IdConfigStatus {
       'supabase/migrations/003_found_match.sql',
       'supabase/migrations/004_audit_settings.sql',
       'supabase/migrations/005_intake_mirror_embeddings.sql',
+      'supabase/migrations/014_microchip_track2.sql',
     ],
     setupNote:
       'Run all four SQL migrations in Supabase SQL Editor and enable Email auth (magic link). Env vars alone are not enough.',
