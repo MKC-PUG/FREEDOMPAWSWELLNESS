@@ -27,6 +27,10 @@ const steps = [
     title: '5. Share or save',
     body: 'Tap Share to send to Messages, social apps, or family. Tap Save to download a PNG to your phone.',
   },
+  {
+    title: '6. Print & gift partners (optional)',
+    body: 'After you save your photo, scroll to Print & gift partners — framed prints, mugs, pillows, non-toxic blankets, and Christmas cards. Links go live when affiliate agreements are signed.',
+  },
 ];
 
 const meAndMyPupSteps = [

@@ -3,6 +3,7 @@
 import { useState, type RefObject } from 'react';
 import AccessoryDrawer from './AccessoryDrawer';
 import AdjustPhotoPad from './AdjustPhotoPad';
+import PhotoBoothAffiliatePicks from '@/app/components/photobooth/PhotoBoothAffiliatePicks';
 import MeAndMyPupCanvas from './MeAndMyPupCanvas';
 import PhotoBoothCanvas from './PhotoBoothCanvas';
 import { ACCESSORY_STICKERS } from '@/lib/photobooth/themes';
@@ -22,6 +23,7 @@ import {
 } from '@/lib/photobooth/me-and-my-pup';
 import type { MeAndMyPupCanvasHandle } from './MeAndMyPupCanvas';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
+import type { PhotoBoothAffiliatesData } from '@/lib/photobooth/affiliates';
 
 type Props = {
   themeId: string;
@@ -71,6 +73,7 @@ type Props = {
   aiCreditsRemaining?: number;
   onOpenAiCostume: () => void;
   onExport: () => void;
+  photoAffiliates: PhotoBoothAffiliatesData;
 };
 
 export default function PhotoBoothUnifiedEditor({
@@ -121,6 +124,7 @@ export default function PhotoBoothUnifiedEditor({
   aiCreditsRemaining,
   onOpenAiCostume,
   onExport,
+  photoAffiliates,
 }: Props) {
   const [accessoryOpen, setAccessoryOpen] = useState(false);
 
@@ -536,6 +540,8 @@ export default function PhotoBoothUnifiedEditor({
               Add your photo to enable Share / Save
             </p>
           )}
+
+          {!isDuoMode && <PhotoBoothAffiliatePicks data={photoAffiliates} variant="full" />}
         </div>
       )}
 

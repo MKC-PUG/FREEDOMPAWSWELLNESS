@@ -64,6 +64,9 @@ export default async function OpsWellnessPage() {
           <Link href="/wellness/safe-products" className="text-sm text-[#F5C242] hover:underline">
             Safe products →
           </Link>
+          <Link href="/photobooth/partners" className="text-sm text-[#F5C242] hover:underline">
+            Photo Booth print partners →
+          </Link>
         </div>
       </OpsSection>
 

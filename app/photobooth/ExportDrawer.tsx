@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import PhotoBoothAffiliatePicks from '@/app/components/photobooth/PhotoBoothAffiliatePicks';
+import type { PhotoBoothAffiliatesData } from '@/lib/photobooth/affiliates';
 
 type Props = {
   open: boolean;
   busy: boolean;
+  photoAffiliates: PhotoBoothAffiliatesData;
   onClose: () => void;
   onSaveToPhotos: () => void;
   onShareSocial: () => void;
@@ -15,6 +18,7 @@ type Props = {
 export default function ExportDrawer({
   open,
   busy,
+  photoAffiliates,
   onClose,
   onSaveToPhotos,
   onShareSocial,
@@ -49,7 +53,7 @@ export default function ExportDrawer({
         onClick={onClose}
       />
       <div
-        className="relative z-10 rounded-t-3xl border border-white/10 bg-[#0F1E38] px-4 pt-4 shadow-2xl"
+        className="relative z-10 max-h-[85vh] overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0F1E38] px-4 pt-4 shadow-2xl"
         style={{ paddingBottom: 'calc(2rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/20" />
@@ -84,6 +88,8 @@ export default function ExportDrawer({
             {busy ? 'Preparing…' : '✉️ Email'}
           </button>
         </div>
+
+        <PhotoBoothAffiliatePicks data={photoAffiliates} variant="compact" />
 
         <button
           type="button"

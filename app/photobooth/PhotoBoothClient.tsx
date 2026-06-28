@@ -31,6 +31,7 @@ import AiCostumeDrawer from './AiCostumeDrawer';
 import PhotoBoothThemeBar from './PhotoBoothThemeBar';
 import PhotoBoothUnifiedEditor from './PhotoBoothUnifiedEditor';
 import type { ExportPhotoPayload } from '@/lib/photobooth/export-photo';
+import { getPhotoBoothAffiliatesData } from '@/lib/photobooth/affiliates';
 import {
   saveToPhotoLibrary,
   shareToSocial,
@@ -589,6 +590,7 @@ export default function PhotoBoothClient({
       : cutoutApplied
         ? 2
         : 1;
+  const photoAffiliates = getPhotoBoothAffiliatesData();
 
   return (
     <div className="min-h-screen bg-[#0A1625] text-white">
@@ -805,6 +807,7 @@ export default function PhotoBoothClient({
                   setAiCostumeOpen(true);
                 }}
                 onExport={() => setExportOpen(true)}
+                photoAffiliates={photoAffiliates}
               />
             )}
 
@@ -834,6 +837,7 @@ export default function PhotoBoothClient({
             <ExportDrawer
               open={exportOpen}
               busy={exportBusy}
+              photoAffiliates={photoAffiliates}
               onClose={() => setExportOpen(false)}
               onSaveToPhotos={handleSaveToPhotos}
               onShareSocial={handleShareSocial}

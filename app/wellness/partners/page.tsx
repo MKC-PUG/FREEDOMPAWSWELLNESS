@@ -24,6 +24,13 @@ const PROGRAM_CARDS = [
     desc: 'Integrative vet standards, per-consult referral fees, and wellness-first exclusions.',
     href: '/wellness/partners/telehealth',
   },
+  {
+    slug: 'print' as const,
+    icon: '🎁',
+    title: 'Photo Booth print & gifts',
+    desc: 'Framed prints, mugs, pillows, non-toxic blankets, and Christmas greeting cards from member pet photos.',
+    href: '/photobooth/partners',
+  },
 ];
 
 export default function WellnessPartnersHubPage() {
@@ -64,7 +71,7 @@ export default function WellnessPartnersHubPage() {
 
         <ul className="space-y-4 mb-8">
           {PROGRAM_CARDS.map((card) => {
-            const policy = PARTNER_POLICIES[card.slug];
+            const policy = card.slug === 'print' ? null : PARTNER_POLICIES[card.slug];
             return (
               <li key={card.slug}>
                 <Link
@@ -79,9 +86,11 @@ export default function WellnessPartnersHubPage() {
                   <p className="mt-3 text-xs font-bold text-amber-400 uppercase tracking-wide">
                     View full standards →
                   </p>
-                  <p className="mt-2 text-[10px] text-white/40">
-                    Preferred: {policy.financialStructure.preferred[0]?.structure.slice(0, 60)}…
-                  </p>
+                  {policy && (
+                    <p className="mt-2 text-[10px] text-white/40">
+                      Preferred: {policy.financialStructure.preferred[0]?.structure.slice(0, 60)}…
+                    </p>
+                  )}
                 </Link>
               </li>
             );
