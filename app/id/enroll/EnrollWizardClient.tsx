@@ -460,11 +460,11 @@ export default function EnrollWizardClient({
           </div>
         ) : null}
 
-        <ol className="mb-8 flex gap-0.5 overflow-x-auto">
+        <ol className="mb-8 grid grid-cols-9 gap-0.5">
           {STEPS.map((s) => (
             <li
               key={s.n}
-              className={`min-w-[3.25rem] flex-1 rounded-md py-1.5 text-center text-[9px] font-semibold uppercase tracking-wide ${
+              className={`rounded-md py-1.5 text-center text-[8px] font-semibold uppercase leading-tight tracking-tight ${
                 step === s.n
                   ? 'bg-emerald-500/25 text-emerald-200'
                   : step > s.n
