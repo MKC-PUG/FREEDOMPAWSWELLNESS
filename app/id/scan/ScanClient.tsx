@@ -306,13 +306,19 @@ export default function ScanClient({ userEmail }: Props) {
         {validation && (
           <div
             className={`mt-6 rounded-2xl border p-4 ${
-              validation.ok
-                ? 'border-green-500/40 bg-green-950/20'
-                : 'border-amber-500/40 bg-amber-950/20'
+              !validation.ok
+                ? 'border-red-500/40 bg-red-950/20'
+                : validation.status === 'checksum_fail'
+                  ? 'border-amber-500/40 bg-amber-950/20'
+                  : 'border-green-500/40 bg-green-950/20'
             }`}
           >
             <p className="text-sm font-semibold">
-              {validation.ok ? 'Valid chip ID' : 'Validation issue'}
+              {!validation.ok
+                ? 'Validation issue'
+                : validation.status === 'checksum_fail'
+                  ? 'Valid chip ID (checksum warning)'
+                  : 'Valid chip ID'}
             </p>
             {validation.normalized && (
               <p className="mt-2 font-mono text-lg text-amber-200">{validation.normalized}</p>
@@ -320,10 +326,13 @@ export default function ScanClient({ userEmail }: Props) {
             <p className="mt-2 text-xs text-white/55">
               {validation.digitCount} digits · {validation.format}
               {validation.checksumOk === true ? ' · ISO checksum OK' : ''}
-              {validation.checksumOk === false ? ' · checksum failed' : ''}
+              {validation.checksumOk === false ? ' · ISO checksum not verified' : ''}
             </p>
+            {validation.warning && (
+              <p className="mt-2 text-xs text-amber-200/90 leading-relaxed">{validation.warning}</p>
+            )}
             {validation.error && !validation.ok && (
-              <p className="mt-2 text-xs text-amber-300">{validation.error}</p>
+              <p className="mt-2 text-xs text-red-300">{validation.error}</p>
             )}
           </div>
         )}

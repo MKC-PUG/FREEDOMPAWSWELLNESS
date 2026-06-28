@@ -77,11 +77,15 @@ export function validateChipRaw(raw: string): ChipValidationResult {
   let checksumOk: boolean | null = null;
   let ok = true;
 
+  let warning: string | undefined;
+
   if (format === 'iso_fdx_b') {
     checksumOk = isoMicrochipChecksumOk(normalized);
     if (!checksumOk) {
       status = 'checksum_fail';
-      ok = false;
+      // Practice / demo tags often fail ISO checksum — still linkable for pilot QA.
+      warning =
+        'ISO checksum did not validate (common on test tags). You can still save this ID for pilot testing.';
     }
   }
 
@@ -98,10 +102,9 @@ export function validateChipRaw(raw: string): ChipValidationResult {
     format,
     checksumOk,
     display: normalized,
+    warning,
     error: ok
       ? undefined
-      : status === 'checksum_fail'
-        ? '15-digit ISO checksum failed — rescan or verify ID.'
-        : 'Unsupported chip ID length.',
+      : 'Unsupported chip ID length.',
   };
 }

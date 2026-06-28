@@ -11,6 +11,8 @@ export type ChipValidationResult = {
   checksumOk: boolean | null;
   display: string | null;
   error?: string;
+  /** Non-blocking notice (e.g. practice test tag fails ISO checksum). */
+  warning?: string;
 };
 
 export type ChipLookupResult = {
