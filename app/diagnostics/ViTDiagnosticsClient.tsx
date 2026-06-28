@@ -56,6 +56,7 @@ export default function ViTDiagnosticsClient({
   const symptomsRef = useRef<HTMLTextAreaElement>(null);
   const identityNotesRef = useRef<HTMLTextAreaElement>(null);
   const [selectedRegions, setSelectedRegions] = useState<IdentityRegion[]>(['face']);
+  const [alsoCaptureId, setAlsoCaptureId] = useState(false);
   const [media, setMedia] = useState<VitMediaSelection | null>(null);
   const [result, setResult] = useState<AnalyzeApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -142,6 +143,13 @@ export default function ViTDiagnosticsClient({
       return;
     }
 
+    const useBothMode = !identityMode && Boolean(petId) && alsoCaptureId && selectedRegions.length > 0;
+
+    if (useBothMode && !symptoms.trim()) {
+      setError('Please describe symptoms for wellness analysis.');
+      return;
+    }
+
     if (identityMode && selectedRegions.length === 0) {
       setError('Select at least one identity region.');
       return;
@@ -166,6 +174,13 @@ export default function ViTDiagnosticsClient({
       const formData = new FormData();
       if (identityMode) {
         formData.append('mode', 'identity');
+        formData.append('regions', selectedRegions.join(','));
+        if (identityNotes.trim()) {
+          formData.append('identityNotes', identityNotes.trim());
+        }
+      } else if (useBothMode) {
+        formData.append('mode', 'both');
+        formData.append('symptoms', symptoms);
         formData.append('regions', selectedRegions.join(','));
         if (identityNotes.trim()) {
           formData.append('identityNotes', identityNotes.trim());
@@ -209,7 +224,7 @@ export default function ViTDiagnosticsClient({
       const data = await response.json();
       if (data.success) {
         setResult(data);
-        if (!identityMode && data.mode !== 'identity') {
+        if (data.mode === 'wellness' || data.mode === 'both') {
           saveVitRunLocal(data, petId ?? null, petName ?? null);
           if (petId) void saveVitRunServer(petId, data);
         }
@@ -386,6 +401,44 @@ export default function ViTDiagnosticsClient({
                   placeholder="e.g. limping on walks, sneezing, senior pacing at night..."
                   className="w-full h-40 bg-[#0A1428] border border-[#F5C242]/30 rounded-2xl p-6 text-white resize-y focus:outline-none focus:border-[#F5C242]"
                 />
+                {petId ? (
+                  <div className="mt-5 rounded-2xl border border-emerald-500/25 bg-emerald-950/15 p-4">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={alsoCaptureId}
+                        onChange={(e) => setAlsoCaptureId(e.target.checked)}
+                        className="mt-1 h-4 w-4 rounded border-white/30"
+                      />
+                      <span className="text-sm text-emerald-100/90 leading-relaxed">
+                        Also analyze for{' '}
+                        <strong className="text-emerald-300">Freedom Paws ID</strong> (Track 1) —
+                        one upload for wellness + identity regions
+                      </span>
+                    </label>
+                    {alsoCaptureId ? (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {IDENTITY_REGIONS.map((region) => {
+                          const active = selectedRegions.includes(region);
+                          return (
+                            <button
+                              key={region}
+                              type="button"
+                              onClick={() => toggleRegion(region)}
+                              className={`rounded-full px-3 py-1.5 text-xs font-semibold border transition ${
+                                active
+                                  ? 'border-emerald-400 bg-emerald-500/20 text-emerald-200'
+                                  : 'border-white/20 bg-[#0A1428] text-white/60 hover:border-white/40'
+                              }`}
+                            >
+                              {REGION_LABELS[region]}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
               </>
             )}
 
@@ -403,7 +456,9 @@ export default function ViTDiagnosticsClient({
                 ? 'Analyzing…'
                 : identityMode
                   ? 'Analyze identity regions'
-                  : 'Get AI Recommendation'}
+                  : alsoCaptureId && petId
+                    ? 'Get wellness + ID analysis'
+                    : 'Get AI Recommendation'}
             </button>
 
             {!hasMedia && (
@@ -422,19 +477,29 @@ export default function ViTDiagnosticsClient({
               </p>
             )}
 
-            {result &&
-              (identityMode || result.mode === 'identity' ? (
-                <ViTIdentityResultsPanel result={result} onTryAnother={resetAnalysis} />
-              ) : (
-                <ViTResultsPanel
-                  result={result}
-                  feedbackSent={feedbackSent}
-                  wrongProtocol={wrongProtocol}
-                  onWrongProtocolChange={setWrongProtocol}
-                  onFeedback={(f) => void sendFeedback(f)}
-                  onTryAnother={resetAnalysis}
-                />
-              ))}
+            {result ? (
+              <>
+                {(result.mode === 'wellness' || result.mode === 'both') && result.primary ? (
+                  <ViTResultsPanel
+                    result={result}
+                    feedbackSent={feedbackSent}
+                    wrongProtocol={wrongProtocol}
+                    onWrongProtocolChange={setWrongProtocol}
+                    onFeedback={(f) => void sendFeedback(f)}
+                    onTryAnother={resetAnalysis}
+                  />
+                ) : null}
+                {(identityMode ||
+                  result.mode === 'identity' ||
+                  (result.mode === 'both' && result.identity)) ? (
+                  <ViTIdentityResultsPanel
+                    result={result}
+                    petId={petId}
+                    onTryAnother={resetAnalysis}
+                  />
+                ) : null}
+              </>
+            ) : null}
 
             {error && <p className="text-red-400 mt-6 text-center">{error}</p>}
           </div>

@@ -5,6 +5,9 @@ import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { BIOMETRIC_CONSENT_TEXT, BIOMETRIC_CONSENT_VERSION } from '@/lib/id/consent';
+import { enrollStepForRegion, readVitIdBridgeSession } from '@/lib/id/enroll-bridge';
+import type { IdentityRegion } from '@/lib/id/types';
+import { IDENTITY_REGIONS } from '@/lib/id/types';
 import { fetchServerPets, createServerPet } from '@/lib/mypets/api';
 import type { PetProfile } from '@/lib/mypets/types';
 import { compressFileToUpload } from '@/lib/compress-image';
@@ -25,6 +28,8 @@ const STEPS = [
 type Props = {
   userEmail: string;
   initialPetId?: string | null;
+  initialFocusRegion?: string | null;
+  fromVit?: boolean;
 };
 
 type CaptureResult = {
@@ -45,7 +50,12 @@ type CompleteResult = {
   qrSlug: string;
 };
 
-export default function EnrollWizardClient({ userEmail, initialPetId = null }: Props) {
+export default function EnrollWizardClient({
+  userEmail,
+  initialPetId = null,
+  initialFocusRegion = null,
+  fromVit = false,
+}: Props) {
   const [step, setStep] = useState(1);
   const [pets, setPets] = useState<PetProfile[]>([]);
   const [loadingPets, setLoadingPets] = useState(true);
@@ -66,6 +76,11 @@ export default function EnrollWizardClient({ userEmail, initialPetId = null }: P
   const [reviewReady, setReviewReady] = useState(false);
   const [petName, setPetName] = useState('');
   const [completeResult, setCompleteResult] = useState<CompleteResult | null>(null);
+  const [vitBridgeHint, setVitBridgeHint] = useState<string | null>(null);
+
+  const parsedFocusRegion = IDENTITY_REGIONS.includes(initialFocusRegion as IdentityRegion)
+    ? (initialFocusRegion as IdentityRegion)
+    : null;
 
   const photoRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLInputElement>(null);
@@ -109,6 +124,21 @@ export default function EnrollWizardClient({ userEmail, initialPetId = null }: P
   useEffect(() => {
     void loadPets();
   }, [loadPets]);
+
+  useEffect(() => {
+    if (!fromVit) return;
+    const bridge = readVitIdBridgeSession();
+    if (!bridge) {
+      setVitBridgeHint('ViT pre-check noted — capture each region here to store your ID profile.');
+      return;
+    }
+    const ready = bridge.enrollReadyRegions.length
+      ? bridge.enrollReadyRegions.join(', ')
+      : bridge.focusRegion ?? 'selected regions';
+    setVitBridgeHint(
+      `ViT pre-check passed for ${ready}. Re-capture here to permanently store biometric ID.`
+    );
+  }, [fromVit]);
 
   useEffect(() => {
     if (!initialPetId || selectedPetId) return;
@@ -213,7 +243,7 @@ export default function EnrollWizardClient({ userEmail, initialPetId = null }: P
         setError(data.error || 'Consent failed.');
         return;
       }
-      setStep(3);
+      setStep(parsedFocusRegion ? enrollStepForRegion(parsedFocusRegion) : 3);
     } catch {
       setError('Connection error.');
     } finally {
@@ -423,6 +453,12 @@ export default function EnrollWizardClient({ userEmail, initialPetId = null }: P
           <h1 className="mt-2 text-2xl font-bold">9-step wizard</h1>
           <p className="mt-1 text-xs text-white/50">Signed in as {userEmail}</p>
         </header>
+
+        {vitBridgeHint ? (
+          <div className="mb-6 rounded-2xl border border-emerald-500/35 bg-emerald-950/25 px-4 py-3 text-sm text-emerald-100/90 leading-relaxed">
+            {vitBridgeHint}
+          </div>
+        ) : null}
 
         <ol className="mb-8 flex gap-0.5 overflow-x-auto">
           {STEPS.map((s) => (

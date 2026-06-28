@@ -7,7 +7,12 @@ import {
   isValidAnalyzeImage,
 } from '@/lib/ai/media-utils';
 import type { AnalyzeMode } from '@/lib/id/types';
-import { toAnalyzeApiResponse, toIdentityAnalyzeApiResponse, toVitProAnalyzeApiResponse } from '@/lib/ai/types';
+import {
+  toAnalyzeApiResponse,
+  toBothAnalyzeApiResponse,
+  toIdentityAnalyzeApiResponse,
+  toVitProAnalyzeApiResponse,
+} from '@/lib/ai/types';
 import { getApprovedAliases, recordAnalysis } from '@/lib/symptom-feedback-store';
 import { analyzeVitPro } from '@/lib/vit-pro/vit-pro-analyze';
 import { parseVitProRegionHint } from '@/lib/vit-pro/detect-region';
@@ -57,10 +62,65 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    if (mode === 'identity') {
+    if (mode === 'identity' || mode === 'both') {
       const regions = parseIdentityRegions(regionsRaw);
       if (mediaType === 'video' && !regions.includes('gait') && !regions.includes('posture')) {
         regions.push('gait');
+      }
+
+      if (mode === 'both') {
+        if (!symptoms) {
+          return NextResponse.json(
+            { success: false, error: 'Please describe symptoms before analyzing.' },
+            { status: 400 }
+          );
+        }
+        if (regions.length === 0) {
+          return NextResponse.json(
+            { success: false, error: 'Select at least one identity region for combined analysis.' },
+            { status: 400 }
+          );
+        }
+
+        const approved = await getApprovedAliases();
+        const [wellness, identity] = await Promise.all([
+          analyzeDogMedia({ symptoms, mediaType, frames }, approved),
+          analyzeIdentityFrames(frames, regions, mediaType, identityNotes),
+        ]);
+
+        if (!wellness.success || !wellness.data) {
+          return NextResponse.json({
+            success: false,
+            error: wellness.error || 'Wellness analysis failed',
+          });
+        }
+
+        let analysisId: string = randomUUID();
+        try {
+          const saved = await recordAnalysis({
+            symptoms,
+            normalized: wellness.analysisMeta?.normalized ?? symptoms.toLowerCase(),
+            primaryProtocol: wellness.data.primaryProtocol,
+            secondaryProtocol: wellness.data.secondaryProtocol,
+            confidence: wellness.data.confidence,
+            matchedTerms: wellness.analysisMeta?.matchedTerms ?? [],
+            unknownPhrases: wellness.analysisMeta?.unknownPhrases ?? [],
+            usedFallback: wellness.analysisMeta?.usedFallback ?? false,
+          });
+          analysisId = saved.id;
+        } catch (persistErr) {
+          console.warn('Analysis record not persisted (continuing):', persistErr);
+        }
+
+        return NextResponse.json(
+          toBothAnalyzeApiResponse(analysisId, wellness.data, identity, {
+            matchedTerms: wellness.analysisMeta?.matchedTerms ?? [],
+            unknownPhrases: wellness.analysisMeta?.unknownPhrases ?? [],
+            usedVision: identity.usedVision || Boolean(wellness.data.usedVision),
+            mediaType: identity.mediaType,
+            frameCount: identity.frameCount,
+          })
+        );
       }
 
       const identity = await analyzeIdentityFrames(frames, regions, mediaType, identityNotes);

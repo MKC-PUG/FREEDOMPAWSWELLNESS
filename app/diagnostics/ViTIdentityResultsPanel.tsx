@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
 import type { AnalyzeApiResponse } from '@/lib/ai/types';
 import type { IdentityRegion } from '@/lib/id/types';
 import { IDENTITY_REGIONS } from '@/lib/id/types';
+import { buildEnrollHref, saveVitIdBridgeSession } from '@/lib/id/enroll-bridge';
 
 const REGION_LABELS: Record<IdentityRegion, string> = {
   eyes: 'Eyes',
@@ -16,14 +18,20 @@ const REGION_LABELS: Record<IdentityRegion, string> = {
 type Props = {
   result: AnalyzeApiResponse;
   onTryAnother: () => void;
+  petId?: string | null;
 };
 
-export default function ViTIdentityResultsPanel({ result, onTryAnother }: Props) {
+export default function ViTIdentityResultsPanel({ result, onTryAnother, petId = null }: Props) {
   const identity = result.identity;
+  const enrollHref = buildEnrollHref(petId, result);
   const mediaLabel =
     result.mediaType === 'video' && (result.frameCount ?? 0) > 1
       ? `Video · ${result.frameCount} frames`
       : 'Photo capture';
+
+  useEffect(() => {
+    if (identity) saveVitIdBridgeSession(result, petId);
+  }, [identity, petId, result]);
 
   return (
     <div className="mt-8 space-y-6">
@@ -108,14 +116,14 @@ export default function ViTIdentityResultsPanel({ result, onTryAnother }: Props)
 
       {identity?.enrollReady ? (
         <Link
-          href="/id/enroll"
+          href={enrollHref}
           className="block w-full text-center rounded-2xl border-2 border-[#F5C242] bg-[#F5C242]/15 py-4 text-[#F5C242] font-bold hover:bg-[#F5C242]/25 transition"
         >
           Save to ID profile →
         </Link>
       ) : (
         <Link
-          href="/id/enroll"
+          href={enrollHref}
           className="block w-full text-center rounded-2xl border border-white/20 py-4 text-white/70 font-semibold hover:bg-white/5 transition"
         >
           Continue to enrollment wizard →

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default async function IdEnrollPage({
   searchParams,
 }: {
-  searchParams: Promise<{ petId?: string }>;
+  searchParams: Promise<{ petId?: string; focusRegion?: string; fromVit?: string }>;
 }) {
   if (!isSupabaseConfigured()) {
     return <EnrollSetupRequired />;
@@ -26,8 +26,15 @@ export default async function IdEnrollPage({
 
   const params = await searchParams;
   const initialPetId = params.petId?.trim() || null;
+  const initialFocusRegion = params.focusRegion?.trim() || null;
+  const fromVit = params.fromVit === '1';
 
   return (
-    <EnrollWizardClient userEmail={user.email ?? 'your account'} initialPetId={initialPetId} />
+    <EnrollWizardClient
+      userEmail={user.email ?? 'your account'}
+      initialPetId={initialPetId}
+      initialFocusRegion={initialFocusRegion}
+      fromVit={fromVit}
+    />
   );
 }

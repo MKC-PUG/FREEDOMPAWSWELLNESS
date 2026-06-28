@@ -180,3 +180,34 @@ export function toIdentityAnalyzeApiResponse(
     identity,
   };
 }
+
+/** Wellness + identity in one upload (ViT Track 1 unified session). */
+export function toBothAnalyzeApiResponse(
+  analysisId: string,
+  wellness: NonNullable<AnalysisResponse['data']>,
+  identity: IdentityAnalysisResult,
+  meta: {
+    matchedTerms: string[];
+    unknownPhrases: string[];
+    usedVision: boolean;
+    mediaType: 'photo' | 'video';
+    frameCount: number;
+  }
+): AnalyzeApiResponse {
+  const wellnessResponse = toAnalyzeApiResponse(analysisId, wellness, {
+    matchedTerms: meta.matchedTerms,
+    unknownPhrases: meta.unknownPhrases,
+  });
+  const identityVisual = Object.values(identity.regions).flatMap((r) => r?.descriptors ?? []);
+  const wellnessVisual = wellnessResponse.visualFindings ?? [];
+  return {
+    ...wellnessResponse,
+    mode: 'both',
+    visualFindings: [...wellnessVisual, ...identityVisual].slice(0, 16),
+    usedVision: meta.usedVision || Boolean(wellness.usedVision),
+    mediaType: meta.mediaType,
+    frameCount: meta.frameCount,
+    identity,
+    disclaimer: [wellness.disclaimer, identity.disclaimer].filter(Boolean).join(' '),
+  };
+}
