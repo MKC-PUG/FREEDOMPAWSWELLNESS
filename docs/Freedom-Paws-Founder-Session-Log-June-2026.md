@@ -140,7 +140,7 @@ Web Serial: Chrome/Edge on Windows — same COM3 @ 9600
 | L8 Build/deploy | Done |
 | **Track 1 biometric + found E2E** | **Done** |
 | **Track 2 hardware Day 1** | **Done** |
-| **Track 2 `/id/scan` app** | Not built — next eng session |
+| **Track 2 `/id/scan` app** | **PASS** — validate + link + FP match E2E Jun 28 (v92) |
 | **L5 Terms + Privacy (attorney)** | **Open — critical path** |
 | Public mode + partner emails | Blocked on L5 |
 
@@ -168,6 +168,43 @@ Web Serial: Chrome/Edge on Windows — same COM3 @ 9600
 3. Windows + Chrome: open `/id/scan` → focus field → virtual keyboard scan → link to Buddy test pet  
 
 **Windows PC needed?** No for daily founder work (Mac + iPhone). Yes occasionally for WorldScan Merck software, firmware, or USB serial testing.
+
+---
+
+### Track 2 — Production validation scan (founder QA)
+
+**Date:** June 28, 2026  
+**Environment:** Production — `https://app.freedompawsinc.com/id/scan`  
+**PWA:** v92  
+**Status:** **PASS** — format validation + checksum warning path
+
+| Check | Result |
+|-------|--------|
+| Input | `985141007711681` (WorldScan test tag) |
+| Parsed format | 15-digit **iso_fdx_b** |
+| ISO checksum | Not verified (expected on test tag) |
+| UI message | “Valid chip ID (checksum warning)” + pilot save allowed |
+| Link pet UI | Shown — ready for **Save chip to pet profile** |
+
+**Next QA steps:** Link to Buddy (FP-A6FFE6CD) → refresh → re-scan → confirm Freedom Paws match → duplicate-chip rejection on second pet.
+
+---
+
+### Track 2 — Chip link + Freedom Paws match (founder QA)
+
+**Date:** June 28, 2026  
+**Environment:** Production — `https://app.freedompawsinc.com/id/scan`  
+**Status:** **PASS** — link + internal lookup E2E
+
+| Check | Result |
+|-------|--------|
+| Chip linked to pet | Buddy test |
+| Re-scan lookup | **Freedom Paws match** |
+| Freedom Paws ID | **FP-A6FFE6CD** |
+| QR pet card link | Shown — `/id/p/[slug]` |
+| Registry (AAHA/AVID) | Not built — Phase 2 (expected) |
+
+**Track 2 MVP pass criteria (Section 10):** items 2, 3, 5, 6 ✅ · item 1 (HID wedge on Windows) optional if paste path used · item 4 (duplicate rejection) still worth one quick test · item 7 (Track 1 regression) spot-check when convenient.
 
 ---
 
