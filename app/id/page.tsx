@@ -92,10 +92,10 @@ const hubCards = [
   {
     icon: '🔍',
     title: 'Registry Lookup',
-    desc: 'AAHA routing + AVID branch for scanned chip IDs.',
-    cta: 'TRACK 2 PREVIEW →',
+    desc: 'Validate chip format → open AAHA Universal Lookup + AVID branch guidance.',
+    cta: 'LOOKUP →',
     href: '/id/lookup',
-    status: 'planned' as const,
+    status: 'live' as const,
   },
   {
     icon: '🛒',

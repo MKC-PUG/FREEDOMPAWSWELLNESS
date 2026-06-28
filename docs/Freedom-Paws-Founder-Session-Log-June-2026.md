@@ -204,7 +204,23 @@ Web Serial: Chrome/Edge on Windows — same COM3 @ 9600
 | QR pet card link | Shown — `/id/p/[slug]` |
 | Registry (AAHA/AVID) | Not built — Phase 2 (expected) |
 
-**Track 2 MVP pass criteria (Section 10):** items 2, 3, 5, 6 ✅ · item 1 (HID wedge on Windows) optional if paste path used · item 4 (duplicate rejection) still worth one quick test · item 7 (Track 1 regression) spot-check when convenient.
+**Track 2 MVP pass criteria (Section 10):** items 2, 3, 5, 6 ✅ · item 1 (HID wedge on Windows) optional if paste path used · item 4 (duplicate rejection) skipped — DB constraint sufficient · item 7 (Track 1 regression) spot-check when convenient.
+
+---
+
+### Track 2 — Phase 2a chip UX (engineering v93)
+
+**Date:** June 28, 2026  
+**Status:** Built — pending deploy
+
+| Ship | Route |
+|------|-------|
+| Chip on My Pets + ID settings | `/mypets`, `/id/settings` |
+| AAHA external lookup page | `/id/lookup` |
+| Scan match panel + shelter found hint | `/id/scan`, `/id/found` |
+| ID hub registry card → Live | `/id` |
+
+**Founder QA after deploy:** Buddy chip visible on settings · AAHA button on lookup · found intake shows scan hint.
 
 ---
 

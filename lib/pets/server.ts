@@ -10,6 +10,8 @@ type PetRow = {
   notes: string;
   photo_url: string | null;
   photo_thumb: string | null;
+  microchip_id?: string | null;
+  microchip_linked_at?: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -22,6 +24,8 @@ export function rowToPetProfile(row: PetRow): PetProfile {
     age: row.age ?? '',
     notes: row.notes ?? '',
     photoThumb: row.photo_thumb,
+    microchipId: row.microchip_id ?? null,
+    microchipLinkedAt: row.microchip_linked_at ?? null,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };

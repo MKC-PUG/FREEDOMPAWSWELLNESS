@@ -8,6 +8,8 @@ export type OwnerEnrollmentSummary = {
   status: string;
   freedomPawsId: string | null;
   qrSlug: string | null;
+  microchipId: string | null;
+  microchipLinkedAt: string | null;
   consentedAt: string | null;
   createdAt: string;
 };
@@ -38,23 +40,37 @@ export async function getOwnerIdSettings(userId: string): Promise<OwnerIdSetting
   const petIds = [...new Set((enrollments ?? []).map((e) => e.pet_id as string))];
   const { data: pets } = await supabase
     .from('pets')
-    .select('id, name')
+    .select('id, name, microchip_id, microchip_linked_at')
     .in('id', petIds.length ? petIds : ['00000000-0000-0000-0000-000000000000']);
 
-  const petMap = new Map((pets ?? []).map((p) => [p.id as string, p.name as string]));
+  const petMap = new Map(
+    (pets ?? []).map((p) => [
+      p.id as string,
+      {
+        name: p.name as string,
+        microchipId: (p.microchip_id as string) ?? null,
+        microchipLinkedAt: (p.microchip_linked_at as string) ?? null,
+      },
+    ])
+  );
 
   return {
     alertEmailEnabled: profile?.alert_email_enabled !== false,
-    enrollments: (enrollments ?? []).map((e) => ({
-      enrollmentId: e.id as string,
-      petId: e.pet_id as string,
-      petName: petMap.get(e.pet_id as string) ?? 'Pet',
-      status: e.status as string,
-      freedomPawsId: (e.freedom_paws_id as string) ?? null,
-      qrSlug: (e.qr_slug as string) ?? null,
-      consentedAt: (e.consented_at as string) ?? null,
-      createdAt: e.created_at as string,
-    })),
+    enrollments: (enrollments ?? []).map((e) => {
+      const pet = petMap.get(e.pet_id as string);
+      return {
+        enrollmentId: e.id as string,
+        petId: e.pet_id as string,
+        petName: pet?.name ?? 'Pet',
+        status: e.status as string,
+        freedomPawsId: (e.freedom_paws_id as string) ?? null,
+        qrSlug: (e.qr_slug as string) ?? null,
+        microchipId: pet?.microchipId ?? null,
+        microchipLinkedAt: pet?.microchipLinkedAt ?? null,
+        consentedAt: (e.consented_at as string) ?? null,
+        createdAt: e.created_at as string,
+      };
+    }),
   };
 }
 

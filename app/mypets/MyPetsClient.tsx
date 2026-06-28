@@ -254,6 +254,12 @@ export default function MyPetsClient() {
                   )}
                   <PetVitRunBadge petId={pet.id} useServer={useServer} />
                   <PetVaultBadge petId={pet.id} petName={pet.name} useServer={useServer} />
+                  {useServer && pet.microchipId && (
+                    <p className="mt-2 text-xs text-white/55">
+                      Microchip:{' '}
+                      <span className="font-mono text-amber-300/90">{pet.microchipId}</span>
+                    </p>
+                  )}
                   <div className="flex flex-wrap gap-2 mt-4">
                     <button
                       type="button"
@@ -275,6 +281,14 @@ export default function MyPetsClient() {
                     >
                       Run ViT →
                     </Link>
+                    {useServer && (
+                      <Link
+                        href="/id/scan"
+                        className="text-xs font-bold text-amber-400/90 touch-manipulation"
+                      >
+                        {pet.microchipId ? 'Chip linked ✓' : 'Scan chip →'}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </article>

@@ -349,6 +349,10 @@ export default function ScanClient({ userEmail }: Props) {
                 </>
               ) : null}
             </p>
+            <p className="mt-2 text-xs text-white/55 leading-relaxed">
+              This chip is linked to a Freedom Paws biometric profile. To link a different pet, use
+              a new chip ID — each chip can only attach to one pet.
+            </p>
             {lookup.qrSlug ? (
               <Link
                 href={`/id/p/${lookup.qrSlug}`}
@@ -357,6 +361,20 @@ export default function ScanClient({ userEmail }: Props) {
                 Open QR pet card →
               </Link>
             ) : null}
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Link
+                href="/id/settings"
+                className="rounded-lg border border-white/20 px-3 py-1.5 text-xs font-semibold text-white/70"
+              >
+                ID settings →
+              </Link>
+              <Link
+                href="/id/lookup"
+                className="rounded-lg border border-amber-500/30 px-3 py-1.5 text-xs font-semibold text-amber-300"
+              >
+                AAHA registry lookup →
+              </Link>
+            </div>
           </div>
         )}
 
@@ -390,7 +408,7 @@ export default function ScanClient({ userEmail }: Props) {
         )}
 
         <p className="mt-8 text-center text-[10px] text-white/40 leading-relaxed">
-          Registry lookup (AAHA / AVID) ships in Phase 2 at{' '}
+          External registry (AAHA / AVID):{' '}
           <Link href="/id/lookup" className="underline">
             /id/lookup
           </Link>

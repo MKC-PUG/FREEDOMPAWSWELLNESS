@@ -188,6 +188,13 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
 
         {!result ? (
           <section className="space-y-4">
+            <div className="rounded-2xl border border-amber-500/25 bg-amber-950/15 px-4 py-3 text-sm text-amber-100/90">
+              <strong className="text-amber-200">Optional first step:</strong> scan microchip on{' '}
+              <Link href="/id/scan" className="underline font-semibold">
+                /id/scan
+              </Link>{' '}
+              — if Freedom Paws match, note the ID; then continue with photo intake below.
+            </div>
             <div>
               <label className="text-sm font-semibold text-white/80">Pilot shelter</label>
               <select

@@ -10,6 +10,8 @@ type Enrollment = {
   status: string;
   freedomPawsId: string | null;
   qrSlug: string | null;
+  microchipId: string | null;
+  microchipLinkedAt: string | null;
 };
 
 type Props = {
@@ -142,6 +144,27 @@ export default function IdSettingsClient({ userEmail }: Props) {
           </button>
         </section>
 
+        <section className="rounded-2xl border border-amber-500/20 bg-amber-950/10 p-5 mb-6">
+          <h2 className="font-semibold text-amber-200">Microchip (Track 2)</h2>
+          <p className="mt-1 text-sm text-white/60">
+            Link a scanned chip to biometric ID or look up external registries.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/id/scan"
+              className="rounded-xl bg-amber-400/90 px-4 py-2 text-xs font-bold text-black"
+            >
+              Scan / link chip →
+            </Link>
+            <Link
+              href="/id/lookup"
+              className="rounded-xl border border-white/25 px-4 py-2 text-xs font-semibold text-white/75"
+            >
+              AAHA lookup →
+            </Link>
+          </div>
+        </section>
+
         <section>
           <h2 className="font-semibold mb-3">Biometric enrollments</h2>
           {loading ? (
@@ -171,6 +194,26 @@ export default function IdSettingsClient({ userEmail }: Props) {
                     >
                       View QR card →
                     </Link>
+                  )}
+                  {e.microchipId ? (
+                    <p className="mt-2 text-xs text-white/55">
+                      Microchip:{' '}
+                      <span className="font-mono text-amber-300/90">{e.microchipId}</span>
+                      {e.microchipLinkedAt && (
+                        <span className="block mt-0.5 text-white/40">
+                          Linked {new Date(e.microchipLinkedAt).toLocaleDateString()}
+                        </span>
+                      )}
+                    </p>
+                  ) : (
+                    e.status === 'complete' && (
+                      <Link
+                        href="/id/scan"
+                        className="mt-2 inline-block text-xs text-amber-400/90 underline"
+                      >
+                        Add microchip (optional) →
+                      </Link>
+                    )
                   )}
                   {e.status === 'complete' && (
                     <button
