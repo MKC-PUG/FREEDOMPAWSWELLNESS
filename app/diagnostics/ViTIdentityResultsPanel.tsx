@@ -34,7 +34,7 @@ export default function ViTIdentityResultsPanel({ result, onTryAnother, petId = 
   }, [identity, petId, result]);
 
   return (
-    <div className="mt-8 space-y-6">
+    <div id="fp-id-results" className="mt-8 space-y-6 scroll-mt-6">
       <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-[#1F2A44] to-[#0A1428] p-6 text-center">
         <p className="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-1">
           Freedom Paws ID — vision capture

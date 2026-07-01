@@ -66,6 +66,7 @@ export default function ViTDiagnosticsClient({
 }: Props) {
   const symptomsRef = useRef<HTMLTextAreaElement>(null);
   const identityNotesRef = useRef<HTMLTextAreaElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const [selectedRegions, setSelectedRegions] = useState<IdentityRegion[]>(['face']);
   const [alsoCaptureId, setAlsoCaptureId] = useState(false);
   const [media, setMedia] = useState<VitMediaSelection | null>(null);
@@ -108,6 +109,19 @@ export default function ViTDiagnosticsClient({
         }
       });
   }, [activePetId]);
+
+  useEffect(() => {
+    if (!result || result.mode !== 'both' || !result.identity) return;
+    const t = window.setTimeout(() => {
+      const el = document.getElementById('fp-id-results');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+    return () => window.clearTimeout(t);
+  }, [result]);
 
   const resolvedPetId = activePetId;
   const resolvedPetName = activePetName;
@@ -569,33 +583,41 @@ export default function ViTDiagnosticsClient({
               </p>
             )}
 
-            {result ? (
-              <>
-                {(result.mode === 'wellness' || result.mode === 'both') && result.primary ? (
-                  <ViTResultsPanel
-                    result={result}
-                    feedbackSent={feedbackSent}
-                    wrongProtocol={wrongProtocol}
-                    onWrongProtocolChange={setWrongProtocol}
-                    onFeedback={(f) => void sendFeedback(f)}
-                    onTryAnother={resetAnalysis}
-                  />
-                ) : null}
-                {(identityMode ||
-                  result.mode === 'identity' ||
-                  (result.mode === 'both' && result.identity)) ? (
-                  <ViTIdentityResultsPanel
-                    result={result}
-                    petId={resolvedPetId}
-                    onTryAnother={resetAnalysis}
-                  />
-                ) : null}
-              </>
-            ) : null}
-
             {error && <p className="text-red-400 mt-6 text-center">{error}</p>}
           </div>
         </div>
+
+        {result ? (
+          <div ref={resultsRef} className="mt-10 space-y-10 scroll-mt-6">
+            {result.mode === 'both' && result.identity ? (
+              <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950/20 px-4 py-3 text-center text-sm text-emerald-100/90">
+                Combined wellness + Freedom Paws ID analysis — identity regions first, then
+                protocol recommendations below.
+              </div>
+            ) : null}
+
+            {(identityMode ||
+              result.mode === 'identity' ||
+              (result.mode === 'both' && result.identity)) ? (
+              <ViTIdentityResultsPanel
+                result={result}
+                petId={resolvedPetId}
+                onTryAnother={resetAnalysis}
+              />
+            ) : null}
+
+            {(result.mode === 'wellness' || result.mode === 'both') && result.primary ? (
+              <ViTResultsPanel
+                result={result}
+                feedbackSent={feedbackSent}
+                wrongProtocol={wrongProtocol}
+                onWrongProtocolChange={setWrongProtocol}
+                onFeedback={(f) => void sendFeedback(f)}
+                onTryAnother={resetAnalysis}
+              />
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </div>
   );
