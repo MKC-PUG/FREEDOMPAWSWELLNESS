@@ -1,10 +1,10 @@
 # Freedom Paws Wellness
 # Founder Master Schedule & Checklist — Now → Launch → Post-Launch → ViT Pro
 
-**Created:** June 21, 2026  
+**Created:** June 21, 2026 · **Updated:** June 30, 2026  
 **For:** Solo founder · 10–15 hrs/day · $0 cash runway · investment target ~September  
-**App:** `https://app.freedompawsinc.com` · PWA **v84**  
-**Website:** `https://freedompawsinc.com` (Framer)  
+**App:** `https://app.freedompawsinc.com` · PWA **v94**  
+**Website:** `https://freedompawsinc.com` (Framer) · **Member Tools** `/member-tools` — Part L signed **June 30, 2026**  
 **How to use:** Work **one department block per day** (or half-day). Check boxes. Do not start Phase 1 outreach until **Launch Activation** gates pass.
 
 **Companion docs (do not duplicate — link only):**
@@ -71,7 +71,7 @@
 
 | Phase | Timeline | Goal |
 |-------|----------|------|
-| **0 — Finish the machine** | Now → ~4–8 weeks | App + website + legal prep ready to flip `SITE_MODE=public` |
+| **0 — Finish the machine** | Now → ~4–8 weeks | **~90%** — legal (L5) + one partner listing remain |
 | **1 — Launch activation** | 1–2 weeks | Public index, first outreach, social ON |
 | **2 — Post-launch (90 days)** | Months 1–3 | TN pilot live listings, members, feedback loops |
 | **3 — ViT Pro buildout** | Parallel after V0 stable | Advisor bench, benchmark, packaging |
@@ -109,14 +109,14 @@
 
 ## Phase 0 — Now (highest ROI for outreach delay)
 
-- [ ] **Copyright** — file for key materials (binders, training manuals, protocol copy) ASAP
+- [x] **Copyright** — filed **June 25, 2026** for all **6 binders** and key documents *(L6 cleared)*
 - [ ] **Trademark** — Freedom Paws Wellness / logo — consult or file intent-to-use when budget allows
 - [ ] LLC / entity status — confirm good standing for contracts
-- [ ] Attorney review queue:
-  - [ ] `/terms` and `/privacy` on app
+- [ ] **Attorney review queue (L5 — critical path)** — see **Section 4A** below
+  - [ ] `/terms` and `/privacy` on app — upgrade from founder draft (`lib/legal/content.ts`)
   - [ ] ViT “not a diagnosis” / vet urgency banner copy
-  - [ ] ID enroll / biometric consent language
-  - [ ] 10% give-back / donation claims on Framer (if stated)
+  - [ ] ID enroll / biometric consent language (in-app + Framer Member Tools)
+  - [ ] 10% give-back / donation claims — define **eligible revenue base** + Framer wording
 - [ ] Insurance outreach kit — do not send until counsel clears (`Freedom-Paws-Insurance-Outreach-Kit-June-13-2026.md`)
 
 ## Phase 1 — Launch activation
@@ -145,10 +145,11 @@
 - [ ] Weekly admin queue: `/admin/symptoms` → approve → `npm run symptom:merge` when batch ready
 - [ ] Attorney copy pass on results disclaimers
 
-### Gate B — Photo Booth 🟡
-- [ ] Phase 4 background JPGs in `public/images/photobooth/backgrounds/`
-- [ ] iPhone sign-off checklist (`Today-Session-Founder-Checklists-June-2026.md` → T3)
-- [ ] Credits decrement correctly after AI Magic Look
+### Gate B — Photo Booth 🟢
+- [x] Phase 4 background JPGs in `public/images/photobooth/backgrounds/`
+- [x] iPhone sign-off (core editor + share/save)
+- [x] Print affiliate catalog + partners page (v94) — env URLs when partners signed
+- [ ] Credits decrement correctly after AI Magic Look (quick retest on v94)
 
 ### Gate C — My Pets + Vault 🟢
 - [ ] Smoke test add/edit pet + vault upload
@@ -168,9 +169,9 @@
 - [ ] Images and prices match source of truth
 
 ### Gate G — PWA / Brand 🟢
-- [ ] Home screen icon: paw fill (v84) — re-add shortcut after deploy
-- [ ] Nav: paw + “Freedom Paws Wellness” text
-- [ ] Service worker updates on deploy
+- [x] Home screen icon: paw fill — re-add shortcut after deploy
+- [x] Nav: paw + “Freedom Paws Wellness” text
+- [x] Service worker updates on deploy — **v94** live on `main`
 
 ### Gate H — Auth + Waitlist 🟢
 - [ ] Magic link login works on production
@@ -198,9 +199,10 @@
 ## Phase 0 — Now (founder + contractor)
 
 ### P0 — Blockers
-- [ ] **Fix ID & Tool Box page Phone layout** (overlap, clip, black gaps) — contractor if needed
-- [ ] **Build `/adopt` marketing page** → CTA `https://app.freedompawsinc.com/adopt/tn`
-- [ ] Add **Adopt** to site nav
+- [x] **Member Tools page** (`/member-tools`) — replaces ID & Tool Box · Part L signed June 30, 2026
+- [x] **Fix ID & Tool Box / Member Tools Phone layout** — signed off in Framer publish
+- [ ] **Build `/adopt` marketing page** → CTA `https://app.freedompawsinc.com/adopt/tn` *(nav shows Adopt — verify iPhone 4-tap)*
+- [ ] Add **Adopt** to site nav *(likely done — confirm link)*
 
 ### P1 — High priority
 - [ ] Update `/shelters` — TN pilot story + partner portal link
@@ -388,15 +390,17 @@
 
 ## Phase 0 — Now
 
-- [ ] Track 1 flows: enroll, found, match, shelter dashboard — iPhone smoke test
-- [ ] Supabase ID migrations applied in production
-- [ ] Resend match email tested (staging or controlled prod test)
-- [ ] Framer ID page copy = Option A (softened claims)
-- [ ] **Blocker:** Framer ID page Phone layout fixed
+- [x] Track 1 flows: enroll, found, match — iPhone smoke test **PASS** (June 2026)
+- [x] Track 2 chip MVP: `/id/scan`, `/id/lookup`, settings, My Pets — **v93** on production
+- [x] Supabase ID migrations applied in production (`014_microchip_track2.sql`)
+- [x] Resend match email tested (controlled prod test)
+- [x] Framer **Member Tools** copy = launch-safe (Part L signed)
+- [ ] **AAHA partnership email** — **not sent** — see **Section 4B** below
+- [ ] Attorney: chip + registry disclaimer footers on `/id/lookup` + `/id/scan`
 
 ## Phase 1 — Launch activation
 
-- [ ] ID marketing page live + 6-tap iPhone pass
+- [ ] ID marketing: **Member Tools** page live + Part L iPhone pass ✅ *(done June 30)*
 - [ ] Shelter workflow demo ready for partner calls
 
 ## Phase 2 — Post-launch
@@ -465,22 +469,126 @@
 
 Do **not** flip public mode or send partner outreach until:
 
-| # | Gate | Owner |
-|---|------|-------|
-| L1 | ViT iPhone prod test pass | Founder |
-| L2 | Photo Booth iPhone sign-off (or explicit deferral from marketing) | Founder |
-| L3 | Framer ID page Phone layout fixed | Founder/contractor |
-| L4 | Framer `/adopt` page published | Founder |
-| L5 | Attorney review Terms/Privacy (minimum viable) | Counsel |
-| L6 | Copyright filed (recommended before outreach) | Founder |
-| L7 | Test adoption listing E2E works | Founder |
-| L8 | `npm run build` + deploy green | Engineering |
-| L9 | Activation gate read (`ACTIVATION-GATE.md`) | Founder |
+| # | Gate | Owner | Status (Jun 30) |
+|---|------|-------|-----------------|
+| L1 | ViT iPhone prod test pass | Founder | 🟡 Quick retest recommended |
+| L2 | Photo Booth iPhone sign-off | Founder | 🟢 Core + v94 affiliates |
+| L3 | Framer Member Tools page (`/member-tools`) | Founder | ✅ **Pass June 30** |
+| L4 | Framer `/adopt` page published | Founder | 🟡 Verify CTA → app directory |
+| L5 | Attorney review Terms/Privacy + consent + give-back | Counsel | 🔴 **Critical path** — see **4A** |
+| L6 | Copyright filed | Founder | ✅ **Filed June 25, 2026** (6 binders) |
+| L7 | Test adoption listing E2E works | Founder | 🟡 Open — need partner-published listing |
+| L8 | `npm run build` + deploy green | Engineering | ✅ **v94** on `main` |
+| L9 | Activation gate read (`ACTIVATION-GATE.md`) | Founder | 🟡 |
 
 **Then:**
 - [ ] `NEXT_PUBLIC_SITE_MODE=public`
 - [ ] First manual partner email (one org)
 - [ ] Social launch posts
+
+---
+
+## SECTION 4A — L5 Attorney queue: what to do (founder playbook)
+
+**Goal:** Replace the yellow **“founder draft — not formal legal counsel”** banner on `/terms` and `/privacy` with **attorney-reviewed** text so you can flip `SITE_MODE=public` and send shelter outreach.
+
+**You already have:** Draft sections in `lib/legal/content.ts` (Terms + Privacy, last updated June 13, 2026). Pages live at `app.freedompawsinc.com/terms` and `/privacy`.
+
+### Step 1 — Pick counsel (1–2 hours)
+
+| Option | When |
+|--------|------|
+| **Pet / health-tech friendly attorney** (recommended) | Before public launch |
+| **LegalZoom / Rocket Lawyer business package** | Budget stopgap — still get ID + AI clauses reviewed |
+| **WY LLC registered agent referral** | Often has partner list |
+
+Ask for: **Terms of Use, Privacy Policy, biometric consent, affiliate disclosures, 10% give-back language** — flat-fee review if possible.
+
+### Step 2 — Send counsel this packet (one email)
+
+Attach or link:
+
+| # | Document | Path |
+|---|----------|------|
+| 1 | Current Terms draft | `lib/legal/content.ts` → TERMS_SECTIONS |
+| 2 | Current Privacy draft | `lib/legal/content.ts` → PRIVACY_SECTIONS |
+| 3 | Live URLs | `https://app.freedompawsinc.com/terms` · `/privacy` |
+| 4 | Framer Member Tools disclaimer | `freedompawsinc.com/member-tools` (screenshot) |
+| 5 | ID enroll consent flow | Screenshot `/id/enroll` consent step |
+| 6 | ViT results disclaimer | Screenshot `/diagnostics` results + urgency banner |
+| 7 | Give-back methodology | `docs/Freedom-Paws-ID-Cost-Scanner-DAO-Report-MASTER-FINAL-June-10-2026.md` § give-back |
+| 8 | Copyright registration | Confirmation filed **June 25, 2026** (6 binders) |
+
+**Subject line:** `Freedom Paws Wellness — Terms/Privacy/biometric review for Oct 2026 pilot launch`
+
+### Step 3 — Ask counsel to sign off on these five items
+
+| # | Topic | What attorney must confirm |
+|---|--------|---------------------------|
+| 1 | **Terms of Use** | Not veterinary advice; limitation of liability; XRPL/Token Shop; affiliate disclosures |
+| 2 | **Privacy Policy** | Biometric descriptors/embeddings; OpenAI processing; Supabase; deletion rights |
+| 3 | **Biometric consent** | In-app enroll consent + revoke in `/id/settings` — sufficient for TN pilot |
+| 4 | **ViT / CDS language** | “Wellness guidance” / “not diagnosis” on consumer tier; urgent-care banners |
+| 5 | **10% give-back** | Define **eligible net** (Token Shop + affiliate only); 50/50 vets/shelters; safe Framer wording |
+
+### Step 4 — Implement attorney edits (engineering — ~1 hour)
+
+1. Founder receives redline or replacement sections from counsel.
+2. Update `lib/legal/content.ts` with approved text.
+3. Set `LEGAL_LAST_UPDATED` to counsel sign-off date.
+4. Remove or soften the yellow “founder draft” banner in `LegalPageShell.tsx` **only after** counsel approves.
+5. Deploy to `main` → verify `/terms` and `/privacy` on iPhone.
+
+### Step 5 — Mark L5 complete
+
+- [ ] Written email or letter from counsel: “approved for pilot launch” (save PDF to `~/Documents/Freedom Paws Wellness/Legal/`)
+- [ ] Log date in `/ops` audit notes
+- [ ] **Then** flip `NEXT_PUBLIC_SITE_MODE=public` on Vercel
+
+**Budget expectation:** $1,500–$4,000 for startup Terms + Privacy + biometric addendum (varies by market). Ask for **pilot-scope** review, not full SaMD/FDA package yet.
+
+---
+
+## SECTION 4B — AAHA partnership email: what to do (20 minutes)
+
+**Status:** **Not sent** as of June 30, 2026.  
+**This does not block consumer launch** — you already link out to AAHA from `/id/lookup`. The email starts the **embed/API partnership** path for Track 2 (2027).
+
+**Why send now:** Starts a 4–12 week clock; no cost; shows registry good faith before scanner kit promotion (Jan 2027).
+
+### Click-by-click
+
+1. Open email (from `info@freedompawsinc.com` or `partners@freedompawsinc.com`).
+2. **To:** `petmicrochiplookup@aaha.org`
+3. **Subject:** `Freedom Paws ID — microchip lookup partnership inquiry (TN shelter pilot)`
+4. **Paste body** (edit names as needed):
+
+```
+Hello AAHA Pet Microchip Lookup team,
+
+Freedom Paws Wellness (https://app.freedompawsinc.com) is a nonprofit-aligned pet wellness PWA launching a Tennessee shelter adoption and reunion pilot in October 2026.
+
+We have shipped a microchip scan and validate flow at /id/scan and currently direct users to your public lookup at /id/lookup (external link). We do not display owner contact information from registries.
+
+We are requesting information on:
+1. Partnership or API terms for in-app registry routing (chip → participating registry name/phone only, no owner PII).
+2. Any requirements for shelters using our Universal Scan Kit with your lookup ecosystem.
+3. Point of contact for technical integration questions.
+
+Pilot partners: Tennessee municipal shelters and rescues (Freedom Paws Adoption Network). We are Wyoming LLC, counsel-reviewed Terms/Privacy in progress.
+
+Thank you,
+[Your name]
+Founder, Freedom Paws Wellness LLC
+info@freedompawsinc.com
+https://freedompawsinc.com
+```
+
+5. **Send.**
+6. Log in CRM or session log: **AAHA email sent — [date]**
+7. When they reply → forward to attorney (counsel reviews any API/embed terms before you build embed).
+
+**Reference:** `docs/ops/TRACK-2-SCAN-BUILD-SPEC-CLICK-BY-CLICK.md` § 2.1
 
 ---
 
@@ -505,15 +613,15 @@ Do **not** flip public mode or send partner outreach until:
 
 ---
 
-# SECTION 6 — What to do THIS WEEK (June 21, 2026)
+# SECTION 6 — What to do THIS WEEK (June 30, 2026)
 
 **If you only do five things:**
 
-1. [ ] **Copyright filing** — unlocks confident outreach copy  
-2. [ ] **ViT iPhone prod test** (T1 checklist) — 10 min  
-3. [ ] **Framer: ID page layout** OR book contractor — unblocks website  
-4. [ ] **Framer: start `/adopt` page** — app directory already live  
-5. [ ] **CRM Phase 0** — run two npm scripts, skim drafts (1 hr max)  
+1. [x] **Copyright filing** — **DONE June 25, 2026** (6 binders)  
+2. [ ] **L5 attorney packet** — send counsel email per **Section 4A** (highest priority)  
+3. [ ] **AAHA email** — send per **Section 4B** (20 min, non-blocking)  
+4. [ ] **L7 adoption listing** — one partner publishes a real dog in portal  
+5. [ ] **ViT iPhone prod test** (T1 checklist) — 10 min · close L1  
 
 **Explicitly defer:**
 - n8n workflow activation  
@@ -524,22 +632,32 @@ Do **not** flip public mode or send partner outreach until:
 
 ---
 
-# SECTION 7 — Progress tracker
+# SECTION 7 — Progress tracker (updated June 30, 2026)
 
-| Department | Phase 0 % est. | Launch blocker? |
-|------------|----------------|-----------------|
-| Executive Ops | 85% | No |
-| Legal / IP | 40% | **Yes** |
-| App Engineering | 80% | Monitor optional |
-| Framer Website | 70% | **Yes** (layout + /adopt) |
-| Adoption Network | 90% | Need live partner listing |
-| Marketing Automation | 60% prepare | Phase 1 gated |
-| Brand / Social | 50% prep | No |
-| Finance / Grants | 30% | No |
-| Ops Command Center | 95% | No |
-| Freedom Paws ID | 75% | Framer layout |
-| Wellness | 70% | Partner URLs |
-| ViT Pro | 85% V0 | No (parallel) |
+| Department | Phase 0 % est. | Launch blocker? | Notes |
+|------------|----------------|-----------------|-------|
+| Executive Ops | 90% | No | Founder docs committed; Member Tools signed off |
+| Legal / IP | **55%** | **Yes — L5 only** | **L6 copyright filed 6/25/26** |
+| App Engineering | **88%** | Monitor optional | **v94** · chip v93 · Photo Booth affiliates |
+| Framer Website | **90%** | 🟡 `/adopt` verify | **Member Tools** live · Part L pass |
+| Adoption Network | 90% | L7 partner listing | Portal + directory live |
+| Marketing Automation | 60% prepare | Phase 1 gated | Wait for L5 |
+| Brand / Social | 55% prep | No | |
+| Finance / Grants | 45% | No | Product-line + investor docs in repo |
+| Ops Command Center | 95% | No | |
+| Freedom Paws ID | **85%** | AAHA email open | Track 2 MVP live |
+| Wellness | 70% | Partner URLs | |
+| ViT Pro | 88% V0 | No (parallel) | Advisor bench not started |
+
+### Launch gate scorecard
+
+| Cleared | Open |
+|---------|------|
+| L3 Member Tools ✅ | L5 Attorney ⛔ |
+| L6 Copyright ✅ | L7 Partner listing |
+| L8 v94 deploy ✅ | L1 ViT retest |
+| L2 Photo Booth 🟢 | L4 `/adopt` verify |
+| | L9 Activation doc read |
 
 ---
 
@@ -549,7 +667,9 @@ You are not behind. You shipped **more than most funded startups build in year o
 
 Your constraint is not talent or work ethic. It is **sequencing**: the world sees one brand, but you are running twelve departments. The fix is not more hours — it is **fewer open fronts per day**.
 
-**The next 60 days in one sentence:** Finish the storefront (Framer), lock the legal floor (copyright + Terms), prove the product in your hand (ViT + Photo Booth on iPhone), then send **one** shelter email — not six workflows at once.
+**The next 60 days in one sentence:** ~~Finish the storefront (Framer)~~ **Storefront largely done (Member Tools)** — **lock the legal floor (L5 attorney)**, prove one partner listing (L7), send AAHA inquiry, then **one** shelter email.
+
+**June 30 milestone:** Copyright filed · Member Tools marketing hub live · app **v94** · **L5 is the remaining hard gate** before `SITE_MODE=public`.
 
 When September capital arrives, you will not be “starting.” You will be **activating** a machine you already built: flip public mode, fund TN move, pay counsel, stock product, and scale what is already working.
 
