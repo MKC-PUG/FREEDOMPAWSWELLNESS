@@ -23,6 +23,13 @@ import {
 } from '@/lib/vit/media-quality-gate';
 import { selectGaitFrames } from '@/lib/vit/extract-video-frames';
 import { saveVitRunLocal, saveVitRunServer } from '@/lib/vit/history';
+import { fetchServerPets } from '@/lib/mypets/api';
+import { readPetProfiles } from '@/lib/mypets/storage';
+import {
+  buildDiagnosticsPath,
+  diagnosticsPathWithoutUploadParams,
+  diagnosticsReturnTo,
+} from '@/lib/diagnostics-url';
 
 const REGION_LABELS: Record<IdentityRegion, string> = {
   eyes: 'Eyes',
@@ -70,6 +77,45 @@ export default function ViTDiagnosticsClient({
   const [wrongProtocol, setWrongProtocol] = useState(protocols[0]?.title ?? '');
   const [mediaQuality, setMediaQuality] = useState<VitMediaQuality | null>(null);
   const [qualityChecking, setQualityChecking] = useState(false);
+  const [activePetId, setActivePetId] = useState(petId);
+  const [activePetName, setActivePetName] = useState(petName);
+
+  useEffect(() => {
+    setActivePetId(petId);
+    setActivePetName(petName);
+  }, [petId, petName]);
+
+  useEffect(() => {
+    if (activePetId) return;
+    void fetchServerPets()
+      .then((pets) => {
+        if (pets?.[0]) {
+          setActivePetId(pets[0].id);
+          setActivePetName(pets[0].name);
+          return;
+        }
+        const local = readPetProfiles();
+        if (local[0]) {
+          setActivePetId(local[0].id);
+          setActivePetName(local[0].name);
+        }
+      })
+      .catch(() => {
+        const local = readPetProfiles();
+        if (local[0]) {
+          setActivePetId(local[0].id);
+          setActivePetName(local[0].name);
+        }
+      });
+  }, [activePetId]);
+
+  const resolvedPetId = activePetId;
+  const resolvedPetName = activePetName;
+  const diagnosticsReturnPath = diagnosticsReturnTo({
+    petId: resolvedPetId,
+    pet: resolvedPetName,
+    mode: identityMode ? 'identity' : null,
+  });
 
   const assessMediaQuality = async (
     selection: VitMediaSelection
@@ -147,7 +193,11 @@ export default function ViTDiagnosticsClient({
     setMediaQuality(null);
     setLocalUploadError('');
     setResult(null);
-    window.location.href = '/diagnostics';
+    window.location.href = buildDiagnosticsPath({
+      petId: resolvedPetId,
+      pet: resolvedPetName,
+      mode: identityMode ? 'identity' : null,
+    });
   };
 
   const analyze = async () => {
@@ -164,7 +214,8 @@ export default function ViTDiagnosticsClient({
       return;
     }
 
-    const useBothMode = !identityMode && Boolean(petId) && alsoCaptureId && selectedRegions.length > 0;
+    const useBothMode =
+      !identityMode && Boolean(resolvedPetId) && alsoCaptureId && selectedRegions.length > 0;
 
     if (useBothMode && !symptoms.trim()) {
       setError('Please describe symptoms for wellness analysis.');
@@ -255,8 +306,8 @@ export default function ViTDiagnosticsClient({
       if (data.success) {
         setResult(data);
         if (data.mode === 'wellness' || data.mode === 'both') {
-          saveVitRunLocal(data, petId ?? null, petName ?? null);
-          if (petId) void saveVitRunServer(petId, data);
+          saveVitRunLocal(data, resolvedPetId ?? null, resolvedPetName ?? null);
+          if (resolvedPetId) void saveVitRunServer(resolvedPetId, data);
         }
       } else {
         setError(data.error || 'Analysis failed');
@@ -292,14 +343,17 @@ export default function ViTDiagnosticsClient({
     <div className="min-h-screen bg-[#0A1428] text-white p-6 sm:p-8">
       <div className="max-w-5xl mx-auto">
         <BackLink href={identityMode ? '/id' : '/mypets'} label={identityMode ? 'Back to ID hub' : 'Back to My Pets'} />
-        {petName && (
+        {resolvedPetName && (
           <div className="mt-4 mb-2 rounded-2xl border border-amber-500/35 bg-amber-950/25 px-4 py-3 text-center text-sm text-amber-100">
-            ViT scan for <strong>{petName}</strong>
-            {petId ? (
+            ViT scan for <strong>{resolvedPetName}</strong>
+            {resolvedPetId ? (
               <>
                 {' '}
                 ·{' '}
-                <a href={`/id/enroll?petId=${encodeURIComponent(petId)}`} className="text-amber-300 underline">
+                <a
+                  href={`/id/enroll?petId=${encodeURIComponent(resolvedPetId)}`}
+                  className="text-amber-300 underline"
+                >
                   Enroll ID →
                 </a>
               </>
@@ -360,6 +414,7 @@ export default function ViTDiagnosticsClient({
             <h3 className="text-xl font-semibold mb-4">1. Upload Photo or Video</h3>
 
             <ViTMediaUpload
+              returnTo={diagnosticsReturnPath}
               onSelect={(sel) => {
                 setLocalUploadError('');
                 setError('');
@@ -368,7 +423,11 @@ export default function ViTDiagnosticsClient({
                 setFeedbackSent(null);
                 void runQualityCheck(sel);
                 if (typeof window !== 'undefined' && window.location.search) {
-                  window.history.replaceState({}, '', '/diagnostics');
+                  window.history.replaceState(
+                    {},
+                    '',
+                    diagnosticsPathWithoutUploadParams(window.location.search)
+                  );
                 }
               }}
               onClear={() => void clearMedia()}
@@ -431,7 +490,7 @@ export default function ViTDiagnosticsClient({
                   placeholder="e.g. limping on walks, sneezing, senior pacing at night..."
                   className="w-full h-40 bg-[#0A1428] border border-[#F5C242]/30 rounded-2xl p-6 text-white resize-y focus:outline-none focus:border-[#F5C242]"
                 />
-                {petId ? (
+                {resolvedPetId ? (
                   <div className="mt-5 rounded-2xl border border-emerald-500/25 bg-emerald-950/15 p-4">
                     <label className="flex items-start gap-3 cursor-pointer">
                       <input
@@ -486,7 +545,7 @@ export default function ViTDiagnosticsClient({
                 ? 'Analyzing…'
                 : identityMode
                   ? 'Analyze identity regions'
-                  : alsoCaptureId && petId
+                  : alsoCaptureId && resolvedPetId
                     ? 'Get wellness + ID analysis'
                     : 'Get AI Recommendation'}
             </button>
@@ -524,7 +583,7 @@ export default function ViTDiagnosticsClient({
                   (result.mode === 'both' && result.identity)) ? (
                   <ViTIdentityResultsPanel
                     result={result}
-                    petId={petId}
+                    petId={resolvedPetId}
                     onTryAnother={resetAnalysis}
                   />
                 ) : null}

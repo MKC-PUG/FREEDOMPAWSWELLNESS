@@ -193,7 +193,14 @@ export default function MyPetsClient() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
           {[
             { href: '/id', label: 'Freedom Paws ID', emoji: '🛡️' },
-            { href: '/diagnostics', label: 'ViT Scan', emoji: '📸' },
+            {
+              href:
+                pets.length > 0
+                  ? `/diagnostics?pet=${encodeURIComponent(pets[0]!.name)}&petId=${encodeURIComponent(pets[0]!.id)}`
+                  : '/diagnostics',
+              label: pets.length === 1 ? `ViT · ${pets[0]!.name}` : 'ViT Scan',
+              emoji: '📸',
+            },
             { href: '/photobooth', label: 'Photo Booth', emoji: '✨' },
             { href: '/token-shop', label: 'Token Shop', emoji: '🪙' },
             { href: '/protocols', label: 'Protocols', emoji: '📋' },

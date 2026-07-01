@@ -16,6 +16,7 @@ type Props = {
   uploadSuccess: boolean;
   initialPhoto: string | null;
   selection: VitMediaSelection | null;
+  returnTo?: string;
 };
 
 export default function ViTMediaUpload({
@@ -25,6 +26,7 @@ export default function ViTMediaUpload({
   uploadSuccess,
   initialPhoto,
   selection,
+  returnTo = '/diagnostics',
 }: Props) {
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [mode, setMode] = useState<'photo' | 'video'>(
@@ -98,7 +100,7 @@ export default function ViTMediaUpload({
           onClear={onClear}
           onError={onError}
           storageKey="vit-diagnostics"
-          returnTo="/diagnostics"
+          returnTo={returnTo}
         />
       )}
 
