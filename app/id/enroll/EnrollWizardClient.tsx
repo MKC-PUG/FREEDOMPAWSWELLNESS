@@ -40,6 +40,7 @@ type CaptureResult = {
 };
 
 type ReviewMedia = {
+  id: string;
   region: string;
   angle: string | null;
   qualityScore: number;
@@ -392,6 +393,30 @@ export default function EnrollWizardClient({
     }
   };
 
+  const removeCapture = async (mediaId: string) => {
+    if (!enrollmentId) return;
+    setBusy(true);
+    setError('');
+    try {
+      const res = await fetch('/api/id/enroll/media', {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enrollmentId, mediaId }),
+      });
+      const data = await res.json();
+      if (!data.success) {
+        setError(data.error || 'Could not remove capture.');
+        return;
+      }
+      await loadReview(enrollmentId);
+    } catch {
+      setError('Connection error.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const confirmEnrollment = async () => {
     if (!enrollmentId) return;
     setBusy(true);
@@ -704,19 +729,36 @@ export default function EnrollWizardClient({
               {reviewMedia.map((m) => {
                 const label = m.angle ? `${m.region} (${m.angle})` : m.region;
                 const pct = Math.round(m.qualityScore * 100);
+                const lowQuality = pct < 65;
                 return (
                   <li
-                    key={`${m.region}-${m.angle ?? 'x'}`}
+                    key={m.id}
                     className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm"
                   >
-                    <div className="flex justify-between">
+                    <div className="flex justify-between gap-3">
                       <span className="font-semibold capitalize">{label}</span>
-                      <span className={pct >= 65 ? 'text-green-400' : 'text-amber-400'}>
-                        {pct}%
-                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className={pct >= 65 ? 'text-green-400' : 'text-amber-400'}>
+                          {pct}%
+                        </span>
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() => void removeCapture(m.id)}
+                          className="text-xs font-semibold text-red-300/80 hover:text-red-200 disabled:opacity-40"
+                          aria-label={`Remove ${label} capture`}
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
                     {m.descriptors[0] && (
                       <p className="mt-1 text-xs text-white/55 truncate">{m.descriptors[0]}</p>
+                    )}
+                    {lowQuality && (
+                      <p className="mt-1 text-xs text-amber-300/70">
+                        Low quality — remove or retake from the region step.
+                      </p>
                     )}
                   </li>
                 );

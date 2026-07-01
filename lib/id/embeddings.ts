@@ -17,6 +17,21 @@ type MediaRow = {
   descriptors: string[] | unknown;
 };
 
+/** One row per region+angle slot — highest quality wins (handles duplicate NULL-angle rows). */
+export function bestMediaPerSlot(rows: MediaRow[]): MediaRow[] {
+  const bySlot = new Map<string, MediaRow>();
+  for (const row of rows) {
+    const key = `${row.region}:${row.angle ?? ''}`;
+    const existing = bySlot.get(key);
+    const score = Number(row.quality_score ?? 0);
+    const existingScore = Number(existing?.quality_score ?? 0);
+    if (!existing || score > existingScore) {
+      bySlot.set(key, row);
+    }
+  }
+  return Array.from(bySlot.values());
+}
+
 export type IntakeFusionRow = {
   region: string;
   angle: string | null;
@@ -96,9 +111,10 @@ export function fuseFoundIntakeDescriptors(analysis: {
 
 export function fuseEnrollmentDescriptors(rows: MediaRow[]): string {
   const parts: string[] = [];
+  const slots = bestMediaPerSlot(rows);
 
   const byKey = (region: string, angle?: string | null) =>
-    rows.find((r) => r.region === region && (angle ? r.angle === angle : !r.angle));
+    slots.find((r) => r.region === region && (angle ? r.angle === angle : !r.angle));
 
   const append = (label: string, row: MediaRow | undefined) => {
     if (!row) return;
@@ -162,9 +178,10 @@ export function validateEnrollmentMedia(rows: MediaRow[]): {
   issues: string[];
 } {
   const issues: string[] = [];
+  const slots = bestMediaPerSlot(rows);
 
   const requireRegion = (region: string, angle?: string) => {
-    const row = rows.find((r) => r.region === region && (angle ? r.angle === angle : !r.angle));
+    const row = slots.find((r) => r.region === region && (angle ? r.angle === angle : !r.angle));
     const thresholds =
       REGION_CAPTURE_THRESHOLDS[region as keyof typeof REGION_CAPTURE_THRESHOLDS] ?? {
         minScore: 0.65,

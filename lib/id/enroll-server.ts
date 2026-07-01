@@ -27,6 +27,7 @@ type EnrollmentRow = {
 };
 
 export type EnrollmentMediaSummary = {
+  id: string;
   region: string;
   angle: string | null;
   qualityScore: number;
@@ -67,6 +68,7 @@ function rowToDraft(row: EnrollmentRow): EnrollmentDraft {
 
 function parseMediaRows(
   rows: {
+    id: string;
     region: string;
     angle: string | null;
     quality_score: number | null;
@@ -75,6 +77,7 @@ function parseMediaRows(
   }[]
 ): EnrollmentMediaSummary[] {
   return rows.map((r) => ({
+    id: r.id,
     region: r.region,
     angle: r.angle,
     qualityScore: Number(r.quality_score ?? 0),
@@ -215,18 +218,29 @@ export async function captureEnrollmentRegion(
   }
 
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from('enrollment_media').upsert(
-    {
-      enrollment_id: enrollmentId,
-      region,
-      angle: angle ?? null,
-      quality_score: regionResult.qualityScore,
-      descriptors: regionResult.descriptors,
-      quality_issues: regionResult.qualityIssues,
-      analyzed_at: new Date().toISOString(),
-    },
-    { onConflict: 'enrollment_id,region,angle' }
-  );
+  const angleValue = angle ?? null;
+
+  // PostgreSQL treats NULL as distinct in unique constraints — delete the slot first so retakes replace.
+  let deleteQuery = supabase
+    .from('enrollment_media')
+    .delete()
+    .eq('enrollment_id', enrollmentId)
+    .eq('region', region);
+  deleteQuery = angleValue
+    ? deleteQuery.eq('angle', angleValue)
+    : deleteQuery.is('angle', null);
+  const { error: deleteError } = await deleteQuery;
+  if (deleteError) throw deleteError;
+
+  const { error } = await supabase.from('enrollment_media').insert({
+    enrollment_id: enrollmentId,
+    region,
+    angle: angleValue,
+    quality_score: regionResult.qualityScore,
+    descriptors: regionResult.descriptors,
+    quality_issues: regionResult.qualityIssues,
+    analyzed_at: new Date().toISOString(),
+  });
 
   if (error) throw error;
 
@@ -245,12 +259,37 @@ export async function captureEnrollmentRegion(
   };
 }
 
+export async function deleteEnrollmentMedia(
+  userId: string,
+  enrollmentId: string,
+  mediaId: string
+): Promise<void> {
+  const enrollment = await getEnrollmentForUser(userId, enrollmentId);
+  if (!enrollment) throw new Error('Enrollment not found');
+  if (enrollment.status === 'complete') {
+    throw new Error('Cannot remove captures from a completed enrollment');
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from('enrollment_media')
+    .delete()
+    .eq('id', mediaId)
+    .eq('enrollment_id', enrollmentId)
+    .select('id')
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) throw new Error('Capture not found');
+}
+
 export async function listEnrollmentMedia(userId: string, enrollmentId: string) {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from('enrollment_media')
-    .select('region, angle, quality_score, descriptors, analyzed_at')
-    .eq('enrollment_id', enrollmentId);
+    .select('id, region, angle, quality_score, descriptors, analyzed_at')
+    .eq('enrollment_id', enrollmentId)
+    .order('analyzed_at', { ascending: false });
 
   if (error) throw error;
 
