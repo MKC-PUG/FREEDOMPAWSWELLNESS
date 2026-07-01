@@ -3,6 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
+import SecondaryButton from '@/app/components/ui/SecondaryButton';
+import EnrollStepper from '@/app/components/ui/EnrollStepper';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { BIOMETRIC_CONSENT_TEXT, BIOMETRIC_CONSENT_VERSION } from '@/lib/id/consent';
 import { enrollStepForRegion, readVitIdBridgeSession } from '@/lib/id/enroll-bridge';
@@ -483,7 +489,7 @@ export default function EnrollWizardClient({
   const cardHref = completeResult ? `/id/p/${completeResult.qrSlug}` : '#';
 
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
+    <PageShell maxWidth="lg">
       <input
         ref={photoRef}
         type="file"
@@ -500,39 +506,23 @@ export default function EnrollWizardClient({
         onChange={(ev) => void onVideoPicked(ev)}
       />
 
-      <div className="mx-auto max-w-lg px-6 py-10">
-        <BackLink href="/id" label="Back to ID hub" />
+      <BackLink href="/id" label="Back to ID hub" />
 
-        <header className="mt-4 mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
-            Enroll biometric ID
-          </p>
-          <h1 className="mt-2 text-2xl font-bold">9-step wizard</h1>
-          <p className="mt-1 text-xs text-white/50">Signed in as {userEmail}</p>
-        </header>
+      <PageHeader
+        eyebrow="Enroll biometric ID"
+        eyebrowVariant="emerald"
+        title="9-step wizard"
+        subtitle={`Signed in as ${userEmail}`}
+        className="mt-4 mb-2"
+      />
 
         {vitBridgeHint ? (
-          <div className="mb-6 rounded-2xl border border-emerald-500/35 bg-emerald-950/25 px-4 py-3 text-sm text-emerald-100/90 leading-relaxed">
-            {vitBridgeHint}
-          </div>
+          <SectionCard className="mb-6 border-emerald-500/35 bg-emerald-950/25">
+            <p className="text-sm text-emerald-100/90 leading-relaxed">{vitBridgeHint}</p>
+          </SectionCard>
         ) : null}
 
-        <ol className="mb-8 grid grid-cols-9 gap-0.5">
-          {STEPS.map((s) => (
-            <li
-              key={s.n}
-              className={`rounded-md py-1.5 text-center text-[8px] font-semibold uppercase leading-tight tracking-tight ${
-                step === s.n
-                  ? 'bg-emerald-500/25 text-emerald-200'
-                  : step > s.n
-                    ? 'bg-white/10 text-white/50'
-                    : 'bg-white/5 text-white/30'
-              }`}
-            >
-              {s.label}
-            </li>
-          ))}
-        </ol>
+        <EnrollStepper steps={STEPS} currentStep={step} />
 
         {error && (
           <p className="mb-4 rounded-xl border border-red-500/40 bg-red-950/30 px-4 py-3 text-sm text-red-300">
@@ -541,7 +531,7 @@ export default function EnrollWizardClient({
         )}
 
         {step === 1 && (
-          <section className="space-y-4">
+          <SectionCard className="space-y-4">
             <h2 className="text-lg font-semibold">1. Select your pet</h2>
             {loadingPets ? (
               <p className="text-sm text-white/50">Loading pets…</p>
@@ -585,29 +575,31 @@ export default function EnrollWizardClient({
                 placeholder="Breed (optional)"
                 className="w-full rounded-xl bg-[#0A1428] border border-white/20 px-3 py-2 text-sm"
               />
-              <button
+              <SecondaryButton
                 type="button"
+                variant="gold"
+                fullWidth
                 disabled={creatingPet}
                 onClick={() => void createPet()}
-                className="w-full min-h-[48px] rounded-xl border border-amber-400/50 py-2 text-sm font-semibold text-amber-300 touch-manipulation active:bg-amber-400/10 disabled:opacity-50"
               >
                 {creatingPet ? 'Creating…' : 'Add pet'}
-              </button>
+              </SecondaryButton>
             </div>
 
-            <button
+            <PrimaryButton
               type="button"
+              variant="emerald"
+              fullWidth
               disabled={busy || !selectedPetId}
               onClick={() => void startEnrollment()}
-              className="w-full min-h-[52px] rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50 touch-manipulation active:bg-emerald-300"
             >
               {busy ? 'Starting…' : `Continue with ${selectedPet?.name ?? 'pet'}`}
-            </button>
-          </section>
+            </PrimaryButton>
+          </SectionCard>
         )}
 
         {step === 2 && (
-          <section className="space-y-4">
+          <SectionCard className="space-y-4">
             <h2 className="text-lg font-semibold">2. Biometric consent</h2>
             <pre className="whitespace-pre-wrap rounded-2xl border border-white/10 bg-[#0A1428] p-4 text-xs leading-relaxed text-white/75 font-sans">
               {BIOMETRIC_CONSENT_TEXT}
@@ -623,19 +615,20 @@ export default function EnrollWizardClient({
                 I agree to biometric capture and storage (v{BIOMETRIC_CONSENT_VERSION}).
               </span>
             </label>
-            <button
+            <PrimaryButton
               type="button"
+              variant="emerald"
+              fullWidth
               disabled={busy || !consentChecked}
               onClick={() => void recordConsent()}
-              className="w-full min-h-[52px] rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50 touch-manipulation active:bg-emerald-300"
             >
               {busy ? 'Saving…' : 'I agree — continue'}
-            </button>
-          </section>
+            </PrimaryButton>
+          </SectionCard>
         )}
 
         {step >= 3 && step <= 7 && enrollmentId && (
-          <section className="space-y-4">
+          <SectionCard className="space-y-4">
             {step === 3 && (
               <>
                 <h2 className="text-lg font-semibold">3. Eyes</h2>
@@ -650,16 +643,17 @@ export default function EnrollWizardClient({
                   busy={busy}
                 />
                 {captures.eyes && !captures.eyes.enrollReady && (
-                  <button
+                  <SecondaryButton
                     type="button"
+                    variant="gold"
+                    fullWidth
                     onClick={() => {
                       setError('');
                       setStep(4);
                     }}
-                    className="w-full min-h-[48px] rounded-2xl border border-amber-400/50 py-3 text-sm font-bold text-amber-300 touch-manipulation active:bg-amber-400/10"
                   >
                     Continue to Face → ({Math.round(captures.eyes.qualityScore * 100)}% quality)
-                  </button>
+                  </SecondaryButton>
                 )}
               </>
             )}
@@ -722,11 +716,11 @@ export default function EnrollWizardClient({
                 />
               </>
             )}
-          </section>
+          </SectionCard>
         )}
 
         {step === 8 && enrollmentId && (
-          <section className="space-y-4">
+          <SectionCard className="space-y-4">
             <h2 className="text-lg font-semibold">8. Review &amp; confirm</h2>
             <p className="text-sm text-white/65">
               {petName ? `${petName} — ` : ''}confirm all regions before we create your embedding
@@ -784,19 +778,20 @@ export default function EnrollWizardClient({
               </div>
             )}
 
-            <button
+            <PrimaryButton
               type="button"
+              variant="emerald"
+              fullWidth
               disabled={busy || !reviewReady}
               onClick={() => void confirmEnrollment()}
-              className="w-full min-h-[52px] rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50 touch-manipulation active:bg-emerald-300"
             >
               {busy ? 'Creating ID…' : 'Confirm & create Freedom Paws ID'}
-            </button>
-          </section>
+            </PrimaryButton>
+          </SectionCard>
         )}
 
         {step === 9 && completeResult && (
-          <section className="space-y-4 text-center">
+          <SectionCard className="space-y-4 text-center">
             <div className="rounded-2xl border-2 border-emerald-500/50 bg-emerald-900/20 p-8">
               <p className="text-emerald-300 font-bold text-lg">Enrollment complete</p>
               <p className="mt-4 text-3xl font-mono font-bold text-amber-400">
@@ -817,10 +812,9 @@ export default function EnrollWizardClient({
             <Link href="/id" className="block text-sm text-white/50 hover:text-white/70">
               Return to ID hub
             </Link>
-          </section>
+          </SectionCard>
         )}
-      </div>
-    </div>
+    </PageShell>
   );
 }
 
@@ -841,7 +835,7 @@ function CaptureCard({
 }) {
   const pct = capture ? Math.round(capture.qualityScore * 100) : null;
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+    <SectionCard>
       <div className="flex items-center justify-between">
         <p className="font-semibold">{label}</p>
         {pct !== null && (
@@ -863,14 +857,16 @@ function CaptureCard({
       ) : (
         <p className="mt-2 text-xs text-white/45">No capture yet</p>
       )}
-      <button
+      <SecondaryButton
         type="button"
+        variant="emerald"
+        fullWidth
         disabled={busy || disabled}
         onClick={onCapture}
-        className="mt-4 w-full min-h-[48px] rounded-xl bg-[#0A1428] border border-emerald-500/40 py-3 text-sm font-semibold text-emerald-300 disabled:opacity-40 touch-manipulation active:bg-emerald-500/10"
+        className="mt-4 !min-h-[48px] !rounded-xl"
       >
         {busy ? 'Analyzing…' : capture ? 'Retake' : actionLabel ?? 'Take photo'}
-      </button>
-    </div>
+      </SecondaryButton>
+    </SectionCard>
   );
 }

@@ -63,7 +63,7 @@ const cards = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
+    <div className="min-h-screen bg-[#0A1428] text-white font-sans">
       {/* Lake background spans hero + cards */}
       <div className="relative">
         <Image
@@ -75,7 +75,7 @@ export default function Home() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A1625]/60 via-[#0A1625]/70 to-[#0A1625]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A1428]/60 via-[#0A1428]/70 to-[#0A1428]/90" />
 
         <div className="relative z-10">
           {/* Hero */}
@@ -111,7 +111,7 @@ export default function Home() {
                   key={c.title}
                   href={c.href}
                   prefetch={false}
-                  className="bg-[#0F1E38]/85 backdrop-blur-sm rounded-3xl p-7 min-h-[260px] flex flex-col border border-white/10 hover:border-amber-400/40 hover:bg-[#132A4F]/90 active:border-amber-400/60 transition-all touch-manipulation relative z-10"
+                  className="bg-[#0F1E38]/85 backdrop-blur-sm rounded-2xl p-7 min-h-[260px] flex flex-col border border-white/10 hover:border-amber-400/40 hover:bg-[#132A4F]/90 active:border-amber-400/60 transition-all touch-manipulation relative z-10"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   <div className="text-3xl mb-6">{c.icon}</div>

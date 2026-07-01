@@ -5,6 +5,10 @@ import Link from 'next/link';
 import PetVitRunBadge from '@/app/components/mypets/PetVitRunBadge';
 import PetVaultBadge from '@/app/components/mypets/PetVaultBadge';
 import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { tokenShopItems } from '@/app/token-shop/shop-items';
 import { fileToPetThumb } from '@/lib/mypets/photo-thumb';
@@ -151,9 +155,8 @@ export default function MyPetsClient() {
   const unlockedItems = tokenShopItems.filter((item) => unlocked.includes(item.slug));
 
   return (
-    <div className="min-h-screen bg-[#0A1428] text-white p-6 sm:p-8 pb-20">
-      <div className="max-w-5xl mx-auto">
-        <BackLink />
+    <PageShell maxWidth="5xl" innerClassName="sm:p-8">
+      <BackLink />
         {!useServer && (
           <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-950/25 px-4 py-3 text-sm text-amber-200/90">
             Pets saved on this device only.{' '}
@@ -171,26 +174,18 @@ export default function MyPetsClient() {
             </Link>
           </p>
         )}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-4">
-            <span className="text-4xl sm:text-5xl">🐾</span>
-            <div>
-              <h1 className="text-3xl sm:text-5xl font-bold">My Pets</h1>
-              <p className="text-[#F5C242] text-sm sm:text-lg mt-1">
-                Pet profiles, wellness vault, protocols &amp; ViT history
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={openAdd}
-            className="bg-[#F5C242] hover:bg-white active:bg-amber-300 text-black font-bold px-6 py-3 min-h-[48px] rounded-2xl text-sm transition touch-manipulation"
-          >
-            + Add Pet
-          </button>
-        </div>
+        <PageHeader
+          icon="🐾"
+          title="My Pets"
+          subtitle="Pet profiles, wellness vault, protocols & ViT history"
+          badge={
+            <PrimaryButton type="button" onClick={openAdd}>
+              + Add Pet
+            </PrimaryButton>
+          }
+        />
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10 -mt-4">
           {[
             { href: '/id', label: 'Freedom Paws ID', emoji: '🛡️' },
             {
@@ -221,28 +216,21 @@ export default function MyPetsClient() {
         <WellnessPartnerPanel context="my_pets" className="mb-10" />
 
         {pets.length === 0 ? (
-          <div className="bg-[#1F2A44] rounded-3xl p-10 sm:p-16 text-center border border-white/10">
+          <SectionCard variant="solid" padding="lg" className="text-center mb-10">
             <div className="text-7xl mb-6">🐕</div>
             <h2 className="text-2xl sm:text-4xl font-bold mb-3">No pets added yet</h2>
             <p className="text-gray-400 max-w-md mx-auto mb-8 text-sm leading-relaxed">
               Add your first pet to track wellness notes, unlocked protocols, and photos.
               {useServer ? ' Synced to your account.' : ' Saved on this device until you sign in.'}
             </p>
-            <button
-              type="button"
-              onClick={openAdd}
-              className="bg-[#F5C242] hover:bg-white text-black font-bold px-10 py-4 min-h-[52px] rounded-2xl text-lg transition touch-manipulation"
-            >
+            <PrimaryButton type="button" size="lg" onClick={openAdd}>
               + Add New Pet
-            </button>
-          </div>
+            </PrimaryButton>
+          </SectionCard>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
             {pets.map((pet) => (
-              <article
-                key={pet.id}
-                className="rounded-3xl border border-white/10 bg-[#1F2A44] p-5 flex gap-4"
-              >
+              <SectionCard key={pet.id} className="flex gap-4">
                 <div className="shrink-0 w-20 h-20 rounded-2xl overflow-hidden bg-[#0A1428] flex items-center justify-center text-3xl">
                   {pet.photoThumb ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -284,7 +272,8 @@ export default function MyPetsClient() {
                     </button>
                     <Link
                       href={`/diagnostics?pet=${encodeURIComponent(pet.name)}&petId=${encodeURIComponent(pet.id)}`}
-                      className="text-xs font-bold text-white/70 touch-manipulation"
+                      className="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-2xl bg-[#F5C242] hover:bg-white active:bg-amber-300 text-black font-bold text-xs transition touch-manipulation"
+                      style={{ WebkitTapHighlightColor: 'transparent' }}
                     >
                       Run ViT →
                     </Link>
@@ -298,12 +287,12 @@ export default function MyPetsClient() {
                     )}
                   </div>
                 </div>
-              </article>
+              </SectionCard>
             ))}
           </div>
         )}
 
-        <section className="rounded-3xl border border-white/10 bg-[#16223C] p-6 mb-8">
+        <SectionCard className="mb-8">
           <h2 className="text-lg font-bold text-[#F5C242]">Protocols unlocked (this device)</h2>
           <p className="text-xs text-white/50 mt-1 mb-4">
             Purchases from Token Shop unlock lifetime access here and in the shop.
@@ -330,9 +319,9 @@ export default function MyPetsClient() {
               ))}
             </ul>
           )}
-        </section>
+        </SectionCard>
 
-        <section className="rounded-3xl border border-dashed border-white/15 bg-[#0F1E38]/50 p-6">
+        <SectionCard variant="dashed">
           <h2 className="text-lg font-bold text-white/80">Wellness vault</h2>
           <p className="text-sm text-white/50 mt-2 leading-relaxed">
             Each pet card links to a private vault for vet records, vaccinations, and daily notes.
@@ -346,9 +335,9 @@ export default function MyPetsClient() {
               Open {pets[0]!.name}&apos;s vault →
             </Link>
           )}
-        </section>
+        </SectionCard>
 
-        <section className="rounded-3xl border border-dashed border-white/15 bg-[#0F1E38]/50 p-6 mt-6">
+        <SectionCard variant="dashed" className="mt-6">
           <h2 className="text-lg font-bold text-white/80">Dynamic NFT gallery</h2>
           <p className="text-sm text-white/50 mt-2 leading-relaxed">
             Your XRPL protocol tokens will appear here after wallet connect ships. Purchased access
@@ -360,8 +349,7 @@ export default function MyPetsClient() {
           >
             Token Shop →
           </Link>
-        </section>
-      </div>
+        </SectionCard>
 
       {formOpen && (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -450,13 +438,9 @@ export default function MyPetsClient() {
                 </div>
               </div>
               {formError && <p className="text-sm text-red-400">{formError}</p>}
-              <button
-                type="button"
-                onClick={() => void saveForm()}
-                className="w-full min-h-[48px] rounded-full bg-[#F5C242] text-black font-bold text-sm touch-manipulation"
-              >
+              <PrimaryButton type="button" fullWidth onClick={() => void saveForm()}>
                 {editingId ? 'Save changes' : 'Add pet'}
-              </button>
+              </PrimaryButton>
               <button
                 type="button"
                 onClick={closeForm}
@@ -468,6 +452,6 @@ export default function MyPetsClient() {
           </div>
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }

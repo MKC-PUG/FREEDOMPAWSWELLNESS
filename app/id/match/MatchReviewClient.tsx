@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
 import type { MatchReviewStatus } from '@/lib/id/types';
 
 type Report = {
@@ -122,9 +123,8 @@ export default function MatchReviewClient({ canDecide }: Props) {
   const selected = reports.find((r) => r.id === selectedId);
 
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
-      <div className="mx-auto max-w-2xl px-6 py-10">
-        <BackLink href="/id/shelter" label="Shelter dashboard" />
+    <PageShell maxWidth="2xl">
+      <BackLink href="/id/shelter" label="Shelter dashboard" />
 
         <header className="mt-4 mb-6">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
@@ -271,7 +271,6 @@ export default function MatchReviewClient({ canDecide }: Props) {
             View-only mode — shelter admin or FP ops required to approve matches.
           </p>
         )}
-      </div>
-    </div>
+    </PageShell>
   );
 }

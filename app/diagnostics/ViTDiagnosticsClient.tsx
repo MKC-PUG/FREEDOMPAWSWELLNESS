@@ -5,6 +5,11 @@ import { protocols } from '@/app/protocols/protocols';
 import { compressFileToUpload } from '@/lib/compress-image';
 import { PWA_VERSION } from '@/lib/pwa-version';
 import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
+import EyebrowLabel from '@/app/components/ui/EyebrowLabel';
 import type { AnalyzeApiResponse } from '@/lib/ai/types';
 import ViTMediaUpload, { type VitMediaSelection } from './ViTMediaUpload';
 import ViTResultsPanel from './ViTResultsPanel';
@@ -354,9 +359,8 @@ export default function ViTDiagnosticsClient({
     (mediaQuality === null || mediaQuality.canAnalyze);
 
   return (
-    <div className="min-h-screen bg-[#0A1428] text-white p-6 sm:p-8">
-      <div className="max-w-5xl mx-auto">
-        <BackLink href={identityMode ? '/id' : '/mypets'} label={identityMode ? 'Back to ID hub' : 'Back to My Pets'} />
+    <PageShell maxWidth="5xl">
+      <BackLink href={identityMode ? '/id' : '/mypets'} label={identityMode ? 'Back to ID hub' : 'Back to My Pets'} />
         {resolvedPetName && (
           <div className="mt-4 mb-2 rounded-2xl border border-amber-500/35 bg-amber-950/25 px-4 py-3 text-center text-sm text-amber-100">
             ViT scan for <strong>{resolvedPetName}</strong>
@@ -374,17 +378,25 @@ export default function ViTDiagnosticsClient({
             ) : null}
           </div>
         )}
-        <h1 className="text-5xl font-bold text-center mb-2">
-          {identityMode ? 'ViT Identity Capture' : 'ViT Diagnostics'}
-        </h1>
-        <p className="text-center text-[#F5C242] mb-2">
-          {identityMode
-            ? 'Upload photo or video — capture identity regions for Freedom Paws ID'
-            : 'Upload photo or short video + symptoms for AI protocol recommendation'}
-        </p>
-        <p className="text-center text-sm font-semibold text-[#F5C242] mb-1">
-          App release {PWA_VERSION}
-        </p>
+
+        <PageHeader
+          center
+          eyebrow={identityMode ? 'Freedom Paws ID' : 'ViT Diagnostics'}
+          eyebrowVariant={identityMode ? 'emerald' : 'gold'}
+          title={identityMode ? 'Identity capture' : 'ViT Diagnostics'}
+          subtitle={
+            identityMode
+              ? 'Photo or video for biometric regions — eyes, face, body, posture & gait'
+              : 'Share a photo or short clip plus what you are noticing — we will suggest holistic protocols'
+          }
+          badge={
+            <span className="rounded-full border border-amber-400/30 bg-amber-950/25 px-3 py-1 text-xs font-semibold text-amber-300">
+              App release {PWA_VERSION}
+            </span>
+          }
+          className="mb-4"
+        />
+
         <p className="text-center text-xs text-white/40 mb-4">
           Photo · short video · symptom matching · AI vision
         </p>
@@ -410,22 +422,25 @@ export default function ViTDiagnosticsClient({
         <ViTHowItWorks />
 
         {hasMedia && canAnalyze && mediaQuality?.status === 'pass' && (
-          <div className="mb-6 rounded-2xl border-2 border-green-500/50 bg-green-900/20 p-4 text-center">
+          <SectionCard className="mb-6 border-2 border-green-500/50 bg-green-900/20 text-center">
             <p className="text-green-400 font-semibold">
-              ✓ Media quality looks good — describe symptoms, tap Get AI Recommendation
+              ✓ Media looks good — add symptoms below, then tap Get AI Recommendation
             </p>
-          </div>
+          </SectionCard>
         )}
 
         {displayError && (
-          <div className="mb-6 rounded-2xl border-2 border-red-500 bg-red-950/50 p-4 text-center">
+          <SectionCard className="mb-6 border-2 border-red-500 bg-red-950/50 text-center">
             <p className="text-red-300 font-semibold">{displayError}</p>
-          </div>
+          </SectionCard>
         )}
 
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-[#1F2A44] rounded-3xl p-8">
-            <h3 className="text-xl font-semibold mb-4">1. Upload Photo or Video</h3>
+          <SectionCard padding="lg">
+            <h3 className="text-xl font-semibold mb-1">Add a photo or video</h3>
+            <EyebrowLabel variant="muted" className="mb-4 normal-case tracking-normal">
+              Step 1 · clear, well-lit shots work best
+            </EyebrowLabel>
 
             <ViTMediaUpload
               returnTo={diagnosticsReturnPath}
@@ -458,12 +473,15 @@ export default function ViTDiagnosticsClient({
                 mediaKind={media?.kind ?? null}
               />
             </div>
-          </div>
+          </SectionCard>
 
-          <div className="bg-[#1F2A44] rounded-3xl p-8 flex flex-col">
+          <SectionCard padding="lg" className="flex flex-col">
             {identityMode ? (
               <>
-                <h3 className="text-xl font-semibold mb-4">2. Identity regions</h3>
+                <h3 className="text-xl font-semibold mb-1">Choose identity regions</h3>
+                <EyebrowLabel variant="muted" className="mb-4 normal-case tracking-normal">
+                  Step 2 · video works well for gait
+                </EyebrowLabel>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {IDENTITY_REGIONS.map((region) => {
                     const active = selectedRegions.includes(region);
@@ -497,7 +515,10 @@ export default function ViTDiagnosticsClient({
               </>
             ) : (
               <>
-                <h3 className="text-xl font-semibold mb-4">2. Describe Symptoms</h3>
+                <h3 className="text-xl font-semibold mb-1">Tell us what you are noticing</h3>
+                <EyebrowLabel variant="muted" className="mb-4 normal-case tracking-normal">
+                  Step 2 · symptoms, behavior changes, or concerns
+                </EyebrowLabel>
                 <textarea
                   ref={symptomsRef}
                   name="symptoms"
@@ -547,16 +568,14 @@ export default function ViTDiagnosticsClient({
               </>
             )}
 
-            <button
+            <PrimaryButton
               type="button"
+              variant={identityMode ? 'emerald' : 'gold'}
+              fullWidth
+              size="lg"
               onClick={() => void analyze()}
               disabled={loading || !canAnalyze}
-              className={`mt-6 min-h-[52px] disabled:opacity-50 text-black font-bold py-4 rounded-2xl text-xl transition touch-manipulation active:scale-[0.99] ${
-                identityMode
-                  ? 'bg-emerald-400 hover:bg-emerald-400/90 active:bg-emerald-300'
-                  : 'bg-[#F5C242] hover:bg-[#F5C242]/90 active:bg-amber-300'
-              }`}
-              style={{ WebkitTapHighlightColor: 'transparent' }}
+              className="mt-6 !text-xl"
             >
               {loading
                 ? 'Analyzing…'
@@ -565,7 +584,7 @@ export default function ViTDiagnosticsClient({
                   : alsoCaptureId && resolvedPetId
                     ? 'Get wellness + ID analysis'
                     : 'Get AI Recommendation'}
-            </button>
+            </PrimaryButton>
 
             {!hasMedia && (
               <p className="mt-3 text-center text-xs text-white/45">
@@ -584,16 +603,18 @@ export default function ViTDiagnosticsClient({
             )}
 
             {error && <p className="text-red-400 mt-6 text-center">{error}</p>}
-          </div>
+          </SectionCard>
         </div>
 
         {result ? (
           <div ref={resultsRef} className="mt-10 space-y-10 scroll-mt-6">
             {result.mode === 'both' && result.identity ? (
-              <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950/20 px-4 py-3 text-center text-sm text-emerald-100/90">
-                Combined wellness + Freedom Paws ID analysis — identity regions first, then
-                protocol recommendations below.
-              </div>
+              <SectionCard className="border-emerald-500/35 bg-emerald-950/20 text-center">
+                <p className="text-sm text-emerald-100/90">
+                  Combined wellness + Freedom Paws ID results — identity regions first, then
+                  protocol recommendations below.
+                </p>
+              </SectionCard>
             ) : null}
 
             {(identityMode ||
@@ -618,7 +639,6 @@ export default function ViTDiagnosticsClient({
             ) : null}
           </div>
         ) : null}
-      </div>
-    </div>
+    </PageShell>
   );
 }

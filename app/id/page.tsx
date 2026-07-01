@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
 
 export const metadata: Metadata = {
   title: 'Freedom Paws ID • Biometric Pet Identity',
@@ -131,30 +133,28 @@ function statusBadge(status: 'live' | 'coming_soon' | 'planned') {
 
 export default function FreedomPawsIdPage() {
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
-      <div className="mx-auto max-w-lg px-6 py-10">
-        <BackLink href="/" label="Back to Home" />
+    <PageShell maxWidth="lg" backLink={{ href: '/', label: 'Back to Home' }}>
+      <PageHeader
+        center
+        eyebrow="Freedom Paws ID"
+        eyebrowVariant="emerald"
+        title="Biometric pet identity"
+        subtitle={
+          <>
+            ViT vision for <strong className="text-white/90">unchipped dogs</strong> — eyes, face,
+            body, posture, and gait. Tennessee shelter pilot — expanding after validation.
+          </>
+        }
+        className="mt-2"
+      />
 
-        <header className="mt-6 mb-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
-            Freedom Paws ID
-          </p>
-          <h1 className="mt-2 text-2xl font-bold leading-tight">
-            Biometric pet identity
-          </h1>
-          <p className="mt-3 text-sm leading-relaxed text-white/70">
-            ViT vision for <strong className="text-white/90">unchipped dogs</strong> — eyes,
-            face, body, posture, and gait. Tennessee shelter pilot — expanding to additional
-            states after validation. Microchip module follows after Oct 2026 pilot.
-          </p>
-        </header>
-
-        <ul className="space-y-4">
-          {hubCards.map((card) => (
-            <li key={card.href}>
-              <Link
-                href={card.href}
-                className="block rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-amber-400/40 hover:bg-white/10"
+      <ul className="space-y-4">
+        {hubCards.map((card) => (
+          <li key={card.href}>
+            <Link href={card.href} className="block group">
+              <SectionCard
+                variant="glass"
+                className="transition hover:border-amber-400/40 hover:bg-[#132A4F]/90 active:border-amber-400/60 touch-manipulation"
               >
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-2xl" aria-hidden>
@@ -163,19 +163,18 @@ export default function FreedomPawsIdPage() {
                   {statusBadge(card.status)}
                 </div>
                 <h2 className="mt-3 text-lg font-semibold">{card.title}</h2>
-                <p className="mt-1 text-sm text-white/65">{card.desc}</p>
-                <p className="mt-3 text-sm font-semibold text-amber-400">{card.cta}</p>
-              </Link>
-            </li>
-          ))}
-        </ul>
+                <p className="mt-1 text-sm text-white/65 leading-relaxed">{card.desc}</p>
+                <p className="mt-3 text-xs font-bold tracking-wider text-amber-400">{card.cta}</p>
+              </SectionCard>
+            </Link>
+          </li>
+        ))}
+      </ul>
 
-        <p className="mt-8 text-center text-xs leading-relaxed text-white/45">
-          Freedom Paws ID is not a government pet license. Not veterinary advice.
-          Biometric enrollment requires explicit consent. Match results require human
-          review before owner contact.
-        </p>
-      </div>
-    </div>
+      <p className="mt-8 text-center text-xs leading-relaxed text-white/45">
+        Freedom Paws ID is not a government pet license. Not veterinary advice. Biometric enrollment
+        requires explicit consent. Match results require human review before owner contact.
+      </p>
+    </PageShell>
   );
 }
