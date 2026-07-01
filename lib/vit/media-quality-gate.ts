@@ -2,6 +2,8 @@
  * Client-side media quality gate for ViT Diagnostics (runs before analyze).
  */
 
+import { selectGaitFrames } from '@/lib/vit/extract-video-frames';
+
 export type VitQualityStatus = 'pass' | 'warn' | 'fail';
 
 export type VitMediaQuality = {
@@ -18,6 +20,27 @@ const MIN_EDGE_HARD_FAIL = 180;
 const PASS_SCORE = 70;
 const WARN_SCORE = 55;
 const DARK_LUMINANCE = 42;
+
+const EYES_MIN_EDGE = 400;
+const EYES_MIN_EDGE_HARD_FAIL = 260;
+const EYES_PASS_SCORE = 72;
+
+const FACE_MIN_EDGE = 480;
+const FACE_MIN_EDGE_HARD_FAIL = 240;
+const FACE_PASS_SCORE = 70;
+
+const GAIT_MIN_EDGE = 360;
+const GAIT_MIN_EDGE_HARD_FAIL = 200;
+const GAIT_PASS_SCORE = 65;
+const GAIT_WARN_SCORE = 50;
+
+type RegionGateOptions = {
+  minEdge: number;
+  minEdgeHardFail: number;
+  passScore?: number;
+  warnScore?: number;
+  darkLuminance?: number;
+};
 
 type ImageMetrics = {
   width: number;
@@ -63,8 +86,14 @@ function loadImageMetrics(file: File): Promise<ImageMetrics | null> {
 
 function scorePhotoMetrics(
   metrics: ImageMetrics | null,
-  file: File
+  file: File,
+  region?: RegionGateOptions
 ): VitMediaQuality {
+  const minEdgePx = region?.minEdge ?? MIN_EDGE_PX;
+  const minEdgeHardFail = region?.minEdgeHardFail ?? MIN_EDGE_HARD_FAIL;
+  const passScore = region?.passScore ?? PASS_SCORE;
+  const warnScore = region?.warnScore ?? WARN_SCORE;
+  const darkLuminance = region?.darkLuminance ?? DARK_LUMINANCE;
   const issues: string[] = [];
   const suggestions: string[] = [];
   let score = 100;
@@ -86,17 +115,17 @@ function scorePhotoMetrics(
   }
 
   const shortEdge = Math.min(metrics.width, metrics.height);
-  if (shortEdge < MIN_EDGE_HARD_FAIL) {
+  if (shortEdge < minEdgeHardFail) {
     issues.push('Resolution is too low for AI vision');
     score -= 45;
-    suggestions.push('Move closer or use a higher-resolution photo (at least 320px)');
-  } else if (shortEdge < MIN_EDGE_PX) {
+    suggestions.push(`Move closer or use a higher-resolution photo (at least ${minEdgePx}px)`);
+  } else if (shortEdge < minEdgePx) {
     issues.push('Resolution is a bit low');
     score -= 22;
     suggestions.push('A sharper, closer photo helps our AI see coat, eyes, and posture');
   }
 
-  if (metrics.luminance < DARK_LUMINANCE) {
+  if (metrics.luminance < darkLuminance) {
     issues.push('Image appears very dark');
     score -= 28;
     suggestions.push('Retake in brighter light or turn on flash');
@@ -109,9 +138,9 @@ function scorePhotoMetrics(
   score = Math.max(0, Math.min(100, score));
 
   let status: VitQualityStatus = 'pass';
-  if (score < WARN_SCORE || shortEdge < MIN_EDGE_HARD_FAIL) {
+  if (score < warnScore || shortEdge < minEdgeHardFail) {
     status = 'fail';
-  } else if (score < PASS_SCORE) {
+  } else if (score < passScore) {
     status = 'warn';
   }
 
@@ -130,7 +159,99 @@ export async function assessPhotoForVit(file: File): Promise<VitMediaQuality> {
   return scorePhotoMetrics(metrics, file);
 }
 
-/** Assess extracted video frames — uses middle frame + worst score. */
+/** Eyes region — close-up, catchlights; stricter resolution. */
+export async function gateEyes(file: File): Promise<VitMediaQuality> {
+  const metrics = await loadImageMetrics(file);
+  const result = scorePhotoMetrics(metrics, file, {
+    minEdge: EYES_MIN_EDGE,
+    minEdgeHardFail: EYES_MIN_EDGE_HARD_FAIL,
+    passScore: EYES_PASS_SCORE,
+    darkLuminance: 48,
+  });
+  if (result.status !== 'fail' && metrics && metrics.luminance < 52) {
+    return {
+      ...result,
+      suggestions: [
+        ...result.suggestions,
+        'For dark-coated dogs, use bright room light or flash so catchlights show on the eyes',
+      ],
+    };
+  }
+  return result;
+}
+
+/** Face region — muzzle and markings; higher min resolution. */
+export async function gateFace(file: File): Promise<VitMediaQuality> {
+  const metrics = await loadImageMetrics(file);
+  return scorePhotoMetrics(metrics, file, {
+    minEdge: FACE_MIN_EDGE,
+    minEdgeHardFail: FACE_MIN_EDGE_HARD_FAIL,
+    passScore: FACE_PASS_SCORE,
+  });
+}
+
+/** Gait region — video frames; tolerates motion blur, prefers mid-stride samples. */
+export async function gateGait(frames: File[]): Promise<VitMediaQuality> {
+  if (frames.length === 0) {
+    return {
+      status: 'fail',
+      score: 0,
+      issues: ['No video frames captured'],
+      suggestions: ['Record 3–8 seconds with the dog walking in frame'],
+      canAnalyze: false,
+    };
+  }
+
+  const gaitFrames = selectGaitFrames(frames);
+  const sampleIndexes = [
+    0,
+    Math.floor(gaitFrames.length / 2),
+    gaitFrames.length - 1,
+  ].filter((v, i, a) => a.indexOf(v) === i);
+
+  const results: VitMediaQuality[] = [];
+  for (const idx of sampleIndexes) {
+    const metrics = await loadImageMetrics(gaitFrames[idx]!);
+    results.push(
+      scorePhotoMetrics(metrics, gaitFrames[idx]!, {
+        minEdge: GAIT_MIN_EDGE,
+        minEdgeHardFail: GAIT_MIN_EDGE_HARD_FAIL,
+        passScore: GAIT_PASS_SCORE,
+        warnScore: GAIT_WARN_SCORE,
+      })
+    );
+  }
+
+  const worst = results.reduce((a, b) => (a.score <= b.score ? a : b));
+  const avgScore = Math.round(
+    results.reduce((sum, r) => sum + r.score, 0) / results.length
+  );
+
+  const issues = [...new Set(results.flatMap((r) => r.issues))];
+  const suggestions = [
+    ...new Set([
+      ...results.flatMap((r) => r.suggestions),
+      'Film the dog walking toward or across the camera for 3–8 seconds',
+    ]),
+  ];
+
+  let status: VitQualityStatus = 'pass';
+  if (worst.status === 'fail' || avgScore < GAIT_WARN_SCORE) {
+    status = 'fail';
+  } else if (worst.status === 'warn' || avgScore < GAIT_PASS_SCORE) {
+    status = 'warn';
+  }
+
+  return {
+    status,
+    score: avgScore,
+    issues,
+    suggestions,
+    canAnalyze: status !== 'fail',
+  };
+}
+
+/** Assess extracted video frames — wellness video (general). */
 export async function assessVideoFramesForVit(frames: File[]): Promise<VitMediaQuality> {
   if (frames.length === 0) {
     return {

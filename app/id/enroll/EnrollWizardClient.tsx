@@ -11,7 +11,8 @@ import { IDENTITY_REGIONS } from '@/lib/id/types';
 import { fetchServerPets, createServerPet } from '@/lib/mypets/api';
 import type { PetProfile } from '@/lib/mypets/types';
 import { compressFileToUpload } from '@/lib/compress-image';
-import { extractVideoFrames, isValidVitVideoFile } from '@/lib/vit/extract-video-frames';
+import { extractVideoFrames, isValidVitVideoFile, selectGaitFrames } from '@/lib/vit/extract-video-frames';
+import { gateEyes, gateFace, gateGait } from '@/lib/vit/media-quality-gate';
 
 const STEPS = [
   { n: 1, label: 'Pet' },
@@ -277,6 +278,20 @@ export default function EnrollWizardClient({
         upload = await compressFileToUpload(upload);
       }
 
+      const quality =
+        pendingCapture.region === 'eyes'
+          ? await gateEyes(upload)
+          : pendingCapture.region === 'face'
+            ? await gateFace(upload)
+            : null;
+      if (quality && !quality.canAnalyze) {
+        setError(
+          quality.suggestions[0] ??
+            'Photo quality is too low for this region. Retake with better lighting and framing.'
+        );
+        return;
+      }
+
       const data = await postRegionCapture(
         pendingCapture.region,
         [upload],
@@ -346,7 +361,17 @@ export default function EnrollWizardClient({
         maxDurationSec: 8,
       });
 
-      const data = await postRegionCapture('gait', frames, 'video');
+      const gaitFrames = selectGaitFrames(frames);
+      const gaitQuality = await gateGait(gaitFrames);
+      if (!gaitQuality.canAnalyze) {
+        setError(
+          gaitQuality.suggestions[0] ??
+            'Video quality is too low for gait analysis. Retake with the dog walking in brighter light.'
+        );
+        return;
+      }
+
+      const data = await postRegionCapture('gait', gaitFrames, 'video');
       if (!data?.success || !data.capture) {
         setError(data?.error || 'Gait analysis failed.');
         return;

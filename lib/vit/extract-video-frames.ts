@@ -121,6 +121,26 @@ export async function extractVideoFrames(
   }
 }
 
+/**
+ * Prefer mid-stride frames from a gait clip (middle 60% of the timeline).
+ * Assumes frames were sampled evenly across duration.
+ */
+export function selectGaitFrames(frames: File[], maxFrames = 5): File[] {
+  if (frames.length <= maxFrames) return frames;
+
+  const start = Math.floor(frames.length * 0.2);
+  const end = Math.ceil(frames.length * 0.8);
+  const pool = frames.slice(start, end);
+  if (pool.length <= maxFrames) return pool;
+
+  const selected: File[] = [];
+  const step = pool.length / maxFrames;
+  for (let i = 0; i < maxFrames; i += 1) {
+    selected.push(pool[Math.min(pool.length - 1, Math.floor(i * step + step / 2))]!);
+  }
+  return selected;
+}
+
 export function isValidVitVideoFile(file: File): boolean {
   const type = file.type.toLowerCase();
   const name = file.name.toLowerCase();

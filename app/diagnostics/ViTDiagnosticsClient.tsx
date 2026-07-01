@@ -16,8 +16,12 @@ import ViTHowItWorks from './ViTHowItWorks';
 import {
   assessPhotoForVit,
   assessVideoFramesForVit,
+  gateEyes,
+  gateFace,
+  gateGait,
   type VitMediaQuality,
 } from '@/lib/vit/media-quality-gate';
+import { selectGaitFrames } from '@/lib/vit/extract-video-frames';
 import { saveVitRunLocal, saveVitRunServer } from '@/lib/vit/history';
 
 const REGION_LABELS: Record<IdentityRegion, string> = {
@@ -67,14 +71,31 @@ export default function ViTDiagnosticsClient({
   const [mediaQuality, setMediaQuality] = useState<VitMediaQuality | null>(null);
   const [qualityChecking, setQualityChecking] = useState(false);
 
+  const assessMediaQuality = async (
+    selection: VitMediaSelection
+  ): Promise<VitMediaQuality> => {
+    if (identityMode) {
+      if (selection.kind === 'video') {
+        return gateGait(selection.frames);
+      }
+      if (selectedRegions.includes('eyes')) {
+        return gateEyes(selection.file);
+      }
+      if (selectedRegions.includes('face')) {
+        return gateFace(selection.file);
+      }
+      return assessPhotoForVit(selection.file);
+    }
+    return selection.kind === 'video'
+      ? await assessVideoFramesForVit(selection.frames)
+      : await assessPhotoForVit(selection.file);
+  };
+
   const runQualityCheck = async (selection: VitMediaSelection) => {
     setQualityChecking(true);
     setMediaQuality(null);
     try {
-      const quality =
-        selection.kind === 'video'
-          ? await assessVideoFramesForVit(selection.frames)
-          : await assessPhotoForVit(selection.file);
+      const quality = await assessMediaQuality(selection);
       setMediaQuality(quality);
       if (!quality.canAnalyze) {
         setError('Media quality is too low for reliable AI analysis. See tips below.');
@@ -192,13 +213,16 @@ export default function ViTDiagnosticsClient({
 
       if (selection.kind === 'video') {
         formData.append('mediaType', 'video');
-        const vq = await assessVideoFramesForVit(selection.frames);
+        const gaitFrames = identityMode ? selectGaitFrames(selection.frames) : selection.frames;
+        const vq = identityMode
+          ? await gateGait(gaitFrames)
+          : await assessVideoFramesForVit(selection.frames);
         setMediaQuality(vq);
         if (!vq.canAnalyze) {
           setError('Video quality is too low. Retake in brighter light with the dog centered.');
           return;
         }
-        selection.frames.forEach((frame, i) => {
+        gaitFrames.forEach((frame, i) => {
           formData.append(i === 0 ? 'image' : `frame_${i}`, frame, frame.name);
         });
       } else {
@@ -207,7 +231,13 @@ export default function ViTDiagnosticsClient({
         if (file.size > 2 * 1024 * 1024) {
           file = await compressFileToUpload(file);
         }
-        const pq = await assessPhotoForVit(file);
+        const pq = identityMode
+          ? selectedRegions.includes('eyes')
+            ? await gateEyes(file)
+            : selectedRegions.includes('face')
+              ? await gateFace(file)
+              : await assessPhotoForVit(file)
+          : await assessPhotoForVit(file);
         setMediaQuality(pq);
         if (!pq.canAnalyze) {
           setError('Photo quality is too low. Retake with the dog in frame and good lighting.');
