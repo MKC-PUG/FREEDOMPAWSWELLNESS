@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
 import PhotoBoothToast from '@/app/components/PhotoBoothToast';
 import PhotoUploadZone from '@/app/components/PhotoUploadZone';
 import { clearPhotoFromDb } from '@/lib/photo-db';
@@ -593,30 +596,28 @@ export default function PhotoBoothClient({
   const photoAffiliates = getPhotoBoothAffiliatesData();
 
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white">
+    <PageShell maxWidth="lg" innerClassName="!px-4">
       <PhotoBoothToast message={toastMsg} />
-      <div className="max-w-lg mx-auto px-4 py-6 pb-16">
-        <Link
-          href="/"
-          className="inline-block mb-3 text-xs font-bold tracking-wider text-amber-400"
-        >
-          ← BACK TO HOME
-        </Link>
+      <BackLink href="/" label="Back to Home" />
 
-        <div className="relative mb-1">
-          <Link
-            href="/photobooth/help"
-            className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border border-amber-400/50 bg-[#0F1E38] text-sm font-bold text-amber-300 touch-manipulation hover:bg-amber-400/15 active:bg-amber-400/25"
-            aria-label="Photo Booth how-to instructions"
-            title="How to use Photo Booth"
-          >
-            ?
-          </Link>
-          <h1 className="text-3xl font-bold text-center pr-10">SuperBud Photo Booth</h1>
-        </div>
-        <p className="mt-2 text-center text-sm text-white/60">
-          Dress up your pet (dog or cat) · pick a style · share in seconds
-        </p>
+      <div className="relative mb-1 mt-2">
+        <Link
+          href="/photobooth/help"
+          className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border border-amber-400/50 bg-[#0F1E38] text-sm font-bold text-amber-300 touch-manipulation hover:bg-amber-400/15 active:bg-amber-400/25"
+          aria-label="Photo Booth how-to instructions"
+          title="How to use Photo Booth"
+        >
+          ?
+        </Link>
+        <PageHeader
+          center
+          eyebrow="SuperBud Photo Booth"
+          eyebrowVariant="gold"
+          title="Dress up your pet"
+          subtitle="Pick a style · share in seconds — dogs and cats welcome"
+          className="!mb-2 pr-10"
+        />
+      </div>
 
         {displayError && (
           <div className="mt-4 rounded-2xl border border-red-500/50 bg-red-950/40 p-3 text-center text-sm text-red-300">
@@ -863,7 +864,6 @@ export default function PhotoBoothClient({
         )}
 
         {error && <p className="mt-4 text-center text-sm text-red-400">{error}</p>}
-      </div>
-    </div>
+    </PageShell>
   );
 }

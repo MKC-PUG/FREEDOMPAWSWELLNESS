@@ -3,6 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
 
 type Stats = {
   totalReports: number;
@@ -31,72 +34,71 @@ export default function ShelterDashboardClient({ role, isReviewer }: Props) {
   }, [isReviewer]);
 
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
-      <div className="mx-auto max-w-lg px-6 py-10">
-        <BackLink href="/id" label="Back to ID hub" />
+    <PageShell maxWidth="lg">
+      <BackLink href="/id" label="Back to ID hub" />
 
-        <header className="mt-4 mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
-            Shelter portal
-          </p>
-          <h1 className="mt-2 text-2xl font-bold">Tennessee pilot dashboard</h1>
-          <p className="mt-2 text-sm text-white/60">
-            Role: <span className="text-amber-300">{role}</span>
-          </p>
-        </header>
+      <PageHeader
+        eyebrow="Shelter portal"
+        eyebrowVariant="emerald"
+        title="Tennessee pilot dashboard"
+        subtitle={
+          <>
+            Role: <span className="text-emerald-300">{role}</span>
+          </>
+        }
+        className="mt-4 mb-6"
+      />
 
-        {isReviewer && stats && (
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            {[
-              { label: 'Found reports', value: stats.totalReports },
-              { label: 'Pending reviews', value: stats.pendingReviews },
-              { label: 'Matched', value: stats.matchedReports },
-              { label: 'Enrollments', value: stats.totalEnrollments },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center"
-              >
-                <p className="text-2xl font-bold text-amber-300">{s.value}</p>
-                <p className="text-[10px] uppercase tracking-wide text-white/45">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        )}
+      {isReviewer && stats && (
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          {[
+            { label: 'Found reports', value: stats.totalReports },
+            { label: 'Pending reviews', value: stats.pendingReviews },
+            { label: 'Matched', value: stats.matchedReports },
+            { label: 'Enrollments', value: stats.totalEnrollments },
+          ].map((s) => (
+            <SectionCard key={s.label} className="text-center !p-4">
+              <p className="text-2xl font-bold text-amber-300">{s.value}</p>
+              <p className="text-[10px] uppercase tracking-wide text-white/45">{s.label}</p>
+            </SectionCard>
+          ))}
+        </div>
+      )}
 
-        <ul className="space-y-4">
-          <li>
-            <Link
-              href="/id/found"
-              className="block rounded-2xl border border-amber-500/40 bg-amber-900/20 p-5 hover:bg-amber-900/30 transition"
-            >
+      <ul className="space-y-4">
+        <li>
+          <Link href="/id/found" className="block group">
+            <SectionCard className="border-amber-500/40 bg-amber-900/20 transition hover:bg-amber-900/30">
               <p className="font-bold text-amber-300">Found dog intake →</p>
               <p className="mt-1 text-sm text-white/60">
                 Upload photo or video — automatic similarity search
               </p>
-            </Link>
-          </li>
+            </SectionCard>
+          </Link>
+        </li>
 
-          {isReviewer ? (
-            <li>
-              <Link
-                href="/id/match"
-                className="block rounded-2xl border border-emerald-500/40 bg-emerald-900/20 p-5 hover:bg-emerald-900/30 transition"
-              >
+        {isReviewer ? (
+          <li>
+            <Link href="/id/match" className="block group">
+              <SectionCard className="border-emerald-500/40 bg-emerald-900/20 transition hover:bg-emerald-900/30">
                 <p className="font-bold text-emerald-300">Match review queue →</p>
                 <p className="mt-1 text-sm text-white/60">
                   Approve or reject candidates before owner contact
                 </p>
-              </Link>
-            </li>
-          ) : (
-            <li className="rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/50">
+              </SectionCard>
+            </Link>
+          </li>
+        ) : (
+          <li>
+            <SectionCard variant="glass" className="text-sm text-white/50">
               Match review requires shelter admin or FP ops.
-            </li>
-          )}
+            </SectionCard>
+          </li>
+        )}
 
-          {isReviewer && (
-            <li className="rounded-2xl border border-white/10 bg-[#0F1E38]/80 p-5">
+        {isReviewer && (
+          <li>
+            <SectionCard variant="glass">
               <p className="text-xs font-bold uppercase tracking-wide text-white/45">
                 Pilot E2E flow (Oct 2026)
               </p>
@@ -106,14 +108,14 @@ export default function ShelterDashboardClient({ role, isReviewer }: Props) {
                 <li>Approve match at <Link href="/id/match" className="text-emerald-400 underline">/id/match</Link></li>
                 <li>Owner receives email alert (Resend)</li>
               </ol>
-            </li>
-          )}
-        </ul>
+            </SectionCard>
+          </li>
+        )}
+      </ul>
 
-        <p className="mt-8 text-center text-[10px] text-white/40 leading-relaxed">
-          {stats?.pilotShelters ?? 6} Tennessee pilot partners · expanding after validation
-        </p>
-      </div>
-    </div>
+      <p className="mt-8 text-center text-[10px] text-white/40 leading-relaxed">
+        {stats?.pilotShelters ?? 6} Tennessee pilot partners · expanding after validation
+      </p>
+    </PageShell>
   );
 }

@@ -3,6 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
+import SecondaryButton from '@/app/components/ui/SecondaryButton';
 import { PWA_VERSION } from '@/lib/pwa-version';
 import { extractChipDigits, validateChipRaw } from '@/lib/id/chip-id';
 import type { ChipScanSource, ChipValidationResult } from '@/lib/id/chip-types';
@@ -226,24 +231,27 @@ export default function ScanClient({ userEmail }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
-      <div className="mx-auto max-w-lg px-6 py-10">
-        <BackLink href="/id" label="Back to ID hub" />
+    <PageShell maxWidth="lg">
+      <BackLink href="/id" label="Back to ID hub" />
 
-        <header className="mt-4 mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
-            Track 2 · Microchip scan
-          </p>
-          <h1 className="mt-2 text-2xl font-bold">Link chip to Freedom Paws ID</h1>
-          <p className="mt-1 text-xs text-white/50">Signed in as {userEmail}</p>
-          <p className="mt-2 text-xs text-white/40">App release {PWA_VERSION}</p>
-        </header>
+      <PageHeader
+        eyebrow="Track 2 · Microchip scan"
+        eyebrowVariant="emerald"
+        title="Link chip to Freedom Paws ID"
+        subtitle={
+          <>
+            Signed in as {userEmail}
+            <span className="block mt-1 text-xs text-white/40">App release {PWA_VERSION}</span>
+          </>
+        }
+        className="mt-4 mb-6"
+      />
 
-        <div className="mb-6 rounded-2xl border border-amber-500/25 bg-amber-950/15 px-4 py-3 text-sm text-amber-100/90 leading-relaxed">
-          Focus this field, scan with your WorldScan (virtual keyboard), or paste the 15-digit ID.
-          Extra text like <span className="font-mono text-amber-200">Temp below range</span> is stripped
-          automatically.
-        </div>
+      <SectionCard className="mb-6 border-amber-500/25 bg-amber-950/15 text-sm text-amber-100/90 leading-relaxed">
+        Focus this field, scan with your WorldScan (virtual keyboard), or paste the 15-digit ID.
+        Extra text like <span className="font-mono text-amber-200">Temp below range</span> is stripped
+        automatically.
+      </SectionCard>
 
         {error && (
           <p className="mb-4 rounded-xl border border-red-500/40 bg-red-950/30 px-4 py-3 text-sm text-red-300">
@@ -274,38 +282,41 @@ export default function ScanClient({ userEmail }: Props) {
         />
 
         <div className="mt-3 flex flex-wrap gap-2">
-          <button
+          <PrimaryButton
             type="button"
+            variant="emerald"
             disabled={busy || !raw.trim()}
             onClick={() => void runScanPipeline(raw, 'manual')}
-            className="rounded-xl bg-amber-400 px-4 py-2 text-sm font-bold text-black disabled:opacity-50"
+            className="!min-h-[44px] !rounded-xl !px-4 !py-2 !text-sm"
           >
             Validate scan
-          </button>
+          </PrimaryButton>
           {webSerialSupported ? (
             serialStatus === 'on' ? (
-              <button
+              <SecondaryButton
                 type="button"
+                variant="neutral"
                 onClick={() => void disconnectWebSerial()}
-                className="rounded-xl border border-white/25 px-4 py-2 text-sm text-white/70"
+                className="!min-h-[44px] !rounded-xl !px-4 !py-2 !text-sm"
               >
                 Disconnect USB serial
-              </button>
+              </SecondaryButton>
             ) : (
-              <button
+              <SecondaryButton
                 type="button"
+                variant="emerald"
                 onClick={() => void connectWebSerial()}
-                className="rounded-xl border border-emerald-500/40 px-4 py-2 text-sm text-emerald-300"
+                className="!min-h-[44px] !rounded-xl !px-4 !py-2 !text-sm"
               >
                 {serialStatus === 'connecting' ? 'Connecting…' : 'Connect USB serial (Chrome)'}
-              </button>
+              </SecondaryButton>
             )
           ) : null}
         </div>
 
         {validation && (
-          <div
-            className={`mt-6 rounded-2xl border p-4 ${
+          <SectionCard
+            className={`mt-6 ${
               !validation.ok
                 ? 'border-red-500/40 bg-red-950/20'
                 : validation.status === 'checksum_fail'
@@ -334,11 +345,11 @@ export default function ScanClient({ userEmail }: Props) {
             {validation.error && !validation.ok && (
               <p className="mt-2 text-xs text-red-300">{validation.error}</p>
             )}
-          </div>
+          </SectionCard>
         )}
 
         {lookup?.freedomPawsMatch && (
-          <div className="mt-4 rounded-2xl border border-emerald-500/35 bg-emerald-950/20 p-4">
+          <SectionCard className="mt-4 border-emerald-500/35 bg-emerald-950/20">
             <p className="text-sm font-semibold text-emerald-300">Freedom Paws match</p>
             <p className="mt-1 text-sm text-white/85">
               {lookup.petName}
@@ -375,11 +386,11 @@ export default function ScanClient({ userEmail }: Props) {
                 AAHA registry lookup →
               </Link>
             </div>
-          </div>
+          </SectionCard>
         )}
 
         {validation?.ok && !lookup?.freedomPawsMatch && (
-          <div className="mt-6 space-y-3">
+          <SectionCard className="mt-6 space-y-3">
             <label className="block text-sm font-semibold text-white/80">Link to your pet</label>
             <select
               value={petId}
@@ -396,15 +407,16 @@ export default function ScanClient({ userEmail }: Props) {
                 ))
               )}
             </select>
-            <button
+            <PrimaryButton
               type="button"
+              variant="emerald"
+              fullWidth
               disabled={busy || !petId || pets.length === 0}
               onClick={() => void linkToPet()}
-              className="w-full rounded-2xl border-2 border-emerald-500/40 bg-emerald-900/20 py-4 font-bold text-emerald-300 disabled:opacity-50"
             >
               Save chip to pet profile
-            </button>
-          </div>
+            </PrimaryButton>
+          </SectionCard>
         )}
 
         <p className="mt-8 text-center text-[10px] text-white/40 leading-relaxed">
@@ -414,7 +426,6 @@ export default function ScanClient({ userEmail }: Props) {
           </Link>
           . This page stores Freedom Paws internal chip ↔ biometric links only.
         </p>
-      </div>
-    </div>
+    </PageShell>
   );
 }

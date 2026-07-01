@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
+import SecondaryButton from '@/app/components/ui/SecondaryButton';
 import { compressFileToUpload } from '@/lib/compress-image';
 import { extractVideoFrames, isValidVitVideoFile } from '@/lib/vit/extract-video-frames';
 
@@ -149,7 +154,7 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
+    <PageShell maxWidth="lg">
       <input
         ref={photoLibraryRef}
         type="file"
@@ -167,18 +172,15 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
       />
       <input ref={videoRef} type="file" accept="video/*" className="hidden" onChange={(e) => void onVideo(e)} />
 
-      <div className="mx-auto max-w-lg px-6 py-10">
-        <BackLink href="/id" label="Back to ID hub" />
+      <BackLink href="/id" label="Back to ID hub" />
 
-        <header className="mt-4 mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
-            Shelter intake
-          </p>
-          <h1 className="mt-2 text-2xl font-bold">Report found dog</h1>
-          <p className="mt-1 text-xs text-white/50">
-            CA / TN pilot · signed in as {userEmail}
-          </p>
-        </header>
+      <PageHeader
+        eyebrow="Shelter intake"
+        eyebrowVariant="emerald"
+        title="Report found dog"
+        subtitle={`CA / TN pilot · signed in as ${userEmail}`}
+        className="mt-4 mb-6"
+      />
 
         {error && (
           <p className="mb-4 rounded-xl border border-red-500/40 bg-red-950/30 px-4 py-3 text-sm text-red-300">
@@ -188,13 +190,13 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
 
         {!result ? (
           <section className="space-y-4">
-            <div className="rounded-2xl border border-amber-500/25 bg-amber-950/15 px-4 py-3 text-sm text-amber-100/90">
+            <SectionCard className="border-amber-500/25 bg-amber-950/15 text-sm text-amber-100/90">
               <strong className="text-amber-200">Optional first step:</strong> scan microchip on{' '}
               <Link href="/id/scan" className="underline font-semibold">
                 /id/scan
               </Link>{' '}
               — if Freedom Paws match, note the ID; then continue with photo intake below.
-            </div>
+            </SectionCard>
             <div>
               <label className="text-sm font-semibold text-white/80">Pilot shelter</label>
               <select
@@ -210,7 +212,7 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
               </select>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <SectionCard variant="glass">
               {preview ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={preview} alt="Found dog preview" className="w-full rounded-xl object-cover max-h-64" />
@@ -218,32 +220,38 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
                 <p className="text-sm text-white/45 text-center py-8">No media yet</p>
               )}
               <div className="mt-3 flex gap-2">
-                <button
+                <SecondaryButton
                   type="button"
+                  variant="emerald"
+                  fullWidth
+                  className="!min-h-[44px] !rounded-xl !text-sm"
                   onClick={() => photoLibraryRef.current?.click()}
-                  className="flex-1 rounded-xl border border-emerald-500/40 py-2 text-sm font-semibold text-emerald-300"
                 >
                   Photo library
-                </button>
-                <button
+                </SecondaryButton>
+                <SecondaryButton
                   type="button"
+                  variant="emerald"
+                  fullWidth
+                  className="!min-h-[44px] !rounded-xl !text-sm opacity-90"
                   onClick={() => photoCameraRef.current?.click()}
-                  className="flex-1 rounded-xl border border-emerald-500/25 py-2 text-sm font-semibold text-emerald-200/80"
                 >
                   Camera
-                </button>
-                <button
+                </SecondaryButton>
+                <SecondaryButton
                   type="button"
+                  variant="gold"
+                  fullWidth
+                  className="!min-h-[44px] !rounded-xl !text-sm"
                   onClick={() => videoRef.current?.click()}
-                  className="flex-1 rounded-xl border border-amber-500/40 py-2 text-sm font-semibold text-amber-300"
                 >
                   Video
-                </button>
+                </SecondaryButton>
               </div>
               <p className="mt-2 text-center text-[10px] text-white/40 leading-relaxed">
                 Photo library opens your camera roll or files — use for enrollment test images.
               </p>
-            </div>
+            </SectionCard>
 
             <textarea
               value={notes}
@@ -252,14 +260,15 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
               className="w-full h-24 rounded-xl bg-[#0A1428] border border-white/20 px-3 py-2 text-sm resize-y"
             />
 
-            <button
+            <PrimaryButton
               type="button"
+              variant="emerald"
+              fullWidth
               disabled={busy}
               onClick={() => void submit()}
-              className="w-full rounded-2xl bg-amber-400 py-4 font-bold text-black disabled:opacity-50"
             >
               {busy ? 'Analyzing & searching…' : 'Submit for match review'}
-            </button>
+            </PrimaryButton>
 
             <p className="text-center text-[10px] text-white/40 leading-relaxed">
               Similarity search runs automatically. Candidates require human review before any
@@ -268,7 +277,7 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
           </section>
         ) : (
           <section className="space-y-4">
-            <div className="rounded-2xl border border-emerald-500/40 bg-emerald-900/20 p-6 text-center">
+            <SectionCard className="border-emerald-500/40 bg-emerald-900/20 text-center">
               <p className="font-semibold text-emerald-300">Report submitted</p>
               <p className="mt-2 text-xs text-white/55">ID: {result.reportId.slice(0, 8)}…</p>
               <p className="mt-3 text-sm">
@@ -276,10 +285,10 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
                   ? `${result.candidateCount} candidate(s) above threshold — pending review`
                   : 'No candidates above threshold yet. More enrollments improve matches.'}
               </p>
-            </div>
+            </SectionCard>
 
             {result.matches.length > 0 && (
-              <div className="rounded-xl border border-white/10 p-4">
+              <SectionCard>
                 <p className="text-xs font-bold uppercase text-white/45 mb-3">
                   Top matches (staff review only)
                 </p>
@@ -293,7 +302,7 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </SectionCard>
             )}
 
             {canReview && (
@@ -320,7 +329,6 @@ export default function FoundIntakeClient({ userEmail, canReview }: Props) {
             </button>
           </section>
         )}
-      </div>
-    </div>
+    </PageShell>
   );
 }

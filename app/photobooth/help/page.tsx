@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
 
 export const metadata: Metadata = {
   title: 'Photo Booth How-To • Freedom Paws Wellness',
@@ -65,90 +69,76 @@ const optionalTips = [
 
 export default function PhotoBoothHelpPage() {
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white">
-      <div className="max-w-lg mx-auto px-4 py-6 pb-16">
-        <Link
-          href="/photobooth"
-          className="inline-block mb-4 text-xs font-bold tracking-wider text-amber-400"
-        >
-          ← BACK TO PHOTO BOOTH
-        </Link>
+    <PageShell maxWidth="lg" backLink={{ href: '/photobooth', label: 'Back to Photo Booth' }}>
+      <PageHeader
+        eyebrow="How-to guide"
+        eyebrowVariant="gold"
+        title="Photo Booth How-To"
+        subtitle="Dress up your pet (dog or cat), try AI Magic Look costumes, create a Me & My Pup card, and share in seconds."
+        className="mt-2 mb-8"
+      />
 
-        <h1 className="text-3xl font-bold text-amber-400">Photo Booth How-To</h1>
-        <p className="mt-2 text-sm text-white/60 leading-relaxed">
-          Dress up your pet (dog or cat), try AI Magic Look costumes, create a Me &amp; My Pup card,
-          and share in seconds.
-        </p>
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold text-white">Quick start</h2>
+        {steps.map((step) => (
+          <SectionCard key={step.title} variant="glass">
+            <h3 className="text-sm font-bold text-amber-300">{step.title}</h3>
+            <p className="mt-2 text-sm text-white/70 leading-relaxed">{step.body}</p>
+          </SectionCard>
+        ))}
+      </section>
 
-        <section className="mt-8 space-y-4">
-          <h2 className="text-lg font-bold text-white">Quick start</h2>
-          {steps.map((step) => (
-            <div
-              key={step.title}
-              className="rounded-2xl border border-white/10 bg-[#0F1E38]/80 p-4"
-            >
-              <h3 className="text-sm font-bold text-amber-300">{step.title}</h3>
-              <p className="mt-2 text-sm text-white/70 leading-relaxed">{step.body}</p>
-            </div>
-          ))}
-        </section>
+      <section className="mt-10 space-y-3">
+        <h2 className="text-lg font-bold text-white">Me &amp; My Pup</h2>
+        <SectionCard variant="glass" className="border-amber-400/30">
+          <ul className="space-y-3 text-sm text-white/75 leading-relaxed">
+            {meAndMyPupSteps.map((tip) => (
+              <li key={tip} className="flex gap-2">
+                <span className="text-amber-400 shrink-0">•</span>
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </SectionCard>
+      </section>
 
-        <section className="mt-10 space-y-3">
-          <h2 className="text-lg font-bold text-white">Me &amp; My Pup</h2>
-          <div className="rounded-2xl border border-amber-400/30 bg-[#0F1E38]/80 p-4">
-            <ul className="space-y-3 text-sm text-white/75 leading-relaxed">
-              {meAndMyPupSteps.map((tip) => (
-                <li key={tip} className="flex gap-2">
-                  <span className="text-amber-400 shrink-0">•</span>
-                  <span>{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+      <section className="mt-10 space-y-3">
+        <h2 className="text-lg font-bold text-white">Accessories (optional)</h2>
+        <SectionCard variant="glass">
+          <ul className="space-y-2 text-sm text-white/75 leading-relaxed">
+            {accessoryTips.map((tip) => (
+              <li key={tip} className="flex gap-2">
+                <span className="text-amber-400 shrink-0">•</span>
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </SectionCard>
+      </section>
 
-        <section className="mt-10 space-y-3">
-          <h2 className="text-lg font-bold text-white">Accessories (optional)</h2>
-          <div className="rounded-2xl border border-white/10 bg-[#0F1E38]/80 p-4">
-            <ul className="space-y-2 text-sm text-white/75 leading-relaxed">
-              {accessoryTips.map((tip) => (
-                <li key={tip} className="flex gap-2">
-                  <span className="text-amber-400 shrink-0">•</span>
-                  <span>{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+      <section className="mt-10 space-y-4">
+        <h2 className="text-lg font-bold text-white">Good to know</h2>
+        {optionalTips.map((tip) => (
+          <SectionCard key={tip.title} variant="glass" className="!bg-[#0F1E38]/60">
+            <h3 className="text-sm font-bold text-white/90">{tip.title}</h3>
+            <p className="mt-2 text-sm text-white/65 leading-relaxed">{tip.body}</p>
+          </SectionCard>
+        ))}
+        <SectionCard className="border-green-500/30 bg-green-950/20">
+          <p className="text-sm text-green-300/90 leading-relaxed">
+            <strong className="text-green-300">Privacy:</strong> Your selfie in Me &amp; My Pup
+            stays on your phone until you tap Share or Save — it is not uploaded to our server.
+          </p>
+        </SectionCard>
+      </section>
 
-        <section className="mt-10 space-y-4">
-          <h2 className="text-lg font-bold text-white">Good to know</h2>
-          {optionalTips.map((tip) => (
-            <div
-              key={tip.title}
-              className="rounded-2xl border border-white/10 bg-[#0F1E38]/60 p-4"
-            >
-              <h3 className="text-sm font-bold text-white/90">{tip.title}</h3>
-              <p className="mt-2 text-sm text-white/65 leading-relaxed">{tip.body}</p>
-            </div>
-          ))}
-          <div className="rounded-2xl border border-green-500/30 bg-green-950/20 p-4">
-            <p className="text-sm text-green-300/90 leading-relaxed">
-              <strong className="text-green-300">Privacy:</strong> Your selfie in Me &amp; My Pup
-              stays on your phone until you tap Share or Save — it is not uploaded to our server.
-            </p>
-          </div>
-        </section>
-
-        <div className="mt-10">
-          <Link
-            href="/photobooth"
-            className="block w-full min-h-[52px] rounded-2xl bg-amber-400 py-4 text-center text-base font-bold text-black touch-manipulation"
-          >
+      <div className="mt-10">
+        <Link href="/photobooth" className="block">
+          <PrimaryButton variant="gold" fullWidth size="lg">
             Open Photo Booth →
-          </Link>
-        </div>
+          </PrimaryButton>
+        </Link>
       </div>
-    </div>
+    </PageShell>
   );
 }

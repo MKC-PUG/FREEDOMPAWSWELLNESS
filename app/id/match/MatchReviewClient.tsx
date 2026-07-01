@@ -4,6 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import BackLink from '@/app/components/BackLink';
 import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
+import SecondaryButton from '@/app/components/ui/SecondaryButton';
 import type { MatchReviewStatus } from '@/lib/id/types';
 
 type Report = {
@@ -126,15 +130,13 @@ export default function MatchReviewClient({ canDecide }: Props) {
     <PageShell maxWidth="2xl">
       <BackLink href="/id/shelter" label="Shelter dashboard" />
 
-        <header className="mt-4 mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
-            Match queue
-          </p>
-          <h1 className="mt-2 text-2xl font-bold">Review candidates</h1>
-          <p className="mt-1 text-xs text-white/50">
-            Human review required before owner contact · threshold 0.72
-          </p>
-        </header>
+      <PageHeader
+        eyebrow="Match queue"
+        eyebrowVariant="emerald"
+        title="Review candidates"
+        subtitle="Human review required before owner contact · threshold 0.72"
+        className="mt-4 mb-6"
+      />
 
         {error && (
           <p className="mb-4 rounded-xl border border-red-500/40 bg-red-950/30 px-4 py-3 text-sm text-red-300">
@@ -198,8 +200,9 @@ export default function MatchReviewClient({ canDecide }: Props) {
                       {candidates.map((c) => (
                         <li
                           key={c.id}
-                          className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                          className="list-none"
                         >
+                        <SectionCard>
                           <div className="flex justify-between items-start">
                             <div>
                               <p className="font-bold">{c.petName}</p>
@@ -227,33 +230,37 @@ export default function MatchReviewClient({ canDecide }: Props) {
                                 className="w-full rounded-lg bg-[#0A1428] border border-white/15 px-2 py-1.5 text-xs"
                               />
                               <div className="flex flex-wrap gap-2">
-                                <button
+                                <PrimaryButton
                                   type="button"
+                                  variant="emerald"
                                   disabled={busy}
                                   onClick={() => void review(c.id, 'approved')}
-                                  className="rounded-lg bg-green-700/80 px-3 py-1.5 text-xs font-bold"
+                                  className="!min-h-[36px] !rounded-lg !px-3 !py-1.5 !text-xs"
                                 >
                                   Approve
-                                </button>
-                                <button
+                                </PrimaryButton>
+                                <SecondaryButton
                                   type="button"
+                                  variant="neutral"
                                   disabled={busy}
                                   onClick={() => void review(c.id, 'rejected')}
-                                  className="rounded-lg border border-red-500/50 px-3 py-1.5 text-xs text-red-300"
+                                  className="!min-h-[36px] !rounded-lg !px-3 !py-1.5 !text-xs !border-red-500/50 !text-red-300"
                                 >
                                   Reject
-                                </button>
-                                <button
+                                </SecondaryButton>
+                                <SecondaryButton
                                   type="button"
+                                  variant="neutral"
                                   disabled={busy}
                                   onClick={() => void review(c.id, 'insufficient_evidence')}
-                                  className="rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white/60"
+                                  className="!min-h-[36px] !rounded-lg !px-3 !py-1.5 !text-xs"
                                 >
                                   Insufficient
-                                </button>
+                                </SecondaryButton>
                               </div>
                             </div>
                           )}
+                        </SectionCard>
                         </li>
                       ))}
                     </ul>

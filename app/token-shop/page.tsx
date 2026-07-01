@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
 import { protocolDetailHref } from '../lib/routes';
 import TokenShopCheckout from './TokenShopCheckout';
 import TokenShopFocus from './TokenShopFocus';
@@ -91,79 +92,68 @@ function TokenShopCard({ item }: { item: (typeof tokenShopItems)[number] }) {
 
 export default function TokenShopPage() {
   return (
-    <div className="min-h-screen bg-[#0A1428] text-white">
+    <PageShell maxWidth="7xl" backLink={{ href: '/protocols', label: 'Back to Protocol Overview' }}>
       <Suspense fallback={null}>
         <TokenShopFocus />
         <TokenShopPaidReturn />
       </Suspense>
 
-      <header className="relative overflow-hidden">
-        <div className="relative max-w-5xl mx-auto px-6 pt-8 sm:pt-10 pb-10">
-          <div className="text-left mb-4">
-            <BackLink href="/protocols" label="Back to Protocol Overview" />
-          </div>
-          <p className="text-sm text-white/50 mb-6">
-            <Link href="/protocols" className="hover:text-white transition-colors">
-              Protocol Overview
-            </Link>
-            <span className="mx-2">→</span>
-            <span className="text-[#F5C242]">Token Shop</span>
-          </p>
+      <p className="text-sm text-white/50 mb-6">
+        <Link href="/protocols" className="hover:text-white transition-colors">
+          Protocol Overview
+        </Link>
+        <span className="mx-2">→</span>
+        <span className="text-[#F5C242]">Token Shop</span>
+      </p>
 
-          <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40">
-            <Image
-              src="/images/token-shop/header.png"
-              alt="SuperBud in a superhero cape with treasure chest of XRP tokens — Token Shop headline"
-              width={1024}
-              height={687}
-              priority
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              className="block w-full h-auto"
-            />
-          </div>
-
-          <h1 className="sr-only">Token Shop</h1>
-          <p className="mt-8 text-2xl md:text-3xl font-bold text-white/95 text-center">
-            Lifetime Wellness Protocols
-          </p>
-          <p className="mt-4 text-sm md:text-base font-semibold tracking-wide text-white/80 text-center">
-            AI-Powered • XRPL Tokenized • Natural Holistic Care
-          </p>
-
-          <div className="mt-8 space-y-4 text-white/75 leading-relaxed text-sm md:text-base max-w-3xl mx-auto">
-            <p>
-              Give your dog personalized, natural wellness support with 10 specialized protocols — each
-              combining Vision Transformer (ViT) AI analysis, whole-food diet plans, lifestyle guidance,
-              and educational resources.
-            </p>
-            <p>
-              Every protocol is delivered as a lifetime-access Dynamic NFT or MPT on the XRPL blockchain.
-              Purchase once and own it forever.
-            </p>
-            <p>
-              Every purchase directly funds no-kill animal shelters and patriotic veteran-dog lake meetups.
-              <strong className="text-emerald-300/90"> 10% of net proceeds</strong> go to veteran dog
-              organizations and no-kill shelters (50/50). Protocols are ${SHOP_PRICE.rlusd}.00 USD each — pay in XRP via Xaman (live conversion at checkout) or by card.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-6 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {tokenShopItems.map((item) => (
-            <TokenShopCard key={item.slug} item={item} />
-          ))}
-        </div>
-
-        <p className="mt-12 text-center text-sm text-white/60">
-          New here?{' '}
-          <Link href="/protocols" className="text-[#F5C242] font-semibold hover:text-amber-300 transition-colors">
-            Browse all protocols
-          </Link>{' '}
-          to learn more before you purchase.
-        </p>
+      <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40 max-w-5xl mx-auto">
+        <Image
+          src="/images/token-shop/header.png"
+          alt="SuperBud in a superhero cape with treasure chest of XRP tokens — Token Shop headline"
+          width={1024}
+          height={687}
+          priority
+          sizes="(max-width: 1024px) 100vw, 1024px"
+          className="block w-full h-auto"
+        />
       </div>
-    </div>
+
+      <PageHeader
+        center
+        eyebrow="AI-Powered • XRPL Tokenized • Natural Holistic Care"
+        eyebrowVariant="gold"
+        title="Lifetime Wellness Protocols"
+        subtitle={
+          <>
+            Give your dog personalized, natural wellness support with 10 specialized protocols — each
+            combining Vision Transformer (ViT) AI analysis, whole-food diet plans, lifestyle guidance,
+            and educational resources. Every protocol is delivered as a lifetime-access Dynamic NFT or
+            MPT on the XRPL blockchain. Purchase once and own it forever.
+          </>
+        }
+        className="mt-8 mb-6"
+      />
+
+      <p className="mb-10 max-w-3xl mx-auto text-center text-white/75 leading-relaxed text-sm md:text-base">
+        Every purchase directly funds no-kill animal shelters and patriotic veteran-dog lake meetups.
+        <strong className="text-emerald-300/90"> 10% of net proceeds</strong> go to veteran dog
+        organizations and no-kill shelters (50/50). Protocols are ${SHOP_PRICE.rlusd}.00 USD each — pay
+        in XRP via Xaman (live conversion at checkout) or by card.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {tokenShopItems.map((item) => (
+          <TokenShopCard key={item.slug} item={item} />
+        ))}
+      </div>
+
+      <p className="mt-12 text-center text-sm text-white/60">
+        New here?{' '}
+        <Link href="/protocols" className="text-[#F5C242] font-semibold hover:text-amber-300 transition-colors">
+          Browse all protocols
+        </Link>{' '}
+        to learn more before you purchase.
+      </p>
+    </PageShell>
   );
 }

@@ -2,7 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
 import PwaNavLink from '@/app/components/PwaNavLink';
 import ProtocolAffiliatePicks from '@/app/components/protocols/ProtocolAffiliatePicks';
 import { getProtocolAffiliateSection } from '@/lib/protocols/affiliates';
@@ -70,7 +73,7 @@ function Section({ s }: { s: DetailSection }) {
 
   if (!hasImage) {
     return (
-      <section className="bg-[#16223C] rounded-3xl p-7 md:p-10 border border-white/10">{text}</section>
+      <SectionCard padding="lg" className="!rounded-3xl">{text}</SectionCard>
     );
   }
 
@@ -87,7 +90,7 @@ function Section({ s }: { s: DetailSection }) {
   );
 
   return (
-    <section className="bg-[#16223C] rounded-3xl p-6 md:p-8 border border-white/10">
+    <SectionCard padding="lg" className="!rounded-3xl">
       <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
         {s.imageSide === 'left' ? (
           <>
@@ -101,7 +104,7 @@ function Section({ s }: { s: DetailSection }) {
           </>
         )}
       </div>
-    </section>
+    </SectionCard>
   );
 }
 
@@ -118,10 +121,7 @@ export default async function ProtocolDetailPage({
   const affiliateSection = getProtocolAffiliateSection(slug, protocol.title);
 
   return (
-    <div className="min-h-screen bg-[#0A1428] text-white">
-      <div className="max-w-5xl mx-auto px-6 py-8 sm:py-12">
-        <BackLink href={protocolOverviewHref()} label="Back to Protocol Overview" />
-
+    <PageShell maxWidth="5xl" backLink={{ href: protocolOverviewHref(), label: 'Back to Protocol Overview' }}>
         <nav aria-label="Breadcrumb" className="mt-2 text-sm text-white/50">
           <Link href={protocolOverviewHref()} className="hover:text-white transition-colors">
             Protocol Overview
@@ -130,11 +130,14 @@ export default async function ProtocolDetailPage({
           <span className="text-white/80">{protocol.title}</span>
         </nav>
 
-        {/* Hero */}
-        <header className="text-center mt-8">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{protocol.title}</h1>
-          {detail && <p className="mt-2 text-lg text-white/70">{detail.subtitle}</p>}
-        </header>
+        <PageHeader
+          center
+          eyebrow="XRPL Protocol Token"
+          eyebrowVariant="gold"
+          title={protocol.title}
+          subtitle={detail?.subtitle}
+          className="mt-8"
+        />
 
         <div className="mt-8 rounded-2xl overflow-hidden border border-[#F5C242]/30 shadow-2xl shadow-black/40">
           <Image
@@ -172,7 +175,7 @@ export default async function ProtocolDetailPage({
             </div>
 
             {/* How to access */}
-            <section className="mt-8 bg-[#16223C] rounded-3xl p-7 md:p-10 border border-white/10">
+            <SectionCard padding="lg" className="mt-8 !rounded-3xl">
               <h2 className="text-2xl md:text-3xl font-bold">{detail.access.heading}</h2>
               <ol className="mt-5 list-decimal list-inside space-y-2 text-white/85 leading-relaxed">
                 {detail.access.steps.map((t, i) => (
@@ -185,11 +188,10 @@ export default async function ProtocolDetailPage({
                 </p>
               ))}
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <PwaNavLink
-                  href={tokenShopHref(slug)}
-                  className="bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 text-black text-lg font-bold px-12 py-4 rounded-full transition-colors touch-manipulation min-h-[52px] inline-flex items-center justify-center"
-                >
-                  {detail.access.buyLabel}
+                <PwaNavLink href={tokenShopHref(slug)} className="inline-block">
+                  <PrimaryButton variant="gold" size="lg" className="!rounded-full !px-12">
+                    {detail.access.buyLabel}
+                  </PrimaryButton>
                 </PwaNavLink>
                 <Link
                   href={protocolOverviewHref()}
@@ -198,7 +200,7 @@ export default async function ProtocolDetailPage({
                   ← Back to Protocol Overview
                 </Link>
               </div>
-            </section>
+            </SectionCard>
 
             {affiliateSection && <ProtocolAffiliatePicks section={affiliateSection} />}
 
@@ -208,7 +210,6 @@ export default async function ProtocolDetailPage({
             </p>
           </>
         )}
-      </div>
-    </div>
+    </PageShell>
   );
 }

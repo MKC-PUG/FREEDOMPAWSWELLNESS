@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
 import SafeProductCard from '@/app/components/wellness/SafeProductCard';
 import {
   getSafeProductsPageData,
@@ -19,36 +21,30 @@ export default function SafeProductsPage() {
 
   if (!data.moduleEnabled) {
     return (
-      <div className="min-h-screen bg-[#0A1625] text-white font-sans">
-        <div className="mx-auto max-w-lg px-6 py-10">
-          <BackLink href="/wellness" label="Back to Wellness" />
-          <p className="mt-8 text-center text-white/60">Safe Picks catalog is temporarily unavailable.</p>
-        </div>
-      </div>
+      <PageShell maxWidth="lg" backLink={{ href: '/wellness', label: 'Back to Wellness' }}>
+        <p className="mt-8 text-center text-white/60">Safe Picks catalog is temporarily unavailable.</p>
+      </PageShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
-      <div className="mx-auto max-w-lg px-6 py-10">
-        <BackLink href="/wellness" label="Back to Wellness" />
-
-        <header className="mt-6 mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
-            Freedom Paws Safe Picks
-          </p>
-          <h1 className="mt-2 text-2xl font-bold leading-tight">
-            Curated non-toxic chews, toys &amp; home
-          </h1>
-          <p className="mt-3 text-sm text-white/70 leading-relaxed">
+    <PageShell maxWidth="lg" backLink={{ href: '/wellness', label: 'Back to Wellness' }}>
+      <PageHeader
+        eyebrow="Freedom Paws Safe Picks"
+        eyebrowVariant="gold"
+        title="Curated non-toxic chews, toys & home"
+        subtitle={
+          <>
             Ten vetted brands and product lines aligned with our{' '}
             <strong className="text-white/90">wellness-first</strong> standards — no rawhide
             priority, transparent sourcing, and quarterly recall review. Live affiliate links appear
             as partners are signed.
-          </p>
-        </header>
+          </>
+        }
+        className="mt-2 mb-8"
+      />
 
-        <section className="rounded-2xl border border-emerald-500/25 bg-emerald-950/15 p-5 mb-8">
+        <SectionCard className="mb-8 border-emerald-500/25 bg-emerald-950/15">
           <h2 className="text-sm font-bold text-emerald-300">How we vet Safe Picks</h2>
           <ul className="mt-3 space-y-2 text-sm text-white/65 list-disc pl-5">
             {SAFE_PRODUCT_CRITERIA.map((c) => (
@@ -59,7 +55,7 @@ export default function SafeProductsPage() {
             We reject partners requiring pharmaceutical-first co-marketing. Not every SKU from a
             brand is approved — only lines that meet our criteria appear here.
           </p>
-        </section>
+        </SectionCard>
 
         {data.activeCount === 0 && (
           <p className="mb-6 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/55 text-center">
@@ -141,7 +137,7 @@ export default function SafeProductsPage() {
           })}
         </div>
 
-        <section className="mt-10 rounded-2xl border border-amber-400/20 bg-amber-950/15 p-5">
+        <SectionCard className="mt-10 border-amber-400/20 bg-amber-950/15">
           <h2 className="text-sm font-bold text-amber-300">ViT → Safe Picks funnel</h2>
           <p className="mt-2 text-sm text-white/65 leading-relaxed">
             After ViT flags dental, allergy, or enrichment patterns, explore related protocols and
@@ -167,9 +163,9 @@ export default function SafeProductsPage() {
               Allergy Shield protocol
             </Link>
           </div>
-        </section>
+        </SectionCard>
 
-        <section className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+        <SectionCard className="mt-6">
           <h2 className="text-sm font-bold text-white/80">Safety &amp; recalls</h2>
           <p className="mt-2 text-sm text-white/60 leading-relaxed">
             Founder quarterly review against{' '}
@@ -189,7 +185,7 @@ export default function SafeProductsPage() {
               partners@freedompawsinc.com
             </a>
           </p>
-        </section>
+        </SectionCard>
 
         <p className="mt-6 text-[11px] leading-relaxed text-white/40">{data.disclosure}</p>
 
@@ -201,7 +197,6 @@ export default function SafeProductsPage() {
             Freedom Paws partner standards →
           </Link>
         </p>
-      </div>
-    </div>
+    </PageShell>
   );
 }

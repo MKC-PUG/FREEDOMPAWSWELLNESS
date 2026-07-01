@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import SectionCard from '@/app/components/ui/SectionCard';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { getWellnessPartnerConfig } from '@/lib/wellness/partners';
 
@@ -37,28 +39,25 @@ export default function WellnessPage() {
   const config = getWellnessPartnerConfig();
 
   return (
-    <div className="min-h-screen bg-[#0A1625] text-white font-sans">
-      <div className="mx-auto max-w-lg px-6 py-10">
-        <BackLink href="/" label="Back to Home" />
-
-        <header className="mt-6 mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
-            Holistic wellness
-          </p>
-          <h1 className="mt-2 text-2xl font-bold leading-tight">
-            Prevention, natural care &amp; partner services
-          </h1>
-          <p className="mt-3 text-sm text-white/70 leading-relaxed">
+    <PageShell maxWidth="lg" backLink={{ href: '/', label: 'Back to Home' }}>
+      <PageHeader
+        eyebrow="Holistic wellness"
+        eyebrowVariant="gold"
+        title="Prevention, natural care & partner services"
+        subtitle={
+          <>
             Freedom Paws is a <strong className="text-white/90">wellness platform</strong> — not a
             veterinary clinic. We do not prescribe pharmaceutical drugs. We educate dog owners on
             reducing toxicity and deficiencies, support lifestyle optimization through our 10
             protocols, and refer to licensed professionals when triage is indicated.
-          </p>
-        </header>
+          </>
+        }
+        className="mt-2 mb-8"
+      />
 
         <WellnessPartnerPanel context="wellness_hub" className="mb-8" />
 
-        <section className="rounded-2xl border border-emerald-500/25 bg-emerald-950/15 p-5 mb-8">
+        <SectionCard className="mb-8 border-emerald-500/25 bg-emerald-950/15">
           <div className="flex items-start gap-3">
             <span className="text-2xl shrink-0" aria-hidden>
               ✅
@@ -79,7 +78,7 @@ export default function WellnessPage() {
               </Link>
             </div>
           </div>
-        </section>
+        </SectionCard>
 
         <section className="space-y-4 mb-8">
           <h2 className="text-sm font-bold uppercase tracking-wide text-white/50">
@@ -87,21 +86,20 @@ export default function WellnessPage() {
           </h2>
           <ul className="space-y-3">
             {EDUCATION_PILLARS.map((p) => (
-              <li
-                key={p.title}
-                className="rounded-2xl border border-white/10 bg-white/5 p-4"
-              >
+              <li key={p.title}>
+                <SectionCard variant="glass">
                 <span className="text-2xl" aria-hidden>
                   {p.icon}
                 </span>
                 <h3 className="mt-2 font-semibold">{p.title}</h3>
                 <p className="mt-1 text-sm text-white/65 leading-relaxed">{p.body}</p>
+                </SectionCard>
               </li>
             ))}
           </ul>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-white/5 p-5 mb-8">
+        <SectionCard className="mb-8">
           <h2 className="text-sm font-bold text-amber-300">When to see a veterinarian</h2>
           <p className="mt-2 text-sm text-white/65 leading-relaxed">
             If ViT flags urgent signs, or your dog has sudden pain, collapse, breathing difficulty,
@@ -110,9 +108,9 @@ export default function WellnessPage() {
             Holistic telehealth is for guidance and wellness planning; it does not replace emergency
             treatment.
           </p>
-        </section>
+        </SectionCard>
 
-        <section className="rounded-2xl border border-amber-400/30 bg-amber-950/20 p-5 mb-8">
+        <SectionCard className="mb-8 border-amber-400/30 bg-amber-950/20">
           <div className="flex items-start gap-3">
             <span className="text-2xl shrink-0" aria-hidden>
               🛡️
@@ -167,9 +165,9 @@ export default function WellnessPage() {
               </p>
             </div>
           </div>
-        </section>
+        </SectionCard>
 
-        <section className="rounded-2xl border border-emerald-400/30 bg-emerald-950/20 p-5 mb-8">
+        <SectionCard className="mb-8 border-emerald-400/30 bg-emerald-950/20">
           <div className="flex items-start gap-3">
             <span className="text-2xl shrink-0" aria-hidden>
               🌿
@@ -225,9 +223,9 @@ export default function WellnessPage() {
               </p>
             </div>
           </div>
-        </section>
+        </SectionCard>
 
-        <section className="rounded-2xl border border-amber-400/20 bg-amber-950/15 p-5 mb-8">
+        <SectionCard className="mb-8 border-amber-400/20 bg-amber-950/15">
           <h2 className="text-sm font-bold text-amber-300">Partner program (for affiliates)</h2>
           <p className="mt-2 text-sm text-white/65 leading-relaxed">
             Prospective insurance and holistic telehealth partners can review our acceptance
@@ -262,7 +260,7 @@ export default function WellnessPage() {
               partners@freedompawsinc.com
             </a>
           </p>
-        </section>
+        </SectionCard>
 
         <section className="grid grid-cols-1 gap-3">
           <Link
@@ -296,7 +294,6 @@ export default function WellnessPage() {
           Not veterinary advice. Not a government pet license. Partner services are provided by
           third parties under their own terms.
         </p>
-      </div>
-    </div>
+    </PageShell>
   );
 }

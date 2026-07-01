@@ -1,39 +1,35 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import BackLink from '@/app/components/BackLink';
+import PageShell from '@/app/components/ui/PageShell';
+import PageHeader from '@/app/components/ui/PageHeader';
+import PrimaryButton from '@/app/components/ui/PrimaryButton';
 import PwaNavLink from '@/app/components/PwaNavLink';
 import { protocolDetailHref, tokenShopHref } from '../lib/routes';
 import { protocols } from './protocols';
 
 export default function ProtocolsPage() {
   return (
-    <div className="min-h-screen bg-[#0A1428] text-white">
-      <div className="max-w-7xl mx-auto px-6 py-8 sm:py-14">
-        <BackLink />
+    <PageShell maxWidth="7xl" innerClassName="sm:py-14">
         {/* Header — image first, then title */}
-        <header className="text-center mb-10">
-          <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40 max-w-4xl mx-auto">
-            <Image
-              src="/images/protocols/superbud-10-protocols.png"
-              alt="SuperBud and friends — 10 protocols to stay healthy"
-              width={1024}
-              height={687}
-              priority
-              sizes="(max-width: 896px) 100vw, 896px"
-              className="block w-full h-auto"
-            />
-          </div>
-
-          <h1 className="mt-8 text-4xl md:text-5xl font-bold tracking-tight">
-            Our 10 Tokenized Holistic Protocols.
-          </h1>
-          <p className="mt-3 text-lg md:text-xl text-white/80">
-            SuperBud flying above a fresh new era in canine wellness
-          </p>
-          <p className="mt-1 text-sm font-semibold tracking-wide text-[#F5C242]">
-            Powered By The XRP Ledger
-          </p>
-        </header>
+        <PageHeader
+          center
+          eyebrow="Powered By The XRP Ledger"
+          eyebrowVariant="gold"
+          title="Our 10 Tokenized Holistic Protocols"
+          subtitle="SuperBud flying above a fresh new era in canine wellness"
+          className="mb-10"
+        />
+        <div className="rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40 max-w-4xl mx-auto mb-10">
+          <Image
+            src="/images/protocols/superbud-10-protocols.png"
+            alt="SuperBud and friends — 10 protocols to stay healthy"
+            width={1024}
+            height={687}
+            priority
+            sizes="(max-width: 896px) 100vw, 896px"
+            className="block w-full h-auto"
+          />
+        </div>
 
         {/* Protocol cards */}
         <div className="flex flex-wrap justify-center gap-6">
@@ -73,14 +69,12 @@ export default function ProtocolsPage() {
 
         <div className="mt-14 text-center">
           <p className="text-white/70 mb-4">Ready to purchase lifetime access?</p>
-          <PwaNavLink
-            href={tokenShopHref()}
-            className="inline-flex items-center justify-center min-h-[52px] bg-[#F5C242] hover:bg-amber-300 active:bg-amber-200 text-black text-base font-bold px-10 py-4 rounded-full transition-colors touch-manipulation"
-          >
-            Visit Token Shop →
+          <PwaNavLink href={tokenShopHref()} className="inline-block">
+            <PrimaryButton variant="gold" size="lg" className="!rounded-full">
+              Visit Token Shop →
+            </PrimaryButton>
           </PwaNavLink>
         </div>
-      </div>
-    </div>
+    </PageShell>
   );
 }
