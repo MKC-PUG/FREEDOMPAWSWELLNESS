@@ -380,7 +380,7 @@ export default function PhotoUploadZone({
             <button
               type="button"
               onClick={submitDirectUpload}
-              className="w-full rounded-2xl bg-[#F5C242] py-4 text-lg font-bold text-black"
+              className="w-full min-h-[48px] rounded-2xl bg-[#F5C242] py-4 text-lg font-bold text-black touch-manipulation active:bg-amber-300"
             >
               Upload &amp; Save Photo (manual)
             </button>
@@ -428,7 +428,7 @@ export default function PhotoUploadZone({
         <button
           type="button"
           onClick={handleClear}
-          className="mt-3 w-full rounded-2xl border border-white/20 py-3 text-sm text-white/70"
+          className="mt-3 w-full min-h-[48px] rounded-2xl border border-white/20 py-3 text-sm text-white/70 touch-manipulation active:bg-white/5"
         >
           Remove Photo
         </button>

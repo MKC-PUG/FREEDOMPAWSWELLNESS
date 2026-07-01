@@ -458,11 +458,12 @@ export default function ViTDiagnosticsClient({
                         key={region}
                         type="button"
                         onClick={() => toggleRegion(region)}
-                        className={`rounded-full px-4 py-2 text-sm font-semibold border transition ${
+                        className={`rounded-full px-4 py-2.5 min-h-[44px] text-sm font-semibold border transition touch-manipulation active:scale-[0.98] ${
                           active
                             ? 'border-emerald-400 bg-emerald-500/20 text-emerald-200'
                             : 'border-white/20 bg-[#0A1428] text-white/60 hover:border-white/40'
                         }`}
+                        style={{ WebkitTapHighlightColor: 'transparent' }}
                       >
                         {REGION_LABELS[region]}
                       </button>
@@ -492,12 +493,12 @@ export default function ViTDiagnosticsClient({
                 />
                 {resolvedPetId ? (
                   <div className="mt-5 rounded-2xl border border-emerald-500/25 bg-emerald-950/15 p-4">
-                    <label className="flex items-start gap-3 cursor-pointer">
+                    <label className="flex items-start gap-3 cursor-pointer touch-manipulation min-h-[48px]">
                       <input
                         type="checkbox"
                         checked={alsoCaptureId}
                         onChange={(e) => setAlsoCaptureId(e.target.checked)}
-                        className="mt-1 h-4 w-4 rounded border-white/30"
+                        className="mt-1 h-5 w-5 shrink-0 rounded border-white/30"
                       />
                       <span className="text-sm text-emerald-100/90 leading-relaxed">
                         Also analyze for{' '}
@@ -514,11 +515,12 @@ export default function ViTDiagnosticsClient({
                               key={region}
                               type="button"
                               onClick={() => toggleRegion(region)}
-                              className={`rounded-full px-3 py-1.5 text-xs font-semibold border transition ${
+                              className={`rounded-full px-3 py-2 min-h-[44px] text-xs font-semibold border transition touch-manipulation active:scale-[0.98] ${
                                 active
                                   ? 'border-emerald-400 bg-emerald-500/20 text-emerald-200'
                                   : 'border-white/20 bg-[#0A1428] text-white/60 hover:border-white/40'
                               }`}
+                              style={{ WebkitTapHighlightColor: 'transparent' }}
                             >
                               {REGION_LABELS[region]}
                             </button>
@@ -535,11 +537,12 @@ export default function ViTDiagnosticsClient({
               type="button"
               onClick={() => void analyze()}
               disabled={loading || !canAnalyze}
-              className={`mt-6 disabled:opacity-50 text-black font-bold py-4 rounded-2xl text-xl transition ${
+              className={`mt-6 min-h-[52px] disabled:opacity-50 text-black font-bold py-4 rounded-2xl text-xl transition touch-manipulation active:scale-[0.99] ${
                 identityMode
-                  ? 'bg-emerald-400 hover:bg-emerald-400/90'
-                  : 'bg-[#F5C242] hover:bg-[#F5C242]/90'
+                  ? 'bg-emerald-400 hover:bg-emerald-400/90 active:bg-emerald-300'
+                  : 'bg-[#F5C242] hover:bg-[#F5C242]/90 active:bg-amber-300'
               }`}
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               {loading
                 ? 'Analyzing…'

@@ -69,6 +69,15 @@ a:hover {
 button {
   cursor: pointer;
   transition: all 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+label:has(input[type='checkbox']),
+label:has(input[type='radio']),
+summary {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Card hover effects */

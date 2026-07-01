@@ -82,14 +82,14 @@ export default function PwaInstallBanner() {
           <button
             type="button"
             onClick={() => void install()}
-            className="flex-1 rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black"
+            className="flex-1 min-h-[48px] rounded-xl bg-amber-400 py-2.5 text-sm font-bold text-black touch-manipulation active:bg-amber-300"
           >
             Install app
           </button>
           <button
             type="button"
             onClick={dismiss}
-            className="rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white/60"
+            className="min-h-[48px] rounded-xl border border-white/20 px-4 py-2.5 text-sm text-white/60 touch-manipulation active:bg-white/5"
           >
             Not now
           </button>
@@ -109,7 +109,7 @@ export default function PwaInstallBanner() {
         <button
           type="button"
           onClick={dismiss}
-          className="mt-3 text-xs text-white/40 underline"
+          className="mt-3 min-h-[44px] text-xs text-white/40 underline touch-manipulation"
         >
           Dismiss
         </button>

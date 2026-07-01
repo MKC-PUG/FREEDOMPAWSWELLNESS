@@ -77,7 +77,7 @@ export default function ViTMediaUpload({
         <button
           type="button"
           onClick={() => setMode('photo')}
-          className={`flex-1 py-2.5 transition ${
+          className={`flex-1 min-h-[48px] py-2.5 transition touch-manipulation active:opacity-90 ${
             mode === 'photo' ? 'bg-[#F5C242] text-black' : 'bg-[#0A1428] text-white/70'
           }`}
         >
@@ -86,7 +86,7 @@ export default function ViTMediaUpload({
         <button
           type="button"
           onClick={() => setMode('video')}
-          className={`flex-1 py-2.5 transition ${
+          className={`flex-1 min-h-[48px] py-2.5 transition touch-manipulation active:opacity-90 ${
             mode === 'video' ? 'bg-[#F5C242] text-black' : 'bg-[#0A1428] text-white/70'
           }`}
         >
@@ -126,7 +126,7 @@ export default function ViTMediaUpload({
             type="button"
             disabled={videoBusy}
             onClick={() => videoInputRef.current?.click()}
-            className="w-full rounded-xl bg-[#F5C242] disabled:opacity-50 text-black font-bold py-3.5"
+            className="w-full min-h-[48px] rounded-xl bg-[#F5C242] disabled:opacity-50 text-black font-bold py-3.5 touch-manipulation active:bg-amber-300"
           >
             {videoBusy ? 'Extracting frames…' : 'Choose Video (10–15 sec)'}
           </button>
@@ -161,7 +161,7 @@ export default function ViTMediaUpload({
         <button
           type="button"
           onClick={onClear}
-          className="w-full rounded-2xl border border-white/20 py-3 text-sm text-white/70"
+          className="w-full min-h-[48px] rounded-2xl border border-white/20 py-3 text-sm text-white/70 touch-manipulation active:bg-white/5"
         >
           Upload different {mode === 'video' ? 'video' : 'photo'}
         </button>

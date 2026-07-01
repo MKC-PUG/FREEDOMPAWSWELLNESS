@@ -86,11 +86,16 @@ export default function EnrollWizardClient({
 
   const photoRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLInputElement>(null);
-  const [pendingCapture, setPendingCapture] = useState<{
-    kind: 'photo';
-    region: 'eyes' | 'face' | 'body' | 'posture';
-    angle?: 'front' | 'side';
-  } | { kind: 'gait' } | null>(null);
+  /** Ref avoids stale state when iOS fires file input change before re-render. */
+  const pendingCaptureRef = useRef<
+    | {
+        kind: 'photo';
+        region: 'eyes' | 'face' | 'body' | 'posture';
+        angle?: 'front' | 'side';
+      }
+    | { kind: 'gait' }
+    | null
+  >(null);
 
   const loadPets = useCallback(async () => {
     setLoadingPets(true);
@@ -257,18 +262,19 @@ export default function EnrollWizardClient({
     region: 'eyes' | 'face' | 'body' | 'posture',
     angle?: 'front' | 'side'
   ) => {
-    setPendingCapture({ kind: 'photo', region, angle });
+    pendingCaptureRef.current = { kind: 'photo', region, angle };
     photoRef.current?.click();
   };
 
   const openGaitCapture = () => {
-    setPendingCapture({ kind: 'gait' });
+    pendingCaptureRef.current = { kind: 'gait' };
     videoRef.current?.click();
   };
 
   const onPhotoPicked = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = '';
+    const pendingCapture = pendingCaptureRef.current;
     if (!file || !pendingCapture || pendingCapture.kind !== 'photo' || !enrollmentId) return;
 
     setBusy(true);
@@ -339,18 +345,19 @@ export default function EnrollWizardClient({
       setError('Connection error.');
     } finally {
       setBusy(false);
-      setPendingCapture(null);
+      pendingCaptureRef.current = null;
     }
   };
 
   const onVideoPicked = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = '';
+    const pendingCapture = pendingCaptureRef.current;
     if (!file || pendingCapture?.kind !== 'gait' || !enrollmentId) return;
 
     if (!isValidVitVideoFile(file)) {
       setError('Use MP4/MOV/WebM under 25 MB, 3–8 seconds, dog walking in frame.');
-      setPendingCapture(null);
+      pendingCaptureRef.current = null;
       return;
     }
 
@@ -389,7 +396,7 @@ export default function EnrollWizardClient({
       setError(err instanceof Error ? err.message : 'Could not process video.');
     } finally {
       setBusy(false);
-      setPendingCapture(null);
+      pendingCaptureRef.current = null;
     }
   };
 
@@ -547,11 +554,12 @@ export default function EnrollWizardClient({
                     <button
                       type="button"
                       onClick={() => setSelectedPetId(pet.id)}
-                      className={`w-full rounded-2xl border p-4 text-left transition ${
+                      className={`w-full rounded-2xl border p-4 text-left transition touch-manipulation min-h-[52px] active:scale-[0.99] ${
                         selectedPetId === pet.id
                           ? 'border-emerald-400 bg-emerald-500/10'
                           : 'border-white/10 bg-white/5 hover:border-white/25'
                       }`}
+                      style={{ WebkitTapHighlightColor: 'transparent' }}
                     >
                       <span className="font-semibold">{pet.name}</span>
                       {pet.breed && (
@@ -581,7 +589,7 @@ export default function EnrollWizardClient({
                 type="button"
                 disabled={creatingPet}
                 onClick={() => void createPet()}
-                className="w-full rounded-xl border border-amber-400/50 py-2 text-sm font-semibold text-amber-300"
+                className="w-full min-h-[48px] rounded-xl border border-amber-400/50 py-2 text-sm font-semibold text-amber-300 touch-manipulation active:bg-amber-400/10 disabled:opacity-50"
               >
                 {creatingPet ? 'Creating…' : 'Add pet'}
               </button>
@@ -591,7 +599,7 @@ export default function EnrollWizardClient({
               type="button"
               disabled={busy || !selectedPetId}
               onClick={() => void startEnrollment()}
-              className="w-full rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50"
+              className="w-full min-h-[52px] rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50 touch-manipulation active:bg-emerald-300"
             >
               {busy ? 'Starting…' : `Continue with ${selectedPet?.name ?? 'pet'}`}
             </button>
@@ -604,12 +612,12 @@ export default function EnrollWizardClient({
             <pre className="whitespace-pre-wrap rounded-2xl border border-white/10 bg-[#0A1428] p-4 text-xs leading-relaxed text-white/75 font-sans">
               {BIOMETRIC_CONSENT_TEXT}
             </pre>
-            <label className="flex items-start gap-3 text-sm">
+            <label className="flex items-start gap-3 text-sm touch-manipulation min-h-[48px] cursor-pointer">
               <input
                 type="checkbox"
                 checked={consentChecked}
                 onChange={(e) => setConsentChecked(e.target.checked)}
-                className="mt-1"
+                className="mt-1 h-5 w-5 shrink-0 rounded border-white/30"
               />
               <span>
                 I agree to biometric capture and storage (v{BIOMETRIC_CONSENT_VERSION}).
@@ -619,7 +627,7 @@ export default function EnrollWizardClient({
               type="button"
               disabled={busy || !consentChecked}
               onClick={() => void recordConsent()}
-              className="w-full rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50"
+              className="w-full min-h-[52px] rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50 touch-manipulation active:bg-emerald-300"
             >
               {busy ? 'Saving…' : 'I agree — continue'}
             </button>
@@ -648,7 +656,7 @@ export default function EnrollWizardClient({
                       setError('');
                       setStep(4);
                     }}
-                    className="w-full rounded-2xl border border-amber-400/50 py-3 text-sm font-bold text-amber-300"
+                    className="w-full min-h-[48px] rounded-2xl border border-amber-400/50 py-3 text-sm font-bold text-amber-300 touch-manipulation active:bg-amber-400/10"
                   >
                     Continue to Face → ({Math.round(captures.eyes.qualityScore * 100)}% quality)
                   </button>
@@ -745,7 +753,7 @@ export default function EnrollWizardClient({
                           type="button"
                           disabled={busy}
                           onClick={() => void removeCapture(m.id)}
-                          className="text-xs font-semibold text-red-300/80 hover:text-red-200 disabled:opacity-40"
+                          className="min-h-[44px] min-w-[44px] px-2 text-xs font-semibold text-red-300/80 hover:text-red-200 disabled:opacity-40 touch-manipulation active:bg-red-500/10 rounded-lg"
                           aria-label={`Remove ${label} capture`}
                         >
                           Remove
@@ -780,7 +788,7 @@ export default function EnrollWizardClient({
               type="button"
               disabled={busy || !reviewReady}
               onClick={() => void confirmEnrollment()}
-              className="w-full rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50"
+              className="w-full min-h-[52px] rounded-2xl bg-emerald-400 py-4 font-bold text-black disabled:opacity-50 touch-manipulation active:bg-emerald-300"
             >
               {busy ? 'Creating ID…' : 'Confirm & create Freedom Paws ID'}
             </button>
@@ -859,7 +867,7 @@ function CaptureCard({
         type="button"
         disabled={busy || disabled}
         onClick={onCapture}
-        className="mt-4 w-full rounded-xl bg-[#0A1428] border border-emerald-500/40 py-3 text-sm font-semibold text-emerald-300 disabled:opacity-40"
+        className="mt-4 w-full min-h-[48px] rounded-xl bg-[#0A1428] border border-emerald-500/40 py-3 text-sm font-semibold text-emerald-300 disabled:opacity-40 touch-manipulation active:bg-emerald-500/10"
       >
         {busy ? 'Analyzing…' : capture ? 'Retake' : actionLabel ?? 'Take photo'}
       </button>
