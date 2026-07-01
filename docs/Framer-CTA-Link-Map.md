@@ -23,7 +23,7 @@
 11. [DNS + `{APP}` base URL](#11-dns--app-base-url)
 12. [Monthly sync checklist](#12-monthly-sync-checklist)
 13. [What Framer must never do](#13-what-framer-must-never-do)
-14. [ID & Tool Box page — full launch wiring (`/freedom-paws-id-toolbox`)](#14-id--tool-box-page--full-launch-wiring-freedom-paws-id-toolbox)
+14. [Member Tools page — full build (`/member-tools`)](#14-member-tools-page--see-full-build-guide) · **Full guide:** `Framer-Member-Tools-Page-Click-by-Click-June-2026.md`
 
 ---
 
@@ -265,7 +265,7 @@ Skip generic **Open the App** unless you want a small footer link to `{APP}/`.
 | Protocols Overview | Framer `/protocol-overview` |
 | Community Impact | Framer page (keep) |
 | **Token Shop** | `{APP}/token-shop` |
-| **ID & Tool Box** | Framer `/freedom-paws-id-toolbox` |
+| **Member Tools** | Framer `/member-tools` (was `/freedom-paws-id-toolbox`) |
 | Grants FAQ | Framer page (keep) |
 | **Connect Wallet** (top right) | `{APP}/token-shop` |
 
@@ -339,6 +339,19 @@ Same URLs for matching menu items. Protocol marketing can point to **`/protocol-
 5. Find-replace in Framer: old Vercel URL → `https://app.freedompawsinc.com` on every **Buy Link**
 6. iPhone: refresh PWA (**Update ready** banner)
 
+### Defensive domains (post-launch — not in Framer CTAs)
+
+Registered separately; **wire redirects after public launch**, not before.
+
+| Domain | Redirect to | Use |
+|--------|-------------|-----|
+| `freedompawz.com` | `https://freedompawsinc.com` | Typo defense — redirect only |
+| `vitproscan.com` | `https://app.freedompawsinc.com/vit-pro` | DVM VitProScan — vet outreach later |
+
+**Until wired:** optional registrar-level forward is enough — no `NEXT_PUBLIC_*` env vars, no Framer links.
+
+Canonical URLs stay `freedompawsinc.com` + `app.freedompawsinc.com` only.
+
 ---
 
 ## 12. Monthly sync checklist
@@ -362,10 +375,14 @@ Same URLs for matching menu items. Protocol marketing can point to **`/protocol-
 
 ---
 
-## 14. ID & Tool Box page — full launch wiring (`/freedom-paws-id-toolbox`)
+## 14. Member Tools page — see full build guide
 
-**Page:** Framer `/freedom-paws-id-toolbox`  
-**Nav:** **ID & Tool Box** → this Framer page (not the app)  
+**Canonical build doc (copy, wireframe, click-by-click):**  
+`docs/Framer-Member-Tools-Page-Click-by-Click-June-2026.md`
+
+**Page:** Framer `/member-tools`  
+**Nav:** **Member Tools** → this Framer page (not the app)  
+**Legacy URL:** `/freedom-paws-id-toolbox` → redirect or stub to `/member-tools`  
 **Launch rule:** Tell the **vision**; link only what is **live** in the app; mark ID vault/IPFS/match/alerts as **planned**.
 
 `{APP}` = `https://app.freedompawsinc.com`

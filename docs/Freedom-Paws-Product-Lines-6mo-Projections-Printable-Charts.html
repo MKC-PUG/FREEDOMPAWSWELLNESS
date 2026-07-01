@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freedom Paws — Product Lines 6-Month Projections (Y0.5–Y5)</title>
+  <style>
+    :root {
+      --fp-green: #2d6a4f;
+      --fp-gold: #b8860b;
+      --fp-blue: #1d4e89;
+      --cons: #6b7280;
+      --base: #2d6a4f;
+      --agg: #b8860b;
+      --a: #7c3aed;
+      --b: #1d4e89;
+      --c: #2d6a4f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11pt;
+      line-height: 1.4;
+      color: #111;
+      max-width: 8.5in;
+      margin: 0 auto;
+      padding: 0.5in 0.6in;
+      background: #fff;
+    }
+    h1 {
+      font-size: 18pt;
+      color: var(--fp-green);
+      margin: 0 0 4px;
+      border-bottom: 3px solid var(--fp-green);
+      padding-bottom: 8px;
+    }
+    h2 {
+      font-size: 13pt;
+      color: var(--fp-blue);
+      margin: 24px 0 10px;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 11pt;
+      color: #333;
+      margin: 16px 0 8px;
+      page-break-after: avoid;
+    }
+    .subtitle { font-size: 10pt; color: #555; margin-bottom: 16px; }
+    .instructions {
+      background: #f0f7f4;
+      border: 1px solid var(--fp-green);
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+    .instructions strong { color: var(--fp-green); }
+    .instructions ol { margin: 8px 0 0; padding-left: 20px; }
+    .chart-block {
+      margin: 16px 0 24px;
+      page-break-inside: avoid;
+      text-align: center;
+    }
+    .chart-block svg {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      background: #fafafa;
+    }
+    .chart-caption {
+      font-size: 9pt;
+      color: #666;
+      margin-top: 6px;
+      font-style: italic;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin: 8px 0 16px;
+      font-size: 9pt;
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin: 10px 0 20px;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 5px 6px;
+      text-align: right;
+    }
+    th {
+      background: var(--fp-green);
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+    }
+    th.left, td.left { text-align: left; }
+    td.period { font-weight: bold; text-align: left; background: #f5f5f5; }
+    tr:nth-child(even) td { background: #f9f9f9; }
+    tr.scenario-cons td:first-child { border-left: 4px solid var(--cons); }
+    tr.scenario-base td:first-child { border-left: 4px solid var(--base); }
+    tr.scenario-agg td:first-child { border-left: 4px solid var(--agg); }
+    .neg { color: #b91c1c; }
+    .summary-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+      page-break-inside: avoid;
+    }
+    .summary-card {
+      border: 2px solid #ddd;
+      padding: 12px;
+      text-align: center;
+      border-radius: 4px;
+    }
+    .summary-card.cons { border-color: var(--cons); }
+    .summary-card.base { border-color: var(--base); background: #f0f7f4; }
+    .summary-card.agg { border-color: var(--agg); }
+    .summary-card h4 { margin: 0 0 8px; font-size: 10pt; }
+    .summary-card .big { font-size: 14pt; font-weight: bold; color: var(--fp-green); }
+    .summary-card .label { font-size: 8pt; color: #666; }
+    .footer {
+      margin-top: 24px;
+      padding-top: 12px;
+      border-top: 1px solid #ccc;
+      font-size: 8pt;
+      color: #666;
+      text-align: center;
+    }
+    @media print {
+      body { padding: 0.35in; }
+      .no-print { display: none !important; }
+      h2 { page-break-before: auto; }
+      .page-break { page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Freedom Paws Wellness — Product Lines</h1>
+  <p class="subtitle">6-Month Projections · Y0.5 through Y5.0 · Conservative · Base · Aggressive<br />
+  Launch: October 2026 · Source: Freedom-Paws-Product-Lines-6mo-Projections-Y0.5-Y5.csv · June 2026</p>
+
+  <div class="instructions no-print">
+    <strong>How to use in Google Docs (print / share)</strong>
+    <ol>
+      <li><strong>Charts:</strong> Select each chart below → Copy → Paste into Google Doc (charts paste as images).</li>
+      <li><strong>Tables:</strong> Select a table → Copy → Paste into Google Doc (keeps formatting).</li>
+      <li><strong>Or:</strong> File → Print → Save as PDF → Upload PDF to Google Drive → Open with Google Docs.</li>
+      <li><strong>Or:</strong> Upload the CSV to Google Sheets → Insert chart → Copy chart into Doc.</li>
+    </ol>
+  </div>
+
+  <!-- Y5 SUMMARY CARDS -->
+  <h2>Y5.0 Snapshot (Apr 2031 – Sep 2031)</h2>
+  <div class="summary-box">
+    <div class="summary-card cons">
+      <h4>Conservative</h4>
+      <div class="big">$344K</div>
+      <div class="label">6-mo revenue</div>
+      <div style="margin-top:8px;font-size:10pt;">GP $268K · 220 clinics · 910 members</div>
+    </div>
+    <div class="summary-card base">
+      <h4>Base (planning)</h4>
+      <div class="big">$513K</div>
+      <div class="label">6-mo revenue</div>
+      <div style="margin-top:8px;font-size:10pt;">GP $416K · 320 clinics · 1,300 members</div>
+    </div>
+    <div class="summary-card agg">
+      <h4>Aggressive</h4>
+      <div class="big">$825K</div>
+      <div class="label">6-mo revenue</div>
+      <div style="margin-top:8px;font-size:10pt;">GP $678K · 550 clinics · 1,820 members</div>
+    </div>
+  </div>
+
+  <!-- CHART 1: Total Revenue Trend -->
+  <h2>Chart 1 — Total Revenue by 6-Month Period</h2>
+  <div class="legend">
+    <span><i class="swatch" style="background:#6b7280"></i> Conservative</span>
+    <span><i class="swatch" style="background:#2d6a4f"></i> Base</span>
+    <span><i class="swatch" style="background:#b8860b"></i> Aggressive</span>
+  </div>
+  <div class="chart-block">
+    <svg viewBox="0 0 720 320" width="720" height="320" xmlns="http://www.w3.org/2000/svg">
+      <rect x="60" y="20" width="640" height="240" fill="#fff" stroke="#ddd"/>
+      <!-- Y axis labels -->
+      <text x="52" y="45" text-anchor="end" font-size="9" fill="#666">$800K</text>
+      <text x="52" y="105" text-anchor="end" font-size="9" fill="#666">$600K</text>
+      <text x="52" y="165" text-anchor="end" font-size="9" fill="#666">$400K</text>
+      <text x="52" y="225" text-anchor="end" font-size="9" fill="#666">$200K</text>
+      <text x="52" y="255" text-anchor="end" font-size="9" fill="#666">$0</text>
+      <!-- Grid -->
+      <line x1="60" y1="40" x2="700" y2="40" stroke="#eee" stroke-width="1"/>
+      <line x1="60" y1="100" x2="700" y2="100" stroke="#eee" stroke-width="1"/>
+      <line x1="60" y1="160" x2="700" y2="160" stroke="#eee" stroke-width="1"/>
+      <line x1="60" y1="220" x2="700" y2="220" stroke="#eee" stroke-width="1"/>
+      <line x1="60" y1="260" x2="700" y2="260" stroke="#333" stroke-width="1"/>
+      <!-- Conservative line -->
+      <polyline fill="none" stroke="#6b7280" stroke-width="2.5" points="92,252 156,238 220,228 284,210 348,200 412,188 476,180 540,168 604,158 668,148"/>
+      <!-- Base line -->
+      <polyline fill="none" stroke="#2d6a4f" stroke-width="3" points="92,248 156,228 220,218 284,198 348,186 412,170 476,160 540,148 604,136 668,122"/>
+      <!-- Aggressive line -->
+      <polyline fill="none" stroke="#b8860b" stroke-width="2.5" points="92,242 156,218 220,206 284,178 348,162 412,142 476,128 540,112 604,96 668,78"/>
+      <!-- X labels -->
+      <text x="92" y="278" text-anchor="middle" font-size="8" fill="#333">Y0.5</text>
+      <text x="156" y="278" text-anchor="middle" font-size="8" fill="#333">Y1.0</text>
+      <text x="220" y="278" text-anchor="middle" font-size="8" fill="#333">Y1.5</text>
+      <text x="284" y="278" text-anchor="middle" font-size="8" fill="#333">Y2.0</text>
+      <text x="348" y="278" text-anchor="middle" font-size="8" fill="#333">Y2.5</text>
+      <text x="412" y="278" text-anchor="middle" font-size="8" fill="#333">Y3.0</text>
+      <text x="476" y="278" text-anchor="middle" font-size="8" fill="#333">Y3.5</text>
+      <text x="540" y="278" text-anchor="middle" font-size="8" fill="#333">Y4.0</text>
+      <text x="604" y="278" text-anchor="middle" font-size="8" fill="#333">Y4.5</text>
+      <text x="668" y="278" text-anchor="middle" font-size="8" fill="#333">Y5.0</text>
+      <text x="380" y="310" text-anchor="middle" font-size="10" fill="#333" font-weight="bold">6-Month Period (Launch Oct 2026)</text>
+    </svg>
+    <p class="chart-caption">All three product lines combined · USD per 6-month period</p>
+  </div>
+
+  <!-- CHART 2: Gross Profit Trend -->
+  <h2>Chart 2 — Gross Profit by 6-Month Period</h2>
+  <div class="legend">
+    <span><i class="swatch" style="background:#6b7280"></i> Conservative</span>
+    <span><i class="swatch" style="background:#2d6a4f"></i> Base</span>
+    <span><i class="swatch" style="background:#b8860b"></i> Aggressive</span>
+  </div>
+  <div class="chart-block">
+    <svg viewBox="0 0 720 320" width="720" height="320" xmlns="http://www.w3.org/2000/svg">
+      <rect x="60" y="20" width="640" height="240" fill="#fff" stroke="#ddd"/>
+      <text x="52" y="45" text-anchor="end" font-size="9" fill="#666">$700K</text>
+      <text x="52" y="105" text-anchor="end" font-size="9" fill="#666">$525K</text>
+      <text x="52" y="165" text-anchor="end" font-size="9" fill="#666">$350K</text>
+      <text x="52" y="225" text-anchor="end" font-size="9" fill="#666">$175K</text>
+      <text x="52" y="255" text-anchor="end" font-size="9" fill="#666">$0</text>
+      <line x1="60" y1="40" x2="700" y2="40" stroke="#eee"/>
+      <line x1="60" y1="100" x2="700" y2="100" stroke="#eee"/>
+      <line x1="60" y1="160" x2="700" y2="160" stroke="#eee"/>
+      <line x1="60" y1="220" x2="700" y2="220" stroke="#eee"/>
+      <line x1="60" y1="260" x2="700" y2="260" stroke="#333"/>
+      <polyline fill="none" stroke="#6b7280" stroke-width="2.5" points="92,248 156,232 220,222 284,204 348,194 412,182 476,174 540,162 604,152 668,142"/>
+      <polyline fill="none" stroke="#2d6a4f" stroke-width="3" points="92,244 156,224 220,212 284,192 348,178 412,162 476,150 540,136 604,124 668,108"/>
+      <polyline fill="none" stroke="#b8860b" stroke-width="2.5" points="92,238 156,212 220,198 284,168 348,152 412,130 476,114 540,96 604,78 668,58"/>
+      <text x="92" y="278" text-anchor="middle" font-size="8">Y0.5</text>
+      <text x="156" y="278" text-anchor="middle" font-size="8">Y1.0</text>
+      <text x="220" y="278" text-anchor="middle" font-size="8">Y1.5</text>
+      <text x="284" y="278" text-anchor="middle" font-size="8">Y2.0</text>
+      <text x="348" y="278" text-anchor="middle" font-size="8">Y2.5</text>
+      <text x="412" y="278" text-anchor="middle" font-size="8">Y3.0</text>
+      <text x="476" y="278" text-anchor="middle" font-size="8">Y3.5</text>
+      <text x="540" y="278" text-anchor="middle" font-size="8">Y4.0</text>
+      <text x="604" y="278" text-anchor="middle" font-size="8">Y4.5</text>
+      <text x="668" y="278" text-anchor="middle" font-size="8">Y5.0</text>
+      <text x="380" y="310" text-anchor="middle" font-size="10" font-weight="bold">6-Month Period</text>
+    </svg>
+    <p class="chart-caption">After product COGS · before operating expenses</p>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- CHART 3: Base stacked bars by product -->
+  <h2>Chart 3 — Base Scenario: Revenue by Product Line</h2>
+  <div class="legend">
+    <span><i class="swatch" style="background:#7c3aed"></i> A — Scanner Kit</span>
+    <span><i class="swatch" style="background:#1d4e89"></i> B — VitProScan (DVM)</span>
+    <span><i class="swatch" style="background:#2d6a4f"></i> C — Member ID &amp; ViT</span>
+  </div>
+  <div class="chart-block">
+    <svg viewBox="0 0 720 340" width="720" height="340" xmlns="http://www.w3.org/2000/svg">
+      <rect x="60" y="20" width="640" height="260" fill="#fff" stroke="#ddd"/>
+      <text x="52" y="45" text-anchor="end" font-size="9" fill="#666">$500K</text>
+      <text x="52" y="110" text-anchor="end" font-size="9" fill="#666">$375K</text>
+      <text x="52" y="175" text-anchor="end" font-size="9" fill="#666">$250K</text>
+      <text x="52" y="240" text-anchor="end" font-size="9" fill="#666">$125K</text>
+      <text x="52" y="275" text-anchor="end" font-size="9" fill="#666">$0</text>
+      <line x1="60" y1="280" x2="700" y2="280" stroke="#333"/>
+      <!-- Bars: scale max 512500 -> 260px height, base y=280 -->
+      <!-- Y0.5: A1300 B18000 C8500 total 27800 -> h=14 -->
+      <rect x="78" y="266" width="36" height="1" fill="#7c3aed"/>
+      <rect x="78" y="257" width="36" height="9" fill="#1d4e89"/>
+      <rect x="78" y="252" width="36" height="5" fill="#2d6a4f"/>
+      <!-- Y1.0 total 66800 h=34 -->
+      <rect x="142" y="276" width="36" height="1" fill="#7c3aed"/>
+      <rect x="142" y="255" width="36" height="21" fill="#1d4e89"/>
+      <rect x="142" y="246" width="36" height="9" fill="#2d6a4f"/>
+      <!-- Y1.5 total 96500 h=49 -->
+      <rect x="206" y="276" width="36" height="1" fill="#7c3aed"/>
+      <rect x="206" y="250" width="36" height="26" fill="#1d4e89"/>
+      <rect x="206" y="238" width="36" height="12" fill="#2d6a4f"/>
+      <!-- Y2.0 total 154200 h=78 -->
+      <rect x="270" y="275" width="36" height="1" fill="#7c3aed"/>
+      <rect x="270" y="233" width="36" height="42" fill="#1d4e89"/>
+      <rect x="270" y="214" width="36" height="19" fill="#2d6a4f"/>
+      <!-- Y2.5 total 194800 h=99 -->
+      <rect x="334" y="275" width="36" height="1" fill="#7c3aed"/>
+      <rect x="334" y="225" width="36" height="50" fill="#1d4e89"/>
+      <rect x="334" y="203" width="36" height="22" fill="#2d6a4f"/>
+      <!-- Y3.0 total 255500 h=130 -->
+      <rect x="398" y="275" width="36" height="1" fill="#7c3aed"/>
+      <rect x="398" y="214" width="36" height="61" fill="#1d4e89"/>
+      <rect x="398" y="187" width="36" height="27" fill="#2d6a4f"/>
+      <!-- Y3.5 total 306000 h=155 -->
+      <rect x="462" y="275" width="36" height="1" fill="#7c3aed"/>
+      <rect x="462" y="206" width="36" height="69" fill="#1d4e89"/>
+      <rect x="462" y="175" width="36" height="31" fill="#2d6a4f"/>
+      <!-- Y4.0 total 371500 h=188 -->
+      <rect x="526" y="275" width="36" height="1" fill="#7c3aed"/>
+      <rect x="526" y="196" width="36" height="79" fill="#1d4e89"/>
+      <rect x="526" y="160" width="36" height="36" fill="#2d6a4f"/>
+      <!-- Y4.5 total 432000 h=219 -->
+      <rect x="590" y="275" width="36" height="1" fill="#7c3aed"/>
+      <rect x="590" y="188" width="36" height="87" fill="#1d4e89"/>
+      <rect x="590" y="148" width="36" height="40" fill="#2d6a4f"/>
+      <!-- Y5.0 total 512500 h=260 -->
+      <rect x="654" y="275" width="36" height="1" fill="#7c3aed"/>
+      <rect x="654" y="178" width="36" height="97" fill="#1d4e89"/>
+      <rect x="654" y="131" width="36" height="47" fill="#2d6a4f"/>
+      <text x="96" y="298" text-anchor="middle" font-size="8">Y0.5</text>
+      <text x="160" y="298" text-anchor="middle" font-size="8">Y1.0</text>
+      <text x="224" y="298" text-anchor="middle" font-size="8">Y1.5</text>
+      <text x="288" y="298" text-anchor="middle" font-size="8">Y2.0</text>
+      <text x="352" y="298" text-anchor="middle" font-size="8">Y2.5</text>
+      <text x="416" y="298" text-anchor="middle" font-size="8">Y3.0</text>
+      <text x="480" y="298" text-anchor="middle" font-size="8">Y3.5</text>
+      <text x="544" y="298" text-anchor="middle" font-size="8">Y4.0</text>
+      <text x="608" y="298" text-anchor="middle" font-size="8">Y4.5</text>
+      <text x="672" y="298" text-anchor="middle" font-size="8">Y5.0</text>
+      <text x="380" y="328" text-anchor="middle" font-size="10" font-weight="bold">Stacked revenue · Base scenario only</text>
+    </svg>
+  </div>
+
+  <!-- CHART 4: Y5 comparison bar -->
+  <h2>Chart 4 — Y5.0 Revenue Comparison (All Scenarios)</h2>
+  <div class="chart-block">
+    <svg viewBox="0 0 520 220" width="520" height="220" xmlns="http://www.w3.org/2000/svg">
+      <text x="130" y="30" text-anchor="middle" font-size="10" font-weight="bold">Conservative</text>
+      <text x="260" y="30" text-anchor="middle" font-size="10" font-weight="bold">Base</text>
+      <text x="390" y="30" text-anchor="middle" font-size="10" font-weight="bold">Aggressive</text>
+      <!-- bars max 824875 -> 150px -->
+      <rect x="90" y="55" width="80" height="63" fill="#6b7280"/>
+      <text x="130" y="130" text-anchor="middle" font-size="9">$344K</text>
+      <rect x="220" y="55" width="80" height="93" fill="#2d6a4f"/>
+      <text x="260" y="160" text-anchor="middle" font-size="9">$513K</text>
+      <rect x="350" y="55" width="80" height="150" fill="#b8860b"/>
+      <text x="390" y="217" text-anchor="middle" font-size="9">$825K</text>
+      <line x1="40" y1="205" x2="480" y2="205" stroke="#333"/>
+      <text x="260" y="15" text-anchor="middle" font-size="11" font-weight="bold">Total 6-Month Revenue · Y5.0</text>
+    </svg>
+  </div>
+
+  <!-- CHART 5: Growth metrics Base -->
+  <h2>Chart 5 — Base Scenario: Clinics &amp; Paying Members (EOY per period)</h2>
+  <div class="chart-block">
+    <svg viewBox="0 0 720 280" width="720" height="280" xmlns="http://www.w3.org/2000/svg">
+      <rect x="60" y="30" width="640" height="200" fill="#fff" stroke="#ddd"/>
+      <text x="52" y="50" text-anchor="end" font-size="9" fill="#1d4e89">1,400</text>
+      <text x="52" y="110" text-anchor="end" font-size="9" fill="#1d4e89">1,050</text>
+      <text x="52" y="170" text-anchor="end" font-size="9" fill="#1d4e89">700</text>
+      <text x="52" y="225" text-anchor="end" font-size="9" fill="#1d4e89">350</text>
+      <text x="708" y="50" text-anchor="start" font-size="9" fill="#2d6a4f">members</text>
+      <line x1="60" y1="230" x2="700" y2="230" stroke="#333"/>
+      <!-- Members: 45,130,220,350,480,650,820,1000,1150,1300 scale 1400 -->
+      <polyline fill="none" stroke="#2d6a4f" stroke-width="2.5" points="92,223 156,212 220,198 284,180 348,162 412,142 476,124 540,108 604,96 668,86"/>
+      <!-- Clinics: 15,30,45,70,95,130,165,210,260,320 scale 1400 same axis approx *4.375 -->
+      <polyline fill="none" stroke="#1d4e89" stroke-width="2.5" stroke-dasharray="6,4" points="92,228 156,226 220,224 284,220 348,216 412,210 476,204 540,198 604,192 668,186"/>
+      <circle cx="92" cy="223" r="3" fill="#2d6a4f"/>
+      <circle cx="668" cy="86" r="4" fill="#2d6a4f"/>
+      <circle cx="668" cy="186" r="4" fill="#1d4e89"/>
+      <text x="675" y="90" font-size="8" fill="#2d6a4f">1,300 members</text>
+      <text x="675" y="190" font-size="8" fill="#1d4e89">320 clinics</text>
+      <text x="92" y="248" text-anchor="middle" font-size="8">Y0.5</text>
+      <text x="220" y="248" text-anchor="middle" font-size="8">Y1.5</text>
+      <text x="348" y="248" text-anchor="middle" font-size="8">Y2.5</text>
+      <text x="476" y="248" text-anchor="middle" font-size="8">Y3.5</text>
+      <text x="604" y="248" text-anchor="middle" font-size="8">Y4.5</text>
+      <text x="668" y="248" text-anchor="middle" font-size="8">Y5.0</text>
+      <text x="380" y="268" text-anchor="middle" font-size="9" font-weight="bold">Solid = paying members · Dashed = VitProScan practices</text>
+    </svg>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- TABLE 1: Summary by scenario -->
+  <h2>Table 1 — Total Revenue &amp; Gross Profit (All Scenarios)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th class="left">Period</th>
+        <th class="left">Calendar</th>
+        <th>Scenario</th>
+        <th>Total Rev</th>
+        <th>Total GP</th>
+        <th>Clinics</th>
+        <th>Members</th>
+        <th>Scanner Units</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="scenario-cons"><td class="period">Y0.5</td><td class="left">Oct 26 – Mar 27</td><td>Conservative</td><td>$18,690</td><td>$12,590</td><td>10</td><td>32</td><td>11</td></tr>
+      <tr class="scenario-base"><td class="period">Y0.5</td><td class="left">Oct 26 – Mar 27</td><td>Base</td><td>$27,800</td><td>$19,000</td><td>15</td><td>45</td><td>14</td></tr>
+      <tr class="scenario-agg"><td class="period">Y0.5</td><td class="left">Oct 26 – Mar 27</td><td>Aggressive</td><td>$45,025</td><td>$31,525</td><td>22</td><td>63</td><td>18</td></tr>
+      <tr class="scenario-cons"><td class="period">Y1.0</td><td class="left">Apr 27 – Sep 27</td><td>Conservative</td><td>$44,940</td><td>$36,250</td><td>20</td><td>91</td><td>26</td></tr>
+      <tr class="scenario-base"><td class="period">Y1.0</td><td class="left">Apr 27 – Sep 27</td><td>Base</td><td>$66,800</td><td>$52,700</td><td>30</td><td>130</td><td>32</td></tr>
+      <tr class="scenario-agg"><td class="period">Y1.0</td><td class="left">Apr 27 – Sep 27</td><td>Aggressive</td><td>$107,800</td><td>$85,580</td><td>42</td><td>182</td><td>40</td></tr>
+      <tr class="scenario-cons"><td class="period">Y1.5</td><td class="left">Oct 27 – Mar 28</td><td>Conservative</td><td>$65,000</td><td>$51,465</td><td>28</td><td>154</td><td>25</td></tr>
+      <tr class="scenario-base"><td class="period">Y1.5</td><td class="left">Oct 27 – Mar 28</td><td>Base</td><td>$96,500</td><td>$76,750</td><td>45</td><td>220</td><td>31</td></tr>
+      <tr class="scenario-agg"><td class="period">Y1.5</td><td class="left">Oct 27 – Mar 28</td><td>Aggressive</td><td>$154,875</td><td>$123,600</td><td>58</td><td>308</td><td>39</td></tr>
+      <tr class="scenario-cons"><td class="period">Y2.0</td><td class="left">Apr 28 – Sep 28</td><td>Conservative</td><td>$103,610</td><td>$82,845</td><td>45</td><td>245</td><td>26</td></tr>
+      <tr class="scenario-base"><td class="period">Y2.0</td><td class="left">Apr 28 – Sep 28</td><td>Base</td><td>$154,200</td><td>$123,650</td><td>70</td><td>350</td><td>32</td></tr>
+      <tr class="scenario-agg"><td class="period">Y2.0</td><td class="left">Apr 28 – Sep 28</td><td>Aggressive</td><td>$248,500</td><td>$199,575</td><td>95</td><td>490</td><td>40</td></tr>
+      <tr class="scenario-cons"><td class="period">Y2.5</td><td class="left">Oct 28 – Mar 29</td><td>Conservative</td><td>$130,940</td><td>$105,080</td><td>62</td><td>336</td><td>25</td></tr>
+      <tr class="scenario-base"><td class="period">Y2.5</td><td class="left">Oct 28 – Mar 29</td><td>Base</td><td>$194,800</td><td>$156,700</td><td>95</td><td>480</td><td>31</td></tr>
+      <tr class="scenario-agg"><td class="period">Y2.5</td><td class="left">Oct 28 – Mar 29</td><td>Aggressive</td><td>$313,300</td><td>$252,280</td><td>130</td><td>672</td><td>39</td></tr>
+      <tr class="scenario-cons"><td class="period">Y3.0</td><td class="left">Apr 29 – Sep 29</td><td>Conservative</td><td>$171,650</td><td>$138,245</td><td>85</td><td>455</td><td>26</td></tr>
+      <tr class="scenario-base"><td class="period">Y3.0</td><td class="left">Apr 29 – Sep 29</td><td>Base</td><td>$255,500</td><td>$206,150</td><td>130</td><td>650</td><td>32</td></tr>
+      <tr class="scenario-agg"><td class="period">Y3.0</td><td class="left">Apr 29 – Sep 29</td><td>Aggressive</td><td>$411,125</td><td>$331,800</td><td>180</td><td>910</td><td>40</td></tr>
+      <tr class="scenario-cons"><td class="period">Y3.5</td><td class="left">Oct 29 – Mar 30</td><td>Conservative</td><td>$205,550</td><td>$165,905</td><td>105</td><td>574</td><td>25</td></tr>
+      <tr class="scenario-base"><td class="period">Y3.5</td><td class="left">Oct 29 – Mar 30</td><td>Base</td><td>$306,000</td><td>$247,350</td><td>165</td><td>820</td><td>31</td></tr>
+      <tr class="scenario-agg"><td class="period">Y3.5</td><td class="left">Oct 29 – Mar 30</td><td>Aggressive</td><td>$492,250</td><td>$397,850</td><td>220</td><td>1,148</td><td>39</td></tr>
+      <tr class="scenario-cons"><td class="period">Y4.0</td><td class="left">Apr 30 – Sep 30</td><td>Conservative</td><td>$249,450</td><td>$201,740</td><td>130</td><td>700</td><td>26</td></tr>
+      <tr class="scenario-base"><td class="period">Y4.0</td><td class="left">Apr 30 – Sep 30</td><td>Base</td><td>$371,500</td><td>$300,800</td><td>210</td><td>1,000</td><td>32</td></tr>
+      <tr class="scenario-agg"><td class="period">Y4.0</td><td class="left">Apr 30 – Sep 30</td><td>Aggressive</td><td>$597,875</td><td>$483,850</td><td>280</td><td>1,400</td><td>40</td></tr>
+      <tr class="scenario-cons"><td class="period">Y4.5</td><td class="left">Oct 30 – Mar 31</td><td>Conservative</td><td>$290,100</td><td>$234,975</td><td>175</td><td>805</td><td>25</td></tr>
+      <tr class="scenario-base"><td class="period">Y4.5</td><td class="left">Oct 30 – Mar 31</td><td>Base</td><td>$432,000</td><td>$350,250</td><td>260</td><td>1,150</td><td>31</td></tr>
+      <tr class="scenario-agg"><td class="period">Y4.5</td><td class="left">Oct 30 – Mar 31</td><td>Aggressive</td><td>$694,750</td><td>$562,850</td><td>350</td><td>1,610</td><td>39</td></tr>
+      <tr class="scenario-cons"><td class="period">Y5.0</td><td class="left">Apr 31 – Sep 31</td><td>Conservative</td><td>$344,000</td><td>$268,150</td><td>220</td><td>910</td><td>26</td></tr>
+      <tr class="scenario-base"><td class="period">Y5.0</td><td class="left">Apr 31 – Sep 31</td><td>Base</td><td>$512,500</td><td>$415,950</td><td>320</td><td>1,300</td><td>32</td></tr>
+      <tr class="scenario-agg"><td class="period">Y5.0</td><td class="left">Apr 31 – Sep 31</td><td>Aggressive</td><td>$824,875</td><td>$678,040</td><td>550</td><td>1,820</td><td>40</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TABLE 2: Base product breakdown -->
+  <h2>Table 2 — Base Scenario: Revenue &amp; Gross Profit by Product</h2>
+  <table>
+    <thead>
+      <tr>
+        <th class="left">Period</th>
+        <th>A Rev</th>
+        <th>A GP</th>
+        <th>B Rev</th>
+        <th>B GP</th>
+        <th>C Rev</th>
+        <th>C GP</th>
+        <th>Total Rev</th>
+        <th>Total GP</th>
+        <th>Inventory</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="period">Y0.5</td><td>$1,300</td><td class="neg">−$800</td><td>$18,000</td><td>$12,600</td><td>$8,500</td><td>$7,200</td><td>$27,800</td><td>$19,000</td><td>180</td></tr>
+      <tr><td class="period">Y1.0</td><td>$2,800</td><td>$400</td><td>$42,000</td><td>$33,600</td><td>$22,000</td><td>$18,700</td><td>$66,800</td><td>$52,700</td><td>120</td></tr>
+      <tr><td class="period">Y1.5</td><td>$3,500</td><td>$600</td><td>$58,000</td><td>$46,400</td><td>$35,000</td><td>$29,750</td><td>$96,500</td><td>$76,750</td><td>100</td></tr>
+      <tr><td class="period">Y2.0</td><td>$4,200</td><td>$900</td><td>$95,000</td><td>$76,000</td><td>$55,000</td><td>$46,750</td><td>$154,200</td><td>$123,650</td><td>100</td></tr>
+      <tr><td class="period">Y2.5</td><td>$4,800</td><td>$1,100</td><td>$118,000</td><td>$94,400</td><td>$72,000</td><td>$61,200</td><td>$194,800</td><td>$156,700</td><td>90</td></tr>
+      <tr><td class="period">Y3.0</td><td>$5,500</td><td>$1,400</td><td>$155,000</td><td>$124,000</td><td>$95,000</td><td>$80,750</td><td>$255,500</td><td>$206,150</td><td>90</td></tr>
+      <tr><td class="period">Y3.5</td><td>$6,000</td><td>$1,600</td><td>$185,000</td><td>$148,000</td><td>$115,000</td><td>$97,750</td><td>$306,000</td><td>$247,350</td><td>85</td></tr>
+      <tr><td class="period">Y4.0</td><td>$6,500</td><td>$1,800</td><td>$225,000</td><td>$180,000</td><td>$140,000</td><td>$119,000</td><td>$371,500</td><td>$300,800</td><td>85</td></tr>
+      <tr><td class="period">Y4.5</td><td>$7,000</td><td>$2,000</td><td>$260,000</td><td>$208,000</td><td>$165,000</td><td>$140,250</td><td>$432,000</td><td>$350,250</td><td>80</td></tr>
+      <tr><td class="period">Y5.0</td><td>$7,500</td><td>$2,200</td><td>$310,000</td><td>$248,000</td><td>$195,000</td><td>$165,750</td><td>$512,500</td><td>$415,950</td><td>80</td></tr>
+      <tr style="font-weight:bold;background:#e8f5e9"><td class="period">5-yr total</td><td>$49,100</td><td>$13,000</td><td>$1,466,000</td><td>$1,173,000</td><td>$702,500</td><td>$596,900</td><td>$2,217,600</td><td>$1,782,900</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p class="chart-caption">A = Scanner Kit · B = VitProScan · C = Member ID &amp; ViT · Inventory = scanner kits on hand (EOY period)</p>
+
+  <!-- TABLE 3: 5-year cumulative -->
+  <h2>Table 3 — 5-Year Cumulative Totals</h2>
+  <table>
+    <thead>
+      <tr>
+        <th class="left">Scenario</th>
+        <th>Total Revenue</th>
+        <th>Total Gross Profit</th>
+        <th>Y5 Clinics</th>
+        <th>Y5 Members</th>
+        <th>Peak Inventory</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="left">Conservative</td><td>~$1,540,000</td><td>~$1,186,000</td><td>220</td><td>910</td><td>180 kits</td></tr>
+      <tr style="background:#f0f7f4"><td class="left"><strong>Base</strong></td><td><strong>~$2,217,000</strong></td><td><strong>~$1,789,000</strong></td><td><strong>320</strong></td><td><strong>1,300</strong></td><td><strong>230 kits</strong></td></tr>
+      <tr><td class="left">Aggressive</td><td>~$3,390,000</td><td>~$2,772,000</td><td>550</td><td>1,820</td><td>280 kits</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    Freedom Paws Wellness LLC · Planning estimates only · Not financial or veterinary advice · June 2026<br />
+    Source: docs/Freedom-Paws-Product-Lines-6mo-Projections-Y0.5-Y5.csv
+  </div>
+
+</body>
+</html>

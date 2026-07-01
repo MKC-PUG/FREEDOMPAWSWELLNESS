@@ -225,6 +225,24 @@
 - [ ] Grant landing page updates with traction metrics
 - [ ] `.org` community site (future)
 
+### Defensive domains — wire **after build + public launch** (not a launch blocker)
+
+**Own now; redirect wiring later.** No app code or Vercel env changes required until this phase.
+
+| Domain | Annual cost | Post-launch redirect target | Notes |
+|--------|-------------|-------------------------------|--------|
+| `freedompawz.com` | ~$11 | `https://freedompawsinc.com` | Typo defense only — never promote “Pawz” spelling |
+| `vitproscan.com` | ~$11 | `https://app.freedompawsinc.com/vit-pro` | DVM **ViT Pro / VitProScan** brand — vet outreach, not consumer Photo Booth |
+
+- [ ] **Now (optional):** Registrar “forward” to targets above — works without Vercel; swap to proper 301 when ready
+- [ ] **Post-launch:** Add both domains in Vercel → Project → Domains (or keep registrar 301)
+- [ ] **Post-launch:** If on Vercel, add host-based 301 in `next.config.ts` or `vercel.json` (eng session)
+- [ ] **Post-launch:** Confirm redirects on iPhone (no mixed-content / wrong host in PWA)
+- [ ] **Do not** add either domain to Framer CTAs, affiliate apps, or trademark specimens until counsel confirms use
+- [ ] **Skip:** `freedompaws.com` ($8.7k), `vitpro.com` ($8k) — not required
+
+**Free subdomains (same DNS pass as `app.` — no extra purchase):** optional `scan.freedompawsinc.com` → `/diagnostics` for consumer ViT marketing.
+
 ---
 
 # DEPARTMENT 5 — Adoption Network & Shelter Partnerships

@@ -339,6 +339,10 @@ Founder beta (go2rtc + Mac + tunnel) stays for **your** dog until cloud relay sh
 - [ ] 5–10 beta testers per module (ViT, Photo Booth, relay)
 - [ ] Coordinated Framer + app launch day
 - [ ] Post-launch: weekly ViT admin queue, relay cost monitoring, FAQ
+- [ ] **Post-launch (P5 — not launch blocker):** Wire defensive domain redirects — see `Freedom-Paws-Founder-Master-Schedule-Checklist-June-2026.md` → Department 4 → Defensive domains
+  - [ ] `freedompawz.com` → `https://freedompawsinc.com`
+  - [ ] `vitproscan.com` → `https://app.freedompawsinc.com/vit-pro` (VitProScan / DVM line)
+  - [ ] Optional: `scan.freedompawsinc.com` → `/diagnostics` (free CNAME on `freedompawsinc.com`)
 
 ---
 

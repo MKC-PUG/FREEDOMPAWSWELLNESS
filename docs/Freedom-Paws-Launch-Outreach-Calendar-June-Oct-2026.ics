@@ -1,0 +1,243 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Freedom Paws Wellness//Launch Outreach Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Freedom Paws — Oct 2026 Launch Outreach
+X-WR-TIMEZONE:America/Chicago
+BEGIN:VTIMEZONE
+TZID:America/Chicago
+BEGIN:STANDARD
+DTSTART:20261101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0600
+TZNAME:CST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20260308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+TZOFFSETFROM:-0600
+TZOFFSETTO:-0500
+TZNAME:CDT
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:fp-outreach-recurring@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;TZID=America/Chicago:20260601T100000
+DTEND;TZID=America/Chicago:20260601T120000
+RRULE:FREQ=WEEKLY;UNTIL=20261005T235959Z;BYDAY=MO
+SUMMARY:Partner Outreach (2 hr block)
+DESCRIPTION:Weekly founder block for affiliate applications\, follow-ups\, and URL QA. See vendor plan in Freedom Paws documents folder.
+LOCATION:Freedom Paws founder calendar
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-jun-setup@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260602
+DTEND;VALUE=DATE:20260603
+SUMMARY:Setup — Copy vendor plan + CRM export
+DESCRIPTION:Copy Freedom-Paws-Vendor-Outreach doc to founder binder. Export or open CRM CSV (docs/marketing/Freedom-Paws-CRM-Import-Ready-June-2026.csv). Confirm partners@freedompawsinc.com is ready to send.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w1-print-pod@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260616
+DTEND;VALUE=DATE:20260617
+SUMMARY:Week 1 — Apply to 3 print POD partners
+DESCRIPTION:Apply: Shutterfly\, Printful\, VistaPrint affiliate programs. Send Week 1 outreach emails (see email draft doc). Products: mug\, pillow\, non-toxic blanket\, greeting cards. Website URL: https://app.freedompawsinc.com/photobooth
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w1-framing@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260618
+DTEND;VALUE=DATE:20260619
+SUMMARY:Week 1 — Framing B2B intro emails
+DESCRIPTION:Email Framebridge + Simply Framed partnerships teams. Attach Photo Booth screenshot + link to /photobooth/partners standards page.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w2-followup@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260623
+DTEND;VALUE=DATE:20260624
+SUMMARY:Week 2 — Follow up print POD applications
+DESCRIPTION:Check approval status for Shutterfly\, Printful\, VistaPrint. Re-send or apply via alternate network (ShareASale\, Impact\, CJ) if no response in 7 days.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w3-safepicks@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260630
+DTEND;VALUE=DATE:20260701
+SUMMARY:Week 3 — Safe Picks affiliate applications
+DESCRIPTION:Apply: West Paw\, Native Pet\, The Honest Kitchen affiliates. Map products to protocol slugs when approved.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w4-openfarm@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260707
+DTEND;VALUE=DATE:20260708
+SUMMARY:Week 4 — Open Farm + paste first URLs
+DESCRIPTION:Apply Open Farm affiliate. If any print POD approved\, generate tracked links and add to Vercel preview env (NEXT_PUBLIC_FP_PHOTO_AFF_*_URL).
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-milestone-selfserve@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260707
+DTEND;VALUE=DATE:20260708
+SUMMARY:Milestone — Self-serve affiliate window (T-12 wks)
+DESCRIPTION:Target: all print POD + tier-1 Safe Picks applications submitted by now (12 weeks before Oct 1 launch).
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w5-insurance@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260714
+DTEND;VALUE=DATE:20260715
+SUMMARY:Week 5 — Insurance affiliate applications
+DESCRIPTION:Apply: Pets Best + Spot pet insurance affiliates. Complete compliance questionnaires. Request quote\, lost-dog\, and urgent-care deep links.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w5-telehealth@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260716
+DTEND;VALUE=DATE:20260717
+SUMMARY:Week 5 — Vetster telehealth affiliate
+DESCRIPTION:Apply Vetster affiliate or provider network. Request integrative/holistic vet filter and book-consult referral URL.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-jul-preview-urls@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260721
+DTEND;VALUE=DATE:20260722
+SUMMARY:July — First 5 affiliate URLs in Vercel preview
+DESCRIPTION:Paste approved tracking URLs into Vercel preview environment. Test each link on iPhone PWA from Photo Booth export flow.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-jul-sample-order@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260724
+DTEND;VALUE=DATE:20260725
+SUMMARY:July — Order sample mug + non-toxic blanket
+DESCRIPTION:Founder QA expense: order sample photo mug and non-toxic blanket through approved partner. Verify ink/material safety before promoting blanket line.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w7-blanket-sku@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260728
+DTEND;VALUE=DATE:20260729
+SUMMARY:Week 7 — Blanket non-toxic SKU negotiation
+DESCRIPTION:Follow up Printful/Shutterfly on pet-safe blanket SKU. Get written confirmation on inks and dyes. Chase all pending affiliate applications.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w8-iphone-qa@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260804
+DTEND;VALUE=DATE:20260805
+SUMMARY:Week 8 — iPhone affiliate link QA
+DESCRIPTION:Click every affiliate link on iPhone PWA: Photo Booth export drawer\, /photobooth/partners\, Safe Picks\, protocol pages.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-milestone-staging@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260820
+DTEND;VALUE=DATE:20260821
+SUMMARY:Milestone — Staging URLs complete (T-6 wks)
+DESCRIPTION:All approved affiliate tracking URLs should be in Vercel preview/staging by mid-August. Engineering: confirm Order replaces Launching soon per partner.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w9-attorney@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260811
+DTEND;VALUE=DATE:20260812
+SUMMARY:Week 9 — Schedule attorney disclosure review
+DESCRIPTION:Send counsel: /photobooth/partners\, Safe Picks pages\, insurance/telehealth CTAs\, Token Shop Terms/Privacy. Request FTC affiliate disclosure sign-off.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-aug-minted@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260818
+DTEND;VALUE=DATE:20260819
+SUMMARY:August — Minted greeting cards affiliate
+DESCRIPTION:Apply Minted (or Tiny Prints) for Christmas/greeting cards line. Seasonal push window: Sep–Dec.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-aug-framer-cta@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260825
+DTEND;VALUE=DATE:20260826
+SUMMARY:August — Framer marketing site CTAs live
+DESCRIPTION:Update Framer marketing site CTAs to point to live Photo Booth. DNS prep for app subdomain if needed.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w11-llc-tm@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260825
+DTEND;VALUE=DATE:20260826
+SUMMARY:Week 11 — LLC + trademark filed (launch gate)
+DESCRIPTION:File LLC and trademark applications if not already done. Required for public launch gate alongside attorney Terms/Privacy.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w12-stripe@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260901
+DTEND;VALUE=DATE:20260902
+SUMMARY:Week 12 — Stripe AI packs (if counsel approves)
+DESCRIPTION:Optional at launch: enable Stripe for AI Magic Look credit packs. Only proceed after attorney disclosure review complete.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-milestone-attorney@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260901
+DTEND;VALUE=DATE:20260902
+SUMMARY:Milestone — Attorney FTC sign-off (T-4 wks)
+DESCRIPTION:Target: affiliate disclosure language approved on all surfaces before production URL flip.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-sep-production-urls@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260908
+DTEND;VALUE=DATE:20260909
+SUMMARY:September — Production affiliate URLs live
+DESCRIPTION:Move all launch-tier NEXT_PUBLIC_FP_* URLs to Vercel production. Disable Launching soon per approved partner.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-milestone-prod-urls@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260915
+DTEND;VALUE=DATE:20260916
+SUMMARY:Milestone — Production URLs + flip CTAs (T-2 wks)
+DESCRIPTION:Mid-September: all launch-tier affiliate links live in production. Full iPhone PWA click-through test.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-sep-iphone-test@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260916
+DTEND;VALUE=DATE:20260917
+SUMMARY:September — Full iPhone PWA affiliate test
+DESCRIPTION:End-to-end test: Photo Booth → export → partner link → disclosure visible. ViT → insurance/telehealth CTAs. Protocol → Safe Picks.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w15-launch-qa@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20260922
+DTEND;VALUE=DATE:20260923
+SUMMARY:Week 15 — Launch QA checklist
+DESCRIPTION:Run full launch QA checklist. Seed Photo Booth to influencers/testers. Verify SITE_MODE=public prep and DNS.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-launch-public@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20261001
+DTEND;VALUE=DATE:20261002
+SUMMARY:🚀 Public launch — Oct 1 2026
+DESCRIPTION:Flip SITE_MODE=public. DNS live. Monitor: affiliate clicks\, Photo Booth sessions\, Token Shop conversions. Do NOT add new vendor categories in first month — stabilize ops.
+END:VEVENT
+BEGIN:VEVENT
+UID:fp-w16-post-launch@freedompawsinc.com
+DTSTAMP:20260529T180000Z
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261006
+SUMMARY:Week 16 — Post-launch affiliate verification
+DESCRIPTION:Click every affiliate link on production iPhone PWA. Log first-week metrics. Weekly monitoring cadence begins.
+END:VEVENT
+END:VCALENDAR
