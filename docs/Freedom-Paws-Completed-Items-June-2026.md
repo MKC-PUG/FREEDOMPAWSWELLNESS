@@ -1,224 +1,265 @@
 # Freedom Paws Wellness
-# Completed Items — Master Record (Through June 5, 2026)
+# Completed Items — Master Record (Through July 3, 2026)
 
-**Document purpose:** Single record of what is **done and validated** so launch planning does not redo settled work.
+**Document purpose:** Single record of what is **done and validated** so launch planning, grants, counsel, and binders do not redo settled work.
 
-**Date:** June 6, 2026 (updated)  
-**⚠️ For current priorities and v65 status:** See **`Freedom-Paws-Launch-Master-Checklist-June-2026.md`**.
+**Last updated:** July 3, 2026  
+**For current priorities:** See `Freedom-Paws-Launch-Master-Checklist-June-2026.md` and `Freedom-Paws-Critical-Path-Action-Packets-June-2026.md` (Wellness folder).
 
 **Project:** `freedompaws-app`  
 **GitHub:** `MKC-PUG/FREEDOMPAWSWELLNESS`  
-**Current PWA release:** **v53** *(historical snapshot — production is v65)*  
+**Current PWA release:** **v96**  
 **Production:** `https://app.freedompawsinc.com` (preview mode; DNS live)
 
-**Related:** `Freedom-Paws-Launch-Todo-Prioritized-June-2026.md`
+**Related:** `Freedom-Paws-Founder-Session-Log-June-2026.md` · `Freedom-Paws-ID-Chip-Final-Sign-Off-Checklist-June-2026.md`
 
 ---
 
 ## Table of contents
 
-1. [Platform & PWA](#1-platform--pwa)
-2. [ViT Diagnostics](#2-vit-diagnostics)
-3. [Protocols & content](#3-protocols--content)
-4. [SuperBud Photo Booth](#4-superbud-photo-booth)
-5. [Token Shop](#5-token-shop)
-6. [Monitor My Dog](#6-monitor-my-dog)
-7. [Navigation & shared UI](#7-navigation--shared-ui)
-8. [Documentation](#8-documentation)
-9. [Deploy history (v33–v40)](#9-deploy-history-v33v40)
-10. [Validated on iPhone (user-confirmed)](#10-validated-on-iphone-user-confirmed)
-11. [Parked / beta-only (working for you, not launch-ready for all members)](#11-parked--beta-only)
+1. [Executive summary](#1-executive-summary)
+2. [Launch gates — July 3 snapshot](#2-launch-gates--july-3-snapshot)
+3. [Platform & PWA](#3-platform--pwa)
+4. [App design system (July 2026)](#4-app-design-system-july-2026)
+5. [ViT Diagnostics (Track A)](#5-vit-diagnostics-track-a)
+6. [Freedom Paws ID — Track 1 biometric](#6-freedom-paws-id--track-1-biometric)
+7. [Freedom Paws ID — Track 2 microchip](#7-freedom-paws-id--track-2-microchip)
+8. [TN adoption network (L7)](#8-tn-adoption-network-l7)
+9. [Protocols, Photo Booth, Token Shop, My Pets](#9-protocols-photo-booth-token-shop-my-pets)
+10. [Founder validation — iPhone smoke tests](#10-founder-validation--iphone-smoke-tests)
+11. [Founder documents & ops packets (July 2026)](#11-founder-documents--ops-packets-july-2026)
+12. [Deploy history (v53–v96 highlights)](#12-deploy-history-v53v96-highlights)
+13. [Not done / blocked / deferred](#13-not-done--blocked--deferred)
+14. [Summary counts](#14-summary-counts)
 
 ---
 
-## 1. Platform & PWA
+## 1. Executive summary
+
+| Area | Status (Jul 3) |
+|------|----------------|
+| **Track 1 biometric ID** | **E2E complete** — enroll, found, match, owner email, ViT bridge |
+| **Track 2 chip scan MVP** | **Live + founder hardware QA complete** (WorldScan + PetScanner paste) |
+| **ViT production smoke** | **Tests 1, 2, 4 PASS** (Jul 1, 2026) on v96 |
+| **TN adoption portal** | **E2E PASS** (New Leash on Life, Jun 30) |
+| **App UI polish** | **Design system rolled out** across client-facing routes |
+| **Public launch** | **Blocked on L5** attorney Terms + Privacy + biometric consent |
+
+---
+
+## 2. Launch gates — July 3 snapshot
+
+| Gate | Status | Notes |
+|------|--------|-------|
+| L1 ViT iPhone prod | ✅ | Smoke Tests 1–2 PASS Jul 1; lexicon 15/15 |
+| L2 Photo Booth sign-off | ✅ | Founder validated |
+| L3–L4 Framer | ✅ | CTAs wired |
+| L6 Copyright filed | ✅ | June 24, 2026 (6 works) |
+| L7 Adoption E2E | ✅ | Partner portal + public directory |
+| L8 Build/deploy | ✅ | v96 on production |
+| **Track 1 biometric + found E2E** | ✅ | FP-A6FFE6CD Jun 27–28; FP-B9B377D6 Jul 1 |
+| **Track 2 `/id/scan` + hardware QA** | ✅ | WorldScan Jun 28; PetScanner C2.3 Jul 3 |
+| **L5 Terms + Privacy (attorney)** | 🔴 **Open — critical path** | Blocks public mode + partner Email 1 at scale |
+| AAHA partnership inquiry | 🔴 Not sent | Packet B ready |
+| First TN partner live listing | 🔴 Not sent | Memphis Email 1 after L5 |
+
+---
+
+## 3. Platform & PWA
 
 | Item | Status | Notes |
 |------|--------|-------|
 | Next.js app on Vercel (HTTPS) | ✅ | Preview mode; not publicly indexed |
-| PWA manifest + icons | ✅ | `public/manifest.json`, maskable icon |
-| Service worker + cache versioning | ✅ | `public/sw.js`, `PWA_VERSION` in `lib/pwa-version.ts` |
-| Install banner + update banner | ✅ | `ServiceWorkerRegister`, `PwaUpdateBanner` |
-| Shared Navbar (all pages) | ✅ | `app/components/Navbar.tsx` |
-| Homepage lake hero + 6 feature cards | ✅ | ViT, My Pets, Protocols, Token Shop, Photo Booth, Monitor |
+| PWA manifest + icons | ✅ | Install banner; Add to Home Screen |
+| Service worker + cache versioning | ✅ | `freedom-paws-v96`; network-first; `/id/` network-only |
+| Shared Navbar + footer | ✅ | All pages |
+| Homepage hero + feature cards | ✅ | Lake hero; 6 feature cards |
 | `robots.ts` preview blocking | ✅ | |
-| Footer © + preview notice | ✅ | |
-| Local mobile test script | ✅ | `npm run start:mobile` |
-| BackLink component | ✅ | Large tap targets |
+| Preview / private notice | ✅ | Footer banner |
+| App release version label | ✅ | e.g. **App release v96** on diagnostics |
+| BackLink / touch targets | ✅ | v95+ `touch-manipulation`, 44px+ hit areas |
 
 ---
 
-## 2. ViT Diagnostics
+## 4. App design system (July 2026)
+
+**Commits:** `dfb6f37`, `8d51834`, `27bc08f` — deployed production.
+
+| Component | Location |
+|-----------|----------|
+| `PageShell`, `PageHeader`, `SectionCard` | `app/components/ui/` |
+| `PrimaryButton`, `SecondaryButton`, `EyebrowLabel` | Gold (wellness) / emerald (ID) |
+| `EnrollStepper` | 9-step enroll progress bar |
+
+**Pages updated:** Home, My Pets, ViT Diagnostics, ID enroll/hub/found/scan/settings/lookup/shelter/match/public card, Adopt TN, wellness hub + safe-products + partners, protocols + detail, token shop, photobooth + help + partners, legal shell.
+
+**Deferred (utilitarian by design):** `/ops/*` uses `OpsPageShell`.
+
+---
+
+## 5. ViT Diagnostics (Track A)
 
 | Item | Status | Notes |
 |------|--------|-------|
-| `/diagnostics` member UI | ✅ | Upload, symptoms, analyze, results |
-| Symptom lexicon — all 10 spec categories | ✅ | v35; `symptom:test:all` |
-| Top-2 protocol recommendations + overlap pairs | ✅ | e.g. senior → Patriot + Calm |
-| OpenAI vision — photo | ✅ | `lib/ai/vision-analyze.ts` |
-| OpenAI vision — short video (5 frames) | ✅ | v36; client frame extraction |
-| Image / video quality gate | ✅ | v37; blocks analyze on fail |
-| Premium results panel | ✅ | Confidence bars, CTAs, matched terms |
-| “How ViT Diagnostics works” explainer | ✅ | v38 collapsible |
-| Vet urgency banner | ✅ | High-risk combinations |
-| Symptom feedback API | ✅ | v34 `/tmp` fix on Vercel |
-| Admin symptom review route | ✅ | `/admin/symptoms` |
-| App release version label on screen | ✅ | Shows `PWA_VERSION` under title |
-| Phase 0 + 1 + 2b roadmap items | ✅ | Per `ViT-Diagnostics-Vision-and-Roadmap.md` |
-
-**Remaining (not done):** Confirm `OPENAI_API_KEY` on Vercel production; Phase 3 accounts/storage.
+| `/diagnostics` wellness flow | ✅ | Upload, symptoms, analyze, protocols |
+| `/diagnostics?mode=identity` | ✅ | Identity-only capture |
+| `mode=both` wellness + ID | ✅ | Checkbox when `petId` present; v96 identity-first results |
+| Symptom lexicon — all categories | ✅ | `symptom:test:all` 15/15 |
+| OpenAI vision — photo + video | ✅ | Quality gate; region gates v94+ |
+| Region gates | ✅ | `gateEyes`, `gateFace`, `gateGait`; `selectGaitFrames()` |
+| petId preservation on upload | ✅ | v96 — Direct Upload + URL cleanup |
+| Combined results layout | ✅ | v96 — full-width; auto-scroll to ID panel |
+| iOS tap responsiveness | ✅ | v95 |
+| Admin symptom review | ✅ | `/admin/symptoms` |
+| Vet urgency banner + disclaimers | ✅ | Pending counsel final copy (L5) |
 
 ---
 
-## 3. Protocols & content
+## 6. Freedom Paws ID — Track 1 biometric
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Protocol Overview page | ✅ | `/protocols` — 10 protocols |
-| Protocol detail pages (slug routes) | ✅ | `/protocols/[slug]` with images + copy |
-| Protocol registry + shop alignment | ✅ | `protocol-registry.ts`, slugs |
-| Detail pages built include | ✅ | max-movement, freedom-calm, liver-kidney-detox, heart-strong, patriot-immune, gut-balance, allergy-shield, clear-vision, fresh-smile-dental, infrared-spine (verify each on device) |
+| 9-step `/id/enroll` wizard | ✅ | Consent v2026-06-10 |
+| Enroll retake / duplicate fix | ✅ | v94 — best-score validation; Remove on review |
+| QR pet card `/id/p/[slug]` | ✅ | |
+| `/id/found` intake | ✅ | |
+| `/id/match` human review queue | ✅ | fp_ops; threshold 0.72 |
+| `/id/settings` revoke/delete | ✅ | |
+| `/id/shelter` dashboard | ✅ | |
+| ViT → enroll bridge | ✅ | v89 — Save to ID profile |
+| pgvector similarity search | ✅ | |
+| **Validated enrollments** | ✅ | FP-A6FFE6CD (Jun 27); **FP-B9B377D6** (Jul 1) |
+| **Found → Match → Email E2E** | ✅ | Jun 27 — New Leash; FP-A6FFE6CD @ 90% |
+| **Found → Match smoke** | ✅ | Jul 1 — FP-B9B377D6 @ 89% in queue |
 
 ---
 
-## 4. SuperBud Photo Booth
+## 7. Freedom Paws ID — Track 2 microchip
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Phase 1 — themes, share, save | ✅ | `/photobooth` |
-| Unified editor (canvas-first) | ✅ | v31 unified editor |
-| Me & My Pup dual portraits | ✅ | Multiple frame variants |
-| Pan / zoom / adjust pet (all themes) | ✅ | Phase A |
-| Background removal (beta) | ✅ | `@imgly/background-removal` client-side |
-| Photo Booth help page | ✅ | `/photobooth/help` |
-| Phase 2 remaining polish | ⏳ | Surprise Me, sparkle, etc. — see roadmap |
+| Migration `014_microchip_track2.sql` | ✅ | Applied Supabase |
+| `/id/scan` MVP | ✅ | v91–v93 — validate, link, FP match |
+| `/id/lookup` AAHA link-out | ✅ | External tab; AVID branch note |
+| Chip on My Pets + ID settings | ✅ | v93 |
+| Found intake scan hint | ✅ | v93 |
+| APIs | ✅ | validate, link, lookup, scan-event |
+| **WorldScan Plus Day 1** | ✅ | Jun 28 — COM3 @ 9600; test tag `985141007711681` |
+| **Production validate + link** | ✅ | Buddy · FP-A6FFE6CD |
+| **PetScanner BLE paste (C2.3)** | ✅ | **Jul 3, 2026** — same test tag → FP match |
+| HID wedge / Web Serial (C2.1/C2.2) | ⏳ Optional | WorldScan serial validated Jun 28 |
+| AAHA API embed | 🔴 | After partnership |
+| Retail scanner kit ($129) | 🔴 | Target Jan 2027 |
+| `/id/kit` Token Shop SKU | 🔴 | Planned |
 
 ---
 
-## 5. Token Shop & Xaman checkout
+## 8. TN adoption network (L7)
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Canonical shop `/token-shop` | ✅ | App = source of truth |
-| Protocol catalog + price sheet | ✅ | `lib/shop/protocol-catalog.ts`, docs CSV |
-| Live XRP pricing (CoinGecko) | ✅ | `/api/pricing/live` |
-| XUMM payload + status APIs | ✅ | v46–v52; Payment omit `Account` (603 fix) |
-| Vercel env (XUMM + treasury + app URL) | ✅ | Task #2 — June 6 |
-| **iPhone Xaman payment (Mainnet)** | ✅ | Task #3 — Spending → treasury; Max Movement unlocked |
-| Device unlock (`localStorage`) | ✅ | `lib/shop/unlocks.ts`; v53 resume polling |
-| RLUSD pay button | ⏳ | Add `XRPL_RLUSD_ISSUER` on Vercel (Task A) |
-| Stripe checkout | ⏳ | Task C |
-| Server-side unlock / webhook | ⏳ | Task C |
+| Partner portal | ✅ | `shelter.freedompawsinc.com/partner` |
+| Public TN directory | ✅ | `/adopt/tn` |
+| Ops adoption CRM | ✅ | `/ops/adoption` — 6 TN pilots |
+| **E2E proof** | ✅ | New Leash on Life listing live (Jun 30) |
+| Memphis / 5 other pilots Email 1 | 🔴 | After L5 gate |
+| n8n outreach automation | 🔴 | Stays **Inactive** until public mode |
 
 ---
 
-## 6. Monitor My Dog
+## 9. Protocols, Photo Booth, Token Shop, My Pets
 
-| Item | Status | Notes |
-|------|--------|-------|
-| `/monitor` — setup wizard + live view | ✅ | v39–v40 |
-| go2rtc `stream.html` iframe player | ✅ | iPhone WebRTC |
-| MJPEG / HLS fallbacks in player | ✅ | |
-| `/monitor/help` troubleshooting | ✅ | v40 |
-| Wyze v3 RTSP setup (user) | ✅ | Firmware 4.50.16.6242 |
-| Home live view (Safari + local IP) | ✅ | `http://MAC:3000/monitor` |
-| Away live view (PWA + cellular) | ✅ | Cloudflare tunnel + `https://` stream URL |
-| Pan/tilt | ✅ | Wyze app (not in Freedom Paws) |
-| Scripts: `start-home.sh`, `start-tunnel.sh` | ✅ | `scripts/monitor/` |
-| **Production cloud relay for all members** | ❌ | **Required at launch — not done** |
+| Module | Status | Notes |
+|--------|--------|-------|
+| **Protocols** | ✅ | 10 protocols; detail pages; design system Jul 2026 |
+| **Photo Booth** | ✅ | Unified editor, cutout, themes; help + partners pages polished |
+| **Token Shop** | ✅ | Xaman XRP Mainnet; device unlock; design system Jul 2026 |
+| **My Pets** | ✅ | Server sync; ViT history; vault; ViT Scan with petId when pets exist |
+| **Monitor** | 🟡 Beta only | Home/away works for founder; **no cloud relay for members** |
+| **Wellness hub** | ✅ | `/wellness`, safe-products, partners — design system Jul 2026 |
 
 ---
 
-## 7. Navigation & shared UI
+## 10. Founder validation — iPhone smoke tests
 
-| Item | Status | Notes |
-|------|--------|-------|
-| Navbar: Home, ViT, My Pets, Protocols, Token Shop, Monitor | ✅ | |
-| ConnectWithUs / social links | ✅ | Homepage footer |
-| Preview deploy protections | ✅ | `lib/site-mode.ts`, docs |
-
----
-
-## 8. Documentation
-
-| Document | Status |
-|----------|--------|
-| `ViT-Diagnostics-Vision-and-Roadmap.md` | ✅ |
-| `Freedom-Paws-Symptom-Lexicon-Admin-Guide.md` | ✅ |
-| `Photo-Booth-Phase-1-Roadmap.md` | ✅ |
-| `Photo-Booth-Phase-2-Roadmap.md` | ✅ |
-| `Photo-Booth-Me-And-My-Pup-Roadmap.md` | ✅ |
-| `Pet-Monitor-MVP-Roadmap.md` | ✅ Updated June 2026 |
-| `Monitor-Equipment-Shopping-Guide.md` | ✅ v3 camera guidance |
-| `Wyze-Monitor-Connect-Guide.md` | ✅ |
-| `Monitor-Phase-2-Relay-Guide.md` | ✅ Tunnel beta |
-| `Conversation-Review-ViT-Framer-and-Roadmap-May-2026.md` | ✅ |
-| `Freedom-Paws-Master-Business-Plan-and-Roadmap.md` | ✅ |
-| `PWA-Setup.md`, `Deploy-and-Brand-Protection.md` | ✅ |
-| `Freedom-Paws-Launch-Todo-Prioritized-June-2026.md` | ✅ This session |
-| `Freedom-Paws-Completed-Items-June-2026.md` | ✅ This file |
-
----
-
-## 9. Deploy history (v33–v53)
-
-| Version | Focus |
-|---------|--------|
-| **v33–v40** | ViT polish; Monitor home/away beta |
-| **v41–v42** | ViT visual observations; SuperBud hero |
-| **v43–v45** | Token Shop P0; XUMM scaffold; config-status |
-| **v46–v52** | XUMM 603 fixes; treasury validation; Mainnet payment |
-| **v53** | Resume Xaman polling on iOS return |
-
----
-
-## 10. Validated on iPhone (user-confirmed)
+### ViT Track 1 — July 1, 2026 (v96) — **ALL PASS**
 
 | Test | Result |
 |------|--------|
-| ViT — senior cognitive symptoms | ✅ Patriot #1 + Calm #2 |
-| ViT — multi-symptom cases | ✅ |
-| ViT — photo + video upload | ✅ |
-| ViT — quality gate “Good for AI analysis” | ✅ |
-| PWA install + refresh banner | ✅ |
-| Photo Booth — themes + share | ✅ |
-| Token Shop — Xaman XRP Mainnet payment | ✅ Max Movement; ✓ Unlocked |
-| Monitor — home live view (go2rtc) | ✅ ● Live, RTC |
-| Monitor — away live view (5G, Wi‑Fi off) | ✅ ● Live, Away mode banner |
-| Wyze app — pan/tilt | ✅ |
+| **Test 1** — Identity capture + enroll | ✅ **FP-B9B377D6** issued |
+| **Test 2** — Wellness + ID combined | ✅ Identity panel first; Eyes/Face regions |
+| **Test 4** — Found → Match | ✅ FP-B9B377D6 @ 89% in ops queue |
+
+### Prior validated (reference)
+
+| Test | Result | Date |
+|------|--------|------|
+| Track 1 enroll | FP-A6FFE6CD | Jun 27 |
+| Found → Match → owner email | FP-A6FFE6CD @ 90% | Jun 27 |
+| Token Shop Xaman Mainnet | Max Movement unlock | Jun 2026 |
+| ViT senior / multi-symptom | Protocol overlap | Jun 2026 |
+| Photo Booth themes + share | ✅ | Jun 2026 |
+| Monitor home + away (go2rtc) | ✅ Founder only | Jun 2026 |
 
 ---
 
-## 11. Parked / beta-only
+## 11. Founder documents & ops packets (July 2026)
 
-These work **for you** but are **not** launch-complete for all members:
-
-| Item | Why parked |
-|------|------------|
-| Monitor Mac + go2rtc + manual yaml | Members won’t run Terminal |
-| Cloudflare quick tunnel | URL changes; Mac must stay on |
-| My Pets page | Placeholder only — no vault yet |
-| Framer ↔ app canonical shop | Decision pending |
-| Stripe / membership gates | Not wired |
-| LLC / trademark / public `SITE_MODE` | In progress with counsel |
-| OPENAI_API_KEY on Vercel | May be unset — verify P0 |
+| Document | Location | Status |
+|----------|----------|--------|
+| Critical Path Action Packets (L5/B5, AAHA, Memphis) | `~/Documents/Freedom Paws Wellness/` | ✅ Jul 1 |
+| Grants & Growth Capital Master | Same | ✅ Jul 1 |
+| ID Chip Final Sign-Off Checklist | App repo + Wellness folder | ✅ C2.3 checked Jul 3 |
+| Founder Session Log | App repo + Wellness folder | ✅ Through Jul 3 |
+| **This master record** | App repo + Wellness folder | ✅ Jul 3 |
 
 ---
 
-## Summary counts
+## 12. Deploy history (v53–v96 highlights)
 
-| Area | Done | Launch still needed |
-|------|------|---------------------|
-| PWA / platform | ~95% | Public mode, app subdomain |
-| ViT | ~90% | Vercel API key verify, accounts optional |
-| Photo Booth | ~85% | Phase 2 polish QA |
-| Protocols | ~90% | Framer sync, final device pass |
-| Token Shop | ~90% | RLUSD env, Stripe, server unlock |
-| Monitor | ~50% for launch | **Cloud relay + member setup** |
-| My Pets vault | ~5% | Full MVP |
-| Legal / payments | ~10% | Terms, Stripe, LLC |
+| Version | Focus |
+|---------|--------|
+| v53–v65 | Token Shop Xaman; My Pets vault; adoption infra |
+| v89–v90 | ViT identity bridge; enroll step bar fix |
+| v91–v93 | Track 2 `/id/scan`; chip UX; AAHA lookup |
+| v94 | Region quality gates; enroll retake + Remove |
+| v95 | iOS tap fixes; SW v95 |
+| v96 | petId preservation; combined ID results layout |
+| **Design system** | dfb6f37 → 8d51834 → 27bc08f (Jul 2026) |
+
+---
+
+## 13. Not done / blocked / deferred
+
+| Item | Why |
+|------|-----|
+| **L5 attorney sign-off** | Blocks public mode, partner outreach, insurance kits |
+| **AAHA email + embed API** | Packet B ready; link-out works today |
+| **Memphis / TN pilot Email 1** | After L5 |
+| **Grants applications** | Prep docs ready; apply after pilot MOU |
+| **Monitor cloud relay** | Member launch requirement |
+| **Stripe / RLUSD checkout** | Post-launch revenue |
+| **BLE native PetScanner** | Paste path sufficient for pilot |
+| **Retail scanner kit** | Jan 2027 |
+| **ViT Pro / DVM (vitproscan.com)** | 2027 track |
+| **Revoke duplicate FP-2D1F1AF0** | Optional cleanup (~5 min) |
+
+---
+
+## 14. Summary counts
+
+| Area | Done (Jul 3) | Launch still needed |
+|------|--------------|---------------------|
+| PWA / platform | ~98% | Public mode (`SITE_MODE=public`) |
+| ViT + Track 1 ID | ~95% | L5 counsel copy; optional ViT Pro |
+| Track 2 chip | ~85% pilot | AAHA embed; retail kit; shelter scan log UI |
+| Adoption network | ~80% | Live municipal partner + LOI |
+| Design / UX | ~90% client routes | Framer pixel parity |
+| Token Shop | ~90% | Stripe, RLUSD, server unlock |
+| Monitor | ~50% for launch | Cloud relay |
+| Legal / GTM | ~15% | L5, AAHA, Memphis, grants execution |
 
 ---
 
 *Freedom Paws Wellness — Honor Buddy's Legacy*  
-*Completed items record — updated June 6, 2026*
+*Completed items master record — updated July 3, 2026*
