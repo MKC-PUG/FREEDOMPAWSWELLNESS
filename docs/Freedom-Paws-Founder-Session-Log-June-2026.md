@@ -224,4 +224,25 @@ Web Serial: Chrome/Edge on Windows — same COM3 @ 9600
 
 ---
 
+### Track 2 — PetScanner BLE founder QA
+
+**Date:** July 3, 2026  
+**Environment:** Production — `https://app.freedompawsinc.com/id/scan`  
+**PWA:** v96  
+**Status:** **PASS** — C2.3 PetScanner paste path
+
+| Check | Result |
+|-------|--------|
+| Hardware | PetScanner BLE received today |
+| PetScanner app scan | `985141007711681` → **Unknown Pet** on PetScanner UK registry (expected) |
+| Freedom Paws paste | Valid chip ID (checksum warning — expected on test tags) |
+| Freedom Paws match | Buddy test · **FP-A6FFE6CD** |
+| Note | Full 15-digit paste confirmed after initial typo |
+
+**Prior hardware:** WorldScan Plus **PASS** Jun 28, 2026 (C1 / C2.1).
+
+**Track 2 pilot gate:** Founder hardware QA complete for pilot (C2 section). C2.1 HID wedge + C2.2 Web Serial remain optional.
+
+---
+
 *Freedom Paws Wellness — Honor Buddy's Legacy*
