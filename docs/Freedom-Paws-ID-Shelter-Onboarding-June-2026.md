@@ -115,7 +115,25 @@ Set `FP_OPS_EMAILS=dir@your-shelter.org,ops@freedompawsinc.com` in Vercel for au
 
 ---
 
-## 8. Track 2 preview (after biometric pilot)
+## 8. FAQ — QR collar tag vs microchip vs Freedom Paws
+
+Shelter directors often ask why Freedom Paws instead of a retail QR tag (e.g. **BuddyID BuddyBadge**) or chip registry alone.
+
+| Approach | What it solves | What it misses at intake |
+|----------|----------------|----------------------------|
+| **QR collar tag** | Finder scans tag → owner profile | Tag lost, removed, or never worn; no help for unchipped strays |
+| **Microchip only** | Registry lookup when chip reads | ~40–60% of intakes unchipped or unreadable; no photo match |
+| **Freedom Paws ID** | Biometric photo match + optional chip link + scan kit (2027) | Requires enroll + staff workflow (this guide) |
+
+**Three points for your pitch**
+
+1. **QR tags help tagged pets** — Freedom Paws is built for the **unchipped gap** shelters see on every intake shift.
+2. **We add, not replace** — chip scan at `{APP}/id/scan` and AAHA lookup at `{APP}/id/lookup` complement registries; biometric match covers when the chip fails.
+3. **Human review before owner contact** — match queue at `{APP}/id/match`; no automated owner PII exposure.
+
+---
+
+## 9. Track 2 preview (after biometric pilot)
 
 - `{APP}/id/scan` — Bluetooth LF RFID scanner
 - `{APP}/id/lookup` — AAHA / AVID registry routing

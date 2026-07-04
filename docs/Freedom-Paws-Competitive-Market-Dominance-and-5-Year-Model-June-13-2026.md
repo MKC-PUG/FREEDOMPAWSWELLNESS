@@ -56,7 +56,26 @@ Freedom Paws occupies a **unique whitespace**: the only wellness-first, mission-
 | Pet health records | 11pets, Petable | My Pets vault + ID enroll media |
 | Photo / social | Generic apps | SuperBud Photo Booth (acquisition) |
 | Camera monitoring | Wyze, Ring | Monitor My Dog (relay + setup guides) |
-| Lost pet | Microchip registries | Freedom Paws ID (biometric, unchipped wedge) |
+| Lost pet | Microchip registries, **BuddyID / BuddyBadge** (QR collar tags), PawBoost | Freedom Paws ID (biometric, unchipped wedge) + optional chip link |
+
+### Tier 2.5 — QR collar tags & lost-pet point solutions
+
+*Reference snapshot — July 2026. Review quarterly (Phase 9D marketing batch); not a separate monitoring task.*
+
+| Player | What they sell | Gap Freedom Paws fills |
+|--------|----------------|------------------------|
+| **BuddyID / BuddyBadge** | QR collar tag + lifetime registry profile | Tag must stay on the collar; no unchipped biometric match; no shelter found-dog intake workflow |
+| **Microchip registries** (HomeAgain, AKC Reunite, etc.) | Implant + registry lookup | ~40–60% of shelter intakes are unchipped or unreadable; no photo-based match |
+| **GPS collars** (Fi, Whistle) | Location tracking + subscription | Consumer hardware cost; does not help shelter staff intake for strays |
+| **Freedom Paws** | Biometric enroll + optional chip link + Universal Scan Kit (Jan 2027) | **Unchipped wedge** — photograph found dogs and human-reviewed match; chip scan path when hardware is present |
+
+**Product policy (founder)**
+
+1. **Do not build** a BuddyBadge-style QR collar tag for launch — QR-only tags are out of scope for Track 2 MVP (`Freedom-Paws-ID-Track-2-Supplies-Shopping-Guide-June-2026.md`).
+2. **Optional later:** printed QR reunion card at adoption events — supplement to digital `/id/p/[slug]` card, not a standalone product line.
+3. **Grant / partner framing:** describe the **market gap** (unchipped strays), not competitor attacks — e.g. *“QR tags help tagged pets; Freedom Paws covers the unchipped intake gap shelters see daily.”*
+
+**One-line vs BuddyBadge:** *“BuddyBadge helps if the tag is still on the collar. Freedom Paws helps when there is no tag — and gives shelters scanner + photo match so unchipped dogs aren’t invisible.”*
 
 ---
 
