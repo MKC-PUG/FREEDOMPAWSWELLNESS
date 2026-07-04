@@ -6,6 +6,7 @@ import BackLink from '@/app/components/BackLink';
 import PageShell from '@/app/components/ui/PageShell';
 import PageHeader from '@/app/components/ui/PageHeader';
 import PhotoBoothToast from '@/app/components/PhotoBoothToast';
+import TaskProgressBar from '@/app/components/ui/TaskProgressBar';
 import PhotoUploadZone from '@/app/components/PhotoUploadZone';
 import { clearPhotoFromDb } from '@/lib/photo-db';
 import { clearPhotoPreview } from '@/lib/photo-storage';
@@ -28,6 +29,11 @@ import {
 } from '@/lib/photobooth/ai-costumes';
 import PhotoBoothFlowHint from './PhotoBoothFlowHint';
 import { trimPetCutoutBlob } from '@/lib/photobooth/trim-pet-alpha';
+import {
+  createMonotonicProgress,
+  startSimulatedProgress,
+  type TaskProgressSnapshot,
+} from '@/lib/photobooth/task-progress';
 import FrameDrawer from './FrameDrawer';
 import ExportDrawer from './ExportDrawer';
 import AiCostumeDrawer from './AiCostumeDrawer';
@@ -96,7 +102,7 @@ export default function PhotoBoothClient({
   const [frameHeadline, setFrameHeadline] = useState('');
   const [frameHeadlineOffset, setFrameHeadlineOffset] = useState(0);
   const [bgRemoving, setBgRemoving] = useState(false);
-  const [bgProgress, setBgProgress] = useState('');
+  const [bgProgress, setBgProgress] = useState<TaskProgressSnapshot | null>(null);
   const [bgError, setBgError] = useState('');
   const [cutoutApplied, setCutoutApplied] = useState(false);
   const [petSelected, setPetSelected] = useState(false);
@@ -113,7 +119,7 @@ export default function PhotoBoothClient({
   const [exportBusy, setExportBusy] = useState(false);
   const [aiCostumeOpen, setAiCostumeOpen] = useState(false);
   const [aiCostumeBusy, setAiCostumeBusy] = useState(false);
-  const [aiCostumeProgress, setAiCostumeProgress] = useState('');
+  const [aiCostumeProgress, setAiCostumeProgress] = useState<TaskProgressSnapshot | null>(null);
   const [aiCostumeConfigured, setAiCostumeConfigured] = useState(false);
   const [aiCostumeApplied, setAiCostumeApplied] = useState(false);
   const [aiCredits, setAiCredits] = useState<AiCreditsClient | null>(null);
@@ -299,13 +305,13 @@ export default function PhotoBoothClient({
     setAiCostumeApplied(false);
     setAiCostumeOpen(false);
     setAiCostumeBusy(false);
-    setAiCostumeProgress('');
+    setAiCostumeProgress(null);
     setThemeId(DEFAULT_PHOTO_BOOTH_THEME_ID);
     setEditorActive(false);
     setPhotoUrl(null);
     setCutoutApplied(false);
     setBgRemoving(false);
-    setBgProgress('');
+    setBgProgress(null);
     setBgError('');
     setShareMsg('');
     setLocalUploadError('');
@@ -316,10 +322,11 @@ export default function PhotoBoothClient({
   const handleRemoveBackground = useCallback(async () => {
     if (!petImageUrl || bgRemoving) return;
     setBgRemoving(true);
-    setBgProgress('Starting…');
     setBgError('');
     setError('');
     setShareMsg('');
+    const progress = createMonotonicProgress(setBgProgress);
+    progress.emit(1, 'Starting magic cutout…');
     try {
       const sourceBlob = petImageUrl.startsWith('blob:')
         ? await fetch(petImageUrl).then((r) => {
@@ -331,12 +338,16 @@ export default function PhotoBoothClient({
             return r.blob();
           });
 
+      progress.emit(4, 'Preparing photo…');
       const { removePetBackground } = await import('@/lib/photobooth/remove-background');
-      const cutout = await removePetBackground(sourceBlob, (p) => {
-        setBgProgress(p.percent > 0 ? `${p.percent}%` : 'Loading AI model…');
-      });
-      setBgProgress('Tightening fit…');
+      const cutout = await removePetBackground(
+        sourceBlob,
+        (p) => progress.emit(p.percent, p.label),
+        { rangeStart: 6, rangeEnd: 88 }
+      );
+      progress.emit(90, 'Tightening edges…');
       const trimmed = await trimPetCutoutBlob(cutout);
+      progress.complete('Cutout ready');
       if (!originalPhotoUrlRef.current) {
         originalPhotoUrlRef.current = petImageUrl;
       }
@@ -357,7 +368,7 @@ export default function PhotoBoothClient({
       );
     } finally {
       setBgRemoving(false);
-      setBgProgress('');
+      setBgProgress(null);
     }
   }, [petImageUrl, bgRemoving, setPhotoUrl]);
 
@@ -443,9 +454,11 @@ export default function PhotoBoothClient({
 
       setAiCostumeOpen(false);
       setAiCostumeBusy(true);
-      setAiCostumeProgress('Uploading your pet photo…');
+      const progress = createMonotonicProgress(setAiCostumeProgress);
+      progress.emit(2, 'Uploading your pet photo…');
       setShareMsg('✨ Creating Magic Look — please wait 15–30 sec…');
 
+      let stopSim: (() => void) | null = null;
       try {
         const sourceBlob = await fetch(petImageUrl).then((r) => {
           if (!r.ok) throw new Error('Could not read pet photo');
@@ -455,7 +468,12 @@ export default function PhotoBoothClient({
         fd.append('image', sourceBlob, 'pet.jpg');
         fd.append('costumeId', costumeId);
 
-        setAiCostumeProgress('AI is creating your holiday look…');
+        progress.emit(8, 'Sending to AI…');
+        stopSim = startSimulatedProgress(
+          (pct) => progress.emit(pct, 'AI is creating your holiday look…'),
+          { from: 10, to: 68, durationMs: 32000 }
+        );
+
         const controller = new AbortController();
         const timeoutId = window.setTimeout(() => controller.abort(), 90000);
         let res: Response;
@@ -468,7 +486,11 @@ export default function PhotoBoothClient({
           });
         } finally {
           window.clearTimeout(timeoutId);
+          stopSim?.();
+          stopSim = null;
         }
+
+        progress.emit(70, 'Receiving your look…');
 
         const data = (await res.json()) as {
           success?: boolean;
@@ -493,6 +515,7 @@ export default function PhotoBoothClient({
           throw new Error(raw);
         }
 
+        progress.emit(74, 'Loading AI image…');
         const outBlob = await fetch(data.imageDataUrl).then((r) => {
           if (!r.ok) throw new Error('Could not read AI image');
           return r.blob();
@@ -510,23 +533,23 @@ export default function PhotoBoothClient({
           }
         }
 
-        // AI often returns the original room/scene baked in — re-cutout so only the
-        // costumed pet floats on the member's chosen Photo Booth background.
-        setAiCostumeProgress('Cleaning Magic Look edges…');
+        progress.emit(78, 'Cleaning Magic Look edges…');
         let finalBlob = outBlob;
         try {
           const { removePetBackground } = await import('@/lib/photobooth/remove-background');
-          const cutout = await removePetBackground(outBlob, (p) => {
-            setAiCostumeProgress(
-              p.percent > 0 ? `Cutout ${p.percent}%` : 'Cleaning edges…'
-            );
-          });
+          const cutout = await removePetBackground(
+            outBlob,
+            (p) => progress.emit(p.percent, p.label.replace('Tracing your pet', 'Cleaning edges')),
+            { rangeStart: 78, rangeEnd: 96 }
+          );
+          progress.emit(97, 'Final polish…');
           finalBlob = await trimPetCutoutBlob(cutout);
         } catch {
           /* use AI output if second cutout fails */
         }
 
         const outUrl = URL.createObjectURL(finalBlob);
+        progress.complete('Magic Look ready');
 
         if (!editorActive) {
           setThemeId(costume.themeId);
@@ -538,6 +561,7 @@ export default function PhotoBoothClient({
         setCutoutApplied(true);
         setShareMsg(`✨ ${costume.name} — Magic Look applied!`);
       } catch (e) {
+        stopSim?.();
         if (e instanceof Error && e.name === 'AbortError') {
           setShareMsg('AI Magic Look timed out — try again in a moment.');
         } else {
@@ -545,7 +569,7 @@ export default function PhotoBoothClient({
         }
       } finally {
         setAiCostumeBusy(false);
-        setAiCostumeProgress('');
+        setAiCostumeProgress(null);
       }
     },
     [aiCostumeBusy, editorActive, petImageUrl, refreshAiCredits, setPhotoUrl]
@@ -659,11 +683,18 @@ export default function PhotoBoothClient({
           >
             <PhotoBoothFlowHint activeStep={flowStep} />
 
-            {aiCostumeBusy && (
-              <div className="mb-3 rounded-2xl border border-violet-400/45 bg-violet-950/40 p-4 text-center">
-                <p className="text-sm font-bold text-violet-200">✨ AI Magic Look working…</p>
-                <p className="mt-1 text-xs text-white/60">
-                  {aiCostumeProgress || 'Usually 15–30 seconds — app is not frozen'}
+            {aiCostumeBusy && aiCostumeProgress && (
+              <div className="mb-3 rounded-2xl border border-violet-400/45 bg-violet-950/40 p-4">
+                <p className="text-center text-sm font-bold text-violet-200 mb-3">
+                  ✨ AI Magic Look working…
+                </p>
+                <TaskProgressBar
+                  percent={aiCostumeProgress.percent}
+                  label={aiCostumeProgress.label}
+                  variant="violet"
+                />
+                <p className="mt-2 text-center text-[10px] text-white/45">
+                  Usually 15–30 seconds — app is not frozen
                 </p>
               </div>
             )}
@@ -676,10 +707,16 @@ export default function PhotoBoothClient({
 
             {!editorActive && (
               <div className="mb-3 space-y-2">
-                {bgRemoving ? (
-                  <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4 text-center">
-                    <p className="text-base font-bold text-amber-400">Magic cutout working…</p>
-                    <p className="mt-2 text-sm text-white/70">{bgProgress || 'Please wait'}</p>
+                {bgRemoving && bgProgress ? (
+                  <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4">
+                    <p className="text-center text-base font-bold text-amber-400 mb-3">
+                      Magic cutout working…
+                    </p>
+                    <TaskProgressBar
+                      percent={bgProgress.percent}
+                      label={bgProgress.label}
+                      variant="amber"
+                    />
                   </div>
                 ) : (
                   <>

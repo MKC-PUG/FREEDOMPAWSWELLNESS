@@ -9,6 +9,7 @@ import PageShell from '@/app/components/ui/PageShell';
 import PageHeader from '@/app/components/ui/PageHeader';
 import SectionCard from '@/app/components/ui/SectionCard';
 import PrimaryButton from '@/app/components/ui/PrimaryButton';
+import TaskProgressBar from '@/app/components/ui/TaskProgressBar';
 import EyebrowLabel from '@/app/components/ui/EyebrowLabel';
 import type { AnalyzeApiResponse } from '@/lib/ai/types';
 import ViTMediaUpload, { type VitMediaSelection } from './ViTMediaUpload';
@@ -35,6 +36,11 @@ import {
   diagnosticsPathWithoutUploadParams,
   diagnosticsReturnTo,
 } from '@/lib/diagnostics-url';
+import {
+  createMonotonicProgress,
+  startSimulatedProgress,
+  type TaskProgressSnapshot,
+} from '@/lib/photobooth/task-progress';
 
 const REGION_LABELS: Record<IdentityRegion, string> = {
   eyes: 'Eyes',
@@ -77,6 +83,7 @@ export default function ViTDiagnosticsClient({
   const [media, setMedia] = useState<VitMediaSelection | null>(null);
   const [result, setResult] = useState<AnalyzeApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const [analyzeProgress, setAnalyzeProgress] = useState<TaskProgressSnapshot | null>(null);
   const [error, setError] = useState('');
   const [localUploadError, setLocalUploadError] = useState('');
   const [feedbackSent, setFeedbackSent] = useState<'helpful' | 'wrong' | null>(null);
@@ -250,6 +257,9 @@ export default function ViTDiagnosticsClient({
     setError('');
     setResult(null);
     setFeedbackSent(null);
+    const progress = createMonotonicProgress(setAnalyzeProgress);
+    progress.emit(2, 'Preparing your media…');
+    let stopSim: (() => void) | null = null;
 
     try {
       let selection = media;
@@ -316,13 +326,24 @@ export default function ViTDiagnosticsClient({
         formData.append('image', file, file.name || 'dog-photo.jpg');
       }
 
+      progress.emit(12, 'Uploading for analysis…');
+      stopSim = startSimulatedProgress(
+        (pct) => progress.emit(pct, 'ViT is analyzing your pet…'),
+        { from: 15, to: 90, durationMs: 28000 }
+      );
+
       const response = await fetch('/api/analyze', {
         method: 'POST',
         body: formData,
       });
 
+      stopSim?.();
+      stopSim = null;
+      progress.emit(93, 'Building recommendations…');
+
       const data = await response.json();
       if (data.success) {
+        progress.complete('Analysis complete');
         setResult(data);
         if (data.mode === 'wellness' || data.mode === 'both') {
           saveVitRunLocal(data, resolvedPetId ?? null, resolvedPetName ?? null);
@@ -334,7 +355,9 @@ export default function ViTDiagnosticsClient({
     } catch {
       setError('Connection error. Try again.');
     } finally {
+      stopSim?.();
       setLoading(false);
+      window.setTimeout(() => setAnalyzeProgress(null), 500);
     }
   };
 
@@ -585,6 +608,16 @@ export default function ViTDiagnosticsClient({
                     ? 'Get wellness + ID analysis'
                     : 'Get AI Recommendation'}
             </PrimaryButton>
+
+            {loading && analyzeProgress && (
+              <div className="mt-4 rounded-2xl border border-amber-400/30 bg-amber-950/20 p-4">
+                <TaskProgressBar
+                  percent={analyzeProgress.percent}
+                  label={analyzeProgress.label}
+                  variant={identityMode ? 'emerald' : 'amber'}
+                />
+              </div>
+            )}
 
             {!hasMedia && (
               <p className="mt-3 text-center text-xs text-white/45">

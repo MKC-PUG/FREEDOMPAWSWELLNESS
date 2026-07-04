@@ -16,12 +16,11 @@ function isStandalonePwa(): boolean {
   );
 }
 
-/** Full document navigation — reliable when leaving Photo Booth on iOS PWA. */
+/** Full document navigation — only when leaving Photo Booth on iOS PWA (scroll lock / stale canvas). */
 export function shouldUseHardPwaNav(currentPath: string): boolean {
   if (typeof window === 'undefined') return false;
-  if (currentPath.startsWith('/photobooth')) return true;
-  if (isStandalonePwa() && /iPhone|iPad|iPod/i.test(navigator.userAgent)) return true;
-  return false;
+  if (!currentPath.startsWith('/photobooth')) return false;
+  return isStandalonePwa() && /iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
 export function navigatePwa(
@@ -44,5 +43,6 @@ export function navigatePwa(
     return;
   }
 
-  router.push(href);
+  if (options?.replace) router.replace(href);
+  else router.push(href);
 }

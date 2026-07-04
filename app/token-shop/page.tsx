@@ -4,10 +4,13 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import PageShell from '@/app/components/ui/PageShell';
 import PageHeader from '@/app/components/ui/PageHeader';
+import { getShopConfigStatus } from '@/lib/shop/config-status';
+import { getLivePriceQuote } from '@/lib/shop/pricing';
 import { protocolDetailHref } from '../lib/routes';
 import TokenShopCheckout from './TokenShopCheckout';
 import TokenShopFocus from './TokenShopFocus';
 import TokenShopPaidReturn from './TokenShopPaidReturn';
+import { TokenShopProvider, toTokenShopQuote } from './TokenShopProvider';
 import { SHOP_PRICE, tokenShopItems } from './shop-items';
 
 export const metadata: Metadata = {
@@ -20,7 +23,6 @@ function ViewProtocolButton({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      prefetch={false}
       className="mt-5 mx-auto flex w-full max-w-xs min-h-[52px] items-center justify-center rounded-full border-2 border-white bg-transparent px-6 py-3.5 text-base font-bold text-white tracking-wide hover:bg-white hover:text-[#1E3050] active:bg-white/90 transition-colors touch-manipulation"
     >
       {label}
@@ -90,7 +92,26 @@ function TokenShopCard({ item }: { item: (typeof tokenShopItems)[number] }) {
   );
 }
 
-export default function TokenShopPage() {
+export default async function TokenShopPage() {
+  let initialQuote;
+  try {
+    initialQuote = toTokenShopQuote(await getLivePriceQuote());
+  } catch {
+    initialQuote = undefined;
+  }
+  const shopConfig = getShopConfigStatus();
+
+  return (
+    <TokenShopProvider
+      initialQuote={initialQuote}
+      initialConfigReady={shopConfig.readyForXamanTest}
+    >
+      <TokenShopPageContent />
+    </TokenShopProvider>
+  );
+}
+
+function TokenShopPageContent() {
   return (
     <PageShell maxWidth="7xl" backLink={{ href: '/protocols', label: 'Back to Protocol Overview' }}>
       <Suspense fallback={null}>

@@ -24,6 +24,8 @@ import {
 import type { MeAndMyPupCanvasHandle } from './MeAndMyPupCanvas';
 import type { PhotoBoothCanvasHandle, StickerListItem } from './PhotoBoothCanvas';
 import type { PhotoBoothAffiliatesData } from '@/lib/photobooth/affiliates';
+import TaskProgressBar from '@/app/components/ui/TaskProgressBar';
+import type { TaskProgressSnapshot } from '@/lib/photobooth/task-progress';
 
 type Props = {
   themeId: string;
@@ -40,7 +42,7 @@ type Props = {
   frameHeadlineOffset: number;
   cutoutApplied: boolean;
   bgRemoving: boolean;
-  bgProgress: string;
+  bgProgress: TaskProgressSnapshot | null;
   bgError: string;
   petSelected: boolean;
   selectedSlot: SlotId | null;
@@ -501,8 +503,14 @@ export default function PhotoBoothUnifiedEditor({
                   ↩ Remove AI costume
                 </button>
               )}
-              {bgRemoving ? (
-                <p className="text-center text-xs font-bold text-amber-400">✨ Cutout… {bgProgress}</p>
+              {bgRemoving && bgProgress ? (
+                <div className="py-1">
+                  <TaskProgressBar
+                    percent={bgProgress.percent}
+                    label={bgProgress.label}
+                    variant="amber"
+                  />
+                </div>
               ) : bgError ? (
                 <p className="text-xs text-red-300">{bgError}</p>
               ) : cutoutApplied ? (

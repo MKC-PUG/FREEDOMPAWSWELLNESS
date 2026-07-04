@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import TaskProgressBar from '@/app/components/ui/TaskProgressBar';
+import type { TaskProgressSnapshot } from '@/lib/photobooth/task-progress';
 import {
   AI_COSTUME_GROUPS,
   AI_COSTUMES,
@@ -23,7 +25,7 @@ type Props = {
   open: boolean;
   busy: boolean;
   configured: boolean;
-  progress: string;
+  progress: TaskProgressSnapshot | null;
   credits: CreditsInfo | null;
   onClose: () => void;
   onPick: (costumeId: AiCostumeId) => void;
@@ -114,10 +116,15 @@ export default function AiCostumeDrawer({
           </div>
         )}
 
-        {busy && (
-          <div className="mt-3 rounded-xl border border-amber-400/40 bg-amber-400/10 p-3 text-center">
-            <p className="text-sm font-bold text-amber-300">Creating your look…</p>
-            <p className="mt-1 text-xs text-white/60">{progress || 'Usually 15–30 sec — not frozen'}</p>
+        {busy && progress && (
+          <div className="mt-3 rounded-xl border border-amber-400/40 bg-amber-400/10 p-3">
+            <p className="text-center text-sm font-bold text-amber-300 mb-2">Creating your look…</p>
+            <TaskProgressBar
+              percent={progress.percent}
+              label={progress.label}
+              variant="violet"
+            />
+            <p className="mt-2 text-center text-[10px] text-white/45">Usually 15–30 sec — not frozen</p>
           </div>
         )}
 

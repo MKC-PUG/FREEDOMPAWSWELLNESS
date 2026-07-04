@@ -522,7 +522,11 @@ export default function EnrollWizardClient({
           </SectionCard>
         ) : null}
 
-        <EnrollStepper steps={STEPS} currentStep={step} />
+        <EnrollStepper
+          steps={STEPS}
+          currentStep={step}
+          progressOverride={completeResult ? 100 : undefined}
+        />
 
         {error && (
           <p className="mb-4 rounded-xl border border-red-500/40 bg-red-950/30 px-4 py-3 text-sm text-red-300">

@@ -1,8 +1,19 @@
 /** Client-side pet cutout via @imgly/background-removal (browser + self-hosted WASM). */
 
-export type BgRemovalProgress = {
+import {
+  labelForImglyPhase,
+  mapImglyPhaseToRange,
+  type TaskProgressSnapshot,
+} from '@/lib/photobooth/task-progress';
+
+export type BgRemovalProgress = TaskProgressSnapshot & {
   phase: string;
-  percent: number;
+};
+
+export type BgRemovalOptions = {
+  /** Overall progress window (default 0–99). */
+  rangeStart?: number;
+  rangeEnd?: number;
 };
 
 const PACKAGE_VERSION = '1.7.0';
@@ -31,11 +42,22 @@ async function resolvePublicPath(): Promise<string> {
 
 export async function removePetBackground(
   imageSource: Blob | string,
-  onProgress?: (p: BgRemovalProgress) => void
+  onProgress?: (p: BgRemovalProgress) => void,
+  options?: BgRemovalOptions
 ): Promise<Blob> {
+  const rangeStart = options?.rangeStart ?? 0;
+  const rangeEnd = options?.rangeEnd ?? 99;
+  let maxEmitted = rangeStart;
+
+  const emit = (phase: string, percent: number, label: string) => {
+    const next = Math.min(rangeEnd - 1, Math.max(maxEmitted, percent));
+    maxEmitted = next;
+    onProgress?.({ phase, percent: next, label });
+  };
+
   const publicPath = await resolvePublicPath();
   const { removeBackground } = await import('@imgly/background-removal');
-  onProgress?.({ phase: 'load-model', percent: 5 });
+  emit('load-model', Math.min(rangeStart + 2, rangeEnd - 1), 'Loading AI model…');
 
   const blob = await removeBackground(imageSource, {
     publicPath,
@@ -43,8 +65,8 @@ export async function removePetBackground(
     device: 'cpu',
     output: { format: 'image/png', quality: 0.92 },
     progress: (key, current, total) => {
-      const percent = total > 0 ? Math.round((current / total) * 100) : 0;
-      onProgress?.({ phase: key, percent: Math.max(percent, 8) });
+      const mapped = mapImglyPhaseToRange(key, current, total, rangeStart, rangeEnd);
+      emit(key, mapped, labelForImglyPhase(key, mapped));
     },
   });
 

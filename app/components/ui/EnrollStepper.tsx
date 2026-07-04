@@ -3,10 +3,14 @@ type Step = { n: number; label: string };
 type Props = {
   steps: readonly Step[];
   currentStep: number;
+  /** Pass 100 when enrollment is fully complete; otherwise bar caps at 99% during last step. */
+  progressOverride?: number;
 };
 
-export default function EnrollStepper({ steps, currentStep }: Props) {
-  const progress = Math.min(100, Math.round((currentStep / steps.length) * 100));
+export default function EnrollStepper({ steps, currentStep, progressOverride }: Props) {
+  const progress =
+    progressOverride ??
+    Math.min(99, Math.round(((currentStep - 0.5) / steps.length) * 100));
 
   return (
     <div className="mb-8">

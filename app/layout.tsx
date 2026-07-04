@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import AppChrome from './components/AppChrome';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
-import PwaInstallBanner from './components/PwaInstallBanner';
+import DeferredPwaInstallBanner from './components/DeferredPwaInstallBanner';
 import PwaUpdateBanner from './components/PwaUpdateBanner';
 import OfflineBanner from './components/OfflineBanner';
 import PreviewModeBanner from './components/PreviewModeBanner';
@@ -54,7 +54,7 @@ export default function RootLayout({
         <OfflineBanner />
         <PwaUpdateBanner />
         <PreviewModeBanner />
-        <PwaInstallBanner />
+        <DeferredPwaInstallBanner />
         <AppChrome>
           <main>{children}</main>
         </AppChrome>

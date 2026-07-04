@@ -1,15 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { CANONICAL_USD, FALLBACK_XRP } from '@/lib/shop/pricing';
+import { CANONICAL_USD } from '@/lib/shop/pricing';
 import { isProtocolUnlocked, unlockProtocol } from '@/lib/shop/unlocks';
-
-type LiveQuote = {
-  xrp: number;
-  xrpIsLive: boolean;
-  xrpUsdRate: number;
-  updatedAt: string;
-};
+import { useTokenShop } from './TokenShopProvider';
 
 type Props = {
   slug: string;
@@ -19,36 +13,13 @@ type Props = {
 type Phase = 'idle' | 'creating' | 'waiting' | 'success' | 'error';
 
 export default function TokenShopCheckout({ slug, cardTitle }: Props) {
-  const [quote, setQuote] = useState<LiveQuote>({
-    xrp: FALLBACK_XRP,
-    xrpIsLive: false,
-    xrpUsdRate: 0,
-    updatedAt: '',
-  });
+  const { quote, configReady } = useTokenShop();
   const [phase, setPhase] = useState<Phase>('idle');
   const [message, setMessage] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(false);
-  const [configReady, setConfigReady] = useState<boolean | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pendingUuidRef = useRef<string | null>(null);
   const PENDING_KEY = `fp-xumm-pending-${slug}`;
-
-  const loadQuote = useCallback(async () => {
-    try {
-      const res = await fetch('/api/pricing/live');
-      const data = await res.json();
-      if (data.ok) {
-        setQuote({
-          xrp: data.xrp,
-          xrpIsLive: data.xrpIsLive,
-          xrpUsdRate: data.xrpUsdRate,
-          updatedAt: data.updatedAt,
-        });
-      }
-    } catch {
-      /* keep fallback */
-    }
-  }, []);
 
   const stopPolling = useCallback(() => {
     if (pollRef.current) {
@@ -117,29 +88,22 @@ export default function TokenShopCheckout({ slug, cardTitle }: Props) {
 
   useEffect(() => {
     setUnlocked(isProtocolUnlocked(slug));
-    loadQuote();
-    fetch('/api/shop/config-status')
-      .then((r) => r.json())
-      .then((d) => setConfigReady(Boolean(d.readyForXamanTest)))
-      .catch(() => setConfigReady(null));
     const pending = sessionStorage.getItem(PENDING_KEY);
     if (pending && !isProtocolUnlocked(slug)) {
       pendingUuidRef.current = pending;
       pollStatus(pending);
     }
-    const interval = setInterval(loadQuote, 2 * 60 * 1000);
     const onVisible = () => {
       if (document.visibilityState === 'visible') void resumePendingPayment();
     };
     document.addEventListener('visibilitychange', onVisible);
     window.addEventListener('pageshow', onVisible);
     return () => {
-      clearInterval(interval);
       document.removeEventListener('visibilitychange', onVisible);
       window.removeEventListener('pageshow', onVisible);
       if (pollRef.current) clearInterval(pollRef.current);
     };
-  }, [slug, loadQuote, PENDING_KEY, pollStatus, resumePendingPayment]);
+  }, [slug, PENDING_KEY, pollStatus, resumePendingPayment]);
 
   const startXaman = async () => {
     setPhase('creating');

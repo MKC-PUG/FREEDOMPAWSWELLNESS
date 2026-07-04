@@ -39,7 +39,11 @@ export default function ServiceWorkerRegister() {
       void navigator.serviceWorker
         .register(`/sw.js?${PWA_VERSION}`, { scope: '/', updateViaCache: 'none' })
         .then((reg) => {
-          if (navigator.onLine) reg.update().catch(() => {});
+          const checkedKey = 'fp-sw-update-checked';
+          if (navigator.onLine && !sessionStorage.getItem(checkedKey)) {
+            sessionStorage.setItem(checkedKey, '1');
+            reg.update().catch(() => {});
+          }
           reg.addEventListener('updatefound', () => {
             const worker = reg.installing;
             if (!worker) return;

@@ -2,6 +2,37 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { isSupabaseConfigured } from './config';
 
+/** Routes that skip session refresh when the user has no auth cookies (faster TTFB). */
+const PUBLIC_ANON_PREFIXES = [
+  '/protocols',
+  '/wellness',
+  '/token-shop',
+  '/waitlist',
+  '/terms',
+  '/privacy',
+  '/photobooth',
+  '/monitor',
+  '/diagnostics',
+  '/adopt',
+  '/grants',
+  '/partners',
+  '/auth/callback',
+  '/id',
+] as const;
+
+function hasSupabaseAuthCookies(request: NextRequest): boolean {
+  return request.cookies.getAll().some(
+    (c) => c.name.includes('-auth-token') || c.name.startsWith('sb-')
+  );
+}
+
+function isPublicAnonymousRoute(pathname: string): boolean {
+  if (pathname === '/') return true;
+  return PUBLIC_ANON_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
+}
+
 export async function updateSupabaseSession(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -37,6 +68,11 @@ export async function updateSupabaseSession(request: NextRequest) {
       },
     }
   );
+
+  const pathname = request.nextUrl.pathname;
+  if (!hasSupabaseAuthCookies(request) && isPublicAnonymousRoute(pathname)) {
+    return response;
+  }
 
   await supabase.auth.getUser();
   return response;

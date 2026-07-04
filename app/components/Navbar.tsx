@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import BrandLogo from '@/app/components/BrandLogo';
-import { clearPwaBodyScrollLock, navigatePwa } from '@/lib/pwa-nav';
+import { clearPwaBodyScrollLock, navigatePwa, shouldUseHardPwaNav } from '@/lib/pwa-nav';
 
 const discordInviteUrl = process.env.NEXT_PUBLIC_FP_DISCORD_INVITE_URL?.trim() || '';
 
@@ -36,7 +36,11 @@ export default function Navbar() {
     (href: string) => {
       closeMobileMenu();
       clearPwaBodyScrollLock();
-      navigatePwa(href, router, { currentPath: pathname });
+      if (shouldUseHardPwaNav(pathname)) {
+        navigatePwa(href, router, { currentPath: pathname });
+      } else {
+        router.push(href);
+      }
     },
     [closeMobileMenu, pathname, router]
   );
@@ -91,7 +95,6 @@ export default function Navbar() {
               <Link
                 key={l.label}
                 href={l.href}
-                prefetch={false}
                 className={
                   isActive
                     ? 'text-amber-400 whitespace-nowrap py-2 shrink-0'
@@ -120,9 +123,9 @@ export default function Navbar() {
           <Link
             id="connect-wallet"
             href="/token-shop"
-            prefetch={false}
             className="relative z-[101] bg-amber-400 active:bg-amber-300 text-black text-[10px] font-bold px-3 min-h-[44px] inline-flex items-center rounded-xl whitespace-nowrap touch-manipulation"
             onClick={(e) => {
+              if (!shouldUseHardPwaNav(pathname)) return;
               e.preventDefault();
               navigatePwa('/token-shop', router, { currentPath: pathname });
             }}
@@ -134,7 +137,6 @@ export default function Navbar() {
         <Link
           id="connect-wallet-desktop"
           href="/token-shop"
-          prefetch={false}
           className="hidden md:inline-flex shrink-0 bg-amber-400 hover:bg-amber-300 text-black text-[10px] xl:text-xs font-bold px-4 xl:px-6 py-2.5 xl:py-3 rounded-xl whitespace-nowrap transition-colors"
         >
           WALLET
@@ -190,10 +192,13 @@ export default function Navbar() {
                     <Link
                       key={l.label}
                       href={l.href}
-                      prefetch={false}
                       onClick={(e) => {
-                        e.preventDefault();
-                        navigateFromMenu(l.href);
+                        if (shouldUseHardPwaNav(pathname)) {
+                          e.preventDefault();
+                          navigateFromMenu(l.href);
+                          return;
+                        }
+                        closeMobileMenu();
                       }}
                       className={
                         isActive
