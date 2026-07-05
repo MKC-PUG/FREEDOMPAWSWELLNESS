@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { BRAND_LOGO_PAW } from '@/lib/brand/paths';
 
@@ -94,6 +95,12 @@ export default function PwaInstallBanner() {
             Not now
           </button>
         </div>
+        <Link
+          href="/help/install"
+          className="mt-2 inline-block min-h-[44px] text-xs text-white/40 underline touch-manipulation"
+        >
+          Need help?
+        </Link>
       </div>
     );
   }
@@ -106,13 +113,21 @@ export default function PwaInstallBanner() {
           Tap <strong className="text-white">Share</strong> →{' '}
           <strong className="text-white">Add to Home Screen</strong> in Safari.
         </p>
-        <button
-          type="button"
-          onClick={dismiss}
-          className="mt-3 min-h-[44px] text-xs text-white/40 underline touch-manipulation"
-        >
-          Dismiss
-        </button>
+        <div className="mt-3 flex items-center gap-4">
+          <Link
+            href="/help/install"
+            className="min-h-[44px] text-xs text-white/40 underline touch-manipulation"
+          >
+            Need help?
+          </Link>
+          <button
+            type="button"
+            onClick={dismiss}
+            className="min-h-[44px] text-xs text-white/40 underline touch-manipulation"
+          >
+            Dismiss
+          </button>
+        </div>
       </div>
     );
   }
