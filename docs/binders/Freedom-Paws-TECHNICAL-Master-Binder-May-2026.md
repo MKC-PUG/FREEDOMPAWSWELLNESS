@@ -766,6 +766,12 @@ At scale (Y3 integrated): +$5–15M
 | M4 | Dynamic NFT wellness record |
 | M5 | DAO Snapshot governance |
 
+### Out of current grant scope
+
+**Agentic settlement on XRPL (future option; not in current grant scope)**
+
+Freedom Paws Wellness, LLC (Wyoming) plans to prioritize human-facing on-ledger utility in the near term: RLUSD checkout for protocol purchases, MPT-based protocol issuance, and transparent give-back to shelter and veteran-support partners as approved by counsel. After those milestones and a successful Memphis-area pilot—with measurable enrollments, scan validation, and ViT usage—the Company may explore **agentic settlement** on the XRP Ledger for **metered, non-consumer** workflows (for example, capped machine payments for ViT inference, treasury automation, and auditable operational spend aligned with our give-back model). Any such work would follow ecosystem standards such as **x402-style machine payments** and may involve third-party trust and audit layers (e.g., t54.ai). **This agentic track is not a dependency for the current grant milestone, is not budgeted in this application, and would proceed only after legal review, pilot metrics, and production RLUSD readiness.** Consumer checkout will remain human-initiated (Xaman, card/Stripe, and RLUSD as applicable).
+
 ### Use of funds (illustrative $250K seed/grant)
 
 | Category | % | Amount |
