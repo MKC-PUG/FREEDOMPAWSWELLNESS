@@ -239,9 +239,68 @@ Web Serial: Chrome/Edge on Windows — same COM3 @ 9600
 | Freedom Paws match | Buddy test · **FP-A6FFE6CD** |
 | Note | Full 15-digit paste confirmed after initial typo |
 
-**Prior hardware:** WorldScan Plus **PASS** Jun 28, 2026 (C1 / C2.1).
+**Prior hardware:** WorldScan Plus **PASS** Jun 28, 2026 (C1 Day 1 serial + Merck app).
 
-**Track 2 pilot gate:** Founder hardware QA complete for pilot (C2 section). C2.1 HID wedge + C2.2 Web Serial remain optional.
+**Track 2 pilot gate:** C2.3 PetScanner paste **PASS** Jul 3. C2.1 HID wedge **PASS** Jul 4 (see below). C2.2 Web Serial **PASS** Jul 4 (see below).
+
+---
+
+### Track 2 — C2.1 HID wedge founder QA (WorldScan)
+
+**Date:** July 4, 2026  
+**Environment:** Production — `https://app.freedompawsinc.com/id/scan`  
+**Status:** **PASS** — C2.1 HID keyboard wedge (no paste)
+
+| Check | Result |
+|-------|--------|
+| Notepad wedge test | `985141007711681 Temp below range` (virtual keyboard enabled) |
+| `/id/scan` auto-fill | Chip field **985141007711681** — **without paste** |
+| Validation UI | Green **Valid chip ID** card appeared automatically |
+| Connect USB serial error | **Not a C2.1 failure** — clicked Connect without selecting port (C2.2 still pending) |
+
+**Step 5 log (founder record):**
+
+```
+C2.1 — PASS — Date: July 4, 2026
+Port: COM3 @ 9600
+Raw in field: 985141007711681 (+ Temp below range stripped by app)
+Normalized shown: 985141007711681 (field); validation card displayed Valid chip ID
+Used paste? NO
+Hardware: HomeAgain Universal WorldScan Plus (UWSR+)
+Browser: Chrome on Windows
+C2.2 Web Serial: PASS (Jul 4 — see below)
+```
+
+---
+
+### Track 2 — C2.2 Web Serial founder QA (WorldScan)
+
+**Date:** July 4, 2026  
+**Environment:** Production — `https://app.freedompawsinc.com/id/scan`  
+**Status:** **PASS** — C2.2 Web Serial @ 9600 (Chrome Windows)
+
+| Check | Result |
+|-------|--------|
+| Browser | Chrome on Windows |
+| Port selected | **Microchip Reader (COM3) - Paired** → Connect |
+| Web Serial connected | **YES** — button changed to **Disconnect USB serial** (no red port error) |
+| Merck app closed during test | **YES** (after prior troubleshooting) |
+| Field populated from scan | **985141007711681** |
+| Used paste? | **NO** |
+
+**Step 5 log (founder record):**
+
+```
+C2.2 — PASS — Date: July 4, 2026
+Browser: Chrome on Windows
+Port selected: Microchip Reader (COM3) @ 9600
+Merck app closed during test: YES
+Web Serial connected: YES (Disconnect USB serial visible)
+Field populated from scan: 985141007711681
+Used paste? NO
+Hardware: HomeAgain Universal WorldScan Plus (UWSR+)
+Track 2 founder hardware QA: C2.1 ✅ C2.2 ✅ C2.3 ✅ (Jul 3)
+```
 
 ---
 

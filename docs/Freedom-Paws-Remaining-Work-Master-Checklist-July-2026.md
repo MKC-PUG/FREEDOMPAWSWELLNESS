@@ -107,8 +107,8 @@
 
 | ☐ | # | Task | Done |
 |---|-----|------|:----:|
-| ☐ | C2.1 | HID wedge WorldScan → `/id/scan` field | ☐ |
-| ☐ | C2.2 | Web Serial @ 9600 Chrome Windows | ☐ |
+| ☑ | C2.1 | HID wedge WorldScan → `/id/scan` field | ✅ Jul 4 |
+| ☑ | C2.2 | Web Serial @ 9600 Chrome Windows | ✅ Jul 4 |
 | ☑ | C2.3 | PetScanner BLE → paste path | ✅ Jul 3 |
 
 ### C3 — Business / registry

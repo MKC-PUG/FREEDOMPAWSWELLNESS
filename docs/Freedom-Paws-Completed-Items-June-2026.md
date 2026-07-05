@@ -3,7 +3,7 @@
 
 **Document purpose:** Single record of what is **done and validated** so launch planning, grants, counsel, and binders do not redo settled work.
 
-**Last updated:** July 3, 2026  
+**Last updated:** July 4, 2026  
 **For current priorities:** See `Freedom-Paws-Launch-Master-Checklist-June-2026.md` and `Freedom-Paws-Critical-Path-Action-Packets-June-2026.md` (Wellness folder).
 
 **Project:** `freedompaws-app`  
@@ -39,7 +39,7 @@
 | Area | Status (Jul 3) |
 |------|----------------|
 | **Track 1 biometric ID** | **E2E complete** — enroll, found, match, owner email, ViT bridge |
-| **Track 2 chip scan MVP** | **Live + founder hardware QA complete** (WorldScan + PetScanner paste) |
+| **Track 2 chip scan MVP** | **Live + founder hardware QA complete** — C2.1 wedge + C2.2 Web Serial Jul 4; C2.3 PetScanner Jul 3 |
 | **ViT production smoke** | **Tests 1, 2, 4 PASS** (Jul 1, 2026) on v96 |
 | **TN adoption portal** | **E2E PASS** (New Leash on Life, Jun 30) |
 | **App UI polish** | **Design system rolled out** across client-facing routes |
@@ -58,7 +58,7 @@
 | L7 Adoption E2E | ✅ | Partner portal + public directory |
 | L8 Build/deploy | ✅ | v96 on production |
 | **Track 1 biometric + found E2E** | ✅ | FP-A6FFE6CD Jun 27–28; FP-B9B377D6 Jul 1 |
-| **Track 2 `/id/scan` + hardware QA** | ✅ | WorldScan Jun 28; PetScanner C2.3 Jul 3 |
+| **Track 2 `/id/scan` + hardware QA** | ✅ | C2.1 wedge + C2.2 Web Serial Jul 4; PetScanner C2.3 Jul 3 — all C2 complete |
 | **L5 Terms + Privacy (attorney)** | 🔴 **Open — critical path** | Blocks public mode + partner Email 1 at scale |
 | AAHA partnership inquiry | 🔴 Not sent | Packet B ready |
 | First TN partner live listing | 🔴 Not sent | Memphis Email 1 after L5 |
@@ -147,7 +147,8 @@
 | **WorldScan Plus Day 1** | ✅ | Jun 28 — COM3 @ 9600; test tag `985141007711681` |
 | **Production validate + link** | ✅ | Buddy · FP-A6FFE6CD |
 | **PetScanner BLE paste (C2.3)** | ✅ | **Jul 3, 2026** — same test tag → FP match |
-| HID wedge / Web Serial (C2.1/C2.2) | ⏳ Optional | WorldScan serial validated Jun 28 |
+| **HID wedge (C2.1)** | ✅ | **Jul 4, 2026** — WorldScan → `/id/scan` auto-fill, no paste |
+| **Web Serial (C2.2)** | ✅ | **Jul 4, 2026** — COM3 @ 9600; Merck closed; field `985141007711681` |
 | AAHA API embed | 🔴 | After partnership |
 | Retail scanner kit ($129) | 🔴 | Target Jan 2027 |
 | `/id/kit` Token Shop SKU | 🔴 | Planned |
@@ -209,9 +210,9 @@
 |----------|----------|--------|
 | Critical Path Action Packets (L5/B5, AAHA, Memphis) | `~/Documents/Freedom Paws Wellness/` | ✅ Jul 1 |
 | Grants & Growth Capital Master | Same | ✅ Jul 1 |
-| ID Chip Final Sign-Off Checklist | App repo + Wellness folder | ✅ C2.3 checked Jul 3 |
-| Founder Session Log | App repo + Wellness folder | ✅ Through Jul 3 |
-| **This master record** | App repo + Wellness folder | ✅ Jul 3 |
+| ID Chip Final Sign-Off Checklist | App repo + Wellness folder | ✅ C2.1 + C2.2 Jul 4; C2.3 Jul 3 |
+| Founder Session Log | App repo + Wellness folder | ✅ Through Jul 4 |
+| **This master record** | App repo + Wellness folder | ✅ Jul 4 |
 
 ---
 
@@ -262,4 +263,4 @@
 ---
 
 *Freedom Paws Wellness — Honor Buddy's Legacy*  
-*Completed items master record — updated July 3, 2026*
+*Completed items master record — updated July 4, 2026*

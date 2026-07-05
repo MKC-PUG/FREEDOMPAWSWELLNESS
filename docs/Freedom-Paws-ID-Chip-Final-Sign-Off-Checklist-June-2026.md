@@ -85,8 +85,8 @@
 
 | ☐ | # | Task | Time | Pass criteria | Done |
 |---|-----|------|------|---------------|:----:|
-| ☐ | C2.1 | HID wedge on Windows (WorldScan) | 10 min | Scan types into `/id/scan` field (not paste) | ☐ |
-| ☐ | C2.2 | Web Serial @ 9600 (Chrome Windows) | 15 min | Connect USB serial → scan populates field | ☐ |
+| ☑ | C2.1 | HID wedge on Windows (WorldScan) | 10 min | Scan types into `/id/scan` field (not paste) | ✅ Jul 4, 2026 |
+| ☑ | C2.2 | Web Serial @ 9600 (Chrome Windows) | 15 min | Connect USB serial → scan populates field | ✅ Jul 4, 2026 |
 | ☑ | C2.3 | PetScanner BLE arrives → paste path | 10 min | Copy from vendor app → validate in Freedom Paws | ✅ |
 
 **C2 subtotal:** ~**35 min** (when hardware available)
