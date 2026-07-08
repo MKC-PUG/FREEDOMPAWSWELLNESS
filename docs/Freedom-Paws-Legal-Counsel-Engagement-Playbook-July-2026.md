@@ -11,6 +11,7 @@
 **Companion docs:**
 - `Freedom-Paws-Critical-Path-Action-Packets-June-2026.md` (Packet A detail)
 - `Freedom-Paws-Remaining-Work-Master-Checklist-July-2026.md` (A1–A10 checklist)
+- `Freedom-Paws-3-Month-Pilot-Analysis-July-2026.md` (pilot duration, MOU milestones — **Section 16 summary**)
 
 ---
 
@@ -35,6 +36,7 @@
 13. [Packet A attachment checklist](#13-packet-a-attachment-checklist)
 14. [After L5 — what counsel handles next](#14-after-l5--what-counsel-handles-next)
 15. [Quick reference card](#15-quick-reference-card)
+16. [3-month pilot analysis — MOU guidance for counsel](#16-3-month-pilot-analysis--mou-guidance-for-counsel)
 
 ---
 
@@ -116,7 +118,7 @@
 | Packet A (pick one primary) | $1,500 | $4,000 | Internal target; get flat fee in writing |
 | WY LLC + RA (Terms.Law path) | $340 | $540 | Can run parallel to counsel search |
 | Trademark (1 mark, counsel-assisted) | $750 | $1,850 | Defer ViT Pro mark until D3 |
-| First shelter MOU (Memphis) | $1,500 | $3,500 | After L5 cleared |
+| First shelter MOU (Memphis) | $1,500 | $3,500 | After L5 cleared — use **Section 16** milestone template |
 | **Phase 0 legal minimum** | **~$3,600** | **~$9,000** | Before scaled outreach |
 
 ---
@@ -485,6 +487,12 @@ info@freedompawsinc.com
 29. After L5, what is your recommended **sequence** — MOU first (Memphis), trademark, or TN qualification?
 30. Can you provide a **conflicts check** on any of our 6 pilot orgs or AAHA before we engage?
 
+### Pilot MOU (Packet C5 — after L5)
+
+31. Will you draft the **first shelter pilot MOU/LOI** (Memphis M1) using **milestone-based success criteria** — not reunion-only? (See **Section 16**.)
+32. Can the pilot term be structured as **6 months with a 90-day checkpoint**, or **3 + 3 auto-extension** when operational milestones are met?
+33. Should **per-shelter reunion targets** be avoided in the initial MOU given stochastic reunion timing?
+
 ---
 
 # 9. Bass, Berry & Sims intake consult questions
@@ -593,7 +601,7 @@ info@freedompawsinc.com
 | W3.4 | **A9:** Verify `/terms` + `/privacy` on iPhone; remove founder-draft banner | ☐ |
 | W3.5 | **A10:** Save counsel approval PDF → `~/Documents/Freedom Paws Wellness/Legal/` | ☐ |
 | W3.6 | Mark **L5 GATE CLEARED** in session log | ☐ |
-| W3.7 | Proceed to **Packet C** — first partner outreach (Memphis Email 1) | ☐ |
+| W3.7 | Proceed to **Packet C** — first partner outreach (Memphis Email 1); share **Section 16** MOU milestones with counsel for **C5 LOI** | ☐ |
 
 ### Founder new to hiring counsel — principles
 
@@ -620,6 +628,8 @@ info@freedompawsinc.com
 | Comparator | *"We are obtaining two quotes and will decide by [date]."* |
 | Product facts | *"Biometric matching uses photo descriptors, not government ID. Human review before owner contact."* |
 | ViT positioning | *"Consumer tier is wellness guidance only; DVM product is a separate B2B line."* |
+| Pilot success | *"We measure pilot success by trained staff, enrollment at handoff, found-intake workflow, and at least one reunion or validated near-miss — with quarterly transparency."* (Section 16) |
+| Pilot extension | *"Pilot extends automatically when operational milestones are met — we're not asking you to bet on one reunion in 90 days."* (Section 16) |
 
 ### DO NOT say
 
@@ -631,6 +641,10 @@ info@freedompawsinc.com
 | *"We don't need written sign-off, just a quick look"* | You need A10 PDF for L5 gate |
 | *"Can you do this for free / equity?"* | Pre-funding startups pay flat fees; equity rare at this stage |
 | *"Shelters already agreed — we just need paperwork"* | MOUs need counsel before scale; don't imply commitment |
+| *"We'll have reunions every month"* or reunion-count guarantees | Reunions are partly stochastic; use milestone-based MOU language (Section 16) |
+| *"Match rate guarantees"* or similarity-score promises | No SLA on match accuracy in pilot MOU |
+| *"Government pet license"* or municipal endorsement beyond pilot scope | Freedom Paws ID is not a government license |
+| *"Phones read microchips"* | Track 2 scanner hardware is Jan 2027+ scope |
 | *"We process owner PII from chip registries"* | Factually false today; creates compliance alarm |
 | *"HIPAA doesn't apply so we're fine"* | TN privacy, biometric, and consumer laws still apply |
 | Sharing other firms' exact quotes | Say "budget anchor" instead of "Firm X said $2K" |
@@ -715,13 +729,13 @@ info@freedompawsinc.com
 
 | Priority | Task | Counsel role | Est. cost |
 |----------|------|--------------|-----------|
-| 1 | **First shelter MOU** (Memphis M1 recommended) | Draft / review pilot LOI | $1,500–$3,500 |
+| 1 | **First shelter MOU** (Memphis M1 recommended) — **Checklist C5** | Draft / review pilot LOI using **Section 16** milestone template (not reunion-only) | $1,500–$3,500 |
 | 2 | **TN foreign qualification** (if recommended in Packet A) | File or advise | $1,000–$2,500 |
 | 3 | **Trademark** — Freedom Paws word mark | Clearance + TEAS | $750–$1,850 |
 | 4 | **Shelter DPA — full execution** (per org) | Customize outline from A8 | $1,500–$3,000/org |
 | 5 | **XRPL / Token Shop** disclosure addendum | Terms update | $1,000–$3,000 |
 | 6 | **AAHA terms review** (when reply received) | Review API/embed agreement | $500–$1,500 |
-| 7 | **Remaining MOUs** (M2, M3, P1–P3) | Template reuse | $1,000–$2,500 each |
+| 7 | **Remaining MOUs** (M2, M3, P1–P3) | Reuse M1 template from Section 16 | $1,000–$2,500 each |
 | 8 | **VitProScan B2B Terms** (Phase 4) | Separate DVM addendum | $1,500–$4,000 |
 | 9 | **Benefit corp** | Deferred post-funding | $3,000–$8,000 |
 | 10 | **Annual review** | Terms/Privacy refresh | $2,000–$5,000/yr |
@@ -758,6 +772,88 @@ info@freedompawsinc.com
 | P1 | New Leash on Life | Lebanon |
 | P2 | Humane Society of Sumner County | Hendersonville |
 | P3 | Safe Place for Animals | Gallatin |
+
+---
+
+# 16. 3-month pilot analysis — MOU guidance for counsel
+
+> **Full memo:** `Freedom-Paws-3-Month-Pilot-Analysis-July-2026.md` (repo + Wellness folder). This section summarizes counsel-relevant findings — not legal advice.
+
+### Executive summary
+
+| Question | Verdict |
+|----------|---------|
+| Is **3 months** (Oct–Dec 2026) enough to **prove the system works**? | **Yes** — with aggressive enrollment, found-dog drills in weeks 2–4, and milestone-based MOU language |
+| Is 3 months enough to **prove scale** or lock multi-year deals on reunion volume alone? | **No** — that is the **Jan 2027 promotion window** (5+ reunions, ~20 shelters) by design |
+
+**Founder recommendation for counsel:** Structure every shelter MOU as **6 months with a 3-month checkpoint**, or as **3 + 3 auto-extension** when operational milestones are met — **not reunion-only**. Separate **pilot MOU success** from **renewal / annual partnership** criteria.
+
+### Two proof phases (do not collapse into one 90-day bar)
+
+| Phase | Window | Reunion bar (canonical) | Purpose |
+|-------|--------|-------------------------|---------|
+| **A — Biometric pilot** | Oct–Dec 2026 (~3 mo) | ≥1 documented reunion *or* high-confidence near-miss + E2E proof | Prove workflow, safety, enroll habit |
+| **B — Full promotion** | Jan 2027+ | 5+ documented reunion stories; 15–20 shelters | Scale proof before multi-year commitments |
+
+**Counsel note:** Shelter Onboarding sets 3+ approved matches for Oct–Dec; TN Pilot Spec and ID Roadmap set ≥1 reunion for the same window. **Per-shelter MOU success** should not require a reunion at every org — aggregate network proof counts toward pilot gate G3. Do not promise each municipal partner a reunion in 90 days.
+
+### Pilot term structure — 6 months vs 3 + 3
+
+| Term | Pros | Cons |
+|------|------|------|
+| **3 months only** | Easier municipal yes | Reunion roulette; false negative on renewal |
+| **6 months** | Better reunion odds; aligns with Oct start | Slightly slower formal renewal conversation |
+| **3 + 3 extension** | Compromise; objective checkpoint at 90 days | Requires clear extension triggers in MOU |
+
+**Preferred:** **6-month pilot** with **90-day checkpoint** (metrics review + transparency report — not termination unless operational failure or safety breach).  
+**Alternative:** **3-month initial term** with **automatic 3-month extension** when milestone checklist ≥80% complete (operational items 2–6 below).
+
+### Milestone-based MOU success criteria (not reunion-only)
+
+Define pilot success as **any combination** of measurable operational and outcome criteria. Meeting **a majority** of operational milestones (items 2–6) **and** at least one outcome milestone (item 1 or 7) constitutes **successful pilot completion**:
+
+| # | Category | Example milestone |
+|---|----------|-------------------|
+| 1 | **Outcome** | ≥1 documented reunion **or** ≥1 staff-verified high-confidence near-miss |
+| 2 | **Enrollment** | ≥25–50 owner enrollments attributed to Partner during pilot term |
+| 3 | **Found intake** | ≥10–15 found-dog intakes through shelter portal with completed match workflow |
+| 4 | **Training** | ≥2 shelter staff + ≥1 shelter_admin completed Freedom Paws training |
+| 5 | **Adoption directory** | ≥5 live listings (where applicable); adoptions marked within 72h |
+| 6 | **Safety & compliance** | No unauthorized PII disclosure; biometric consent flow used; no off-workflow owner contact |
+| 7 | **E2E drill** | ≥1 found-dog test drill (intake → candidates → review → test alert) within 30 days of go-live |
+
+**90-day checkpoint:** Freedom Paws delivers written report covering milestones 1–7; partner review within 14 days.
+
+**Auto-extension placeholder (for counsel adaptation):**
+
+> If, at the 90-day checkpoint, Partner has met **at least four (4)** of milestones 2–6 and has **not** experienced a material safety or data breach attributable to Freedom Paws systems, the pilot term shall **automatically extend** for an additional **ninety (90) days** on the same terms, without requirement of a new reunion outcome.
+
+### What counsel should bless in pilot MOU / LOI language
+
+| Item | Counsel action |
+|------|----------------|
+| **Milestone checklist** (above) | Adapt bracketed thresholds; confirm municipal procurement fit |
+| **90-day checkpoint + extension trigger** | Add termination rights, notice periods, municipal approval language |
+| **Explicit non-goals** | No multi-year exclusivity; no reunion-count or match-rate SLAs; no paid fees in pilot; no Track 2 scanner obligations |
+| **Controller/processor roles** | Align with Shelter DPA outline (A8) |
+| **Biometric consent** | Confirm in-app v2026-06-10 sufficient for shelter-attributed enrollments |
+| **Renewal MOU** | Separate document — reunion count, case study rights, optional scanner placement **not** binding on initial pilot term |
+| **Partner-facing claims** | Human review before owner contact; no-cost pilot; adds to microchips/QR (unchipped gap) |
+
+### Operational tactics counsel should know (founder executes; MOU may reference)
+
+- **Found-dog drills in weeks 2–4** — prove E2E before a real reunion (Checklist **C6**)
+- **Front-load enrollment** — 50 free enrollments per shelter per adoption event; strong handoff prompt (not optional at listing publish)
+- **Separate pilot from renewal** — partner who completes drills, enrollments, and intakes but misses reunion by 30 days should **extend**, not exit
+
+### Attach for first MOU engagement (Packet C5)
+
+When engaging counsel for Memphis M1 LOI after L5, attach:
+
+1. This playbook **Section 16** (or full `Freedom-Paws-3-Month-Pilot-Analysis-July-2026.md`)
+2. L5 sign-off PDF (A10)
+3. Shelter DPA outline (A8)
+4. Pilot org list (M1–M3, P1–P3)
 
 ---
 
