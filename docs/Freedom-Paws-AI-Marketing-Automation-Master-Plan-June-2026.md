@@ -424,7 +424,7 @@ Shelter shares listing link
 | 1 | Import master CSV to Google Sheets | 20m |
 | 2 | Add CRM columns (§4) | 15m |
 | 3 | Create Slack `#fp-approvals` + `#fp-metrics` | 10m |
-| 4 | Resend: verify domain; create shelter@ + partners@ forwards | 30m |
+| 4 | ✅ Namecheap Private Email: info@, shelter@, partners@ live (iPhone + Mac IMAP) — July 12, 2026; Resend for app mail | Done |
 | 5 | Claude Project: upload Partner Policies + Marketing Network Plan | 20m |
 | 6 | n8n: install (Docker or cloud.n8n.io) | 45m |
 

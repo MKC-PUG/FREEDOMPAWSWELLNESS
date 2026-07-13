@@ -197,7 +197,7 @@ The **CSV directory** provides 50 ranked targets per category with apply URLs an
 | Item | Recommendation | Monthly cost |
 |------|----------------|-------------:|
 | Sender domain | `notifications@freedompawsinc.com` (verified Resend) | Already live |
-| Outreach alias | `partners@freedompawsinc.com` forward | **$0–$6** |
+| Outreach mailbox | `partners@freedompawsinc.com` (Namecheap Private Email, live IMAP) | **Included** |
 | CRM | HubSpot Free or Notion pipeline | $0 |
 | Sequences | 3-touch max per target; 7-day spacing | $0 |
 

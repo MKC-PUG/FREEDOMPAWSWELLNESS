@@ -54,7 +54,7 @@ Only complete when you are ready to send real email:
 
 1. [ ] Review all drafts in `docs/marketing/outbox/tn-pilot/`
 2. [ ] Import CRM to Google Sheets (optional — for tracking only)
-3. [ ] Resend domain verified; shelter@ / partners@ forward to you
+3. [x] Namecheap Private Email: info@, shelter@, partners@ live on iPhone + Mac Mail (IMAP) — July 12, 2026 (Resend remains for app transactional mail)
 4. [ ] n8n installed; import workflow JSON from `docs/automation/n8n/`
 5. [ ] **Leave every workflow Inactive** while wiring credentials
 6. [ ] Test Workflow D with **one internal row** (your own email) — workflow still Inactive until test passes

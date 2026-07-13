@@ -332,7 +332,7 @@ Hook: ViT urgent + ID lost-dog funnel, only 3-4% pets insured
 ### Step 4 — Inbound reply forwarding
 
 1. Resend → **Domains** → verify `freedompawsinc.com` (done).
-2. Route `partners@` to founder inbox (Google Workspace forward).
+2. ✅ `partners@` / `shelter@` / `info@` live on Namecheap Private Email (iPhone + Mac Mail IMAP) — July 12, 2026.
 3. Optional n8n: parse reply → Claude triage (Agent 7).
 
 ---

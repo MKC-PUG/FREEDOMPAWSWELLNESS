@@ -227,6 +227,7 @@ Or manually: Vercel → Project → **Settings** → **Environment Variables** �
 | **3** | Insurance URL in Vercel env | ☐ |
 | **3** | Telehealth URL in Vercel env | ☐ |
 | **3** | `/ops/wellness` all OK | ☐ |
+| **Email** | Namecheap Private Email: info@, partners@, shelter@ on iPhone + Mac Mail (IMAP) | ✅ July 12, 2026 |
 
 ---
 

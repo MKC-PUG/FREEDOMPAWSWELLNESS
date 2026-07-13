@@ -284,7 +284,7 @@
 - [ ] `npm run marketing:crm-export` → review CSV
 - [ ] `npm run marketing:tn-outreach` → review 6 drafts in `outbox/tn-pilot/`
 - [ ] Import CRM to Google Sheets — **`Approved` column empty**
-- [ ] Resend: domain verified; shelter@ + partners@ forward to you (receive only)
+- [x] Namecheap Private Email: info@ (catch-all), shelter@, partners@ live on iPhone + Mac Mail (IMAP) — completed July 12, 2026
 - [ ] Cal.com booking link created (for drafts)
 - [ ] n8n account — **workflows Inactive**
 - [ ] Slack `#fp-approvals` + `#fp-metrics` (optional)

@@ -27,7 +27,7 @@
 - [ ] (Optional) Import CRM CSV to Google Sheets for planning — leave **`Approved` empty**
 - [ ] Pin filter views: **TN_Pilot**, **Approve Today** (for later)
 - [ ] Slack: create `#fp-approvals` and `#fp-metrics` (no bots required yet)
-- [ ] Resend: verify domain; forward shelter@ + partners@ (receive only)
+- [x] Namecheap Private Email: info@, shelter@, partners@ live on iPhone + Mac Mail (IMAP) — July 12, 2026
 - [ ] Cal.com: create booking link (for drafts)
 - [ ] n8n: install account/instance — **do not activate workflows**
 - [ ] Supabase: run `011_shelters_public_pilot_read.sql` if needed (public directory only)
