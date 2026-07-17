@@ -1,0 +1,18 @@
+Freedom Paws Biometric ID Consent export
+Source: lib/id/consent.ts
+BIOMETRIC_CONSENT_VERSION: 2026-06-10
+Live enroll: https://app.freedompawsinc.com/id/enroll
+Revoke: https://app.freedompawsinc.com/id/settings
+Status: Draft pending Packet A counsel sign-off (A5 / B5)
+Export: July 2026
+
+---
+
+Freedom Paws Biometric ID Consent (v2026-06-10)
+
+I understand that:
+• Freedom Paws will analyze photos/video of my dog to create identity descriptors for lost-dog matching.
+• This is not a government pet license and not veterinary advice.
+• Match results require human review before any owner contact.
+• I may revoke consent and request deletion of biometric data in ID settings.
+• My data is stored securely and used only for reunion and account features I enable.
