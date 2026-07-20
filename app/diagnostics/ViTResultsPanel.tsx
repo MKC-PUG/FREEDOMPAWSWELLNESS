@@ -160,6 +160,15 @@ export default function ViTResultsPanel({
         </div>
       )}
 
+      <div className="rounded-2xl border-2 border-green-500/60 bg-green-950/45 p-5">
+        <p className="text-green-300 font-bold text-sm">🛡 Educational tool only</p>
+        <p className="text-green-100/90 text-sm mt-2 leading-relaxed">
+          This wellness analysis is for education only — it is not a veterinary diagnosis and is
+          not a substitute for licensed veterinary care. Always consult a licensed veterinarian
+          for medical advice about your pet.
+        </p>
+      </div>
+
       {result.vetUrgent && (
         <div className="rounded-2xl border-2 border-red-500 bg-red-950/50 p-5">
           <p className="text-red-300 font-bold text-sm">⚠️ Veterinary attention recommended</p>

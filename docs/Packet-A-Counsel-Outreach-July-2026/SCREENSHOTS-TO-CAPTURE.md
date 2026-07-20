@@ -42,13 +42,13 @@
 |-------|-------|
 | **URL** | https://app.freedompawsinc.com/diagnostics |
 | **Filename** | `04-diagnostics-disclaimer.png` |
-| **What must be visible** | Results panel **and** wellness / not-vet / urgency disclaimer or banner |
+| **What must be visible** | Results panel under **Your wellness analysis**, including the **green educational banner** (educational tool only / not a diagnosis / not a substitute for licensed veterinary care) and/or the **red urgent banner** (“Veterinary attention recommended”) when applicable |
 
 ### Steps
 
 1. Open https://app.freedompawsinc.com/diagnostics
 2. Run a quick analysis with a non-sensitive dog photo you own (or open an existing results view if available).
-3. Scroll so both the **results content** and the **disclaimer / urgent-care banner** are in frame (two screenshots OK: `04a-…` and `04b-…` if needed; prefer one combined if possible).
+3. Scroll so **results** show the **green educational banner** under the results header (always present on successful analysis). If the run is urgent, also include the **red urgent banner** below it (green first, then red). Two screenshots OK: `04a-…` and `04b-…` if needed; prefer one combined if possible.
 4. Save as `04-diagnostics-disclaimer.png` in `Packet-A-2026-07`.
 
 **Related URLs counsel may also open (optional extra shots):**
