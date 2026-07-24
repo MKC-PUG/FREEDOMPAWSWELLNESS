@@ -62,6 +62,7 @@ Freedom Paws ID & Tool Box is the **B2B growth engine** for shelters and veterin
 | M8 | AAHA + AVID registry UX | Dec 15, 2026 | 25 |
 | M9 | Chipped module complete | Dec 15, 2026 | 25 |
 | M10 | **Full launch → promotion mode** | **Jan 1, 2027** | **27** |
+| M10b | **Impact Dashboard** live public KPIs | **First confirmed reunion** **or** **Jan 2027 promo prep** (earliest; not before L5) | — |
 
 ### Architecture diagram
 
@@ -562,6 +563,7 @@ SCANNER_KIT_SHOP_URL=
 - [ ] Framer copy update — remove “planned” for live features
 - [ ] Case study video
 - [ ] Security pen-test (light)
+- [ ] **Impact Dashboard** — live public counters after **first confirmed reunion** **OR** **Jan 2027 promotion prep** (whichever first). Not before L5; Framer methodology OK earlier. Plan: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md`
 - [ ] **Feb 1, 2027 promotion mode**
 
 ### Parallel (all phases)
@@ -911,6 +913,7 @@ Slide 1: 40% of intakes unchipped. Slide 2: Photo → AI match. Slide 3: Human r
 - [ ] Load test passed (5k pets, 500 searches)
 - [ ] Legal sign-off on biometric + chip flows
 - [ ] Promotion campaign live
+- [ ] **Impact Dashboard** live or triggered — first confirmed reunion **or** Jan 2027 promo prep (earliest; not before L5). See `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md`
 
 ---
 

@@ -4,6 +4,20 @@
 **Status:** Recommendation — **phased yes** (plan now; do **not** ship a public live KPI dashboard yet)  
 **Aligned with:** L5 Packet A (A7 give-back), Oct 2026 TN pilot, Jan 2027 promotion  
 **Related:** Legal Counsel Playbook §16; Give-back One-Pager (A7); DAO Cost Report §5.6; Framer `/community-impact` + `/grants`; internal `/ops` Command Center  
+**Build timeline:** Scheduled — see **Timeline gate** below; also Remaining Work Master Checklist, Founder Master Schedule, ID Master Roadmap  
+
+---
+
+## Timeline gate (locked July 2026)
+
+| Rule | Detail |
+|------|--------|
+| **When to build live public Impact Dashboard** | **After first confirmed reunion** (staff/owner in-person verify logged) **OR** **January 2027 promotion prep** — **whichever comes first** |
+| **Hard floor** | **Not before L5** (Packet A, incl. A7 give-back wording for any $ / give-back claims) |
+| **Live public counters** | Only after **proof** (confirmed reunion and/or instrumented honest KPIs) — never zeros, seed partner counts, or `matched` as “reunited” |
+| **OK earlier** | Framer `/community-impact` + `/grants` as **methodology / commitment** pages (no live outcome counters); give-back language only after A7 |
+
+**One-line schedule:** Plan now → Framer methodology when ready → app-hosted live dashboard at first confirmed reunion **or** Jan 2027 promo prep (earliest).
 
 ---
 

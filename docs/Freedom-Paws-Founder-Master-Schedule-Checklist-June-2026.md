@@ -102,6 +102,7 @@
 - [ ] Weekly `/ops` KPI review (15 min)
 - [ ] Monthly: regenerate binders PDF for grant packets
 - [ ] Quarterly: revisit 10-year vision doc against actual metrics
+- [ ] **Impact Dashboard gate:** start live public build after **first confirmed reunion** **OR** **Jan 2027 promotion prep** (whichever first). Not before L5; Framer methodology OK earlier. Plan: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md`
 
 ---
 
@@ -408,6 +409,7 @@
 - [ ] Track 2: order HID scanner hardware (`Freedom-Paws-ID-Track-2-Supplies-Shopping-Guide-June-2026.md`)
 - [ ] `/id/scan` MVP with hardware
 - [ ] Retail scanner kit plan (`docs/ops/TRACK-2-RETAIL-SCANNER-KIT-PLAN-June-20-2026.md`)
+- [ ] **Impact Dashboard** (gated): live public counters after **first confirmed reunion** **OR** **Jan 2027 promotion prep** (earliest). Not before L5; Framer methodology OK earlier. Plan: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md`
 
 ---
 

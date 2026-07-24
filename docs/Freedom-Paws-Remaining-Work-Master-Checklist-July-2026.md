@@ -24,6 +24,7 @@
 | **5** | Entity, payments, membership, public mode | Counsel + eng |
 | **6** | Grants & growth capital | 90-day calendar |
 | **7** | Post-launch marketing & TN pilot expansion | Oct 2026–Jan 2027 |
+| **7b** | **Impact Dashboard** (gated) — first confirmed reunion **or** Jan 2027 promo prep | Earliest that applies |
 | **8** | Long-term product (optional / scale) | 2027+ |
 | **9** | **Running the business** — daily / weekly / monthly / quarterly | Ongoing |
 
@@ -338,8 +339,9 @@
 | ☐ | M8 | Partner acquisition: holistic vets, indie retail QR | 
 | ☐ | M9 | `npm run marketing:crm-export` weekly during pilot |
 | ☐ | M10 | Regenerate binder PDFs quarterly for grants |
+| ☐ | M11 | **Impact Dashboard** — live public counters after **first confirmed reunion** **OR** **Jan 2027 promotion prep** (whichever first). **Not before L5.** Framer methodology pages OK earlier. Plan: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md` |
 
-*Detail: `Freedom-Paws-Master-Marketing-Network-Plan-June-2026.md`*
+*Detail: `Freedom-Paws-Master-Marketing-Network-Plan-June-2026.md` · Impact: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md`*
 
 ---
 
@@ -352,6 +354,7 @@
 | ☐ | ViT | Custom model / clinical validation path |
 | ☐ | ID | Premium ID protection subscription ($2.99/mo) |
 | ☐ | ID | IPFS cloud vault for pet records |
+| ☐ | Impact | Public `/impact` live dashboard — **gated:** first confirmed reunion **or** Jan 2027 promo prep (earliest); not before L5. See Impact Dashboard Plan |
 | ☐ | Photo Booth | Phase 3.5 live camera → AI; share card + QR |
 | ☐ | Monitor | Multi-camera; cloud DVR (optional) |
 | ☐ | Shop | Full Stripe + RLUSD parity; server unlocks all devices |
@@ -437,6 +440,7 @@
 | ☐ | **Domain renewals** | freedompawsinc.com, vitproscan.com, defensive names |
 | ☐ | **Copyright / binder update** | New features since last registration |
 | ☐ | **Jan promotion cycle** | Retail scanner kit campaign (from 2027) |
+| ☐ | **Impact Dashboard refresh** | If not already live from first confirmed reunion — ship/update per Impact Dashboard Plan |
 | ☐ | **Strategic plan refresh** | 5-year outlook doc; product line inventory |
 
 ---
@@ -465,6 +469,7 @@
 | **G3** | Oct 2026 TN biometric pilot live | | |
 | **G4** | ViT Pro DVM pilot complete | | |
 | **G5** | Jan 2027 retail scanner promotion | | |
+| **G5b** | **Impact Dashboard** live — first confirmed reunion **OR** Jan 2027 promo prep (earliest); not before L5 | | |
 | **G6** | Operating business — Phase 9 routines stable 90 days | | |
 
 ---
