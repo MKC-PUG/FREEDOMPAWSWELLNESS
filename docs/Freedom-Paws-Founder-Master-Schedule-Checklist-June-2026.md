@@ -304,6 +304,7 @@
 - [ ] Buffer/social scheduling (Workflow F) — after 2 weeks of manual rhythm
 - [ ] Impact.com affiliate applications (when traffic exists)
 - [ ] Insurance partner outreach (after legal kit cleared)
+- [ ] **Verified Dog Health Partners Wave 1** — soft interest OK now; live links post-L5. Plan: `Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md`
 - [ ] Weekly: reply partners@ + shelter@; update CRM
 
 ## Emergency pause (memorize)

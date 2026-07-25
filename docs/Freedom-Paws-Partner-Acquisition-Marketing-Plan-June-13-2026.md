@@ -1,10 +1,12 @@
 # Freedom Paws Wellness — Partner Acquisition & Mission Marketing Plan
 
-**Date:** June 13, 2026  
+**Date:** June 13, 2026 · **Nutrition update:** July 24, 2026  
 **Purpose:** Best-practice playbook to find, vet, and onboard mission-aligned partners — and recruit shelters & veteran organizations for adoption and utilization  
 **Audience:** Founder, outreach lead, future BD hire  
-**Related:** [Partner Policies](./Freedom-Paws-Wellness-Partner-Policies-June-2026.md) · [Super-App Strategy](./Freedom-Paws-Super-App-WeChat-Strategy-June-2026.md) · [Competitive Analysis](./Freedom-Paws-Competitive-Market-Dominance-and-5-Year-Model-June-13-2026.md) · [Framer CTA Map](./Framer-CTA-Link-Map.md)  
+**Related:** [Partner Policies](./Freedom-Paws-Wellness-Partner-Policies-June-2026.md) · [Super-App Strategy](./Freedom-Paws-Super-App-WeChat-Strategy-June-2026.md) · [Competitive Analysis](./Freedom-Paws-Competitive-Market-Dominance-and-5-Year-Model-June-13-2026.md) · [Framer CTA Map](./Framer-CTA-Link-Map.md) · **[Verified Dog Health Partners Outreach Plan](./Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md)**  
 **Apply / outreach hub:** partners@freedompawsinc.com · shelter@freedompawsinc.com
+
+> **July 2026:** Nutrition / supplement / treat / chew partners use the Verified Partners evaluation framework and Wave 1 list. Soft outreach OK now; live affiliate CTAs after L5.
 
 ---
 
@@ -48,10 +50,11 @@ Freedom Paws grows through **trust-first distribution**: daily utility (ViT, My 
 | Principle | What we say | What we reject |
 |-----------|-------------|----------------|
 | **Wellness, not pharma** | Prevention, lifestyle, non-toxic nutrition, protocols | Partners requiring drug-first treatment messaging |
+| **Evidence-based selection** | We evaluate sourcing, contaminant testing, manufacturing, scientific integrity — we only recommend companies that meet our standards | Spray-and-pray affiliate networks; pay-to-rank listings |
 | **Member value** | Exclusive discount/credit via Freedom Paws link | “Same price as website” affiliate deals |
 | **Transparent disclosure** | FTC-compliant “may earn commission” on all CTAs | Hidden referral relationships |
 | **Optional CTAs** | Partners enhance; never block ViT/ID/core app | Paywalls on diagnostics or ID enroll |
-| **Give-back story** | 10% net → veterans + shelters | Partners conflicting with no-kill / holistic ethos |
+| **Give-back story** | 10% eligible net → veterans + shelters; Community Partners amplify documented impact | Overclaiming charity ties without documentation |
 | **Emergency honesty** | ViT ≥80% severe congruency → in-person vet | Telehealth partners discouraging ER referral |
 
 ### Best-practice outreach sequence (all categories)
@@ -111,28 +114,30 @@ Research (mission fit) → Warm intro or targeted email → 15-min alignment cal
 
 ### 3C. Protocol & whole-food affiliates
 
-**Goal:** Affiliate links inside 3 protocols by H1 2027; expand to 8 by 2028.
+**Goal:** Affiliate links inside 3 protocols by H1 2027; expand to 8 by 2028.  
+**Master plan:** [Verified Dog Health Partners Outreach Plan](./Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md) — Wave 1, tiers, charity flags, email template.
 
 | Protocol | Affiliate type | Example congruent brands |
 |----------|----------------|--------------------------|
-| Gut Balance | Whole-food / probiotic | Honest Kitchen, Open Farm, Answers |
-| Max Movement | Joint / anti-inflammatory nutrition | Native Pet, Fera Pets (whole-food) |
-| Allergy Shield | Limited-ingredient food | Nom Nom, JustFoodForDogs |
-| Fresh Smile | Dental chews (non-toxic) | Whimzees (simple ingredients), Greenies Natural (vet) |
-| Liver/Kidney Detox | Clean protein / hydration | Bone broth partners, filtered water affiliate |
-| Freedom Calm | Calming supplements (natural) | Holistic pet brands — **no synthetic pharma** |
-| Patriot Immune | Senior / immune whole-food | Same as above; veteran co-brand angle |
+| Gut Balance | Whole-food / probiotic | Honest Kitchen, Open Farm, Adored Beast, Four Leaf Rover |
+| Max Movement | Joint / anti-inflammatory nutrition | Fera Pets, Four Leaf Rover (whole-food) |
+| Allergy Shield | Limited-ingredient / fresh food | Raised Right, JustFoodForDogs, Green Juju |
+| Fresh Smile | Dental chews (non-toxic) | Whimzees (Safe Picks); Farm Hounds where SKU-fit |
+| Liver/Kidney Detox | Clean protein / hydration | Open Farm, Green Juju (functional) |
+| Freedom Calm | Calming supplements (natural) | Adored Beast / holistic — **no synthetic pharma** |
+| Patriot Immune | Senior / immune + give-back story | Honest Kitchen, Nordic Naturals (omega education) |
 | Clear Vision | Eye-support nutrition | Limited — vet-reviewed only |
 
 | Step | Action | Done when |
 |:----:|--------|-----------|
-| 1 | Vet each brand’s ingredient philosophy (no BHA/BHT, no mystery meal) | Approved list per protocol |
-| 2 | Apply to brand affiliate programs (ShareASale, Impact, direct) | Tracking links |
-| 3 | Add “Shop whole-food partners” block on `/protocols/{slug}` | Live on 3 slugs |
+| 1 | Score brand on Verified framework (sourcing, testing, manufacturing, science, ethics, giving) | Approved list per protocol |
+| 2 | Soft Wave 1 outreach (charity-aligned first); apply programs **after L5** | Tracking links |
+| 3 | Add “Verified / whole-food partners” block on `/protocols/{slug}` | Live on 3 slugs |
 | 4 | Disclose affiliate; cross-link Token Shop | Legal + UX review |
-| 5 | Track clicks in analytics; monthly report | Dashboard |
+| 5 | Offer educational collab (review / webinar), not links only | Partner agrees |
+| 6 | Track clicks in analytics; monthly report | Dashboard |
 
-**Rule:** Never affiliate products that contradict **non-toxic, whole-food** positioning without founder exception.
+**Rule:** Never affiliate products that contradict **non-toxic, whole-food / evidence-based** positioning without founder exception. Never claim shelter/veteran support for a brand without a documented program.
 
 ---
 
@@ -260,16 +265,23 @@ Research (mission fit) → Warm intro or targeted email → 15-min alignment cal
 
 ### Protocol / whole-food & supplement affiliates
 
+*Wave 1 order and charity notes: [Verified Partners Plan §7](./Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md).*
+
 | Priority | Brand | Protocol fit | Affiliate channel |
 |:--------:|-------|--------------|-------------------|
-| ★★★ | **The Honest Kitchen** | Gut, immune, general whole-food | Direct / ShareASale |
-| ★★★ | **Open Farm** | Gut, allergy, ethical sourcing | Impact |
-| ★★★ | **Stella & Chewy’s** | Gut, immune (raw/freeze-dried — disclose handling) | Direct |
-| ★★ | **Nom Nom** | Gut, fresh food | Partner program |
-| ★★ | **Native Pet** | Max Movement, gut | nativepet.com |
+| ★★★ | **The Honest Kitchen** | Gut, immune, treats; Community Partner candidate | Partner With Us / ShareASale |
+| ★★★ | **Open Farm** | Gut, allergy, ethical sourcing; Community | Partnership / Impact |
+| ★★★ | **Farm Hounds** | Treats / chews; regenerative + rescue | Direct |
+| ★★★ | **Raised Right** | Fresh food; Community candidate | Direct |
+| ★★★ | **Four Leaf Rover** | Educational supplements | Direct |
+| ★★★ | **Adored Beast** | Holistic supplements; founder outreach | Direct |
+| ★★★ | **Nordic Naturals Pet** | Omega education; service-adjacent giving | Affiliate / contact |
+| ★★★ | **Green Juju** | Fresh / functional; Community candidate | Direct |
+| ★★★ | **JustFoodForDogs** | Vet nutrition; Community candidate | Direct |
+| ★★★ | **Standard Process Vet** | Practitioner education (not lifestyle affiliate) | BD / practitioner |
 | ★★ | **Fera Pets** | Immune, joint (verify ingredients) | Direct |
-| ★★ | **Answers Pet Food** | Gut, detox | Direct — holistic community |
-| ★ | **Chewy** (select SKUs only) | Scale; **curate SKUs only** | Chewy affiliate — use sparingly |
+| ★★ | **Carna4 / Nature's Logic** | Whole-food / minimally processed | Direct |
+| ★ | **Chewy** (select SKUs only) | Scale; **curate SKUs only** | Use sparingly |
 | ★ | **Amazon Associates** | Last resort; strict SKU whitelist | Associates central |
 
 ---

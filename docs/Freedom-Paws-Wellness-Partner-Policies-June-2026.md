@@ -11,16 +11,20 @@ Official acceptance standards and recommended financial structures for **insuran
 
 **Apply:** partners@freedompawsinc.com
 
+**Nutrition / Safe Picks / Verified Partners (July 2026):** Product evaluation, Founding / Verified / Community tiers, Wave 1 list, and outreach templates live in [Verified Dog Health Partners Outreach Plan](./Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md). Soft interest before L5; live commissions and public badge after counsel clears affiliate disclosures. Do **not** imply FDA or regulatory certification in any “verified” badge language.
+
 ---
 
 ## Shared principles (both modules)
 
 1. **Wellness-first** — Freedom Paws educates on prevention, non-toxic nutrition, lifestyle, and protocols. We are not a veterinary clinic and do not prescribe pharmaceutical drugs.
-2. **Member value required** — Every partner must offer tangible member savings (discount, credit, or bundled benefit) vs. direct signup.
-3. **Transparent disclosure** — FTC-compliant commission disclosure on all affiliate surfaces.
-4. **Optional, never blocking** — Partner CTAs never gate core app features (ViT, ID, protocols).
-5. **Emergency escalation** — ViT urgent flags (≥80% severe-indicator congruency) always recommend in-person licensed care when indicated.
-6. **Right to decline** — Freedom Paws may reject or remove partners misaligned with natural wellness positioning.
+2. **Evidence-based product partners** — When recommending foods, supplements, treats, or chews, we evaluate ingredient sourcing, contaminant testing, manufacturing quality, and scientific integrity. We only recommend companies that meet our standards.
+3. **Member value required** — Every partner must offer tangible member savings (discount, credit, or bundled benefit) vs. direct signup.
+4. **Transparent disclosure** — FTC-compliant commission disclosure on all affiliate surfaces.
+5. **Optional, never blocking** — Partner CTAs never gate core app features (ViT, ID, protocols).
+6. **Emergency escalation** — ViT urgent flags (≥80% severe-indicator congruency) always recommend in-person licensed care when indicated.
+7. **Give-back alignment** — Freedom Paws returns a portion of eligible profits to shelters and working dog organizations (target 10% of eligible net, 50/50). Community Partner recognition requires **documented** shelter/rescue or working-dog support — never overclaim.
+8. **Right to decline** — Freedom Paws may reject or remove partners misaligned with natural wellness positioning.
 
 ---
 

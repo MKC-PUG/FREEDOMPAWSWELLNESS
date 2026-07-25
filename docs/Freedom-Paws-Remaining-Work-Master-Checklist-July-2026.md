@@ -300,6 +300,7 @@
 | ☐ | P8 | Founding member / waitlist coupon codes |
 | ☐ | P9 | 10% give-back at checkout (counsel-cleared) |
 | ☐ | P10 | Insurance / affiliate outreach kits (post-L5) |
+| ☐ | P10b | **Verified Dog Health Partners** — Wave 1 after L5 (or soft interest now). Plan: `Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md`. Charity-aligned first: Honest Kitchen → Open Farm → Farm Hounds → Raised Right → Four Leaf Rover → Adored Beast → Nordic Naturals → Green Juju → JustFoodForDogs → Standard Process Vet. Live commissions only after L5 disclosures. |
 
 ---
 
@@ -337,9 +338,11 @@
 | ☐ | M6 | First reunion PR story (with partner consent) |
 | ☐ | M7 | Veteran give-back transparency post (Framer `/grants`) |
 | ☐ | M8 | Partner acquisition: holistic vets, indie retail QR | 
+| ☐ | M8b | Verified Partners Wave 1 formal sequence (post-L5); CRM tags Founding/Verified/Community | See Verified Partners Plan |
 | ☐ | M9 | `npm run marketing:crm-export` weekly during pilot |
 | ☐ | M10 | Regenerate binder PDFs quarterly for grants |
 | ☐ | M11 | **Impact Dashboard** — live public counters after **first confirmed reunion** **OR** **Jan 2027 promotion prep** (whichever first). **Not before L5.** Framer methodology pages OK earlier. Plan: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md` |
+| ☐ | M12 | **Dog Health Verified badge + annual nutrition report** — Phase later (~Jan 2027+); TM search + counsel first; no FDA/regulatory implication. Plan: Verified Partners §9 |
 
 *Detail: `Freedom-Paws-Master-Marketing-Network-Plan-June-2026.md` · Impact: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md`*
 
@@ -355,6 +358,7 @@
 | ☐ | ID | Premium ID protection subscription ($2.99/mo) |
 | ☐ | ID | IPFS cloud vault for pet records |
 | ☐ | Impact | Public `/impact` live dashboard — **gated:** first confirmed reunion **or** Jan 2027 promo prep (earliest); not before L5. See Impact Dashboard Plan |
+| ☐ | Verified Partners | Badge + *State of Canine Health & Nutrition Report* — post-L5 / ~Jan 2027+; TM + no regulatory endorsement claims |
 | ☐ | Photo Booth | Phase 3.5 live camera → AI; share card + QR |
 | ☐ | Monitor | Multi-camera; cloud DVR (optional) |
 | ☐ | Shop | Full Stripe + RLUSD parity; server unlocks all devices |

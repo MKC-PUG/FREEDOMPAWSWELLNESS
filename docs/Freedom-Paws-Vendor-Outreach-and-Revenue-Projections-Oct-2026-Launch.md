@@ -11,6 +11,8 @@
 
 **Companion file (printable):** `~/Documents/Freedom Paws Wellness/Freedom-Paws-Vendor-Outreach-and-Revenue-Projections-Oct-2026-Launch.md` (copy of this doc)
 
+**July 2026 — nutrition / Safe Picks philosophy:** Evidence-based selection, Wave 1 charity-aligned brands, Founding/Verified/Community tiers, and soft-vs-L5 timing are defined in [Verified Dog Health Partners Outreach Plan](./Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md). Print/Photo Booth and insurance/telehealth sections below remain the revenue timeline for non-nutrition vendors.
+
 ---
 
 ## Table of contents
@@ -98,9 +100,11 @@ Photo Booth is correctly positioned as the **top-of-funnel hook**: free cutout, 
 
 ### B. Safe Picks (whole-food & non-toxic products)
 
-Tier 1 apply first (protocol-aligned, high trust): The Honest Kitchen, Open Farm, Native Pet, West Paw, Whimzees, Earth Animal, Answers Pet Food.
+**Tier 1 / Wave 1 (charity-aligned + educational fit — see Verified Partners Plan):** The Honest Kitchen, Open Farm, Farm Hounds, Raised Right, Four Leaf Rover, Adored Beast, Nordic Naturals, Green Juju, JustFoodForDogs, Standard Process Veterinary.
 
-Env pattern: `NEXT_PUBLIC_FP_SAFE_{PRODUCT_ID}_URL` (e.g. `WEST_PAW`, `NATIVE_PET`).
+Also keep toy/chew Safe Picks catalog brands (West Paw, Whimzees, etc.) for `/wellness/safe-products`.
+
+Env pattern: `NEXT_PUBLIC_FP_SAFE_{PRODUCT_ID}_URL` (e.g. `WEST_PAW`, `HONEST_KITCHEN`). Soft interest pre-L5; production URLs after attorney disclosure sign-off.
 
 ### C. Protocol page affiliates (10 protocols × 2 picks each)
 
@@ -164,8 +168,9 @@ Start with Vetster (+ integrative vet filter). Env: `NEXT_PUBLIC_FP_TELEHEALTH_B
 
 ### Safe Picks / nutrition brands
 
-**Method:** Use each brand’s affiliate page; mention Gut Balance / Max Movement protocol alignment.  
-**Pitch angle:** Whole-food, non-toxic — matches Safe Picks criteria in app.
+**Method:** Use Verified Partners positioning + each brand’s affiliate/BD page; charity-aligned Wave 1 first.  
+**Pitch angle:** Evidence-based canine health — sourcing, contaminant testing, manufacturing, scientific integrity; educational reviews/webinars, not links only. Template: Verified Partners Plan §8.  
+**Ask for:** Tracking link (post-L5), educational collab, optional Give Back Alliance commission %.
 
 ### Insurance
 

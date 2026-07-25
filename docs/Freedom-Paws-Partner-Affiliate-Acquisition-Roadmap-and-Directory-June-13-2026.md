@@ -1,9 +1,13 @@
 # Freedom Paws — Partner & Affiliate Acquisition Roadmap, Contact Directory & Outreach Playbook
 
-**Date:** June 13, 2026  
+**Date:** June 13, 2026 · **Nutrition philosophy update:** July 24, 2026  
 **Prepared for:** Founder / BD — nationwide partner recruitment and member adoption  
 **Companion spreadsheet:** [Freedom-Paws-Partner-Contact-Directory-June-13-2026.csv](./Freedom-Paws-Partner-Contact-Directory-June-13-2026.csv) (**300 organizations** — top 50 per category)  
 **Related:** [Partner Policies](./Freedom-Paws-Wellness-Partner-Policies-June-2026.md) · [Marketing Plan](./Freedom-Paws-Partner-Acquisition-Marketing-Plan-June-13-2026.md) · [E2E Runbook](./Freedom-Paws-ID-E2E-Found-Match-Runbook-June-13-2026.md)
+
+> **July 2026 — Verified Dog Health Partners (nutrition / Safe Picks):** For evidence-based food, supplement, treat, and chew outreach — positioning language, evaluation framework, partnership tiers (Founding / Verified / Community), Wave 1 charity-aligned list, Give Back Alliance, and badge/report phasing — use the master plan:  
+> **[Verified Dog Health Partners Outreach Plan (July 2026)](./Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md)**  
+> Soft interest OK now; **live commissions after L5**. Insurance, telehealth, shelter, and veteran lanes in this roadmap still apply.
 
 ---
 
@@ -126,18 +130,19 @@ The **CSV directory** provides 50 ranked targets per category with apply URLs an
 
 ### 4C. Whole-food nutrition & protocol affiliates
 
-**Goal:** 3 protocol affiliate links by Q4 2026; 8 by Q2 2027.
+**Goal:** 3 protocol affiliate links by Q4 2026; 8 by Q2 2027.  
+**Philosophy (July 2026):** Select brands against sourcing, contaminant testing, manufacturing quality, and scientific integrity — educational partnership, not link-only. Full directory, tiers, and Wave 1: [Verified Partners Plan](./Freedom-Paws-Verified-Dog-Health-Partners-Outreach-Plan-July-2026.md).
 
 | Step | Action | Est. cost |
 |:----:|--------|----------:|
-| 1 | Apply Honest Kitchen + Open Farm + Native Pet (CSV ranks 1,2,14) | $0 |
-| 2 | Whitelist SKUs per protocol (no BHA/BHT, no mystery meal) | $0 |
-| 3 | Add “Whole-food partners” block on `/protocols/{slug}` | Engineering |
-| 4 | FTC disclosure on all links | $0 |
-| 5 | Email 10 micro pet nutrition creators (P2P Instagram) | $0 |
+| 1 | Wave 1 soft outreach (charity-aligned first): Honest Kitchen, Open Farm, Farm Hounds, Raised Right, Four Leaf Rover, Adored Beast, Nordic Naturals, Green Juju, JustFoodForDogs, Standard Process Vet | $0 |
+| 2 | After L5: apply affiliate programs + whitelist SKUs per protocol (no BHA/BHT, no mystery meal) | $0 |
+| 3 | Add “Verified / whole-food partners” block on `/protocols/{slug}` | Engineering |
+| 4 | FTC disclosure on all links (counsel-cleared) | $0 |
+| 5 | Propose reviews / webinars / interviews — not links only | $0 |
 | 6 | Optional: Send sample protocol unlock codes | **$150–$500** (10 × $15 value) |
 
-**Commission expectation:** 5–15% per sale via Impact/ShareASale.
+**Commission expectation:** 5–15% per sale via Impact/ShareASale. Explore **Give Back Alliance** (% of commission to shelters/veteran orgs) with Community Partners.
 
 ---
 
@@ -416,7 +421,7 @@ flowchart TB
 |-----|--------|----------|
 | Mon | Apply Embrace + Pets Best + Spot | Insurance |
 | Tue | Email sales@airvet.com + Vetster; AHVMA intro | Telehealth |
-| Wed | Apply Honest Kitchen + Open Farm | Nutrition |
+| Wed | Soft interest: Honest Kitchen + Open Farm + Farm Hounds (Verified Partners Wave 1; live links post-L5) | Nutrition |
 | Thu | Email Nashville Humane + Young-Williams + Humane Society TN Valley | Shelters |
 | Fri | Email K9s For Warriors + Pets for Patriots | Veterans |
 | Sat | Post 1 ViT Reel + 1 Photo Booth UGC | P2P social |
