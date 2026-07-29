@@ -1,7 +1,7 @@
 # Freedom Paws Wellness
 # Remaining Work — Master Checklist (Build → Launch → Running Business)
 
-**Version:** July 3, 2026  
+**Version:** July 29, 2026  
 **Purpose:** Single printable list of **everything left** to complete the project (all builds), launch publicly, scale post-launch, and **operate the business** on a recurring schedule.
 
 **Companion (what’s done):** `Freedom-Paws-Completed-Items-Master-Record-Through-July-2026.md`  
@@ -306,21 +306,25 @@
 
 # PHASE 6 — Grants & growth capital
 
-*Full detail: `Freedom-Paws-Grants-Growth-Capital-Master-June-2026.md`*
+*Full detail: `Freedom-Paws-Grants-Growth-Capital-Master-June-2026.md`*  
+*Unblock (L5 + TM + first partner capital): `Freedom-Paws-Capital-Grants-Unblock-Plan-July-2026.md`*
 
-| ☐ | # | Funder / program | When |
-|---|-----|------------------|------|
-| ☐ | G1 | XRPL Grants ($25K watch) | When 2026 cycle opens |
-| ☐ | G2 | Petco Love | Post-L7 + L5 |
-| ☐ | G3 | Maddie's Fund | Post-L7 + L5 |
-| ☐ | G4 | ASPCA grants scan | Q3 2026 |
-| ☐ | G5 | Supabase startup credits | Jul 2026 |
-| ☐ | G6 | OpenAI startup credits | Jul 2026 |
-| ☐ | G7 | Google for Startups | Aug 2026 |
-| ☐ | G8 | Veteran org partnership (in-kind) | Post-L5 |
-| ☐ | G9 | Pre-seed angel conversation | Sep 2026 target |
+| ☐ | # | Funder / program | When / start NOW? |
+|---|-----|------------------|-------------------|
+| ☐ | G1 | XRPL Grants ($25K watch) | Prep only — portal closed; apply when cycle opens |
+| ☐ | G1b | XRPL Commons GLOW Wave 5 | **START NOW** — submit by **Aug 31, 2026** |
+| ☐ | G2 | Petco Love | Prep only — post-L5 + L7; shelter co-applicant |
+| ☐ | G3 | Maddie's Fund | Prep only — post-L5 + L7; 501c3/gov leads |
+| ☐ | G4 | ASPCA grants scan | Q3 2026 — scan only |
+| ☐ | G5 | Supabase startup credits | **START NOW** (Jul 2026) |
+| ☐ | G6 | OpenAI startup credits | **START NOW** (Jul 2026) |
+| ☐ | G7 | Google for Startups | **START NOW** (Jul/Aug 2026) |
+| ☐ | G8 | AWS Activate (optional) | If AWS adopted |
+| ☐ | G9 | Veteran org partnership (in-kind) | Soft list OK; formal post-L5 |
+| ☐ | G10 | F&F / SAFE cash unblock ($8–15K) | **START NOW** — pays L5 + TM + MOU |
+| ☐ | G11 | Leap Venture Studio (research) | Research now; apply after L5+L7 when cohort open |
 
-**90-day calendar:** See Grants Master Compartment F (Jul–Sep 2026).
+**90-day calendar:** See Grants Master Compartment F + Unblock Plan §3.
 
 ---
 
