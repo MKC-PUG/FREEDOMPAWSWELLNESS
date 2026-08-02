@@ -2,6 +2,9 @@ import { NextResponse, NextRequest } from 'next/server';
 import { FP_SURFACE_HEADER, surfaceFromRequest, PARTNER_PATH_PREFIX } from '@/lib/partner/surface';
 import { updateSupabaseSession } from '@/lib/supabase/middleware';
 
+/** Absolute ceiling so middleware always returns before Vercel's ~25s hard kill. */
+const MIDDLEWARE_BUDGET_MS = 5_000;
+
 export async function middleware(request: NextRequest) {
   const host = request.headers.get('host') ?? '';
   const pathname = request.nextUrl.pathname;
@@ -26,11 +29,24 @@ export async function middleware(request: NextRequest) {
   requestHeaders.set(FP_SURFACE_HEADER, surface);
   requestHeaders.set('x-pathname', pathname);
 
-  // Keep the original NextRequest (cookies intact); only forward header overrides.
-  const response = await updateSupabaseSession(request, requestHeaders);
+  const fallback = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
+  fallback.headers.set(FP_SURFACE_HEADER, surface);
 
-  response.headers.set(FP_SURFACE_HEADER, surface);
-  return response;
+  try {
+    const response = await Promise.race([
+      updateSupabaseSession(request, requestHeaders),
+      new Promise<NextResponse>((resolve) => {
+        setTimeout(() => resolve(fallback), MIDDLEWARE_BUDGET_MS);
+      }),
+    ]);
+    response.headers.set(FP_SURFACE_HEADER, surface);
+    return response;
+  } catch (error) {
+    console.error('[middleware] unexpected failure; continuing', error);
+    return fallback;
+  }
 }
 
 export const config = {
