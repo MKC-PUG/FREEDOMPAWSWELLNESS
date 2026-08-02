@@ -26,11 +26,8 @@ export async function middleware(request: NextRequest) {
   requestHeaders.set(FP_SURFACE_HEADER, surface);
   requestHeaders.set('x-pathname', pathname);
 
-  const requestWithSurface = new NextRequest(request.url, {
-    headers: requestHeaders,
-  });
-
-  const response = await updateSupabaseSession(requestWithSurface);
+  // Keep the original NextRequest (cookies intact); only forward header overrides.
+  const response = await updateSupabaseSession(request, requestHeaders);
 
   response.headers.set(FP_SURFACE_HEADER, surface);
   return response;
