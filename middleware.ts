@@ -25,6 +25,25 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Cookie-gate heavy authenticated shells so RSC pages cannot start DB work in parallel
+  // with a layout redirect (Next runs layout + page concurrently).
+  const needsAuthCookie =
+    pathname === '/ops' ||
+    pathname.startsWith('/ops/') ||
+    pathname === '/vit-pro' ||
+    pathname.startsWith('/vit-pro/') ||
+    pathname === '/admin/symptoms' ||
+    pathname.startsWith('/admin/symptoms/');
+  const hasAuthCookie = request.cookies
+    .getAll()
+    .some((c) => c.name.includes('-auth-token') || c.name.startsWith('sb-'));
+  if (needsAuthCookie && !hasAuthCookie) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    url.search = `?next=${encodeURIComponent(pathname)}`;
+    return NextResponse.redirect(url);
+  }
+
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set(FP_SURFACE_HEADER, surface);
   requestHeaders.set('x-pathname', pathname);
