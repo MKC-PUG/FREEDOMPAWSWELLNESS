@@ -28,7 +28,7 @@ const nextConfig = {
       },
       {
         source: '/shelter',
-        destination: '/partner',
+        destination: '/id/shelter',
         permanent: false,
       },
       {
