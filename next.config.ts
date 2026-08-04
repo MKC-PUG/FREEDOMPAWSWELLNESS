@@ -13,6 +13,31 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Short aliases people type / share (Framer + outreach often omit the full path)
+      {
+        source: '/partners',
+        destination: '/wellness/partners',
+        permanent: false,
+      },
+      {
+        source: '/parters',
+        destination: '/wellness/partners',
+        permanent: false,
+      },
+      {
+        source: '/shelter',
+        destination: '/partner',
+        permanent: false,
+      },
+      {
+        source: '/shelters',
+        destination: '/adopt/tn',
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {
