@@ -227,6 +227,13 @@ export async function getOpsOverview(userEmail?: string | null): Promise<OpsOver
       }),
     ]);
   } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.message.includes('Dynamic server usage') ||
+        ('digest' in error && (error as { digest?: string }).digest === 'DYNAMIC_SERVER_USAGE'))
+    ) {
+      throw error;
+    }
     console.error('[ops] getOpsOverview failed or timed out', error);
     const marketing = {
       ...DEFAULT_MARKETING_SETTINGS,

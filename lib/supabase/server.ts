@@ -60,6 +60,14 @@ export const getServerUser = cache(async () => {
     const { data } = await supabase.auth.getUser();
     return data.user;
   } catch (error) {
+    // Let Next.js static analysis mark the route dynamic; do not swallow it.
+    if (
+      error instanceof Error &&
+      (error.message.includes('Dynamic server usage') ||
+        ('digest' in error && error.digest === 'DYNAMIC_SERVER_USAGE'))
+    ) {
+      throw error;
+    }
     console.error('[getServerUser] failed or timed out', error);
     return null;
   }
