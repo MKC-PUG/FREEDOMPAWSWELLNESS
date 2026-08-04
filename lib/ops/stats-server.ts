@@ -132,16 +132,7 @@ async function getRecentAudit(): Promise<OpsAuditRow[]> {
 }
 
 export async function getOpsOverview(userEmail?: string | null): Promise<OpsOverview> {
-  const emptyListingCounts: ListingStatusCounts = {
-    draft: 0,
-    available: 0,
-    pending: 0,
-    adopted: 0,
-    archived: 0,
-    total: 0,
-  };
-
-  const build = async (): Promise<OpsOverview> => {
+  try {
     const [
       marketing,
       featureFlags,
@@ -217,15 +208,6 @@ export async function getOpsOverview(userEmail?: string | null): Promise<OpsOver
       },
       recentAudit,
     };
-  };
-
-  try {
-    return await Promise.race([
-      build(),
-      new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('getOpsOverview timed out')), 10_000);
-      }),
-    ]);
   } catch (error) {
     if (
       error instanceof Error &&
@@ -234,7 +216,15 @@ export async function getOpsOverview(userEmail?: string | null): Promise<OpsOver
     ) {
       throw error;
     }
-    console.error('[ops] getOpsOverview failed or timed out', error);
+    console.error('[ops] getOpsOverview failed', error);
+    const emptyListingCounts: ListingStatusCounts = {
+      draft: 0,
+      available: 0,
+      pending: 0,
+      adopted: 0,
+      archived: 0,
+      total: 0,
+    };
     const marketing = {
       ...DEFAULT_MARKETING_SETTINGS,
       workflows: { ...DEFAULT_MARKETING_SETTINGS.workflows },
@@ -283,7 +273,7 @@ export async function getOpsOverview(userEmail?: string | null): Promise<OpsOver
         fpOpsEmails: false,
         serviceRoleKey: false,
         migrationsNote:
-          'Ops overview timed out or failed — check Supabase connectivity and try again.',
+          'Ops overview failed — check Supabase connectivity and try again.',
       },
       recentAudit: [],
     };

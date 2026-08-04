@@ -8,6 +8,13 @@ export function createSupabaseAdminClient() {
 
   return createClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      fetch: (input, init) =>
+        fetch(input, {
+          ...init,
+          signal: init?.signal ?? AbortSignal.timeout(8_000),
+        }),
+    },
   });
 }
 

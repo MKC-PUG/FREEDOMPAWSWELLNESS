@@ -1,3 +1,4 @@
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import type { UserProfile } from '@/lib/id/profiles';
 import {
@@ -14,6 +15,13 @@ import type {
   UpdateListingInput,
 } from '@/lib/partner/listings-types';
 import { PUBLIC_LISTING_STATUSES } from '@/lib/partner/breeds';
+
+/** Prefer service-role for public directory reads (no cookie/Auth round-trip). */
+async function publicSupabase() {
+  const admin = createSupabaseAdminClient();
+  if (admin) return admin;
+  return createSupabaseServerClient();
+}
 
 function mapListing(row: Record<string, unknown>): AdoptionListing {
   return {
@@ -222,7 +230,7 @@ export async function updateListing(
 export async function listPublicListingsForShelter(
   shelterSlug: string
 ): Promise<AdoptionListingWithShelter[]> {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await publicSupabase();
   const { data, error } = await supabase
     .from('adoption_listings')
     .select(LISTING_SELECT)
@@ -237,7 +245,7 @@ export async function listPublicListingsForShelter(
 
 /** Public directory — available + pending only. */
 export async function listPublicTnListings(): Promise<AdoptionListingWithShelter[]> {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await publicSupabase();
   const { data, error } = await supabase
     .from('adoption_listings')
     .select(LISTING_SELECT)
@@ -254,7 +262,7 @@ export async function getPublicListing(
   shelterSlug: string,
   listingSlug: string
 ): Promise<AdoptionListingWithShelter | null> {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await publicSupabase();
   const { data, error } = await supabase
     .from('adoption_listings')
     .select(LISTING_SELECT)
@@ -303,7 +311,7 @@ export async function listPublicTnSheltersWithCounts(
     }
   }
 
-  const supabase = await createSupabaseServerClient();
+  const supabase = await publicSupabase();
   const { data: shelters } = await supabase
     .from('shelters')
     .select('slug, name, city, org_type')

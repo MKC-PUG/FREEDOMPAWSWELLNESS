@@ -1,3 +1,4 @@
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import type { PartnerOrg, PartnerOrgType, PartnerPilotTier } from '@/lib/partner/types';
 
@@ -18,9 +19,15 @@ function mapRow(row: Record<string, unknown>): PartnerOrg {
   };
 }
 
+async function partnerReadClient() {
+  const admin = createSupabaseAdminClient();
+  if (admin) return admin;
+  return createSupabaseServerClient();
+}
+
 /** TN Adoption Network pilot partners (listings_enabled). */
 export async function listTnPilotPartners(): Promise<PartnerOrg[]> {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await partnerReadClient();
   const { data, error } = await supabase
     .from('shelters')
     .select(
@@ -37,7 +44,7 @@ export async function listTnPilotPartners(): Promise<PartnerOrg[]> {
 }
 
 export async function getPartnerOrgBySlug(slug: string): Promise<PartnerOrg | null> {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await partnerReadClient();
   const { data, error } = await supabase
     .from('shelters')
     .select(

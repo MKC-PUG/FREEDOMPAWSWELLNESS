@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     'Browse adoptable dogs from Tennessee municipal shelters and private rescues in the Freedom Paws pilot.',
 };
 
+/** Refresh public directory periodically without cookie Auth on the data path. */
+export const revalidate = 60;
+
 export default async function AdoptTnPage() {
   let shelters: Awaited<ReturnType<typeof listPublicTnSheltersWithCounts>> = [];
   let listings: Awaited<ReturnType<typeof listPublicTnListings>> = [];
