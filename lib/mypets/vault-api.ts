@@ -1,11 +1,20 @@
 import type { PetVaultEntry, VaultEntryInput, VaultEntryKind } from '@/lib/mypets/vault-types';
 
+const CLIENT_FETCH_TIMEOUT_MS = 12_000;
+
+function clientFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  return fetch(input, {
+    ...init,
+    signal: init?.signal ?? AbortSignal.timeout(CLIENT_FETCH_TIMEOUT_MS),
+  });
+}
+
 export async function fetchVaultEntries(
   petId: string,
   kind?: VaultEntryKind
 ): Promise<PetVaultEntry[] | null> {
   const qs = kind ? `?kind=${encodeURIComponent(kind)}` : '';
-  const res = await fetch(`/api/pets/${encodeURIComponent(petId)}/vault${qs}`, {
+  const res = await clientFetch(`/api/pets/${encodeURIComponent(petId)}/vault${qs}`, {
     credentials: 'include',
   });
   if (res.status === 401) return null;
@@ -18,7 +27,7 @@ export async function createVaultEntryServer(
   petId: string,
   input: VaultEntryInput
 ): Promise<PetVaultEntry> {
-  const res = await fetch(`/api/pets/${encodeURIComponent(petId)}/vault`, {
+  const res = await clientFetch(`/api/pets/${encodeURIComponent(petId)}/vault`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -30,7 +39,7 @@ export async function createVaultEntryServer(
 }
 
 export async function deleteVaultEntryServer(petId: string, entryId: string): Promise<void> {
-  const res = await fetch(
+  const res = await clientFetch(
     `/api/pets/${encodeURIComponent(petId)}/vault/${encodeURIComponent(entryId)}`,
     { method: 'DELETE', credentials: 'include' }
   );
@@ -39,7 +48,7 @@ export async function deleteVaultEntryServer(petId: string, entryId: string): Pr
 }
 
 export async function fetchVaultCount(petId: string): Promise<number | null> {
-  const res = await fetch(`/api/pets/${encodeURIComponent(petId)}/vault?count=1`, {
+  const res = await clientFetch(`/api/pets/${encodeURIComponent(petId)}/vault?count=1`, {
     credentials: 'include',
   });
   if (res.status === 401) return null;

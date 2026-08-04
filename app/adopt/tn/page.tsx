@@ -21,10 +21,8 @@ export default async function AdoptTnPage() {
   let listings: Awaited<ReturnType<typeof listPublicTnListings>> = [];
 
   try {
-    [shelters, listings] = await Promise.all([
-      listPublicTnSheltersWithCounts(),
-      listPublicTnListings(),
-    ]);
+    listings = await listPublicTnListings();
+    shelters = await listPublicTnSheltersWithCounts(listings);
   } catch {
     shelters = [];
     listings = [];

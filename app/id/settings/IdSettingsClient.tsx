@@ -34,7 +34,10 @@ export default function IdSettingsClient({ userEmail }: Props) {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/id/settings', { credentials: 'include' });
+      const res = await fetch('/api/id/settings', {
+        credentials: 'include',
+        signal: AbortSignal.timeout(12_000),
+      });
       const data = await res.json();
       if (!data.success) {
         setError(data.error || 'Could not load settings.');

@@ -1,5 +1,7 @@
 import type { PetFormInput, PetProfile } from './types';
 
+const CLIENT_FETCH_TIMEOUT_MS = 12_000;
+
 export type PetsApiListResponse = {
   success: boolean;
   pets?: PetProfile[];
@@ -7,8 +9,15 @@ export type PetsApiListResponse = {
   error?: string;
 };
 
+function clientFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  return fetch(input, {
+    ...init,
+    signal: init?.signal ?? AbortSignal.timeout(CLIENT_FETCH_TIMEOUT_MS),
+  });
+}
+
 export async function fetchServerPets(): Promise<PetProfile[] | null> {
-  const res = await fetch('/api/pets', { credentials: 'include' });
+  const res = await clientFetch('/api/pets', { credentials: 'include' });
   if (res.status === 401) return null;
   if (res.status === 503) return null;
   const data = (await res.json()) as PetsApiListResponse;
@@ -17,7 +26,7 @@ export async function fetchServerPets(): Promise<PetProfile[] | null> {
 }
 
 export async function createServerPet(input: PetFormInput): Promise<PetProfile> {
-  const res = await fetch('/api/pets', {
+  const res = await clientFetch('/api/pets', {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -29,7 +38,7 @@ export async function createServerPet(input: PetFormInput): Promise<PetProfile> 
 }
 
 export async function updateServerPet(id: string, input: PetFormInput): Promise<PetProfile> {
-  const res = await fetch(`/api/pets/${id}`, {
+  const res = await clientFetch(`/api/pets/${id}`, {
     method: 'PATCH',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -41,7 +50,7 @@ export async function updateServerPet(id: string, input: PetFormInput): Promise<
 }
 
 export async function deleteServerPet(id: string): Promise<void> {
-  const res = await fetch(`/api/pets/${id}`, { method: 'DELETE', credentials: 'include' });
+  const res = await clientFetch(`/api/pets/${id}`, { method: 'DELETE', credentials: 'include' });
   const data = await res.json();
   if (!data.success) throw new Error(data.error || 'Failed to delete pet');
 }

@@ -34,15 +34,23 @@ export default function SymptomReviewClient() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch('/api/symptom-review');
-    if (res.status === 401) {
-      router.push('/admin/login');
-      return;
+    try {
+      const res = await fetch('/api/symptom-review', {
+        signal: AbortSignal.timeout(12_000),
+      });
+      if (res.status === 401) {
+        router.push('/admin/login');
+        return;
+      }
+      const data = await res.json();
+      setPending(data.pending ?? []);
+      setApproved(data.approved ?? []);
+    } catch {
+      setPending([]);
+      setApproved([]);
+    } finally {
+      setLoading(false);
     }
-    const data = await res.json();
-    setPending(data.pending ?? []);
-    setApproved(data.approved ?? []);
-    setLoading(false);
   }, [router]);
 
   useEffect(() => {

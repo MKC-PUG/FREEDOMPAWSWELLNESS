@@ -269,7 +269,9 @@ export async function getPublicListing(
   return mapWithShelter(data as Record<string, unknown>);
 }
 
-export async function listPublicTnSheltersWithCounts(): Promise<
+export async function listPublicTnSheltersWithCounts(
+  listings?: AdoptionListingWithShelter[]
+): Promise<
   {
     slug: string;
     name: string;
@@ -278,13 +280,14 @@ export async function listPublicTnSheltersWithCounts(): Promise<
     listingCount: number;
   }[]
 > {
-  const listings = await listPublicTnListings();
+  // Reuse listings when the caller already fetched them (avoids double round-trip on /adopt/tn).
+  const publicListings = listings ?? (await listPublicTnListings());
   const byShelter = new Map<
     string,
     { slug: string; name: string; city: string | null; orgType: string; count: number }
   >();
 
-  for (const l of listings) {
+  for (const l of publicListings) {
     const key = l.shelterSlug;
     const cur = byShelter.get(key);
     if (cur) {

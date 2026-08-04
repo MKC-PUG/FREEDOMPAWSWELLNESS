@@ -36,6 +36,11 @@ const nextConfig = {
         destination: '/adopt/tn',
         permanent: false,
       },
+      {
+        source: '/grants',
+        destination: 'https://freedompawsinc.com/grants',
+        permanent: false,
+      },
     ];
   },
   async headers() {

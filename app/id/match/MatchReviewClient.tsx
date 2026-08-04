@@ -49,7 +49,10 @@ export default function MatchReviewClient({ canDecide }: Props) {
   const [toast, setToast] = useState('');
 
   const loadReports = useCallback(async () => {
-    const res = await fetch('/api/id/match/reports', { credentials: 'include' });
+    const res = await fetch('/api/id/match/reports', {
+      credentials: 'include',
+      signal: AbortSignal.timeout(12_000),
+    });
     const data = await res.json();
     if (data.success) setReports(data.reports ?? []);
   }, []);
@@ -57,7 +60,10 @@ export default function MatchReviewClient({ canDecide }: Props) {
   const loadCandidates = useCallback(async (reportId: string) => {
     const res = await fetch(
       `/api/id/match/candidates?reportId=${encodeURIComponent(reportId)}`,
-      { credentials: 'include' }
+      {
+        credentials: 'include',
+        signal: AbortSignal.timeout(12_000),
+      }
     );
     const data = await res.json();
     if (data.success) setCandidates(data.candidates ?? []);

@@ -25,7 +25,10 @@ export default function ShelterDashboardClient({ role, isReviewer }: Props) {
 
   useEffect(() => {
     if (!isReviewer) return;
-    void fetch('/api/id/shelter/stats', { credentials: 'include' })
+    void fetch('/api/id/shelter/stats', {
+      credentials: 'include',
+      signal: AbortSignal.timeout(12_000),
+    })
       .then((r) => r.json())
       .then((d) => {
         if (d.success) setStats(d.stats);
