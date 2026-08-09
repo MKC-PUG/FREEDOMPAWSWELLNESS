@@ -347,8 +347,9 @@
 | ☐ | M10 | Regenerate binder PDFs quarterly for grants |
 | ☐ | M11 | **Impact Dashboard** — live public counters after **first confirmed reunion** **OR** **Jan 2027 promotion prep** (whichever first). **Not before L5.** Framer methodology pages OK earlier. Plan: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md` |
 | ☐ | M12 | **Dog Health Verified badge + annual nutrition report** — Phase later (~Jan 2027+); TM search + counsel first; no FDA/regulatory implication. Plan: Verified Partners §9 |
+| ☐ | M13 | **SuperBud social video factory** — lock Character Bible + ElevenLabs voice; pilot master → Shorts/Reels; weekly batch per module. Soft education OK pre-L5; affiliate/national-ID claims gated. Plan: `Freedom-Paws-SuperBud-Social-Video-Marketing-Module-August-2026.md` |
 
-*Detail: `Freedom-Paws-Master-Marketing-Network-Plan-June-2026.md` · Impact: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md`*
+*Detail: `Freedom-Paws-Master-Marketing-Network-Plan-June-2026.md` · Impact: `Freedom-Paws-Impact-Dashboard-Plan-July-2026.md` · SuperBud video: `Freedom-Paws-SuperBud-Social-Video-Marketing-Module-August-2026.md`*
 
 ---
 
@@ -432,7 +433,7 @@
 | ☐ | **Security review** | Rotate API keys if needed; review RLS policies |
 | ☐ | **Shelter training refresh** | PDF manual; 20-min call with lowest-usage partner |
 | ☐ | **ViT Pro advisor session** | Benchmark review; CDS copy tuning |
-| ☐ | **Marketing content batch** | 3 Reels + 1 adoption story (per Marketing Plan) |
+| ☐ | **Marketing content batch** | 3 Reels + 1 adoption story (per Marketing Plan); SuperBud clips per `Freedom-Paws-SuperBud-Social-Video-Marketing-Module-August-2026.md` |
 | ☐ | **Grant applications wave** | Petco / Maddie's / XRPL as windows open |
 | ☐ | **LLC annual report** | Wyoming + any state foreign qualification |
 
