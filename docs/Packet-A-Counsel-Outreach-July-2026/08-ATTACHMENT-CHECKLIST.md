@@ -4,6 +4,8 @@
 **Drop screenshots / live PDFs here:** `~/Documents/Freedom Paws Wellness/Legal/Packet-A-2026-07/`  
 **Attach PDFs from:** `~/Documents/Freedom Paws Wellness/Packet-A-Counsel-Outreach-July-2026/`
 
+**Send status:** **A2 DONE 8/19/2026.** Founder confirmed Packet A emails **sent** to Baker Donelson (Chris Sloan) and Bass Berry (Roy Wyman). Identical Packet A scope to both. **Next:** wait for both flat-fee quotes; decide A1; do not start scaled shelter Email 1 until A10.
+
 ---
 
 ## A. Ready-to-attach package docs (generate/print once)
@@ -40,14 +42,14 @@
 
 | ☐ | Action |
 |---|--------|
-| ☐ | Replace `[Founder name]` in Baker email |
-| ☐ | Replace `[DATE + 7 days]` decision date in Baker email |
-| ☐ | Attach same 8-file set (docs 1–7 + screenshots bundle) |
-| ☐ | Send Baker → csloan@bakerdonelson.com from info@freedompawsinc.com |
-| ☐ | Replace `[Founder name]` in Bass email |
-| ☐ | Attach **same** files |
-| ☐ | Send Bass → roy.wyman@bassberry.com same day |
-| ☐ | Mark A2 complete in Remaining Work checklist |
+| ☑ | Replace `[Founder name]` in Baker email |
+| ☑ | Replace `[DATE + 7 days]` decision date in Baker email |
+| ☑ | Attach same 8-file set (docs 1–7 + screenshots bundle) |
+| ☑ | Send Baker → csloan@bakerdonelson.com from info@freedompawsinc.com — **DONE 8/19/2026** |
+| ☑ | Replace `[Founder name]` in Bass email |
+| ☑ | Attach **same** files |
+| ☑ | Send Bass → roy.wyman@bassberry.com same day — **DONE 8/19/2026** (identical Packet A scope) |
+| ☑ | Mark A2 complete in Remaining Work checklist — **DONE 8/19/2026** |
 | ☐ | Calendar Week 1 intake follow-ups |
 
 ---

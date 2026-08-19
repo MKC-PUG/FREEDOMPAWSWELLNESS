@@ -10,11 +10,13 @@
 
 > **Not legal advice.** Founder-draft materials for counsel review. Do not treat as final legal text until counsel signs off (A10).
 
+**Send status:** **A2 DONE 8/19/2026.** Founder confirmed Packet A legal emails **sent** to Baker Donelson (Chris Sloan) and Bass Berry (Roy Wyman). **Identical Packet A / L5 quote-request scope** went to both in parallel. **Next:** wait for both flat-fee quotes; decide **A1**; do **not** start scaled shelter Email 1 until **A10**.
+
 ---
 
 ## What this package is
 
-Everything you need for **A2** — email Packet A to recommended counsel so they can quote a flat fee and deliver written L5 sign-off on A3–A9.
+Package used for **A2** (complete) — email Packet A to recommended counsel so they can quote a flat fee and deliver written L5 sign-off on A3–A9.
 
 | Step | Firm | Contact | When |
 |------|------|---------|------|
@@ -73,7 +75,7 @@ Use the **PDF versions** from the Wellness package folder (or Markdown if PDF pr
 
 ### D. After both sent
 
-- Mark **A2** complete in Remaining Work checklist.
+- **Done 8/19/2026:** both emails sent; **A2** marked complete in Remaining Work checklist.
 - Calendar intake follow-ups for Week 1.
 - Do **not** pick counsel until both quotes are in writing (A1).
 

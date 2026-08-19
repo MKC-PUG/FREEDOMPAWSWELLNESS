@@ -8,6 +8,8 @@
 **Production app:** https://app.freedompawsinc.com  
 **Critical path gate:** L5 (attorney sign-off) blocks public mode and scaled shelter outreach
 
+**Outreach status (Aug 19, 2026):** **A2 DONE.** Founder confirmed Packet A legal emails **sent** to Baker Donelson (Chris Sloan) and Bass Berry (Roy Wyman). Identical Packet A / L5 quote-request scope to both in parallel. **Next:** wait for both written flat-fee quotes; decide **A1**; do **not** start scaled shelter Email 1 until **A10**. Week 2 **W2.3** (resend to engaged matter email) is still open until A1.
+
 **Companion docs:**
 - `Freedom-Paws-Critical-Path-Action-Packets-June-2026.md` (Packet A detail)
 - `Freedom-Paws-Remaining-Work-Master-Checklist-July-2026.md` (A1–A10 checklist)
@@ -553,10 +555,10 @@ info@freedompawsinc.com
 
 | Step | Action | Done |
 |------|--------|:----:|
-| W1.1 | Email **Chris Sloan** (Baker) with Packet A attachments | ☐ |
-| W1.2 | Email **Roy Wyman** (Bass) with same attachments — **same day** | ☐ |
+| W1.1 | Email **Chris Sloan** (Baker) with Packet A attachments | ☑ 8/19/2026 |
+| W1.2 | Email **Roy Wyman** (Bass) with same attachments — **same day** | ☑ 8/19/2026 |
 | W1.3 | (Optional) Call Mark Wilson (Riggs) for boutique quote if time permits | ☐ |
-| W1.4 | Log outreach in founder session log with dates | ☐ |
+| W1.4 | Log outreach in founder session log with dates | ☑ 8/19/2026 |
 | W1.5 | Schedule intake calls (target: both within 7 days) | ☐ |
 
 ### WEEK 1 — Intake consults (Days 3–7)
@@ -760,7 +762,7 @@ info@freedompawsinc.com
 | **Shelter outreach** | shelter@freedompawsinc.com |
 | **Packet A budget** | $1,500–$4,000 target |
 | **L5 save path** | `~/Documents/Freedom Paws Wellness/Legal/` |
-| **Contact both #1 and #2?** | **YES — parallel this week** |
+| **Contact both #1 and #2?** | **SENT 8/19/2026** — identical Packet A scope; awaiting both quotes |
 
 ### Pilot org quick list
 

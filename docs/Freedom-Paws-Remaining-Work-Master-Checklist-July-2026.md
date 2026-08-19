@@ -10,6 +10,8 @@
 
 **Rule:** Work phases in order where dependencies exist. **L5 (attorney)** blocks public mode and scaled partner outreach.
 
+**Packet A / A2 (as of Aug 19, 2026):** **DONE** — counsel packet emailed to Baker Donelson (Chris Sloan) and Bass Berry (Roy Wyman). Identical Packet A / L5 quote-request scope sent in parallel to both. **Next:** wait for both flat-fee quotes; decide **A1**; do **not** start scaled shelter Email 1 until **A10**.
+
 ---
 
 ## Document map
@@ -38,8 +40,8 @@
 
 | ☐ | # | Task | Owner | Pass criteria |
 |---|-----|------|-------|---------------|
-| ☐ | A1 | Pick counsel | Founder | Retainer or flat-fee scope agreed |
-| ☐ | A2 | Send attorney packet (Terms, Privacy, consent, binders, screenshots) | Founder | Email + PDFs sent |
+| ☐ | A1 | Pick counsel | Founder | Retainer or flat-fee scope agreed — **after both quotes** |
+| ☑ | A2 | Send attorney packet (Terms, Privacy, consent, binders, screenshots) | Founder | **DONE 8/19/2026** — Baker (Sloan) + Bass (Wyman); identical scope |
 | ☐ | A3 | Terms sign-off | Counsel | Written approval |
 | ☐ | A4 | Privacy sign-off | Counsel | Written approval |
 | ☐ | A5 | Biometric consent v2026-06-10 sign-off | Counsel | B5 complete |
@@ -59,6 +61,8 @@
 | ☐ | B4 | Counsel reviews any AAHA terms | Before API embed |
 
 ### Packet C — First partner (after A10)
+
+*Do not start scaled shelter Email 1 until A10 (L5 PDF). Packet A send (A2) does not unlock C2/D3/B7.*
 
 | ☐ | # | Task | Pass criteria |
 |---|-----|------|---------------|
@@ -94,7 +98,7 @@
 | ☐ | B4 | Revoke duplicate FP-2D1F1AF0 (optional) | 5 min | `/id/settings` |
 | ☐ | B5 | Biometric consent attorney sign-off | Counsel | = Packet A5 |
 | ☐ | B6 | TN shelter: live listing + found test | 30 min | With partner after C4 |
-| ☐ | B7 | Shelter outreach Email 1 at scale | 20 min/org | After L5; n8n stays off |
+| ☐ | B7 | Shelter outreach Email 1 at scale | 20 min/org | After **A10** / L5; n8n stays off — do not start from A2 send |
 
 **Phase 1 gate:** ☐ B5 + B6 + one municipal partner listing · Date: __________
 

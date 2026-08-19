@@ -3,7 +3,7 @@
 
 **Document purpose:** Single record of what is **done and validated** so launch planning, grants, counsel, and binders do not redo settled work.
 
-**Last updated:** July 4, 2026  
+**Last updated:** August 19, 2026 (Packet A / A2 counsel emails sent)  
 **For current priorities:** See `Freedom-Paws-Launch-Master-Checklist-June-2026.md` and `Freedom-Paws-Critical-Path-Action-Packets-June-2026.md` (Wellness folder).
 
 **Project:** `freedompaws-app`  
@@ -43,7 +43,7 @@
 | **ViT production smoke** | **Tests 1, 2, 4 PASS** (Jul 1, 2026) on v96 |
 | **TN adoption portal** | **E2E PASS** (New Leash on Life, Jun 30) |
 | **App UI polish** | **Design system rolled out** across client-facing routes |
-| **Public launch** | **Blocked on L5** attorney Terms + Privacy + biometric consent |
+| **Public launch** | **Blocked on L5** attorney Terms + Privacy + biometric consent — Packet A **sent 8/19/2026**; awaiting quotes |
 
 ---
 
@@ -59,9 +59,9 @@
 | L8 Build/deploy | ✅ | v96 on production |
 | **Track 1 biometric + found E2E** | ✅ | FP-A6FFE6CD Jun 27–28; FP-B9B377D6 Jul 1 |
 | **Track 2 `/id/scan` + hardware QA** | ✅ | C2.1 wedge + C2.2 Web Serial Jul 4; PetScanner C2.3 Jul 3 — all C2 complete |
-| **L5 Terms + Privacy (attorney)** | 🔴 **Open — critical path** | Blocks public mode + partner Email 1 at scale |
+| **L5 Terms + Privacy (attorney)** | 🔴 **Open — critical path** | Packet A **sent 8/19/2026** (Baker + Bass, identical scope). Wait for quotes → A1. Blocks public mode + partner Email 1 at scale until **A10** |
 | AAHA partnership inquiry | 🔴 Not sent | Packet B ready |
-| First TN partner live listing | 🔴 Not sent | Memphis Email 1 after L5 |
+| First TN partner live listing | 🔴 Not sent | Memphis Email 1 after **A10** — do not start scaled Email 1 from A2 |
 
 ---
 
@@ -211,8 +211,9 @@
 | Critical Path Action Packets (L5/B5, AAHA, Memphis) | `~/Documents/Freedom Paws Wellness/` | ✅ Jul 1 |
 | Grants & Growth Capital Master | Same | ✅ Jul 1 |
 | ID Chip Final Sign-Off Checklist | App repo + Wellness folder | ✅ C2.1 + C2.2 Jul 4; C2.3 Jul 3 |
-| Founder Session Log | App repo + Wellness folder | ✅ Through Jul 4 |
-| **This master record** | App repo + Wellness folder | ✅ Jul 4 |
+| Founder Session Log | App repo + Wellness folder | ✅ Through Aug 19 (A2 Packet A send) |
+| **Packet A counsel outreach (A2)** | Baker Donelson (Chris Sloan) + Bass Berry (Roy Wyman) | ✅ **DONE 8/19/2026** — identical L5 Packet A quote request to both |
+| **This master record** | App repo + Wellness folder | ✅ Aug 19 (A2 recorded) |
 
 ---
 
@@ -234,9 +235,9 @@
 
 | Item | Why |
 |------|-----|
-| **L5 attorney sign-off** | Blocks public mode, partner outreach, insurance kits |
+| **L5 attorney sign-off** | Blocks public mode, partner outreach, insurance kits. **A2 sent 8/19/2026**; wait for both quotes; do not start scaled shelter Email 1 until **A10** |
 | **AAHA email + embed API** | Packet B ready; link-out works today |
-| **Memphis / TN pilot Email 1** | After L5 |
+| **Memphis / TN pilot Email 1** | After **A10** / L5 |
 | **Grants applications** | Prep docs ready; apply after pilot MOU |
 | **Monitor cloud relay** | Member launch requirement |
 | **Stripe / RLUSD checkout** | Post-launch revenue |
@@ -263,4 +264,4 @@
 ---
 
 *Freedom Paws Wellness — Honor Buddy's Legacy*  
-*Completed items master record — updated July 4, 2026*
+*Completed items master record — updated August 19, 2026 (A2 Packet A send)*

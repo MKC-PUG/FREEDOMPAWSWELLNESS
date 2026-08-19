@@ -16,6 +16,7 @@
 4. [Track 2 — WorldScan Plus hardware validation](#4-track-2--worldscan-plus-hardware-validation)
 5. [Engineering format reference (Track 2)](#5-engineering-format-reference-track-2)
 6. [Launch gates snapshot](#6-launch-gates-snapshot)
+7. [Packet A counsel outreach (A2)](#7-packet-a-counsel-outreach-a2)
 
 ---
 
@@ -301,6 +302,23 @@ Used paste? NO
 Hardware: HomeAgain Universal WorldScan Plus (UWSR+)
 Track 2 founder hardware QA: C2.1 ✅ C2.2 ✅ C2.3 ✅ (Jul 3)
 ```
+
+---
+
+## 7. Packet A counsel outreach (A2)
+
+**Date:** August 19, 2026  
+**Status:** **DONE** — A2 send counsel packet  
+**Gate:** L5 still **open** until A10 written sign-off PDF
+
+Founder confirmed Packet A legal emails **have been sent** on August 19, 2026:
+
+| Firm | Contact | What was sent |
+|------|---------|----------------|
+| Baker Donelson | Chris Sloan | L5 Packet A quote request |
+| Bass, Berry & Sims | Roy Wyman | Same day — **identical Packet A scope** (parallel comparator) |
+
+**Next:** Wait for **both** written flat-fee quotes; then decide **A1**. Do **not** start scaled shelter Email 1 until **A10**.
 
 ---
 
