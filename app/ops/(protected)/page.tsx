@@ -71,8 +71,8 @@ export default async function OpsHomePage() {
               },
               {
                 href: '/ops/marketing',
-                title: 'Marketing',
-                stat: overview.marketingCanSend ? 'Send path open' : 'Dormant',
+                title: 'Marketing · SuperBud',
+                stat: overview.marketingCanSend ? 'Send path open' : 'Social studio',
                 status: marketingStatus,
               },
               {

@@ -9,7 +9,7 @@
 |-------|---------|
 | `/ops` | Home — KPIs, department cards, quick links, audit tail |
 | `/ops/adoption` | TN pilot partners, listing pipeline, outreach approvals |
-| `/ops/marketing` | Emergency stop, workflow toggles, n8n reference (no email send) |
+| `/ops/marketing` | SuperBud social studio (draft → approve → Buffer) + email automation gates (no email send from console) |
 | `/ops/shelter-id` | Match queue, found intake, ID email readiness |
 | `/ops/wellness` | Insurance & telehealth affiliate config |
 | `/ops/product` | PWA version, feature flags, symptom admin links |

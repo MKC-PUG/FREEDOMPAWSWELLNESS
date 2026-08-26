@@ -9,7 +9,10 @@ export type AuditAction =
   | 'chip.link'
   | 'chip.scan'
   | 'ops.settings.update'
-  | 'ops.marketing.approval';
+  | 'ops.marketing.approval'
+  | 'ops.social.create'
+  | 'ops.social.update'
+  | 'ops.social.buffer';
 
 export async function writeAuditLog(
   actorId: string,
