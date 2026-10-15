@@ -371,7 +371,7 @@ export default function OpsSocialStudio({
         <OpsCard>
           <p className="text-sm text-white/65 mb-4">
             Use SuperBud as the hero still for every short. Work top → bottom. Open each tool in a
-            new tab (your accounts). Paste the Ops script into ElevenLabs / CapCut.
+            new tab (your accounts). Voice stays ElevenLabs; HeyGen only lip-syncs that audio.
           </p>
           <ol className="space-y-3 text-sm text-white/80 list-decimal pl-5">
             <li>
@@ -383,11 +383,15 @@ export default function OpsSocialStudio({
               readable.
             </li>
             <li>
-              <strong>Voice</strong> — ElevenLabs → paste approved script → export WAV/MP3.
+              <strong>Voice</strong> — ElevenLabs → SuperBud-FP-Designed only → export WAV/MP3.
             </li>
             <li>
-              <strong>Visuals</strong> — Runway (motion from SuperBud still) and/or CapCut (app
-              screen recordings).
+              <strong>Host lip-sync</strong> — HeyGen Avatar IV → locked SuperBud still + that
+              audio. Do not use a HeyGen voice. Podium and teach-to-camera shots only.
+            </li>
+            <li>
+              <strong>Visuals</strong> — Runway for motion B-roll from the SuperBud still. Flying
+              and demo shots stay silent; lay the ElevenLabs track in CapCut.
             </li>
             <li>
               <strong>Assemble</strong> — CapCut 9:16, captions, end card with CTA URL from the

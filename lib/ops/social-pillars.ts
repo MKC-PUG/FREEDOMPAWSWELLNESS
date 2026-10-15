@@ -31,6 +31,7 @@ export type ProductionToolId =
   | 'capcut'
   | 'runway'
   | 'elevenlabs'
+  | 'heygen'
   | 'buffer'
   | 'descript';
 
@@ -171,6 +172,14 @@ export const PRODUCTION_TOOLS: ProductionTool[] = [
     whenToUse: 'Generate SuperBud VO from approved script (licensed voice).',
   },
   {
+    id: 'heygen',
+    name: 'HeyGen',
+    role: 'Host lip-sync',
+    url: 'https://app.heygen.com',
+    whenToUse:
+      'Avatar IV talking clip from a locked SuperBud still plus ElevenLabs audio. No HeyGen voice. Podium and teach-to-camera only.',
+  },
+  {
     id: 'runway',
     name: 'Runway',
     role: 'AI video / motion',
@@ -211,7 +220,13 @@ export const DEFAULT_PRODUCTION_CHECKLIST = [
   { id: 'script', label: 'Approve script (wellness-first, no diagnosis claims)', done: false },
   { id: 'storyboard', label: 'Storyboard 3–5 frames in Canva', done: false },
   { id: 'voice', label: 'Generate VO in ElevenLabs from approved script', done: false },
-  { id: 'visual', label: 'Create/motion visuals (Runway and/or CapCut + SuperBud still)', done: false },
+  {
+    id: 'lipsync',
+    label:
+      'HeyGen Avatar IV: lip-sync host shot from locked still + ElevenLabs audio (no HeyGen voice)',
+    done: false,
+  },
+  { id: 'visual', label: 'Motion B-roll in Runway from SuperBud still (identity locked)', done: false },
   { id: 'captions', label: 'Burn captions + end card with CTA URL', done: false },
   { id: 'export', label: 'Export 9:16 MP4 (and 1:1 square if IG feed)', done: false },
   { id: 'approve', label: 'Mark Approved in Ops before Buffer', done: false },
