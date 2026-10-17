@@ -259,9 +259,15 @@ export default function OpsLongformPane({
         <ul className="mt-2 grid gap-3 sm:grid-cols-2">
           {STUDIO_FRIENDS.map((friend) => (
             <li key={friend.id} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
-              <p className="text-sm font-bold">
-                {friend.name} <span className="text-[10px] font-bold uppercase tracking-wide text-[#F5C242]">{friend.role}</span>
-              </p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-bold">
+                  {friend.name}{' '}
+                  <span className="text-[10px] font-bold uppercase tracking-wide text-[#F5C242]">{friend.role}</span>
+                </p>
+                <span className="rounded-full border border-emerald-500/40 px-2 py-0.5 text-[10px] font-bold text-emerald-200">
+                  Locked
+                </span>
+              </div>
               <p className="mt-1 text-[11px] text-white/55">{friend.detail}</p>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {friend.plates.map((plate) => (
@@ -446,11 +452,15 @@ function ShotRow({
           onScreenText={shot.onScreenText}
           backgroundId={talkingPlate(shot.place)}
           motionId="subtle"
+          stillSrc={shot.costume === 'ordinary' ? '/images/brand/friends/buddy-front.jpg' : undefined}
         />
       ) : null}
-      {open && shot.kind === 'talk' && talkingPlate(shot.place) === 'locked' && shot.place === 'sidewalk' ? (
+      {open && shot.kind === 'talk' && shot.costume === 'ordinary' ? (
+        <p className="mt-2 text-[11px] text-white/45">This shot uses Buddy’s locked plate.</p>
+      ) : null}
+      {open && shot.kind === 'talk' && shot.costume !== 'ordinary' && talkingPlate(shot.place) === 'locked' && shot.place === 'sidewalk' ? (
         <p className="mt-2 text-[11px] text-white/45">
-          The film place is the city sidewalk. This preview uses the locked photo until a sidewalk plate exists.
+          The film place is the city sidewalk. This preview uses the locked SuperBud photo until a sidewalk plate exists.
         </p>
       ) : null}
     </li>

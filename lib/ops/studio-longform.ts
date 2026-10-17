@@ -49,7 +49,7 @@ export const CLIP_SLOTS: ClipSlot[] = [
     start: 'Buddy, the ordinary pug, paws on the ground',
     cover: 'A short roll, then a gold puff that hides him',
     end: 'SuperBud standing',
-    emptyNote: 'Empty. Buddy’s plate is the start. The roll clip is not filmed yet.',
+    emptyNote: 'Empty. Buddy’s plate is locked. The roll clip is not filmed yet.',
   },
   {
     id: 'tornado',
@@ -73,7 +73,7 @@ export const CLIP_SLOTS: ClipSlot[] = [
     start: 'SuperBud on Charlie’s back',
     cover: 'The picture drifts forward',
     end: 'The same pug, still on Charlie',
-    emptyNote: 'Empty. Charlie’s plate is ready. The ride clip is not filmed yet.',
+    emptyNote: 'Empty. Charlie’s plate is locked. The ride clip is not filmed yet.',
   },
   {
     id: 'food-zap',
@@ -169,7 +169,7 @@ export const STUDIO_FRIENDS: {
     id: 'buddy',
     name: 'Buddy',
     role: 'Ordinary pug',
-    detail: 'Buddy is SuperBud before the cape. These plates start the roll. The roll clip is not filmed yet.',
+    detail: 'Locked. Buddy is SuperBud before the cape. These plates start the roll. The roll clip is not filmed yet.',
     plates: [
       { label: 'Front', src: '/images/brand/friends/buddy-front.jpg' },
       { label: 'Side', src: '/images/brand/friends/buddy-side.jpg' },
@@ -179,7 +179,7 @@ export const STUDIO_FRIENDS: {
     id: 'presley',
     name: 'Presley',
     role: 'Sidekick',
-    detail: 'She is the white poodle-maltese. She appears in her own shot beside SuperBud.',
+    detail: 'Locked. She is the white poodle-maltese. She appears in her own shot beside SuperBud.',
     plates: [
       { label: 'Front', src: '/images/brand/friends/presley-front.jpg' },
       { label: 'Three-quarter', src: '/images/brand/friends/presley-three-quarter.jpg' },
@@ -189,7 +189,7 @@ export const STUDIO_FRIENDS: {
     id: 'charlie',
     name: 'Charlie',
     role: 'Ride friend',
-    detail: 'He is the Rottweiler SuperBud calls for a ride. The plates are ready. The ride clip is not filmed yet.',
+    detail: 'Locked. He is the Rottweiler SuperBud calls for a ride. The ride clip is not filmed yet.',
     plates: [
       { label: 'Front', src: '/images/brand/friends/charlie-front.jpg' },
       { label: 'Side', src: '/images/brand/friends/charlie-side.jpg' },
@@ -327,7 +327,7 @@ function powerCopy(id: PowerId, placeLabel: string): { beat: string; line: strin
     return {
       beat: 'Ride Charlie',
       line: 'I call Charlie, and I ride on his back from one block to the next.',
-      clipLabel: 'Ride Charlie. His plate is ready. The clip is not filmed yet.',
+      clipLabel: 'Ride Charlie. His plate is locked. The clip is not filmed yet.',
       place: 'sidewalk',
     };
   }
@@ -566,7 +566,7 @@ export function planNotes(choices: LongChoices): string[] {
     notes.push('With no power selected, the transform sits between the hook and the lesson.');
   }
   if (choices.startsAs === 'ordinary' || choices.endsAs === 'ordinary') {
-    notes.push('Buddy’s ordinary-pug plates are on the desk. Talking shots still use the locked SuperBud photo until you lock those plates.');
+    notes.push('Ordinary-pug shots use Buddy’s locked plate. SuperBud shots keep the host photo.');
   }
   return notes;
 }

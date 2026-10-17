@@ -95,6 +95,7 @@ type Props = {
   backgroundId: string;
   motionId: string;
   mode: 'preview' | 'edit';
+  stillSrc?: string;
   onEdit?: () => void;
   onChange?: (patch: Partial<StoryboardFields>) => void;
 };
@@ -105,6 +106,7 @@ export default function OpsStoryboardPreview({
   backgroundId,
   motionId,
   mode,
+  stillSrc,
   onEdit,
   onChange,
 }: Props) {
@@ -123,7 +125,7 @@ export default function OpsStoryboardPreview({
     async function paint() {
       const ctx = surface.getContext('2d');
       if (!ctx) return;
-      if (chosen.kind !== 'locked') {
+      if (!stillSrc && chosen.kind !== 'locked') {
         setStatus('Cutting SuperBud off the sky. The first preview loads a model.');
       }
       ctx.fillStyle = chosen.color;
@@ -133,12 +135,13 @@ export default function OpsStoryboardPreview({
         if (cancel) return;
         cover(ctx, backdrop, surface.width, surface.height);
       }
-      const photo = await loadImage(LOCKED_STILL_PUBLIC);
+      const photoSrc = stillSrc || LOCKED_STILL_PUBLIC;
+      const photo = await loadImage(photoSrc);
       if (cancel) return;
       if (chosen.kind === 'locked') cover(ctx, photo, surface.width, surface.height);
       else contain(ctx, photo, surface.width, surface.height);
       let note: string | null = null;
-      if (chosen.kind !== 'locked') {
+      if (!stillSrc && chosen.kind !== 'locked') {
         try {
           const cut = await loadImage(await loadCutout());
           if (cancel) return;
@@ -165,7 +168,7 @@ export default function OpsStoryboardPreview({
     return () => {
       cancel = true;
     };
-  }, [backgroundId, onScreenText, script]);
+  }, [backgroundId, onScreenText, script, stillSrc]);
 
   return (
     <div className="mt-3 grid gap-3 sm:grid-cols-[200px_1fr]">
