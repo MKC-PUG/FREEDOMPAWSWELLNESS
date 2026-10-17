@@ -1,117 +1,185 @@
 /**
- * First roll-and-poof cut. Locked photos only. The gold puff hides the change.
- * Buddy's plate dips, the puff covers him, the locked SuperBud host is revealed.
+ * Buddy to SuperBud. Not locked.
+ * He stands on all four legs, the shake triggers the change, a sparkling
+ * gold cloud blows up around him, then SuperBud is standing.
  */
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 
 const root = new URL('..', import.meta.url).pathname;
 const outDir = join(root, 'tmp/roll-poof-frames');
+const clipDir = join(root, 'public/images/brand/clips');
 const W = 720;
 const H = 1280;
 const FPS = 24;
-const FRAMES = 72;
+const FRAMES = 120;
+const BG = { r: 232, g: 228, b: 224 };
+const KEY = { r: 222, g: 218, b: 217 };
 
-const buddyPath = join(root, 'public/images/brand/friends/buddy-front.jpg');
-const hostPath = join(root, 'public/images/brand/sb-host-front-canon.png');
-
-function puffSvg(size) {
-  const c = size / 2;
-  return Buffer.from(`<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <filter id="b" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="${Math.round(size * 0.035)}"/>
-      </filter>
-    </defs>
-    <g filter="url(#b)">
-      <ellipse cx="${c}" cy="${c + size * 0.04}" rx="${size * 0.38}" ry="${size * 0.32}" fill="#F5C242"/>
-      <ellipse cx="${c - size * 0.16}" cy="${c - size * 0.08}" rx="${size * 0.24}" ry="${size * 0.2}" fill="#FFE7A0"/>
-      <ellipse cx="${c + size * 0.18}" cy="${c - size * 0.1}" rx="${size * 0.22}" ry="${size * 0.18}" fill="#E8A317"/>
-    </g>
-    <ellipse cx="${c}" cy="${c}" rx="${size * 0.28}" ry="${size * 0.34}" fill="#F5C242"/>
-    <ellipse cx="${c}" cy="${c - size * 0.04}" rx="${size * 0.16}" ry="${size * 0.14}" fill="#FFE7A0"/>
-  </svg>`);
+function ease(t) {
+  const x = Math.min(1, Math.max(0, t));
+  return x * x * (3 - 2 * x);
 }
 
-async function coverAt(file, zoom, dip) {
-  const meta = await sharp(file).metadata();
-  const srcW = meta.width;
-  const srcH = meta.height;
-  const targetRatio = W / H;
-  const srcRatio = srcW / srcH;
-  let cropW;
-  let cropH;
-  if (srcRatio > targetRatio) {
-    cropH = srcH;
-    cropW = Math.round(srcH * targetRatio);
-  } else {
-    cropW = srcW;
-    cropH = Math.round(srcW / targetRatio);
+function starPath(cx, cy, r) {
+  const points = [];
+  for (let i = 0; i < 8; i += 1) {
+    const radius = i % 2 === 0 ? r : r * 0.28;
+    const a = -Math.PI / 2 + (i * Math.PI) / 4;
+    points.push(`${(cx + Math.cos(a) * radius).toFixed(1)},${(cy + Math.sin(a) * radius).toFixed(1)}`);
   }
-  cropW = Math.max(2, Math.round(cropW / zoom));
-  cropH = Math.max(2, Math.round(cropH / zoom));
-  const left = Math.max(0, Math.min(srcW - cropW, Math.round((srcW - cropW) / 2)));
-  const top = Math.max(0, Math.min(srcH - cropH, Math.round((srcH - cropH) / 2 + dip * srcH)));
-  return sharp(file)
-    .extract({ left, top, width: cropW, height: cropH })
-    .resize(W, H)
+  return points.join(' ');
+}
+
+async function cutout(file) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  let minX = info.width;
+  let minY = info.height;
+  let maxX = 0;
+  let maxY = 0;
+  for (let y = 0; y < info.height; y += 1) {
+    for (let x = 0; x < info.width; x += 1) {
+      const i = (y * info.width + x) * 4;
+      const dr = data[i] - KEY.r;
+      const dg = data[i + 1] - KEY.g;
+      const db = data[i + 2] - KEY.b;
+      const dist = Math.sqrt(dr * dr + dg * dg + db * db);
+      if (dist < 26) data[i + 3] = 0;
+      else if (dist < 46) data[i + 3] = Math.round(((dist - 26) / 20) * 255);
+      if (data[i + 3] > 40) {
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  const width = Math.max(2, maxX - minX + 1);
+  const height = Math.max(2, maxY - minY + 1);
+  return sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
+    .extract({ left: minX, top: minY, width, height })
     .png()
     .toBuffer();
 }
 
-function ease(t) {
-  return t * t * (3 - 2 * t);
+async function plate(file) {
+  const cut = await cutout(file);
+  const meta = await sharp(cut).metadata();
+  const maxH = Math.round(H * 0.74);
+  const maxW = Math.round(W * 0.86);
+  const scale = Math.min(maxW / meta.width, maxH / meta.height);
+  const targetW = Math.max(2, Math.round(meta.width * scale));
+  const targetH = Math.max(2, Math.round(meta.height * scale));
+  const resized = await sharp(cut).resize(targetW, targetH).png().toBuffer();
+  const left = Math.round((W - targetW) / 2);
+  const top = Math.round((H - targetH) / 2);
+  return sharp({
+    create: { width: W, height: H, channels: 4, background: { ...BG, alpha: 1 } },
+  })
+    .composite([{ input: resized, left, top }])
+    .png()
+    .toBuffer();
+}
+
+function cloudSvg(scale, opacity, frame, sparkleOnly) {
+  const cx = W / 2;
+  const cy = H * 0.48;
+  const R = 560 * scale;
+  const blobs = [];
+  for (let i = 0; i < 22; i += 1) {
+    const a = (i / 22) * Math.PI * 2 + frame * 0.07;
+    const ring = 0.08 + (i % 6) * 0.1;
+    const x = cx + Math.cos(a) * R * ring;
+    const y = cy + Math.sin(a) * R * ring * 0.9;
+    const rx = R * (0.28 + (i % 4) * 0.05);
+    const ry = rx * (0.8 + (i % 3) * 0.08);
+    const fill = ['#FFF6D0', '#F6C84A', '#FFE08A', '#E8A317'][i % 4];
+    blobs.push(
+      `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${fill}"/>`,
+    );
+  }
+  const stars = [];
+  for (let i = 0; i < 48; i += 1) {
+    const a = (i / 48) * Math.PI * 2 + frame * (i % 2 === 0 ? 0.2 : -0.14);
+    const ring = 0.55 + (i % 6) * 0.08;
+    const x = cx + Math.cos(a) * R * ring;
+    const y = cy + Math.sin(a) * R * ring * 0.92;
+    const twinkle = 0.3 + 0.7 * Math.abs(Math.sin(frame * 0.9 + i * 1.7));
+    const r = 4 + (i % 5) * 2.6;
+    const fill = i % 3 === 0 ? '#FFFFFF' : '#FFF4C2';
+    stars.push(
+      `<polygon points="${starPath(x, y, r)}" fill="${fill}" opacity="${(twinkle * Math.min(1, opacity + 0.35)).toFixed(3)}"/>`,
+    );
+  }
+  const mist = sparkleOnly
+    ? ''
+    : `<g filter="url(#mist)" opacity="${opacity.toFixed(3)}">
+      ${blobs.join('')}
+      <ellipse cx="${cx}" cy="${cy}" rx="${(R * 0.78).toFixed(1)}" ry="${(R * 0.95).toFixed(1)}" fill="#F5C242"/>
+      <ellipse cx="${cx}" cy="${cy}" rx="${(R * 0.5).toFixed(1)}" ry="${(R * 0.62).toFixed(1)}" fill="#FFE08A"/>
+    </g>`;
+  return Buffer.from(`<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="mist" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="26"/>
+      </filter>
+    </defs>
+    ${mist}
+    ${stars.join('')}
+  </svg>`);
+}
+
+function poseFor(frame) {
+  if (frame < 24) return 'neutral';
+  if (frame < 58) {
+    const u = (frame - 24) / 34;
+    const period = Math.max(2, Math.round(6 - u * 4));
+    const n = Math.floor((frame - 24) / period);
+    return n % 2 === 0 ? 'left' : 'right';
+  }
+  if (frame < 78) return 'neutral';
+  return 'super';
+}
+
+function cloudAt(frame) {
+  if (frame < 52) return { scale: 0, opacity: 0, sparkle: false };
+  if (frame < 58) {
+    const u = (frame - 52) / 6;
+    return { scale: 0.28, opacity: 0.2 + u * 0.25, sparkle: true };
+  }
+  if (frame < 74) {
+    const u = ease((frame - 58) / 16);
+    return { scale: 0.34 + u * 0.86, opacity: Math.min(1, u * 1.35), sparkle: false };
+  }
+  if (frame < 88) return { scale: 1.2, opacity: 1, sparkle: false };
+  if (frame < 112) {
+    const u = ease((frame - 88) / 24);
+    return { scale: 1.2 + u * 0.9, opacity: 1 - u, sparkle: false };
+  }
+  return { scale: 0, opacity: 0, sparkle: false };
 }
 
 mkdirSync(outDir, { recursive: true });
-const puffMaster = await sharp(puffSvg(900)).png().toBuffer();
+
+const plates = {
+  neutral: await plate(join(clipDir, 'buddy-full-neutral.jpg')),
+  left: await plate(join(clipDir, 'buddy-shake-left.jpg')),
+  right: await plate(join(clipDir, 'buddy-shake-right.jpg')),
+  super: await plate(join(clipDir, 'superbud-full-body.jpg')),
+};
 
 for (let i = 0; i < FRAMES; i += 1) {
-  const t = i / (FRAMES - 1);
-  let file = buddyPath;
-  let zoom = 1;
-  let dip = 0;
-  let puffScale = 0;
-  let puffOpacity = 0;
-
-  if (t < 0.22) {
-    const u = ease(t / 0.22);
-    dip = u * 0.08;
-    zoom = 1 + u * 0.06;
-  } else if (t < 0.46) {
-    const u = ease((t - 0.22) / 0.24);
-    dip = 0.08;
-    zoom = 1.06;
-    puffScale = 0.55 + u * 1.35;
-    puffOpacity = Math.min(1, u * 1.2);
-  } else if (t < 0.58) {
-    file = t < 0.52 ? buddyPath : hostPath;
-    dip = 0.08;
-    zoom = 1.06;
-    puffScale = 1.9;
-    puffOpacity = 1;
-  } else if (t < 0.8) {
-    const u = ease((t - 0.58) / 0.22);
-    file = hostPath;
-    zoom = 1.08 - u * 0.08;
-    dip = 0.04 * (1 - u);
-    puffScale = 1.9 - u * 1.5;
-    puffOpacity = 1 - u;
-  } else {
-    file = hostPath;
-  }
-
+  const name = poseFor(i);
+  const { scale, opacity, sparkle } = cloudAt(i);
   const layers = [];
-  if (puffOpacity > 0.02 && puffScale > 0.05) {
-    const size = Math.round(900 * puffScale);
-    const mask = Buffer.from([255, 255, 255, Math.round(puffOpacity * 255)]);
-    let puff = await sharp(puffMaster)
-      .resize(size, size)
+  if (i >= 24 && i < 58) {
+    const smear = name === 'left' ? plates.right : plates.left;
+    const faded = await sharp(smear)
       .ensureAlpha()
       .composite([
         {
-          input: mask,
+          input: Buffer.from([255, 255, 255, 70]),
           raw: { width: 1, height: 1, channels: 4 },
           tile: true,
           blend: 'dest-in',
@@ -119,25 +187,20 @@ for (let i = 0; i < FRAMES; i += 1) {
       ])
       .png()
       .toBuffer();
-    let left = Math.round((W - size) / 2);
-    let top = Math.round(H * 0.34 - size / 2);
-    if (left < 0 || top < 0 || left + size > W || top + size > H) {
-      const cropLeft = Math.max(0, -left);
-      const cropTop = Math.max(0, -top);
-      const cropW = Math.min(size - cropLeft, W - Math.max(0, left));
-      const cropH = Math.min(size - cropTop, H - Math.max(0, top));
-      puff = await sharp(puff).extract({ left: cropLeft, top: cropTop, width: cropW, height: cropH }).png().toBuffer();
-      left = Math.max(0, left);
-      top = Math.max(0, top);
-    }
-    layers.push({ input: puff, left, top });
+    const shift = name === 'left' ? -18 : 18;
+    layers.push({ input: faded, left: shift, top: 0 });
   }
-
-  const base = await coverAt(file, zoom, dip);
-  await sharp(base)
+  layers.push({ input: plates[name], left: 0, top: 0 });
+  if (opacity > 0.02 && scale > 0.05) {
+    layers.push({ input: cloudSvg(scale, opacity, i, sparkle), left: 0, top: 0 });
+  }
+  await sharp({
+    create: { width: W, height: H, channels: 4, background: { ...BG, alpha: 1 } },
+  })
     .composite(layers)
     .png()
     .toFile(join(outDir, `f${String(i).padStart(3, '0')}.png`));
+  if (i % 12 === 0) console.log('frame', i);
 }
 
 console.log(outDir);

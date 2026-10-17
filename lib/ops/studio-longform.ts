@@ -46,12 +46,13 @@ export type ClipSlot = {
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
-    label: 'Roll and gold poof',
-    start: 'Buddy, the ordinary pug, paws on the ground',
-    cover: 'A short roll, then a gold puff that hides him',
-    end: 'SuperBud standing',
-    emptyNote: 'First cut. Not locked. Buddy dips, the gold puff hides the face, then the host appears.',
-    previewSrc: '/clips/roll-poof-preview.mp4',
+    label: 'Shake and gold poof',
+    start: 'Buddy standing on all four legs',
+    cover: 'He shakes, and that shake blows a sparkling gold cloud around him',
+    end: 'SuperBud standing on all four legs',
+    emptyNote:
+      'Second cut. Not locked. Stand, shake, gold cloud, then SuperBud. The shake is the trigger whenever Buddy becomes SuperBud.',
+    previewSrc: '/clips/roll-poof-preview-2.mp4',
   },
   {
     id: 'tornado',
@@ -140,7 +141,7 @@ export const EGOS: { id: EgoId; label: string }[] = [
 ];
 
 export const TRANSFORMS: { id: TransformId; label: string }[] = [
-  { id: 'roll-poof', label: 'Roll and gold poof' },
+  { id: 'roll-poof', label: 'Shake and gold poof' },
   { id: 'tornado', label: 'Tornado cone' },
   { id: 'shield', label: 'Shield flash' },
   { id: 'none', label: 'None' },
@@ -171,7 +172,8 @@ export const STUDIO_FRIENDS: {
     id: 'buddy',
     name: 'Buddy',
     role: 'Ordinary pug',
-    detail: 'Locked. Buddy is SuperBud before the cape. These plates start the roll. The roll clip is not filmed yet.',
+    detail:
+      'Locked. Buddy is SuperBud before the cape. He stands on all four legs, then shakes. That shake is the trigger whenever he becomes SuperBud.',
     plates: [
       { label: 'Front', src: '/images/brand/friends/buddy-front.jpg' },
       { label: 'Side', src: '/images/brand/friends/buddy-side.jpg' },
@@ -282,7 +284,11 @@ function hookLine(choices: LongChoices): string {
   return `Hi friends. I am ${who}, and this sidewalk is today's classroom.`;
 }
 
-function transformCopy(id: TransformId, ends: EgoId): { beat: string; line: string; clipLabel: string } {
+function transformCopy(
+  id: TransformId,
+  starts: EgoId,
+  ends: EgoId,
+): { beat: string; line: string; clipLabel: string } {
   const next = egoSpeech(ends);
   if (id === 'tornado') {
     return {
@@ -298,10 +304,13 @@ function transformCopy(id: TransformId, ends: EgoId): { beat: string; line: stri
       clipLabel: 'Shield flash. Not filmed yet.',
     };
   }
+  const buddyToSuper = starts === 'ordinary' && ends === 'superbud';
   return {
-    beat: 'Roll and gold poof',
-    line: `A short roll, a gold puff, and I am ${next}.`,
-    clipLabel: 'Ground roll and gold poof. Not filmed yet.',
+    beat: 'Shake and gold poof',
+    line: buddyToSuper
+      ? 'I stand on all four paws, I shake, a gold cloud blows up around me, and I am SuperBud.'
+      : `I shake, a gold cloud blows up, and I am ${next}.`,
+    clipLabel: 'Shake, then the gold cloud. The shake is the trigger. Not locked.',
   };
 }
 
@@ -423,7 +432,7 @@ export function buildShots(choices: LongChoices): LongShot[] {
 
   if (choices.transform === 'none') return shots;
 
-  const copy = transformCopy(choices.transform, choices.endsAs);
+  const copy = transformCopy(choices.transform, choices.startsAs, choices.endsAs);
   const transformShot: LongShot = {
     id: 'transform',
     chapter: 'transform',
@@ -566,6 +575,16 @@ export function planNotes(choices: LongChoices): string[] {
   }
   if (choices.powers.filter((power) => power !== 'none').length === 0 && choices.transform !== 'none') {
     notes.push('With no power selected, the transform sits between the hook and the lesson.');
+  }
+  if (
+    choices.startsAs === 'ordinary' &&
+    choices.endsAs === 'superbud' &&
+    choices.transform !== 'roll-poof' &&
+    choices.transform !== 'none'
+  ) {
+    notes.push(
+      'Buddy becomes SuperBud by standing, shaking, then the gold cloud. Tornado and the shield flash are for a later costume change.',
+    );
   }
   if (choices.startsAs === 'ordinary' || choices.endsAs === 'ordinary') {
     notes.push('Ordinary-pug shots use Buddy’s locked plate. SuperBud shots keep the host photo.');
