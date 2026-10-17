@@ -39,6 +39,7 @@ export type ClipSlot = {
   cover: string;
   end: string;
   emptyNote: string;
+  previewSrc?: string;
 };
 
 /** Approved action files land here. All five are empty until a clip is locked. */
@@ -49,7 +50,8 @@ export const CLIP_SLOTS: ClipSlot[] = [
     start: 'Buddy, the ordinary pug, paws on the ground',
     cover: 'A short roll, then a gold puff that hides him',
     end: 'SuperBud standing',
-    emptyNote: 'Empty. Buddy’s plate is locked. The roll clip is not filmed yet.',
+    emptyNote: 'First cut. Not locked. Buddy dips, the gold puff hides the face, then the host appears.',
+    previewSrc: '/clips/roll-poof-preview.mp4',
   },
   {
     id: 'tornado',

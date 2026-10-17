@@ -299,9 +299,18 @@ export default function OpsLongformPane({
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-bold">{slot.label}</p>
                   <span className="rounded-full border border-amber-500/40 px-2 py-0.5 text-[10px] font-bold text-amber-200">
-                    Empty
+                    {slot.previewSrc ? 'Watch' : 'Empty'}
                   </span>
                 </div>
+                {slot.previewSrc ? (
+                  <video
+                    className="mt-2 w-full rounded-lg bg-black"
+                    controls
+                    playsInline
+                    preload="metadata"
+                    src={slot.previewSrc}
+                  />
+                ) : null}
                 <p className="mt-1 text-[11px] text-amber-200">{slot.emptyNote}</p>
                 <p className="mt-1 text-[11px] text-white/45">
                   {used ? 'Used in this story.' : 'Not in this story.'} Starts on {slot.start}. {slot.cover}. Ends on {slot.end}.
