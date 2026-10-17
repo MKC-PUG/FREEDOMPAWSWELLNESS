@@ -5,6 +5,7 @@ import {
   LOCKED_VOICE_ID,
   SPOKEN_CLOSER,
 } from '@/lib/ops/studio-catalog';
+import { backgroundById, motionById } from '@/lib/ops/studio-plates';
 
 export type RenderStart = {
   audioUrl: string | null;
@@ -96,12 +97,101 @@ async function uploadAudioAsset(audio: Buffer): Promise<{ id: string; url: strin
   return { id, url: json.data?.url ?? null };
 }
 
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const value = hex.replace('#', '');
+  return {
+    r: Number.parseInt(value.slice(0, 2), 16),
+    g: Number.parseInt(value.slice(2, 4), 16),
+    b: Number.parseInt(value.slice(4, 6), 16),
+  };
+}
+
+function titleSvg(text: string): string {
+  const lines = text
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80)
+    .split(' ')
+    .reduce<string[]>((rows, word) => {
+      const last = rows[rows.length - 1] ?? '';
+      if (!last || `${last} ${word}`.length > 28) rows.push(word);
+      else rows[rows.length - 1] = `${last} ${word}`;
+      return rows;
+    }, [])
+    .slice(0, 2);
+  const escaped = lines.map((line) =>
+    line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  );
+  const body = escaped
+    .map(
+      (line, index) =>
+        `<text x="36" y="${78 + index * 58}" fill="#F5C242" font-size="46" font-family="sans-serif" font-weight="700">${line}</text>`
+    )
+    .join('');
+  return `<svg width="960" height="200" xmlns="http://www.w3.org/2000/svg"><rect width="960" height="200" rx="28" fill="#0A1428" fill-opacity="0.78"/>${body}</svg>`;
+}
+
+/** A 9:16 plate with the title printed at the top. HeyGen places SuperBud on this after the cutout. */
+export async function renderBackgroundPlate(backgroundId: string, onScreenText: string): Promise<Buffer> {
+  const sharp = (await import('sharp')).default;
+  const plate = backgroundById(backgroundId);
+  const color = hexToRgb(plate.color);
+  let image = sharp({
+    create: { width: 1080, height: 1920, channels: 3, background: color },
+  });
+  if (plate.kind === 'image' && plate.path) {
+    const file = path.join(process.cwd(), 'public', plate.path.replace(/^\//, ''));
+    if (fs.existsSync(file)) {
+      const covered = await sharp(file)
+        .resize(1080, 1920, { fit: 'cover', position: 'centre' })
+        .toBuffer();
+      image = sharp(covered);
+    }
+  }
+  const title = onScreenText.trim();
+  if (!title) return image.png().toBuffer();
+  return image.composite([{ input: Buffer.from(titleSvg(title)), top: 72, left: 60 }]).png().toBuffer();
+}
+
+async function uploadImageAsset(png: Buffer): Promise<string> {
+  const form = new FormData();
+  form.append('file', new Blob([new Uint8Array(png)], { type: 'image/png' }), 'superbud-plate.png');
+  const res = await fetch('https://api.heygen.com/v3/assets', {
+    method: 'POST',
+    headers: { 'x-api-key': heygenKey() },
+    body: form,
+    signal: AbortSignal.timeout(30_000),
+  });
+  const json = (await res.json().catch(() => ({}))) as {
+    data?: { asset_id?: string; id?: string };
+    error?: { message?: string };
+    message?: string;
+  };
+  if (!res.ok) {
+    throw new Error(
+      `HeyGen plate upload ${res.status}: ${json.error?.message || json.message || 'upload failed'}`
+    );
+  }
+  const id = json.data?.asset_id || json.data?.id;
+  if (!id) throw new Error('HeyGen plate upload did not return an asset id.');
+  return id;
+}
+
 export async function startAvatarRender(input: {
   title: string;
   audio: Buffer;
+  backgroundId?: string;
+  motionId?: string;
+  onScreenText?: string;
 }): Promise<RenderStart> {
   const still = readLockedStill();
   const asset = await uploadAudioAsset(input.audio);
+  const background = backgroundById(input.backgroundId);
+  const motion = motionById(input.motionId);
+  const plate =
+    background.kind === 'locked'
+      ? null
+      : { asset_id: await uploadImageAsset(await renderBackgroundPlate(background.id, input.onScreenText || '')) };
   const res = await fetch('https://api.heygen.com/v3/videos', {
     method: 'POST',
     headers: {
@@ -121,9 +211,12 @@ export async function startAvatarRender(input: {
       resolution: '1080p',
       expressiveness: 'low',
       engine: { type: 'avatar_iv' },
-      motion_prompt:
-        'Subtle speaking motion. Preserve the pug face, grey mask, ears, muzzle, and costume exactly.',
+      motion_prompt: motion.prompt,
       output_format: 'mp4',
+      caption: { style: 'default' },
+      ...(plate
+        ? { remove_background: true, background: plate, fit: 'contain' }
+        : {}),
     }),
     signal: AbortSignal.timeout(30_000),
   });

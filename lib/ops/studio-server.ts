@@ -27,6 +27,7 @@ import {
 } from '@/lib/ops/studio-copy';
 import { budPrompt, echoPrompt, factPrompt, generalPrompt } from '@/lib/ops/studio-prompts';
 import { atHomeComfort } from '@/lib/ops/studio-research';
+import { backgroundById, motionById, shortOnScreenText } from '@/lib/ops/studio-plates';
 import {
   pollAvatarRender,
   readLockedStill,
@@ -70,6 +71,9 @@ function mapJob(row: Record<string, unknown>): StudioJob {
     socialPostIds: Array.isArray(row.social_post_ids)
       ? row.social_post_ids.filter((item) => typeof item === 'string')
       : [],
+    backgroundId: backgroundById((row.background_id as string) || undefined).id,
+    motionId: motionById((row.motion_id as string) || undefined).id,
+    onScreenText: (row.on_screen_text as string) ?? '',
     errorMessage: (row.error_message as string) ?? null,
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
@@ -81,6 +85,20 @@ function missingTable(error: { message?: string } | null): boolean {
   return msg.includes('ops_jobs') || msg.includes('schema cache') || msg.includes('does not exist');
 }
 
+function explainWriteError(error: { message?: string }): Error {
+  const message = error.message ?? 'Save failed';
+  if (
+    message.includes('background_id') ||
+    message.includes('motion_id') ||
+    message.includes('on_screen_text')
+  ) {
+    return new Error(
+      'Run supabase/migrations/018_ops_job_storyboard.sql in the Supabase SQL Editor, then try again.'
+    );
+  }
+  return error instanceof Error ? error : new Error(message);
+}
+
 async function updateJob(id: string, patch: Record<string, unknown>): Promise<StudioJob> {
   const supabase = await db();
   const { data, error } = await supabase
@@ -89,8 +107,23 @@ async function updateJob(id: string, patch: Record<string, unknown>): Promise<St
     .eq('id', id)
     .select('*')
     .single();
-  if (error) throw error;
+  if (error) throw explainWriteError(error);
   return mapJob(data as Record<string, unknown>);
+}
+
+function storyboardRow(input: {
+  title: string;
+  script?: string;
+  onScreenText?: string;
+  backgroundId?: string;
+  motionId?: string;
+}): Record<string, string> {
+  return {
+    script: input.script?.trim() || '',
+    on_screen_text: (input.onScreenText?.trim() || shortOnScreenText(input.title)).slice(0, 80),
+    background_id: backgroundById(input.backgroundId).id,
+    motion_id: motionById(input.motionId).id,
+  };
 }
 
 export function getStudioKeyStatus(): StudioKeyStatus {
@@ -162,12 +195,18 @@ export async function createVideoJob(input: {
   catalogCode: string;
   platform: string;
   userId: string;
+  script?: string;
+  onScreenText?: string;
+  backgroundId?: string;
+  motionId?: string;
 }): Promise<StudioJob> {
   const topic = getStudioTopic(input.catalogCode);
   if (!topic) throw new Error('Unknown catalog code');
   if (input.platform !== 'all' && !isSocialPlatform(input.platform)) {
     throw new Error('Unknown platform');
   }
+  if (input.script?.trim()) assertStudioCopy(input.script, 'Script');
+  if (input.onScreenText?.trim()) assertStudioCopy(input.onScreenText, 'On-screen text');
 
   const drafted = await draftFactCard(topic);
   const factCard =
@@ -190,6 +229,13 @@ export async function createVideoJob(input: {
       do_not_say: topic.doNotSay,
       prompt,
       created_by: input.userId,
+      ...storyboardRow({
+        title: topic.title,
+        script: input.script,
+        onScreenText: input.onScreenText,
+        backgroundId: input.backgroundId,
+        motionId: input.motionId,
+      }),
     })
     .select('*')
     .single();
@@ -197,7 +243,7 @@ export async function createVideoJob(input: {
     if (missingTable(error)) {
       throw new Error('ops_jobs table missing. Run supabase/migrations/016_ops_studio_jobs.sql.');
     }
-    throw error;
+    throw explainWriteError(error);
   }
   return mapJob(data as Record<string, unknown>);
 }
@@ -208,6 +254,10 @@ export async function createSourcedVideoJob(input: {
   doNotSay?: string;
   platform: string;
   userId: string;
+  script?: string;
+  onScreenText?: string;
+  backgroundId?: string;
+  motionId?: string;
 }): Promise<StudioJob> {
   const title = input.title.trim();
   const factCard = /at-home comfort/i.test(input.factCard)
@@ -219,6 +269,8 @@ export async function createSourcedVideoJob(input: {
     throw new Error('Unknown platform');
   }
   assertStudioCopy(factCard, 'Research card');
+  if (input.script?.trim()) assertStudioCopy(input.script, 'Script');
+  if (input.onScreenText?.trim()) assertStudioCopy(input.onScreenText, 'On-screen text');
   const doNotSay =
     input.doNotSay?.trim() ||
     'Naming a condition as the answer, a treatment promise, a dose, or a reunion promise.';
@@ -247,6 +299,13 @@ export async function createSourcedVideoJob(input: {
       do_not_say: doNotSay,
       prompt: factPrompt(topic),
       created_by: input.userId,
+      ...storyboardRow({
+        title,
+        script: input.script,
+        onScreenText: input.onScreenText,
+        backgroundId: input.backgroundId,
+        motionId: input.motionId,
+      }),
     })
     .select('*')
     .single();
@@ -254,7 +313,7 @@ export async function createSourcedVideoJob(input: {
     if (missingTable(error)) {
       throw new Error('ops_jobs table missing. Run supabase/migrations/016_ops_studio_jobs.sql.');
     }
-    throw error;
+    throw explainWriteError(error);
   }
   return mapJob(data as Record<string, unknown>);
 }
@@ -300,6 +359,9 @@ export async function saveStudioJob(
     script?: string;
     echoCaption?: string;
     echoArticle?: string;
+    onScreenText?: string;
+    backgroundId?: string;
+    motionId?: string;
   }
 ): Promise<StudioJob> {
   const row: Record<string, unknown> = {};
@@ -307,6 +369,9 @@ export async function saveStudioJob(
   if (patch.script !== undefined) row.script = patch.script;
   if (patch.echoCaption !== undefined) row.echo_caption = patch.echoCaption;
   if (patch.echoArticle !== undefined) row.echo_article = patch.echoArticle;
+  if (patch.onScreenText !== undefined) row.on_screen_text = patch.onScreenText.trim().slice(0, 80);
+  if (patch.backgroundId !== undefined) row.background_id = backgroundById(patch.backgroundId).id;
+  if (patch.motionId !== undefined) row.motion_id = motionById(patch.motionId).id;
   return updateJob(id, row);
 }
 
@@ -385,7 +450,14 @@ export async function approveScript(id: string): Promise<StudioJob> {
   }
 
   const audio = await synthesizeSuperBud(spoken);
-  const render = await startAvatarRender({ title: job.title, audio });
+  if (job.onScreenText.trim()) assertStudioCopy(job.onScreenText, 'On-screen text');
+  const render = await startAvatarRender({
+    title: job.title,
+    audio,
+    backgroundId: job.backgroundId,
+    motionId: job.motionId,
+    onScreenText: job.onScreenText,
+  });
   return updateJob(id, {
     ...echo,
     script: spoken,

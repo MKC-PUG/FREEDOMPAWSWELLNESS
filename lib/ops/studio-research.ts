@@ -188,3 +188,131 @@ export function factCardFromHit(hit: ResearchHit): { factCard: string; doNotSay:
   ].join('\n');
   return { factCard, doNotSay };
 }
+
+const EXCERPT_HOSTS = new Set([
+  'en.wikipedia.org',
+  'pubmed.ncbi.nlm.nih.gov',
+  'www.ncbi.nlm.nih.gov',
+]);
+
+const EXCERPT_STOP = new Set([
+  'about',
+  'after',
+  'also',
+  'and',
+  'are',
+  'canine',
+  'dog',
+  'dogs',
+  'for',
+  'from',
+  'have',
+  'how',
+  'into',
+  'that',
+  'the',
+  'this',
+  'what',
+  'when',
+  'with',
+  'your',
+]);
+
+export type ResearchExcerpt = {
+  title: string;
+  url: string;
+  sentences: string[];
+  terms: string[];
+};
+
+function excerptTerms(query: string): string[] {
+  const words = query
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((word) => word.length > 3 && !EXCERPT_STOP.has(word));
+  return [...new Set(words)].slice(0, 8);
+}
+
+export function pickRelevantSentences(text: string, terms: string[]): string[] {
+  const sentences = text
+    .replace(/\s+/g, ' ')
+    .split(/(?<=[.!?])\s+/)
+    .map((sentence) => sentence.trim())
+    .filter((sentence) => sentence.length > 50 && sentence.length < 420);
+  if (sentences.length === 0) return [];
+  const ranked = sentences
+    .map((sentence) => {
+      const lower = sentence.toLowerCase();
+      const score = terms.reduce((total, term) => total + (lower.includes(term) ? 1 : 0), 0);
+      return { sentence, score };
+    })
+    .filter((row) => row.score > 0)
+    .sort((a, b) => b.score - a.score);
+  const picked = (ranked.length > 0 ? ranked : sentences.map((sentence) => ({ sentence, score: 0 })))
+    .slice(0, 3)
+    .map((row) => row.sentence);
+  return picked;
+}
+
+function allowedExcerptUrl(raw: string): URL | null {
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== 'https:' || !EXCERPT_HOSTS.has(url.hostname)) return null;
+    return url;
+  } catch {
+    return null;
+  }
+}
+
+async function wikipediaExtract(title: string): Promise<string> {
+  const url = new URL('https://en.wikipedia.org/w/api.php');
+  url.searchParams.set('action', 'query');
+  url.searchParams.set('prop', 'extracts');
+  url.searchParams.set('explaintext', '1');
+  url.searchParams.set('exchars', '4000');
+  url.searchParams.set('titles', title);
+  url.searchParams.set('redirects', '1');
+  url.searchParams.set('format', 'json');
+  const res = await fetch(url, { headers: HEADERS, signal: AbortSignal.timeout(12_000) });
+  if (!res.ok) return '';
+  const json = (await res.json()) as { query?: { pages?: Record<string, { extract?: string }> } };
+  const pages = Object.values(json.query?.pages ?? {});
+  return pages[0]?.extract?.trim() || '';
+}
+
+async function pubmedAbstract(id: string): Promise<string> {
+  const url = new URL('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi');
+  url.searchParams.set('db', 'pubmed');
+  url.searchParams.set('id', id);
+  url.searchParams.set('rettype', 'abstract');
+  url.searchParams.set('retmode', 'text');
+  url.searchParams.set('tool', 'freedompaws-ops');
+  url.searchParams.set('email', 'info@freedompawsinc.com');
+  const res = await fetch(url, { headers: HEADERS, signal: AbortSignal.timeout(12_000) });
+  if (!res.ok) return '';
+  return (await res.text()).trim();
+}
+
+/** The sentences that match the search, plus the terms to mark. The full article stays at `url`. */
+export async function excerptForSource(input: {
+  url: string;
+  query: string;
+  title?: string;
+}): Promise<ResearchExcerpt> {
+  const url = allowedExcerptUrl(input.url);
+  if (!url) throw new Error('That source cannot be previewed here. Open the full article instead.');
+  const terms = excerptTerms(`${input.query} ${input.title || ''}`);
+  let text = '';
+  if (url.hostname === 'en.wikipedia.org') {
+    const slug = decodeURIComponent(url.pathname.replace(/^\/wiki\//, '')).replace(/_/g, ' ');
+    text = await wikipediaExtract(slug);
+  } else {
+    const id = url.pathname.match(/(\d{5,})/)?.[1];
+    if (id) text = await pubmedAbstract(id);
+  }
+  const sentences = pickRelevantSentences(text, terms);
+  if (sentences.length === 0) {
+    throw new Error('No matching lines came back. Open the full article.');
+  }
+  return { title: input.title?.trim() || url.hostname, url: url.toString(), sentences, terms };
+}

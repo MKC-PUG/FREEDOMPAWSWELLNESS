@@ -51,6 +51,9 @@ export async function POST(request: NextRequest) {
     script?: string;
     echoCaption?: string;
     echoArticle?: string;
+    onScreenText?: string;
+    backgroundId?: string;
+    motionId?: string;
   };
   try {
     body = await request.json();
@@ -67,6 +70,10 @@ export async function POST(request: NextRequest) {
           catalogCode: body.catalogCode || '',
           platform: body.platform || 'instagram',
           userId,
+          script: body.script,
+          onScreenText: body.onScreenText,
+          backgroundId: body.backgroundId,
+          motionId: body.motionId,
         });
         break;
       case 'queue_source':
@@ -76,6 +83,10 @@ export async function POST(request: NextRequest) {
           doNotSay: body.doNotSay,
           platform: body.platform || 'all',
           userId,
+          script: body.script,
+          onScreenText: body.onScreenText,
+          backgroundId: body.backgroundId,
+          motionId: body.motionId,
         });
         break;
       case 'create_general':
@@ -93,6 +104,9 @@ export async function POST(request: NextRequest) {
           script: body.script,
           echoCaption: body.echoCaption,
           echoArticle: body.echoArticle,
+          onScreenText: body.onScreenText,
+          backgroundId: body.backgroundId,
+          motionId: body.motionId,
         });
         break;
       case 'accept_research':

@@ -173,6 +173,9 @@ export type StudioJob = {
   heygenVideoId: string | null;
   socialPostId: string | null;
   socialPostIds: string[];
+  backgroundId: string;
+  motionId: string;
+  onScreenText: string;
   errorMessage: string | null;
   createdAt: string;
   updatedAt: string;

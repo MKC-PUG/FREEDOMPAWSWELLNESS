@@ -13,7 +13,9 @@ import {
   type StudioStatus,
 } from '@/lib/ops/studio-catalog';
 import { atHomeComfort, factCardFromHit, type ResearchHit } from '@/lib/ops/studio-research';
+import { storyboardFor, type StoryboardFields } from '@/lib/ops/studio-plates';
 import { VENDOR_VIDEO_TOPICS, vendorFactCard } from '@/lib/ops/studio-vendors';
+import OpsStoryboardPreview from './OpsStoryboardPreview';
 import { OpsCard, OpsKpiCard, OpsSection } from './OpsUi';
 
 function statusClass(status: StudioStatus): string {
@@ -34,7 +36,43 @@ type SlateItem = {
   doNotSay?: string;
   sourceUrl?: string;
   vendor?: string;
+  script?: string;
+  onScreenText?: string;
+  backgroundId?: string;
+  motionId?: string;
 };
+
+type ExcerptView = {
+  id: string;
+  url: string;
+  loading: boolean;
+  error?: string;
+  sentences: string[];
+  terms: string[];
+};
+
+function Highlighted({ text, terms }: { text: string; terms: string[] }) {
+  const cleaned = terms.filter((term) => term.length > 2);
+  if (cleaned.length === 0) return <>{text}</>;
+  const pattern = new RegExp(
+    `(${cleaned.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`,
+    'ig'
+  );
+  const parts = text.split(pattern);
+  return (
+    <>
+      {parts.map((part, index) =>
+        cleaned.some((term) => term.toLowerCase() === part.toLowerCase()) ? (
+          <mark key={index} className="rounded bg-[#F5C242] px-0.5 text-[#0A1428]">
+            {part}
+          </mark>
+        ) : (
+          <span key={index}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
 
 const SLATE_KEY = 'fp-studio-slate-v1';
 
@@ -45,6 +83,7 @@ function catalogSlate(): SlateItem[] {
     factCard: vendorFactCard(topic),
     doNotSay: topic.doNotSay,
     vendor: topic.vendor,
+    backgroundId: topic.backgroundId,
   }));
   const catalogRows: SlateItem[] = STUDIO_TOPICS.map((topic) => ({
     id: topic.code,
@@ -85,10 +124,17 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
   const [script, setScript] = useState('');
   const [caption, setCaption] = useState('');
   const [article, setArticle] = useState('');
+  const [onScreenText, setOnScreenText] = useState('');
+  const [backgroundId, setBackgroundId] = useState('locked');
+  const [motionId, setMotionId] = useState('subtle');
+  const [boardId, setBoardId] = useState<string | null>(null);
+  const [boardMode, setBoardMode] = useState<'preview' | 'edit'>('preview');
+  const [excerpt, setExcerpt] = useState<ExcerptView | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(tableError ?? null);
 
+  const openTopic = slate.find((item) => item.id === boardId) ?? null;
   const selected = useMemo(
     () => jobs.find((job) => job.id === selectedId) ?? null,
     [jobs, selectedId]
@@ -118,6 +164,9 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
     setScript(selected.script);
     setCaption(selected.echoCaption);
     setArticle(selected.echoArticle);
+    setOnScreenText(selected.onScreenText);
+    setBackgroundId(selected.backgroundId);
+    setMotionId(selected.motionId);
   }, [selected]);
 
   useEffect(() => {
@@ -231,9 +280,43 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
     }
   }
 
+  function boardOf(item: SlateItem): SlateItem {
+    const board = storyboardFor(item.title, item.factCard || '', {
+      script: item.script,
+      onScreenText: item.onScreenText,
+      backgroundId: item.backgroundId,
+      motionId: item.motionId,
+    });
+    return { ...item, ...board };
+  }
+
+  function openBoard(item: SlateItem, mode: 'preview' | 'edit') {
+    const ready = boardOf(item);
+    setSlate((prev) => prev.map((row) => (row.id === item.id ? ready : row)));
+    setBoardId(item.id);
+    setBoardMode(mode);
+  }
+
+  function patchBoard(id: string, patch: Partial<StoryboardFields>) {
+    setSlate((prev) => prev.map((row) => (row.id === id ? { ...boardOf(row), ...patch } : row)));
+  }
+
   function queueSlateItem(item: SlateItem) {
+    const ready = boardOf(item);
+    setSlate((prev) => prev.map((row) => (row.id === item.id ? ready : row)));
+    const board = {
+      script: ready.script,
+      onScreenText: ready.onScreenText,
+      backgroundId: ready.backgroundId,
+      motionId: ready.motionId,
+    };
     if (item.catalogCode) {
-      return run('Queue topic', { action: 'create_video', catalogCode: item.catalogCode, platform });
+      return run('Queue topic', {
+        action: 'create_video',
+        catalogCode: item.catalogCode,
+        platform,
+        ...board,
+      });
     }
     return run('Queue topic', {
       action: 'queue_source',
@@ -241,7 +324,50 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
       factCard: item.factCard || '',
       doNotSay: item.doNotSay,
       platform,
+      ...board,
     });
+  }
+
+  async function openExcerpt(hit: ResearchHit) {
+    setExcerpt({ id: hit.id, url: hit.url, loading: true, sentences: [], terms: [] });
+    try {
+      const params = new URLSearchParams({ url: hit.url, q: researchQuery, title: hit.title });
+      const res = await fetch(`/api/ops/desk/research/excerpt?${params.toString()}`);
+      const data = (await res.json()) as {
+        success?: boolean;
+        error?: string;
+        excerpt?: { sentences: string[]; terms: string[]; url: string };
+      };
+      if (!data.success || !data.excerpt) throw new Error(data.error || 'Excerpt failed');
+      setExcerpt({
+        id: hit.id,
+        url: data.excerpt.url,
+        loading: false,
+        sentences: data.excerpt.sentences,
+        terms: data.excerpt.terms,
+      });
+    } catch (e) {
+      setExcerpt({
+        id: hit.id,
+        url: hit.url,
+        loading: false,
+        error: e instanceof Error ? e.message : 'Excerpt failed',
+        sentences: [],
+        terms: [],
+      });
+    }
+  }
+
+  function jobDraft() {
+    return {
+      factCard,
+      script,
+      echoCaption: caption,
+      echoArticle: article,
+      onScreenText,
+      backgroundId,
+      motionId,
+    };
   }
 
   async function copyPrompt() {
@@ -384,6 +510,20 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                   </button>
                   <button
                     type="button"
+                    className="rounded-lg border border-white/15 px-2 py-1 text-[11px] font-bold"
+                    onClick={() => openBoard(item, 'preview')}
+                  >
+                    Preview
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-white/15 px-2 py-1 text-[11px] font-bold"
+                    onClick={() => openBoard(item, 'edit')}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
                     disabled={busy || !tableReady}
                     className="rounded-lg bg-[#F5C242] px-2 py-1 text-[11px] font-bold text-[#0A1428] disabled:opacity-40"
                     onClick={() => void queueSlateItem(item)}
@@ -401,12 +541,25 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               </li>
             ))}
           </ul>
+          {openTopic ? (
+            <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+              <p className="text-sm font-bold">{openTopic.title}</p>
+              <OpsStoryboardPreview
+                script={openTopic.script || ''}
+                onScreenText={openTopic.onScreenText || ''}
+                backgroundId={openTopic.backgroundId || 'locked'}
+                motionId={openTopic.motionId || 'subtle'}
+                mode={boardMode}
+                onChange={(patch) => patchBoard(openTopic.id, patch)}
+              />
+            </div>
+          ) : null}
         </OpsCard>
 
         <OpsCard>
           <h3 className="text-sm font-bold">FACT research</h3>
           <p className="mt-1 text-xs text-white/50">
-            Search veterinary and dog topics. Read the source, then add the ones you want produced.
+            Search veterinary and dog topics. Read opens the matching lines, with the full article linked.
             Each project includes one at-home comfort step, such as a plain oatmeal bath for itchy skin,
             and says to call a vet if it continues or the dog seems worse.
           </p>
@@ -442,14 +595,13 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                   <p className="mt-1 text-xs text-white/55">{hit.summary}</p>
                   <p className="mt-1 text-xs text-white/75">At-home: {atHomeComfort(`${hit.title} ${hit.summary}`)}</p>
                   <div className="mt-2 flex flex-wrap gap-2">
-                    <a
-                      href={hit.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      type="button"
                       className="rounded-lg border border-white/15 px-2 py-1 text-[11px] font-bold text-white/80"
+                      onClick={() => void openExcerpt(hit)}
                     >
                       Read
-                    </a>
+                    </button>
                     <button
                       type="button"
                       className="rounded-lg bg-[#F5C242] px-2 py-1 text-[11px] font-bold text-[#0A1428]"
@@ -462,6 +614,27 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               ))
             )}
           </ul>
+          {excerpt ? (
+            <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+              {excerpt.loading ? <p className="text-xs text-white/60">Reading the matching lines…</p> : null}
+              {excerpt.error ? <p className="text-xs text-amber-200">{excerpt.error}</p> : null}
+              <div className="space-y-2">
+                {excerpt.sentences.map((sentence) => (
+                  <p key={sentence} className="text-xs leading-5 text-white/80">
+                    <Highlighted text={sentence} terms={excerpt.terms} />
+                  </p>
+                ))}
+              </div>
+              <a
+                href={excerpt.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-block text-xs font-bold text-[#F5C242] hover:underline"
+              >
+                Full article
+              </a>
+            </div>
+          ) : null}
         </OpsCard>
       </div>
 
@@ -578,15 +751,31 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                 onChange={(e) => setFactCard(e.target.value)}
               />
             </label>
-            <label className="mt-3 block text-sm">
-              <span className="text-white/50 text-xs uppercase tracking-wide">Spoken script</span>
-              <textarea
-                className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
-                rows={5}
-                value={script}
-                onChange={(e) => setScript(e.target.value)}
+            {selected.kind === 'superbud_video' ? (
+              <OpsStoryboardPreview
+                script={script}
+                onScreenText={onScreenText}
+                backgroundId={backgroundId}
+                motionId={motionId}
+                mode="edit"
+                onChange={(patch) => {
+                  if (patch.script !== undefined) setScript(patch.script);
+                  if (patch.onScreenText !== undefined) setOnScreenText(patch.onScreenText);
+                  if (patch.backgroundId !== undefined) setBackgroundId(patch.backgroundId);
+                  if (patch.motionId !== undefined) setMotionId(patch.motionId);
+                }}
               />
-            </label>
+            ) : (
+              <label className="mt-3 block text-sm">
+                <span className="text-white/50 text-xs uppercase tracking-wide">Spoken script</span>
+                <textarea
+                  className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
+                  rows={5}
+                  value={script}
+                  onChange={(e) => setScript(e.target.value)}
+                />
+              </label>
+            )}
             <label className="mt-3 block text-sm">
               <span className="text-white/50 text-xs uppercase tracking-wide">Social caption</span>
               <textarea
@@ -632,10 +821,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                   run('Save', {
                     action: 'save',
                     id: selected.id,
-                    factCard,
-                    script,
-                    echoCaption: caption,
-                    echoArticle: article,
+                    ...jobDraft(),
                   })
                 }
               >
@@ -650,10 +836,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                     const saved = await run('Save', {
                       action: 'save',
                       id: selected.id,
-                      factCard,
-                      script,
-                      echoCaption: caption,
-                      echoArticle: article,
+                      ...jobDraft(),
                     });
                     if (saved) await run('Accept research', { action: 'accept_research', id: selected.id });
                   })();
@@ -671,10 +854,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                       const saved = await run('Save', {
                         action: 'save',
                         id: selected.id,
-                        factCard,
-                        script,
-                        echoCaption: caption,
-                        echoArticle: article,
+                        ...jobDraft(),
                       });
                       if (saved) await run('Render', { action: 'approve_script', id: selected.id });
                     })();
@@ -703,10 +883,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                       const saved = await run('Save', {
                         action: 'save',
                         id: selected.id,
-                        factCard,
-                        script,
-                        echoCaption: caption,
-                        echoArticle: article,
+                        ...jobDraft(),
                       });
                       if (saved) await run('Queue social', { action: 'queue_social', id: selected.id });
                     })();
