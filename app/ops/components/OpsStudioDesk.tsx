@@ -134,7 +134,6 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(tableError ?? null);
 
-  const openTopic = slate.find((item) => item.id === boardId) ?? null;
   const selected = useMemo(
     () => jobs.find((job) => job.id === selectedId) ?? null,
     [jobs, selectedId]
@@ -295,6 +294,9 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
     setSlate((prev) => prev.map((row) => (row.id === item.id ? ready : row)));
     setBoardId(item.id);
     setBoardMode(mode);
+    requestAnimationFrame(() => {
+      document.getElementById(`topic-${item.id}`)?.scrollIntoView({ block: 'nearest' });
+    });
   }
 
   function patchBoard(id: string, patch: Partial<StoryboardFields>) {
@@ -474,9 +476,15 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               Add
             </button>
           </div>
-          <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
+          <ul className={`mt-3 space-y-2 ${boardId ? '' : 'max-h-80 overflow-y-auto'}`}>
             {slate.map((item, index) => (
-              <li key={item.id} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+              <li
+                key={item.id}
+                id={`topic-${item.id}`}
+                className={`rounded-xl border px-3 py-2 ${
+                  item.id === boardId ? 'border-[#F5C242]/60 bg-white/10' : 'border-white/10 bg-white/[0.03]'
+                }`}
+              >
                 {item.vendor ? (
                   <p className="text-[10px] font-bold uppercase tracking-wide text-[#F5C242]">{item.vendor}</p>
                 ) : null}
@@ -538,22 +546,19 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                     Remove
                   </button>
                 </div>
+                {item.id === boardId ? (
+                  <OpsStoryboardPreview
+                    script={item.script || ''}
+                    onScreenText={item.onScreenText || ''}
+                    backgroundId={item.backgroundId || 'locked'}
+                    motionId={item.motionId || 'subtle'}
+                    mode={boardMode}
+                    onChange={(patch) => patchBoard(item.id, patch)}
+                  />
+                ) : null}
               </li>
             ))}
           </ul>
-          {openTopic ? (
-            <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-              <p className="text-sm font-bold">{openTopic.title}</p>
-              <OpsStoryboardPreview
-                script={openTopic.script || ''}
-                onScreenText={openTopic.onScreenText || ''}
-                backgroundId={openTopic.backgroundId || 'locked'}
-                motionId={openTopic.motionId || 'subtle'}
-                mode={boardMode}
-                onChange={(patch) => patchBoard(openTopic.id, patch)}
-              />
-            </div>
-          ) : null}
         </OpsCard>
 
         <OpsCard>
