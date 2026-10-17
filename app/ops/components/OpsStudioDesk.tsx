@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
+  SOCIAL_PLATFORMS,
   STUDIO_SEATS,
   STUDIO_STATUS_LABEL,
   STUDIO_TOPICS,
@@ -11,10 +12,7 @@ import {
   type StudioSeat,
   type StudioStatus,
 } from '@/lib/ops/studio-catalog';
-import type { SocialPlatform } from '@/lib/ops/social-pillars';
 import { OpsCard, OpsKpiCard, OpsSection } from './OpsUi';
-
-const PLATFORMS: SocialPlatform[] = ['instagram', 'tiktok', 'youtube', 'facebook'];
 
 function statusClass(status: StudioStatus): string {
   if (status === 'watch' || status === 'research' || status === 'script') {
@@ -38,7 +36,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
   const [jobs, setJobs] = useState(initialJobs);
   const [selectedId, setSelectedId] = useState<string | null>(initialJobs[0]?.id ?? null);
   const [catalogCode, setCatalogCode] = useState(STUDIO_TOPICS[0]?.code ?? 'HA-01');
-  const [platform, setPlatform] = useState<SocialPlatform>('instagram');
+  const [platform, setPlatform] = useState('all');
   const [seat, setSeat] = useState<StudioSeat>('lex');
   const [generalTitle, setGeneralTitle] = useState('');
   const [brief, setBrief] = useState('');
@@ -122,10 +120,10 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
   return (
     <div className="space-y-8">
       <OpsSection title="Video and social jobs">
-        <p className="mb-4 max-w-3xl text-sm text-white/65">
-          One row is one SuperBud package: research, spoken script, MP3, talking MP4, caption,
-          article, and ad drafts. You accept the research, the words that will be spoken, and the
-          finished cut. The last acceptance is what enters the social queue. Ad spend stays off.
+          <p className="mb-4 max-w-3xl text-sm text-white/65">
+          One row is one SuperBud package: research, spoken script, one MP4, and the social pack.
+          Queue sends that same cut to Instagram, TikTok, YouTube, and Facebook. You still accept
+          the research, the spoken words, and the finished cut. Ad spend stays off.
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <OpsKpiCard label="Waiting on you" value={waiting} accent="amber" hint="Research, script, or watch" />
@@ -161,9 +159,9 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
       <div className="grid lg:grid-cols-2 gap-4">
         <OpsCard>
           <h3 className="text-sm font-bold">New SuperBud video</h3>
-          <p className="mt-1 text-xs text-white/50">
-            Starts a FACT card from the topic catalog. Voice stays SuperBud-FP-Designed. The still
-            stays the locked host plate.
+            <p className="mt-1 text-xs text-white/50">
+            Starts a FACT card from the topic catalog. One render. All platforms is the usual
+            choice. Voice stays SuperBud-FP-Designed. The still stays the locked host plate.
           </p>
           <div className="mt-3 grid sm:grid-cols-2 gap-3">
             <label className="text-sm block">
@@ -187,11 +185,12 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                 className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2"
                 value={platform}
                 disabled={busy || !tableReady}
-                onChange={(e) => setPlatform(e.target.value as SocialPlatform)}
+                onChange={(e) => setPlatform(e.target.value)}
               >
-                {PLATFORMS.map((item) => (
+                <option value="all">All platforms</option>
+                {SOCIAL_PLATFORMS.map((item) => (
                   <option key={item} value={item}>
-                    {item}
+                    {item} only
                   </option>
                 ))}
               </select>
@@ -299,7 +298,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               <div>
                 <p className="text-xs uppercase tracking-wide text-white/45">
                   {selected.kind === 'superbud_video' ? 'SuperBud video' : 'Agent job'} ·{' '}
-                  {selected.platform}
+                  {selected.platform === 'all' ? 'Instagram, TikTok, YouTube, Facebook' : selected.platform}
                 </p>
                 <h3 className="mt-1 text-lg font-bold">{selected.title}</h3>
               </div>
@@ -461,7 +460,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                     })();
                   }}
                 >
-                  Queue social post
+                  {selected.platform === 'all' ? 'Queue all platforms' : 'Queue social post'}
                 </button>
               ) : null}
               <button

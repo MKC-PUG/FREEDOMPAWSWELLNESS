@@ -8,6 +8,7 @@ import {
 import {
   getStudioTopic,
   isSocialPlatform,
+  platformsForJob,
   STUDIO_SEATS,
   type StudioJob,
   type StudioKeyStatus,
@@ -19,10 +20,10 @@ import {
 import { assertStudioCopy } from '@/lib/ops/studio-compliance';
 import {
   buildEchoPack,
+  captionForPlatform,
   draftFactCard,
   draftScript,
   pillarOrDefault,
-  platformOrDefault,
 } from '@/lib/ops/studio-copy';
 import { budPrompt, echoPrompt, factPrompt, generalPrompt } from '@/lib/ops/studio-prompts';
 import {
@@ -65,6 +66,9 @@ function mapJob(row: Record<string, unknown>): StudioJob {
     videoUrl: (row.video_url as string) ?? null,
     heygenVideoId: (row.heygen_video_id as string) ?? null,
     socialPostId: (row.social_post_id as string) ?? null,
+    socialPostIds: Array.isArray(row.social_post_ids)
+      ? row.social_post_ids.filter((item) => typeof item === 'string')
+      : [],
     errorMessage: (row.error_message as string) ?? null,
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
@@ -160,7 +164,9 @@ export async function createVideoJob(input: {
 }): Promise<StudioJob> {
   const topic = getStudioTopic(input.catalogCode);
   if (!topic) throw new Error('Unknown catalog code');
-  if (!isSocialPlatform(input.platform)) throw new Error('Unknown platform');
+  if (input.platform !== 'all' && !isSocialPlatform(input.platform)) {
+    throw new Error('Unknown platform');
+  }
 
   const drafted = await draftFactCard(topic);
   const factCard =
@@ -373,32 +379,58 @@ export async function queueSocialPost(id: string, userId: string): Promise<Studi
   assertStudioCopy(script, 'Script');
   assertStudioCopy(job.echoArticle, 'Article');
 
-  let postId = job.socialPostId;
-  if (!postId) {
-    const post = await createSocialPost({
-      pillar: pillarOrDefault(job.pillar),
-      platform: platformOrDefault(job.platform),
-      userId,
-      title: job.title,
-      caption,
-    });
-    await updateSocialPost(post.id, {
-      script,
-      status: 'approved',
-      approvedBy: userId,
-      approvedAt: new Date().toISOString(),
-      errorMessage: null,
-    });
-    postId = post.id;
+  const destinations = platformsForJob(job.platform);
+  let postIds = job.socialPostIds.length
+    ? job.socialPostIds
+    : job.socialPostId
+      ? [job.socialPostId]
+      : [];
+
+  if (postIds.length === 0) {
+    const created: string[] = [];
+    for (const platform of destinations) {
+      const text = captionForPlatform(platform, job);
+      assertStudioCopy(text, `${platform} caption`);
+      const post = await createSocialPost({
+        pillar: pillarOrDefault(job.pillar),
+        platform,
+        userId,
+        title: job.title,
+        caption: text,
+      });
+      await updateSocialPost(post.id, {
+        script,
+        status: 'approved',
+        approvedBy: userId,
+        approvedAt: new Date().toISOString(),
+        errorMessage: null,
+      });
+      created.push(post.id);
+    }
+    postIds = created;
   }
 
-  await sendSocialPostToBuffer(postId);
-  return updateJob(id, {
-    social_post_id: postId,
-    status: 'queued',
-    seat: 'echo',
-    error_message: null,
-  });
+  for (const postId of postIds) {
+    await sendSocialPostToBuffer(postId);
+  }
+
+  try {
+    return await updateJob(id, {
+      social_post_id: postIds[0] ?? null,
+      social_post_ids: postIds,
+      status: 'queued',
+      seat: 'echo',
+      error_message: null,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : '';
+    if (message.includes('social_post_ids')) {
+      throw new Error(
+        'Run supabase/migrations/017_ops_job_all_platforms.sql in the Supabase SQL Editor, then queue again.'
+      );
+    }
+    throw error;
+  }
 }
 
 export async function setStudioStatus(id: string, status: 'hold' | 'done'): Promise<StudioJob> {

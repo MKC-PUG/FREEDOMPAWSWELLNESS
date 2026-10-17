@@ -136,8 +136,17 @@ export function getStudioTopic(code: string): StudioTopic | undefined {
   return STUDIO_TOPICS.find((topic) => topic.code === code);
 }
 
+export const SOCIAL_PLATFORMS: SocialPlatform[] = ['instagram', 'tiktok', 'youtube', 'facebook'];
+
 export function isSocialPlatform(value: string): value is SocialPlatform {
   return value === 'instagram' || value === 'tiktok' || value === 'youtube' || value === 'facebook';
+}
+
+/** One render fans out to every network. A single name limits the queue to that network. */
+export function platformsForJob(platform: string): SocialPlatform[] {
+  if (platform === 'all') return SOCIAL_PLATFORMS;
+  if (isSocialPlatform(platform)) return [platform];
+  return ['instagram'];
 }
 
 export type StudioJob = {
@@ -163,6 +172,7 @@ export type StudioJob = {
   videoUrl: string | null;
   heygenVideoId: string | null;
   socialPostId: string | null;
+  socialPostIds: string[];
   errorMessage: string | null;
   createdAt: string;
   updatedAt: string;

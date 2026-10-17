@@ -95,6 +95,18 @@ export async function draftScript(topic: StudioTopic, factCard: string): Promise
   return script;
 }
 
+export function captionForPlatform(
+  platform: SocialPlatform,
+  input: { echoCaption: string; echoArticle: string; ctaPath: string }
+): string {
+  if (platform === 'youtube') {
+    const cta = appCtaUrl(input.ctaPath || '/diagnostics');
+    const body = input.echoArticle.trim() || input.echoCaption.trim();
+    return body.includes(cta) ? body : `${body}\n\n${cta}`;
+  }
+  return input.echoCaption.trim();
+}
+
 export function pillarOrDefault(value: string | null | undefined): SocialPillarId {
   const allowed: SocialPillarId[] = [
     'adoption_tn',
