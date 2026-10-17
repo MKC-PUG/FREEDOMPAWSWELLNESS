@@ -294,22 +294,54 @@ function poseFor(frame) {
 rmSync(outDir, { recursive: true, force: true });
 mkdirSync(outDir, { recursive: true });
 
+function motionBlur(src, radius) {
+  const out = Buffer.alloc(src.length);
+  const r = Math.max(2, Math.round(radius));
+  const taps = [];
+  let wsum = 0;
+  for (let d = -r; d <= r; d += 2) {
+    const w = r + 1 - Math.abs(d);
+    taps.push([d, w]);
+    wsum += w;
+  }
+  for (let y = 0; y < H; y += 1) {
+    for (let x = 0; x < W; x += 1) {
+      let red = 0;
+      let green = 0;
+      let blue = 0;
+      for (let i = 0; i < taps.length; i += 1) {
+        const sx = Math.max(0, Math.min(W - 1, x + taps[i][0]));
+        const si = (y * W + sx) * 4;
+        const w = taps[i][1];
+        red += src[si] * w;
+        green += src[si + 1] * w;
+        blue += src[si + 2] * w;
+      }
+      const di = (y * W + x) * 4;
+      out[di] = red / wsum;
+      out[di + 1] = green / wsum;
+      out[di + 2] = blue / wsum;
+      out[di + 3] = 255;
+    }
+  }
+  return out;
+}
+
 const buddy = await fit(join(clipDir, 'buddy-full-neutral.jpg'));
 const whipLeft = await fit(join(clipDir, 'buddy-shake-left.jpg'));
 const whipRight = await fit(join(clipDir, 'buddy-shake-right.jpg'));
 const superbud = await fit(join(clipDir, 'superbud-full-body.jpg'));
-const mask = dogMask(buddy);
-const behind = plateBehind(buddy, mask);
-let dogPixels = 0;
-for (let i = 0; i < mask.length; i += 1) if (mask[i]) dogPixels += 1;
-console.log('dog pixels', dogPixels);
 
 for (let frame = 0; frame < FRAMES; frame += 1) {
   const twist = twistAt(frame);
   let dog;
   if (poseFor(frame) === 'super') dog = superbud;
   else if (!twist || twist.amount < 0.04) dog = buddy;
-  else dog = mix(buddy, twist.side === 'left' ? whipLeft : whipRight, twist.amount);
+  else {
+    const u = Math.min(1, Math.max(0, (frame - 16) / 52));
+    const plate = twist.side === 'left' ? whipLeft : whipRight;
+    dog = motionBlur(plate, 6 + u * 16);
+  }
   const bomb = bombAt(frame);
   const layers = [];
   if (bomb && bomb.fade > 0.02) layers.push({ input: smokeSvg(bomb, frame), left: 0, top: 0 });

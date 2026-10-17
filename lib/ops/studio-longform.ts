@@ -51,8 +51,8 @@ export const CLIP_SLOTS: ClipSlot[] = [
     cover: 'A very quick whole-body shiver that builds as the gold smoke explodes',
     end: 'The smoke clears slowly and SuperBud is standing',
     emptyNote:
-      'Fourth cut. Not locked. The head twists first, like a wet dog, faster as the gold smoke explodes. The smoke then clears slowly.',
-    previewSrc: '/clips/roll-poof-preview-4.mp4',
+      'Fifth cut. Not locked. The body blurs as it twists, faster as the gold smoke explodes, then the smoke clears slowly.',
+    previewSrc: '/clips/roll-poof-preview-5.mp4',
   },
   {
     id: 'tornado',
