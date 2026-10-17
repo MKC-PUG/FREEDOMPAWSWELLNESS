@@ -5,6 +5,7 @@ import { findBannedPhrase } from '@/lib/ops/studio-compliance';
 import {
   CHAPTERS,
   CLIP_SLOTS,
+  STUDIO_FRIENDS,
   EGOS,
   LENGTHS,
   LONGFORM_KEY,
@@ -249,6 +250,35 @@ export default function OpsLongformPane({
           A line includes “{banned}”. Rewrite it before a talking shot can go to the topic list.
         </p>
       ) : null}
+
+      <div className="mt-4">
+        <p className="text-[10px] font-bold uppercase tracking-wide text-white/40">Friends</p>
+        <p className="mt-1 text-xs text-white/50">
+          Presley walks beside SuperBud. Charlie is the ride. These plates stay fixed.
+        </p>
+        <ul className="mt-2 grid gap-3 sm:grid-cols-2">
+          {STUDIO_FRIENDS.map((friend) => (
+            <li key={friend.id} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+              <p className="text-sm font-bold">
+                {friend.name} <span className="text-[10px] font-bold uppercase tracking-wide text-[#F5C242]">{friend.role}</span>
+              </p>
+              <p className="mt-1 text-[11px] text-white/55">{friend.detail}</p>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {friend.plates.map((plate) => (
+                  <figure key={plate.src}>
+                    <img
+                      src={plate.src}
+                      alt={`${friend.name}, ${plate.label.toLowerCase()} plate`}
+                      className="h-48 w-full rounded-lg object-contain bg-[#d7d1ca]"
+                    />
+                    <figcaption className="mt-1 text-[10px] text-white/45">{plate.label}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="mt-4">
         <p className="text-[10px] font-bold uppercase tracking-wide text-white/40">Clip library</p>

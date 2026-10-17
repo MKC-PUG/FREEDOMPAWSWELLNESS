@@ -7,15 +7,14 @@ export type SituationId =
   | 'sidewalk'
   | 'lakeside'
   | 'stray'
-  | 'ride-lab'
-  | 'ride-rottweiler'
+  | 'ride-charlie'
   | 'podium';
 
 export type LengthId = '60' | '90' | '120' | '180';
 export type EgoId = 'ordinary' | 'superbud' | 'scientist' | 'veterinarian';
 export type TransformId = 'roll-poof' | 'tornado' | 'shield' | 'none';
 export type TransformWhen = 'opening' | 'middle' | 'before-lesson';
-export type PowerId = 'none' | 'walk' | 'fly-land' | 'ride-lab' | 'ride-rottweiler' | 'zap';
+export type PowerId = 'none' | 'walk' | 'fly-land' | 'ride-charlie' | 'zap';
 export type ChapterId = 'hook' | 'transform' | 'power' | 'lesson' | 'closer';
 export type PlaceId = 'sidewalk' | 'lakeside' | 'sky' | 'podium';
 
@@ -70,11 +69,11 @@ export const CLIP_SLOTS: ClipSlot[] = [
   },
   {
     id: 'rides',
-    label: 'Rides',
-    start: 'SuperBud sitting on the partner dog',
+    label: 'Ride Charlie',
+    start: 'SuperBud on Charlie’s back',
     cover: 'The picture drifts forward',
-    end: 'The same pug, still on that dog',
-    emptyNote: 'Empty. The Lab and the Rottweiler each need their own file.',
+    end: 'The same pug, still on Charlie',
+    emptyNote: 'Empty. Charlie’s plate is ready. The ride clip is not filmed yet.',
   },
   {
     id: 'food-zap',
@@ -120,8 +119,7 @@ export const SITUATIONS: { id: SituationId; label: string }[] = [
   { id: 'sidewalk', label: 'City sidewalk' },
   { id: 'lakeside', label: 'Lakeside' },
   { id: 'stray', label: 'Helping a stray' },
-  { id: 'ride-lab', label: 'Ride with the Lab' },
-  { id: 'ride-rottweiler', label: 'Ride with the Rottweiler' },
+  { id: 'ride-charlie', label: 'Ride with Charlie' },
   { id: 'podium', label: 'Lesson at the podium' },
 ];
 
@@ -156,9 +154,37 @@ export const POWERS: { id: PowerId; label: string }[] = [
   { id: 'none', label: 'None' },
   { id: 'walk', label: 'Walk and talk' },
   { id: 'fly-land', label: 'Fly and land' },
-  { id: 'ride-lab', label: 'Ride the Lab' },
-  { id: 'ride-rottweiler', label: 'Ride the Rottweiler' },
+  { id: 'ride-charlie', label: 'Ride Charlie' },
   { id: 'zap', label: 'Zap food to a stray' },
+];
+
+export const STUDIO_FRIENDS: {
+  id: string;
+  name: string;
+  role: string;
+  detail: string;
+  plates: { label: string; src: string }[];
+}[] = [
+  {
+    id: 'presley',
+    name: 'Presley',
+    role: 'Sidekick',
+    detail: 'She is the white poodle-maltese. She appears in her own shot beside SuperBud.',
+    plates: [
+      { label: 'Front', src: '/images/brand/friends/presley-front.jpg' },
+      { label: 'Three-quarter', src: '/images/brand/friends/presley-three-quarter.jpg' },
+    ],
+  },
+  {
+    id: 'charlie',
+    name: 'Charlie',
+    role: 'Ride friend',
+    detail: 'He is the Rottweiler SuperBud calls for a ride. The plates are ready. The ride clip is not filmed yet.',
+    plates: [
+      { label: 'Front', src: '/images/brand/friends/charlie-front.jpg' },
+      { label: 'Side', src: '/images/brand/friends/charlie-side.jpg' },
+    ],
+  },
 ];
 
 export const CHAPTERS: { id: ChapterId; label: string }[] = [
@@ -235,11 +261,8 @@ function hookLine(choices: LongChoices): string {
   if (choices.situation === 'stray') {
     return `Hi friends. I am ${who}. A stray on this block needs a meal and a kind plan.`;
   }
-  if (choices.situation === 'ride-lab') {
-    return `Hi friends. I am ${who}, and today I ride with a Lab.`;
-  }
-  if (choices.situation === 'ride-rottweiler') {
-    return `Hi friends. I am ${who}, and today I ride with a Rottweiler.`;
+  if (choices.situation === 'ride-charlie') {
+    return `Hi friends. I am ${who}, and today I ride with Charlie.`;
   }
   if (choices.situation === 'podium') {
     return `Hi friends. I am ${who}. Today we learn something that can help your dog live a happier, healthier life.`;
@@ -290,19 +313,11 @@ function powerCopy(id: PowerId, placeLabel: string): { beat: string; line: strin
       place: 'sky',
     };
   }
-  if (id === 'ride-lab') {
+  if (id === 'ride-charlie') {
     return {
-      beat: 'Ride the Lab',
-      line: 'I ride the Lab from one block to the next. He is a partner dog we will draw once and keep.',
-      clipLabel: 'Ride the Lab. The Lab is not designed yet.',
-      place: 'sidewalk',
-    };
-  }
-  if (id === 'ride-rottweiler') {
-    return {
-      beat: 'Ride the Rottweiler',
-      line: 'I ride the Rottweiler from one block to the next. He is a partner dog we will draw once and keep.',
-      clipLabel: 'Ride the Rottweiler. The Rottweiler is not designed yet.',
+      beat: 'Ride Charlie',
+      line: 'I call Charlie, and I ride on his back from one block to the next.',
+      clipLabel: 'Ride Charlie. His plate is ready. The clip is not filmed yet.',
       place: 'sidewalk',
     };
   }
@@ -344,7 +359,7 @@ export function clipSlotById(id: ClipSlotId | null): ClipSlot | null {
 export function slotForShot(shotId: string, transform: TransformId): ClipSlotId | null {
   if (shotId === 'transform' && (transform === 'roll-poof' || transform === 'tornado')) return transform;
   if (shotId === 'power-fly-land') return 'fly-land';
-  if (shotId === 'power-ride-lab' || shotId === 'power-ride-rottweiler') return 'rides';
+  if (shotId === 'power-ride-charlie') return 'rides';
   if (shotId === 'power-zap') return 'food-zap';
   return null;
 }
@@ -531,11 +546,8 @@ export function planNotes(choices: LongChoices): string[] {
   if (choices.startsAs === choices.endsAs && choices.transform !== 'none') {
     notes.push('The costume is the same on both sides. Pick a different ending if this transform should reveal an alter ego.');
   }
-  if (choices.situation === 'ride-lab' && !choices.powers.includes('ride-lab')) {
-    notes.push('This situation names the Lab. Add Ride the Lab if he should be on that dog in a shot.');
-  }
-  if (choices.situation === 'ride-rottweiler' && !choices.powers.includes('ride-rottweiler')) {
-    notes.push('This situation names the Rottweiler. Add Ride the Rottweiler if he should be on that dog in a shot.');
+  if (choices.situation === 'ride-charlie' && !choices.powers.includes('ride-charlie')) {
+    notes.push('This situation names Charlie. Add Ride Charlie if SuperBud should ride in a shot.');
   }
   if (choices.situation === 'stray' && !choices.powers.includes('zap')) {
     notes.push('This situation names a stray. Add Zap food to a stray if that beat should be in the film.');
@@ -568,11 +580,34 @@ export function parseLongPlan(raw: unknown): LongPlan | null {
   const plan = raw as Partial<LongPlan>;
   if (!plan.choices || typeof plan.choices !== 'object' || !Array.isArray(plan.shots)) return null;
   const base = originChoices();
-  const incoming = plan.choices as Partial<LongChoices>;
+  const incoming = plan.choices as Record<string, unknown>;
+  const situationRaw = typeof incoming.situation === 'string' ? incoming.situation : '';
+  const situation: SituationId =
+    situationRaw === 'ride-charlie' || situationRaw === 'ride-rottweiler' || situationRaw === 'ride-lab'
+      ? 'ride-charlie'
+      : SITUATIONS.some((row) => row.id === situationRaw)
+        ? (situationRaw as SituationId)
+        : base.situation;
+  const rawPowers = Array.isArray(incoming.powers)
+    ? incoming.powers.map((power) =>
+        power === 'ride-lab' || power === 'ride-rottweiler' ? 'ride-charlie' : power
+      )
+    : base.powers;
   const choices: LongChoices = {
     ...base,
-    ...incoming,
-    powers: Array.isArray(incoming.powers) ? toggleNormalize(incoming.powers) : base.powers,
+    title: typeof incoming.title === 'string' ? incoming.title : base.title,
+    length: LENGTHS.some((row) => row.id === incoming.length) ? (incoming.length as LengthId) : base.length,
+    lesson: typeof incoming.lesson === 'string' ? incoming.lesson : base.lesson,
+    startsAs: EGOS.some((row) => row.id === incoming.startsAs) ? (incoming.startsAs as EgoId) : base.startsAs,
+    endsAs: EGOS.some((row) => row.id === incoming.endsAs) ? (incoming.endsAs as EgoId) : base.endsAs,
+    transform: TRANSFORMS.some((row) => row.id === incoming.transform)
+      ? (incoming.transform as TransformId)
+      : base.transform,
+    transformWhen: TRANSFORM_WHENS.some((row) => row.id === incoming.transformWhen)
+      ? (incoming.transformWhen as TransformWhen)
+      : base.transformWhen,
+    situation,
+    powers: toggleNormalize(rawPowers as PowerId[]),
   };
   const defaults = buildShots(choices);
   const saved = plan.shots.filter((shot): shot is LongShot => Boolean(shot) && typeof shot.id === 'string');
