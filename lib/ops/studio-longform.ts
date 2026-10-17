@@ -48,11 +48,11 @@ export const CLIP_SLOTS: ClipSlot[] = [
     id: 'roll-poof',
     label: 'Shake and gold poof',
     start: 'Buddy standing on all four legs',
-    cover: 'He shakes, and a gold smoke bomb goes off in front of him',
-    end: 'SuperBud standing on all four legs',
+    cover: 'A very quick whole-body shiver that builds as the gold smoke explodes',
+    end: 'The smoke clears slowly and SuperBud is standing',
     emptyNote:
-      'Third cut. Not locked. Same face coloring as SuperBud. Stand, shake, gold smoke bomb, then SuperBud.',
-    previewSrc: '/clips/roll-poof-preview-3.mp4',
+      'Fourth cut. Not locked. The head twists first, like a wet dog, faster as the gold smoke explodes. The smoke then clears slowly.',
+    previewSrc: '/clips/roll-poof-preview-4.mp4',
   },
   {
     id: 'tornado',
@@ -308,7 +308,7 @@ function transformCopy(
   return {
     beat: 'Shake and gold poof',
     line: buddyToSuper
-      ? 'I stand on all four paws, I shake, a gold smoke bomb goes off in front of me, and I am SuperBud.'
+      ? 'I stand on all four paws, I shiver, a gold smoke bomb explodes in front of me, and it clears to show SuperBud.'
       : `I shake, a gold smoke bomb goes off, and I am ${next}.`,
     clipLabel: 'Shake, then the gold smoke bomb. The shake is the trigger. Not locked.',
   };
