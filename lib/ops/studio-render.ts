@@ -1,11 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import {
-  LOCKED_STILL_RELATIVE,
-  LOCKED_VOICE_ID,
-  SPOKEN_CLOSER,
-} from '@/lib/ops/studio-catalog';
+import { LOCKED_VOICE_ID, SPOKEN_CLOSER } from '@/lib/ops/studio-catalog';
 import { backgroundById, motionById } from '@/lib/ops/studio-plates';
+import { readLockedStill } from '@/lib/ops/studio-still';
+
+export { readLockedStill };
 
 export type RenderStart = {
   audioUrl: string | null;
@@ -32,14 +31,6 @@ export function renderKeysReady(): { elevenlabs: boolean; heygen: boolean } {
     elevenlabs: Boolean(process.env.ELEVENLABS_API_KEY?.trim()),
     heygen: Boolean(process.env.HEYGEN_API_KEY?.trim()),
   };
-}
-
-export function readLockedStill(): Buffer {
-  const file = path.join(process.cwd(), LOCKED_STILL_RELATIVE);
-  if (!fs.existsSync(file)) {
-    throw new Error(`Locked still missing at ${LOCKED_STILL_RELATIVE}.`);
-  }
-  return fs.readFileSync(file);
 }
 
 export function scriptForSpeech(script: string): string {
@@ -140,7 +131,11 @@ export async function renderBackgroundPlate(backgroundId: string, onScreenText: 
     create: { width: 1080, height: 1920, channels: 3, background: color },
   });
   if (plate.kind === 'image' && plate.path) {
-    const file = path.join(process.cwd(), 'public', plate.path.replace(/^\//, ''));
+    const file = path.join(
+      process.cwd(),
+      'public/images/photobooth/backgrounds',
+      path.basename(plate.path)
+    );
     if (fs.existsSync(file)) {
       const covered = await sharp(file)
         .resize(1080, 1920, { fit: 'cover', position: 'centre' })

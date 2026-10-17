@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireFpOps } from '@/lib/api/auth';
-import { readLockedStill } from '@/lib/ops/studio-render';
+import { readLockedStill } from '@/lib/ops/studio-still';
 
 export async function GET() {
   const { error } = await requireFpOps();
