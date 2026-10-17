@@ -125,7 +125,16 @@ export function atHomeComfort(topic: string): string {
   const text = topic.toLowerCase();
   let step =
     'Keep the dog quiet, offer fresh water, and write down what you saw so you can tell your vet.';
-  if (/itch|scratch|skin|coat|hot spot|flea|rash/.test(text)) {
+  if (/topper|joint nutrition|mobility nutrition/.test(text) && !/brace|hind-leg|hind leg/.test(text)) {
+    step =
+      'Stir a measured topper into a normal meal. It is a food habit, not a treatment. Keep walks short and flat.';
+  } else if (/hind|hip|dysplas|arthritis|arthritic|brace/.test(text)) {
+    step =
+      'For a dog who is otherwise bright but slow in the hind end, a properly fitted hind-leg support can steady short flat walks. Skip stairs. Ask your own veterinarian to check the fit before you use it every day.';
+  } else if (/harness/.test(text)) {
+    step =
+      'Use a well-fitted harness, not a neck collar, for a short flat walk. Stop if the dog leans, limps, or will not continue.';
+  } else if (/itch|scratch|skin|coat|hot spot|flea|rash/.test(text)) {
     step =
       'For itchy skin, a cool plain oatmeal bath can soothe: colloidal oatmeal in lukewarm water, a few minutes, then rinse well and dry.';
   } else if (/ear|head shak/.test(text)) {
@@ -134,6 +143,8 @@ export function atHomeComfort(topic: string): string {
   } else if (/eye|squint/.test(text)) {
     step =
       'Do not put drops in the eye. If the dog is calm, a cool damp cloth can clean the face around a closed eye.';
+  } else if (/chew|rawhide/.test(text)) {
+    step = 'Offer the chew only while you watch, and take it away if it breaks into small pieces.';
   } else if (/teeth|breath|gum|dental/.test(text)) {
     step = 'Brush with dog toothpaste on a dog toothbrush. Do not use human toothpaste.';
   } else if (/vomit|throw up|nausea/.test(text)) {

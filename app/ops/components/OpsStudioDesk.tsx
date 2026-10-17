@@ -13,6 +13,7 @@ import {
   type StudioStatus,
 } from '@/lib/ops/studio-catalog';
 import { atHomeComfort, factCardFromHit, type ResearchHit } from '@/lib/ops/studio-research';
+import { VENDOR_VIDEO_TOPICS, vendorFactCard } from '@/lib/ops/studio-vendors';
 import { OpsCard, OpsKpiCard, OpsSection } from './OpsUi';
 
 function statusClass(status: StudioStatus): string {
@@ -32,16 +33,31 @@ type SlateItem = {
   factCard?: string;
   doNotSay?: string;
   sourceUrl?: string;
+  vendor?: string;
 };
 
 const SLATE_KEY = 'fp-studio-slate-v1';
 
 function catalogSlate(): SlateItem[] {
-  return STUDIO_TOPICS.map((topic) => ({
+  const vendorRows: SlateItem[] = VENDOR_VIDEO_TOPICS.map((topic) => ({
+    id: topic.id,
+    title: topic.title,
+    factCard: vendorFactCard(topic),
+    doNotSay: topic.doNotSay,
+    vendor: topic.vendor,
+  }));
+  const catalogRows: SlateItem[] = STUDIO_TOPICS.map((topic) => ({
     id: topic.code,
     title: `${topic.code} · ${topic.title}`,
     catalogCode: topic.code,
   }));
+  return [...vendorRows, ...catalogRows];
+}
+
+function mergeSlate(saved: SlateItem[]): SlateItem[] {
+  const known = new Set(saved.map((item) => item.id));
+  const missing = catalogSlate().filter((item) => !known.has(item.id));
+  return [...missing, ...saved];
 }
 
 type Props = {
@@ -83,7 +99,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
       const raw = localStorage.getItem(SLATE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as SlateItem[];
-        if (Array.isArray(parsed) && parsed.length > 0) setSlate(parsed);
+        if (Array.isArray(parsed) && parsed.length > 0) setSlate(mergeSlate(parsed));
       }
     } catch {
       /* keep the catalog order */
@@ -305,8 +321,8 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
             <div>
               <h3 className="text-sm font-bold">Topic list</h3>
               <p className="mt-1 text-xs text-white/50">
-                Reorder the titles, add your own, then queue the one you want produced. One render
-                still goes to the platforms selected above.
+                Vendor rows are the products partners carry, including hind-leg supports for stiff hips.
+                Reorder, add your own title, then queue the one you want produced.
               </p>
             </div>
             <button
@@ -335,6 +351,9 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
           <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
             {slate.map((item, index) => (
               <li key={item.id} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+                {item.vendor ? (
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-[#F5C242]">{item.vendor}</p>
+                ) : null}
                 <p className="text-sm font-medium">{item.title}</p>
                 {item.sourceUrl ? (
                   <a
