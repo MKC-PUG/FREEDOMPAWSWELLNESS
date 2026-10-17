@@ -124,7 +124,8 @@ export const STUDIO_STATUS_LABEL: Record<StudioStatus, string> = {
 
 export const LOCKED_VOICE_ID = '99s7C3P60wz7zQFwG3Ww';
 export const LOCKED_VOICE_NAME = 'SuperBud-FP-Designed';
-export const LOCKED_STILL_RELATIVE = 'docs/brand/SuperBud-Master/frames/SB-HOST-FRONT-CANON.png';
+export const LOCKED_STILL_RELATIVE = 'public/images/brand/sb-host-front-canon.png';
+export const LOCKED_STILL_PUBLIC = '/images/brand/sb-host-front-canon.png';
 
 export const WELLNESS_DISCLAIMER =
   'SuperBud and Freedom Paws provide general pet wellness education only. This is not veterinary advice and not a diagnosis or treatment plan. Always consult a licensed veterinarian, or a holistic veterinarian, for the individual dog.';

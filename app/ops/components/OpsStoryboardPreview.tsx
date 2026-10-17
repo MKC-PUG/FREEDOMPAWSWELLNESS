@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { removePetBackground } from '@/lib/photobooth/remove-background';
+import { LOCKED_STILL_PUBLIC } from '@/lib/ops/studio-catalog';
 import {
   backgroundById,
   STUDIO_BACKGROUNDS,
@@ -23,7 +24,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 function loadCutout(): Promise<string> {
   if (!cutoutTask) {
     cutoutTask = (async () => {
-      const res = await fetch('/api/ops/desk/still');
+      const res = await fetch(LOCKED_STILL_PUBLIC);
       if (!res.ok) throw new Error('The locked SuperBud still did not load.');
       const blob = await res.blob();
       const cut = await removePetBackground(blob);
@@ -94,6 +95,7 @@ type Props = {
   backgroundId: string;
   motionId: string;
   mode: 'preview' | 'edit';
+  onEdit?: () => void;
   onChange?: (patch: Partial<StoryboardFields>) => void;
 };
 
@@ -103,6 +105,7 @@ export default function OpsStoryboardPreview({
   backgroundId,
   motionId,
   mode,
+  onEdit,
   onChange,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -130,16 +133,30 @@ export default function OpsStoryboardPreview({
         if (cancel) return;
         cover(ctx, backdrop, surface.width, surface.height);
       }
-      const stillSrc = chosen.kind === 'locked' ? '/api/ops/desk/still' : await loadCutout();
+      const photo = await loadImage(LOCKED_STILL_PUBLIC);
       if (cancel) return;
-      const still = await loadImage(stillSrc);
-      if (cancel) return;
-      if (chosen.kind === 'locked') cover(ctx, still, surface.width, surface.height);
-      else contain(ctx, still, surface.width, surface.height);
+      if (chosen.kind === 'locked') cover(ctx, photo, surface.width, surface.height);
+      else contain(ctx, photo, surface.width, surface.height);
+      let note: string | null = null;
+      if (chosen.kind !== 'locked') {
+        try {
+          const cut = await loadImage(await loadCutout());
+          if (cancel) return;
+          ctx.fillStyle = chosen.color;
+          ctx.fillRect(0, 0, surface.width, surface.height);
+          if (chosen.kind === 'image' && chosen.path) {
+            const backdrop = await loadImage(chosen.path);
+            if (!cancel) cover(ctx, backdrop, surface.width, surface.height);
+          }
+          contain(ctx, cut, surface.width, surface.height);
+        } catch {
+          note = 'SuperBud is on the plate. The finished video cuts him off the sky.';
+        }
+      }
       if (onScreenText.trim()) bar(ctx, onScreenText.trim(), 16, surface.width, '#F5C242');
       const caption = script.replace(/\s+/g, ' ').trim().slice(0, 140);
       if (caption) bar(ctx, caption, surface.height - 80, surface.width, '#FFFFFF');
-      if (!cancel) setStatus(null);
+      if (!cancel) setStatus(note);
     }
 
     void paint().catch((error) => {
@@ -162,6 +179,15 @@ export default function OpsStoryboardPreview({
         {status ? <p className="mt-2 text-[11px] text-amber-200">{status}</p> : null}
       </div>
       <div className="space-y-2 text-xs text-white/70">
+        {mode === 'preview' && onEdit ? (
+          <button
+            type="button"
+            onClick={onEdit}
+            className="rounded-lg bg-[#F5C242] px-3 py-1.5 text-xs font-bold text-[#0A1428]"
+          >
+            Edit
+          </button>
+        ) : null}
         <p>
           <span className="text-white/40">Plate. </span>
           {plate.label}

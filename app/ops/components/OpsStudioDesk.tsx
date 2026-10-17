@@ -553,6 +553,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                     backgroundId={item.backgroundId || 'locked'}
                     motionId={item.motionId || 'subtle'}
                     mode={boardMode}
+                    onEdit={() => openBoard(item, 'edit')}
                     onChange={(patch) => patchBoard(item.id, patch)}
                   />
                 ) : null}
