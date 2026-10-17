@@ -43,7 +43,7 @@ export type ClipSlot = {
   locked?: boolean;
 };
 
-/** Approved action files land here. Shake and gold poof is locked. The other four are empty. */
+/** Approved action files land here. Shake and gold poof is locked. Tornado twist is a first cut. The other three are empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -58,11 +58,13 @@ export const CLIP_SLOTS: ClipSlot[] = [
   },
   {
     id: 'tornado',
-    label: 'Tornado cone',
-    start: 'SuperBud sharp in the center',
-    cover: 'Wind around him, thick enough to hide the body',
-    end: 'The other costume as the wind thins',
-    emptyNote: 'Empty. No file yet.',
+    label: 'Tornado twist',
+    start: 'Buddy standing on all four legs',
+    cover: 'He spins in place until his body is a tornado cone',
+    end: 'The wind thins and SuperBud is standing',
+    emptyNote:
+      'First cut. Not locked. Dust lifts around Buddy and becomes a funnel that hides him, darker in the core and lighter at the edge. It thins and SuperBud is standing.',
+    src: '/clips/tornado-preview-1.mp4',
   },
   {
     id: 'fly-land',
@@ -144,7 +146,7 @@ export const EGOS: { id: EgoId; label: string }[] = [
 
 export const TRANSFORMS: { id: TransformId; label: string }[] = [
   { id: 'roll-poof', label: 'Shake and gold poof' },
-  { id: 'tornado', label: 'Tornado cone' },
+  { id: 'tornado', label: 'Tornado twist' },
   { id: 'shield', label: 'Shield flash' },
   { id: 'none', label: 'None' },
 ];
@@ -294,9 +296,9 @@ function transformCopy(
   const next = egoSpeech(ends);
   if (id === 'tornado') {
     return {
-      beat: 'Tornado cone',
-      line: `The wind builds, I spin in the cone, and I am ${next} when it clears.`,
-      clipLabel: 'Tornado cone. Not filmed yet.',
+      beat: 'Tornado twist',
+      line: `I spin in place, the wind becomes a cone around me, and I am ${next} when it thins.`,
+      clipLabel: 'Tornado twist. Not locked.',
     };
   }
   if (id === 'shield') {
@@ -578,14 +580,14 @@ export function planNotes(choices: LongChoices): string[] {
   if (choices.powers.filter((power) => power !== 'none').length === 0 && choices.transform !== 'none') {
     notes.push('With no power selected, the transform sits between the hook and the lesson.');
   }
-  if (
-    choices.startsAs === 'ordinary' &&
-    choices.endsAs === 'superbud' &&
-    choices.transform !== 'roll-poof' &&
-    choices.transform !== 'none'
-  ) {
+  if (choices.startsAs === 'ordinary' && choices.endsAs === 'superbud' && choices.transform === 'tornado') {
     notes.push(
-      'Buddy becomes SuperBud by standing, shaking, then the gold smoke bomb. Tornado and the shield flash are for a later costume change.',
+      'This story uses the tornado twist. The shake and gold poof is the other way Buddy becomes SuperBud.',
+    );
+  }
+  if (choices.startsAs === 'ordinary' && choices.endsAs === 'superbud' && choices.transform === 'shield') {
+    notes.push(
+      'Buddy becomes SuperBud with the locked shake, or with the tornado twist. The shield flash is for a later costume change.',
     );
   }
   if (choices.startsAs === 'ordinary' || choices.endsAs === 'ordinary') {
