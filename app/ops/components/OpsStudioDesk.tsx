@@ -15,7 +15,9 @@ import {
 import { atHomeComfort, factCardFromHit, type ResearchHit } from '@/lib/ops/studio-research';
 import { storyboardFor, type StoryboardFields } from '@/lib/ops/studio-plates';
 import { VENDOR_VIDEO_TOPICS, vendorFactCard } from '@/lib/ops/studio-vendors';
+import OpsLongformPane from './OpsLongformPane';
 import OpsStoryboardPreview from './OpsStoryboardPreview';
+import type { LongTalkingHandoff } from '@/lib/ops/studio-longform';
 import { OpsCard, OpsKpiCard, OpsSection } from './OpsUi';
 
 function statusClass(status: StudioStatus): string {
@@ -225,6 +227,30 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
     const [item] = copy.splice(index, 1);
     copy.splice(next, 0, item);
     setSlate(copy);
+  }
+
+  function sendTalkingShots(items: LongTalkingHandoff[]) {
+    if (items.length === 0) return;
+    setSlate((prev) => {
+      const incoming = new Set(items.map((item) => item.id));
+      const rows: SlateItem[] = items.map((item) => ({
+        id: item.id,
+        title: item.title,
+        factCard: item.factCard,
+        doNotSay: item.doNotSay,
+        script: item.script,
+        onScreenText: item.onScreenText,
+        backgroundId: item.backgroundId,
+        motionId: 'subtle',
+      }));
+      return [...rows, ...prev.filter((row) => !incoming.has(row.id))];
+    });
+    setMessage(
+      items.length === 1
+        ? `“${items[0].title}” is on the topic list. Action shots stay in Long stories until those clips are filmed.`
+        : `${items.length} talking shots are on the topic list. Action shots stay in Long stories until those clips are filmed.`
+    );
+    setError(null);
   }
 
   function addCustomTitle() {
@@ -643,6 +669,8 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
           ) : null}
         </OpsCard>
       </div>
+
+      <OpsLongformPane onSendTalking={sendTalkingShots} />
 
       <OpsCard>
         <h3 className="text-sm font-bold">New agent job</h3>
