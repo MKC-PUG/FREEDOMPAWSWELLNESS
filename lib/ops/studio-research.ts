@@ -117,6 +117,49 @@ export async function searchDogTopics(query: string): Promise<ResearchHit[]> {
   return hits.slice(0, 8);
 }
 
+const STOP_HOME_CARE =
+  'Skip home care and call your vet the same day if there is blood, swelling, repeated vomiting, or the dog will not get up.';
+
+/** One gentle at-home step. No drugs, doses, essential oils, or anything put in the ear or eye. */
+export function atHomeComfort(topic: string): string {
+  const text = topic.toLowerCase();
+  let step =
+    'Keep the dog quiet, offer fresh water, and write down what you saw so you can tell your vet.';
+  if (/itch|scratch|skin|coat|hot spot|flea|rash/.test(text)) {
+    step =
+      'For itchy skin, a cool plain oatmeal bath can soothe: colloidal oatmeal in lukewarm water, a few minutes, then rinse well and dry.';
+  } else if (/ear|head shak/.test(text)) {
+    step =
+      'Wipe only the outside of a dirty ear flap with a damp cloth. Do not put liquid, oil, or drops into the ear canal.';
+  } else if (/eye|squint/.test(text)) {
+    step =
+      'Do not put drops in the eye. If the dog is calm, a cool damp cloth can clean the face around a closed eye.';
+  } else if (/teeth|breath|gum|dental/.test(text)) {
+    step = 'Brush with dog toothpaste on a dog toothbrush. Do not use human toothpaste.';
+  } else if (/vomit|throw up|nausea/.test(text)) {
+    step =
+      'If the dog is otherwise bright, offer small drinks of water and skip the next big meal. Do not try to make the dog vomit.';
+  } else if (/stool|diarrhea|loose/.test(text)) {
+    step =
+      'If the dog is otherwise bright, small meals of plain boiled chicken and rice for one day can rest the gut.';
+  } else if (/paw|mud|nail|pad/.test(text)) {
+    step = 'Rinse mud off the paws and dry between the toes. Do not cut into the quick of a nail.';
+  } else if (/drink|water|pee|urin/.test(text)) {
+    step = 'Keep fresh water available and note how often the dog drinks or needs to go out.';
+  } else if (/night|pacing|restless|anx|thunder/.test(text)) {
+    step = 'Offer a quiet room and a familiar bed. Do not scold the dog for pacing.';
+  } else if (/heat|pant|hot car|summer/.test(text)) {
+    step = 'Move the dog to shade and offer cool water. Do not use an ice bath.';
+  } else if (/limp|walk|gait|stair|sore/.test(text)) {
+    step = 'Keep walks short and flat, and skip stairs, until a vet has seen a limp that continues.';
+  } else if (/cough/.test(text)) {
+    step = 'Skip hard exercise and note when the cough happens, including at night or on a walk.';
+  } else if (/weight|fat|rib/.test(text)) {
+    step = 'Feel the ribs with your hands and keep meals measured. Do not start a crash diet.';
+  }
+  return `${step} ${STOP_HOME_CARE}`;
+}
+
 export function factCardFromHit(hit: ResearchHit): { factCard: string; doNotSay: string } {
   const doNotSay = 'Naming a condition as the answer, a treatment promise, a dose, or a reunion promise.';
   const blurb = hit.summary
@@ -128,7 +171,8 @@ export function factCardFromHit(hit: ResearchHit): { factCard: string; doNotSay:
     `Source: ${hit.source} — ${hit.title}`,
     hit.url,
     blurb ? `From the source: ${blurb}` : 'Open the source and keep one owner-facing sentence.',
-    'SuperBud may say: notice the change, write it down, and call your own veterinarian if it continues.',
+    `At-home comfort: ${atHomeComfort(`${hit.title} ${hit.summary}`)}`,
+    'SuperBud may say the at-home step when the dog is otherwise bright, then tell the owner to call their own veterinarian if it continues or the dog seems worse.',
     `Do not say: ${doNotSay}`,
   ].join('\n');
   return { factCard, doNotSay };

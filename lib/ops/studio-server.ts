@@ -26,6 +26,7 @@ import {
   pillarOrDefault,
 } from '@/lib/ops/studio-copy';
 import { budPrompt, echoPrompt, factPrompt, generalPrompt } from '@/lib/ops/studio-prompts';
+import { atHomeComfort } from '@/lib/ops/studio-research';
 import {
   pollAvatarRender,
   readLockedStill,
@@ -171,7 +172,7 @@ export async function createVideoJob(input: {
   const drafted = await draftFactCard(topic);
   const factCard =
     drafted ||
-    `Allowed: ${topic.teach}\nForbidden: ${topic.doNotSay}\nAdd a public source before you accept this card.`;
+    `Allowed: ${topic.teach}\nAt-home comfort: ${atHomeComfort(`${topic.title} ${topic.teach}`)}\nForbidden: ${topic.doNotSay}\nAdd a public source before you accept this card.`;
   const prompt = factPrompt(topic);
   const supabase = await db();
   const { data, error } = await supabase
@@ -209,7 +210,9 @@ export async function createSourcedVideoJob(input: {
   userId: string;
 }): Promise<StudioJob> {
   const title = input.title.trim();
-  const factCard = input.factCard.trim();
+  const factCard = /at-home comfort/i.test(input.factCard)
+    ? input.factCard.trim()
+    : `${input.factCard.trim()}\nAt-home comfort: ${atHomeComfort(input.title)}`;
   if (title.length < 3) throw new Error('Add a title before queueing.');
   if (factCard.length < 40) throw new Error('The research card is too short to queue.');
   if (input.platform !== 'all' && !isSocialPlatform(input.platform)) {

@@ -19,7 +19,8 @@ export function factPrompt(topic: StudioTopic): string {
     `Teach only this: ${topic.teach}`,
     `Do not say: ${topic.doNotSay}`,
     'Read: docs/brand/SuperBud-Series-Topic-Catalog.md and the compliance section of docs/brand/SuperBud-Master/bible/SuperBud-Character-Bible.md.',
-    'Output a source card: claim, source name, date if you have one, the one sentence SuperBud may say, and the forbidden sentence.',
+    'Output a source card: claim, source name, one at-home comfort step the owner can try when the dog is otherwise bright (no drugs, no doses, no essential oils), the sentence SuperBud may say, and the forbidden sentence.',
+    'Example of an at-home step: a cool plain oatmeal bath for itchy skin, rinsed well.',
     'If you cannot name a public veterinary-education source, cut the line.',
     'Do not write the video script. Do not publish.',
   ].join('\n');
@@ -36,6 +37,7 @@ export function budPrompt(topic: StudioTopic, factCard: string): string {
     `FACT card:\n${factCard}`,
     `Spoken closer to include: ${SPOKEN_CLOSER}`,
     'Write a 20–35 second spoken script, on-screen text, and a do-not-say list.',
+    'Say the at-home comfort step out loud as something the owner can try when the dog is otherwise bright. Then say to call their own veterinarian if it continues or the dog seems worse.',
     'Locked greeting only if this is a viewer’s first episode. Otherwise one callback line.',
     'Do not publish.',
   ].join('\n');

@@ -12,7 +12,7 @@ import {
   type StudioSeat,
   type StudioStatus,
 } from '@/lib/ops/studio-catalog';
-import { factCardFromHit, type ResearchHit } from '@/lib/ops/studio-research';
+import { atHomeComfort, factCardFromHit, type ResearchHit } from '@/lib/ops/studio-research';
 import { OpsCard, OpsKpiCard, OpsSection } from './OpsUi';
 
 function statusClass(status: StudioStatus): string {
@@ -173,7 +173,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
       {
         id: `custom-${Date.now()}`,
         title,
-        factCard: `Topic: ${title}\nAdd a public source before you accept this card.\nSuperBud may say: notice the change and call your own veterinarian if it continues.\nDo not say: naming a condition as the answer, a treatment promise, a dose, or a reunion promise.`,
+        factCard: `Topic: ${title}\nAdd a public source before you accept this card.\nAt-home comfort: ${atHomeComfort(title)}\nSuperBud may say that at-home step when the dog is otherwise bright, then call your own veterinarian if it continues.\nDo not say: naming a condition as the answer, a treatment promise, a dose, or a reunion promise.`,
         doNotSay: 'Naming a condition as the answer, a treatment promise, a dose, or a reunion promise.',
       },
       ...prev,
@@ -388,7 +388,8 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
           <h3 className="text-sm font-bold">FACT research</h3>
           <p className="mt-1 text-xs text-white/50">
             Search veterinary and dog topics. Read the source, then add the ones you want produced.
-            SuperBud still teaches what an owner can notice and when to call a vet.
+            Each project includes one at-home comfort step, such as a plain oatmeal bath for itchy skin,
+            and says to call a vet if it continues or the dog seems worse.
           </p>
           <form
             className="mt-3 flex gap-2"
@@ -420,6 +421,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                   <p className="text-[10px] font-bold uppercase tracking-wide text-[#F5C242]">{hit.source}</p>
                   <p className="mt-1 text-sm font-medium">{hit.title}</p>
                   <p className="mt-1 text-xs text-white/55">{hit.summary}</p>
+                  <p className="mt-1 text-xs text-white/75">At-home: {atHomeComfort(`${hit.title} ${hit.summary}`)}</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     <a
                       href={hit.url}

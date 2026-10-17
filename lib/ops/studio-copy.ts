@@ -1,5 +1,6 @@
 import { appCtaUrl, type SocialPillarId, type SocialPlatform } from '@/lib/ops/social-pillars';
 import { WELLNESS_DISCLAIMER, type StudioTopic } from '@/lib/ops/studio-catalog';
+import { atHomeComfort } from '@/lib/ops/studio-research';
 import { assertStudioCopy, findBannedPhrase } from '@/lib/ops/studio-compliance';
 
 export type EchoPack = {
@@ -77,18 +78,19 @@ export async function draftJson(system: string, user: string): Promise<Record<st
 
 export async function draftFactCard(topic: StudioTopic): Promise<string | null> {
   const parsed = await draftJson(
-    'You are FACT, a research clerk for pet-wellness education. Return JSON only: {"factCard": string}. The card names a public source, one allowed sentence, and one forbidden sentence. Never diagnose.',
-    `${topic.code} ${topic.title}. Teach: ${topic.teach}. Do not say: ${topic.doNotSay}.`
+    'You are FACT, a research clerk for pet-wellness education. Return JSON only: {"factCard": string}. Include a line that starts with "At-home comfort:" and gives one gentle step an owner can try when the dog is otherwise bright. No drugs, no doses, no essential oils, nothing in the ear or eye. Also say to call their own veterinarian if it continues. Never diagnose or promise a cure.',
+    `${topic.code} ${topic.title}. Teach: ${topic.teach}. At-home comfort to include: ${atHomeComfort(`${topic.title} ${topic.teach}`)}. Do not say: ${topic.doNotSay}.`
   );
   const card = typeof parsed?.factCard === 'string' ? parsed.factCard.trim() : '';
   if (!card || findBannedPhrase(card)) return null;
-  return card;
+  if (/at-home comfort/i.test(card)) return card;
+  return `${card}\nAt-home comfort: ${atHomeComfort(`${topic.title} ${topic.teach}`)}`;
 }
 
 export async function draftScript(topic: StudioTopic, factCard: string): Promise<string | null> {
   const parsed = await draftJson(
-    'You are BUD, SuperBud’s producer. Return JSON only: {"script": string}. 70 to 110 spoken words. Warm, clear, educational. End by telling the owner to call their own veterinarian if something seems different. Never diagnose, prescribe, or promise a reunion.',
-    `Topic ${topic.code}: ${topic.teach}. FACT card: ${factCard}. Forbidden: ${topic.doNotSay}.`
+    'You are BUD, SuperBud’s producer. Return JSON only: {"script": string}. 70 to 110 spoken words. Warm, clear, educational. Include the at-home comfort step from the FACT card as something the owner can try when the dog is otherwise bright. No drugs, no doses, no essential oils. End by telling the owner to call their own veterinarian if it continues or the dog seems worse. Never diagnose, prescribe, or promise a reunion.',
+    `Topic ${topic.code}: ${topic.teach}. FACT card: ${factCard}. At-home comfort: ${atHomeComfort(`${topic.title} ${factCard}`)}. Forbidden: ${topic.doNotSay}.`
   );
   const script = typeof parsed?.script === 'string' ? parsed.script.trim() : '';
   if (!script || findBannedPhrase(script)) return null;
