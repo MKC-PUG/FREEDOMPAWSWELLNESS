@@ -24,6 +24,7 @@ import {
   DEFAULT_FEATURE_FLAGS,
   DEFAULT_MARKETING_SETTINGS,
 } from '@/lib/ops/types';
+import { countWaitingOnFounder } from '@/lib/ops/studio-server';
 
 const OUTBOX_DIR = path.join(process.cwd(), 'docs/marketing/outbox/tn-pilot');
 
@@ -143,6 +144,7 @@ export async function getOpsOverview(userEmail?: string | null): Promise<OpsOver
       idConfig,
       waitlistSignups,
       recentAudit,
+      waitingOnFounder,
     ] = await Promise.all([
       getMarketingSettings(),
       getFeatureFlags(),
@@ -153,6 +155,7 @@ export async function getOpsOverview(userEmail?: string | null): Promise<OpsOver
       Promise.resolve(getIdConfigStatus()),
       getWaitlistCount(),
       getRecentAudit(),
+      countWaitingOnFounder(),
     ]);
 
     let partners: OpsPartnerRow[] = [];
@@ -207,6 +210,7 @@ export async function getOpsOverview(userEmail?: string | null): Promise<OpsOver
           'Run supabase/migrations/012_ops_settings.sql in SQL Editor if ops toggles fail to save.',
       },
       recentAudit,
+      studio: { waitingOnFounder },
     };
   } catch (error) {
     if (
@@ -276,6 +280,7 @@ export async function getOpsOverview(userEmail?: string | null): Promise<OpsOver
           'Ops overview failed — check Supabase connectivity and try again.',
       },
       recentAudit: [],
+      studio: { waitingOnFounder: 0 },
     };
   }
 }

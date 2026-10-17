@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getOpsOverview } from '@/lib/ops/stats-server';
 import {
   getSocialDashboardStats,
@@ -54,6 +55,13 @@ export default async function OpsMarketingPage() {
       subtitle="Social production arm — draft, approve, Buffer — plus CRM automation gates (dormant by default)."
       badge={<OpsStatusBadge status={status} />}
     >
+      <div className="mb-6 rounded-2xl border border-[#F5C242]/30 bg-[#F5C242]/10 px-4 py-3 text-sm text-white/80">
+        Video renders, script approval, and the social queue live on the{' '}
+        <Link href="/ops/desk" className="font-bold text-[#F5C242] hover:underline">
+          Studio desk
+        </Link>
+        . This page keeps the marketing kill switch and the same social pipeline.
+      </div>
       <OpsSocialStudio
         initialPosts={posts}
         stats={stats}

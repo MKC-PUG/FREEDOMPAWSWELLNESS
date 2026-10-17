@@ -2,6 +2,7 @@
 
 export const OPS_NAV = [
   { label: 'COMMAND', href: '/ops', exact: true },
+  { label: 'STUDIO', href: '/ops/desk' },
   { label: 'ADOPTION', href: '/ops/adoption' },
   { label: 'SUPERBUD', href: '/ops/marketing' },
   { label: 'SHELTER & ID', href: '/ops/shelter-id' },

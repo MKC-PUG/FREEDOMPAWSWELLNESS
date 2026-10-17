@@ -12,7 +12,8 @@ export type AuditAction =
   | 'ops.marketing.approval'
   | 'ops.social.create'
   | 'ops.social.update'
-  | 'ops.social.buffer';
+  | 'ops.social.buffer'
+  | 'ops.desk.update';
 
 export async function writeAuditLog(
   actorId: string,

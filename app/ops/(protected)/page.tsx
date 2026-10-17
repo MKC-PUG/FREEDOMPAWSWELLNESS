@@ -36,6 +36,12 @@ export default async function OpsHomePage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         <OpsKpiCard
+          label="Waiting on you"
+          value={overview.studio.waitingOnFounder}
+          hint="Studio jobs and social posts"
+          accent="amber"
+        />
+        <OpsKpiCard
           label="TN pilot partners"
           value={overview.adoption.tnPilotPartners}
           hint={`${overview.adoption.sheltersWithListings} with listings`}
@@ -63,6 +69,12 @@ export default async function OpsHomePage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {(
             [
+              {
+                href: '/ops/desk',
+                title: 'Studio desk',
+                stat: `${overview.studio.waitingOnFounder} waiting on you`,
+                status: overview.studio.waitingOnFounder > 0 ? 'warning' : 'ready',
+              },
               {
                 href: '/ops/adoption',
                 title: 'Adoption Network',

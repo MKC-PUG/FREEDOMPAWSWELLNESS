@@ -99,6 +99,9 @@ export type OpsOverview = {
     migrationsNote: string;
   };
   recentAudit: OpsAuditRow[];
+  studio: {
+    waitingOnFounder: number;
+  };
 };
 
 export const MARKETING_WORKFLOW_LABELS: Record<
