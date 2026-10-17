@@ -201,6 +201,61 @@ export async function createVideoJob(input: {
   return mapJob(data as Record<string, unknown>);
 }
 
+export async function createSourcedVideoJob(input: {
+  title: string;
+  factCard: string;
+  doNotSay?: string;
+  platform: string;
+  userId: string;
+}): Promise<StudioJob> {
+  const title = input.title.trim();
+  const factCard = input.factCard.trim();
+  if (title.length < 3) throw new Error('Add a title before queueing.');
+  if (factCard.length < 40) throw new Error('The research card is too short to queue.');
+  if (input.platform !== 'all' && !isSocialPlatform(input.platform)) {
+    throw new Error('Unknown platform');
+  }
+  assertStudioCopy(factCard, 'Research card');
+  const doNotSay =
+    input.doNotSay?.trim() ||
+    'Naming a condition as the answer, a treatment promise, a dose, or a reunion promise.';
+  const topic = {
+    code: 'CUSTOM',
+    title,
+    teach: factCard,
+    doNotSay,
+    ctaPath: '/diagnostics',
+    pillar: 'diagnostics' as const,
+    costume: 'Locked host plate',
+  };
+  const supabase = await db();
+  const { data, error } = await supabase
+    .from('ops_jobs')
+    .insert({
+      kind: 'superbud_video',
+      seat: 'fact',
+      status: 'research',
+      title,
+      catalog_code: 'CUSTOM',
+      pillar: 'diagnostics',
+      platform: input.platform,
+      cta_path: '/diagnostics',
+      fact_card: factCard,
+      do_not_say: doNotSay,
+      prompt: factPrompt(topic),
+      created_by: input.userId,
+    })
+    .select('*')
+    .single();
+  if (error) {
+    if (missingTable(error)) {
+      throw new Error('ops_jobs table missing. Run supabase/migrations/016_ops_studio_jobs.sql.');
+    }
+    throw error;
+  }
+  return mapJob(data as Record<string, unknown>);
+}
+
 export async function createGeneralJob(input: {
   seat: string;
   title: string;

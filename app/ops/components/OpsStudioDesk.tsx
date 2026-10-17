@@ -12,6 +12,7 @@ import {
   type StudioSeat,
   type StudioStatus,
 } from '@/lib/ops/studio-catalog';
+import { factCardFromHit, type ResearchHit } from '@/lib/ops/studio-research';
 import { OpsCard, OpsKpiCard, OpsSection } from './OpsUi';
 
 function statusClass(status: StudioStatus): string {
@@ -22,6 +23,25 @@ function statusClass(status: StudioStatus): string {
   if (status === 'done') return 'border-emerald-500/40 text-emerald-200';
   if (status === 'hold') return 'border-rose-500/40 text-rose-200';
   return 'border-white/20 text-white/70';
+}
+
+type SlateItem = {
+  id: string;
+  title: string;
+  catalogCode?: string;
+  factCard?: string;
+  doNotSay?: string;
+  sourceUrl?: string;
+};
+
+const SLATE_KEY = 'fp-studio-slate-v1';
+
+function catalogSlate(): SlateItem[] {
+  return STUDIO_TOPICS.map((topic) => ({
+    id: topic.code,
+    title: `${topic.code} · ${topic.title}`,
+    catalogCode: topic.code,
+  }));
 }
 
 type Props = {
@@ -35,7 +55,12 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
   const router = useRouter();
   const [jobs, setJobs] = useState(initialJobs);
   const [selectedId, setSelectedId] = useState<string | null>(initialJobs[0]?.id ?? null);
-  const [catalogCode, setCatalogCode] = useState(STUDIO_TOPICS[0]?.code ?? 'HA-01');
+  const [slate, setSlate] = useState<SlateItem[]>(catalogSlate);
+  const [slateReady, setSlateReady] = useState(false);
+  const [customTitle, setCustomTitle] = useState('');
+  const [researchQuery, setResearchQuery] = useState('');
+  const [researchHits, setResearchHits] = useState<ResearchHit[]>([]);
+  const [researchBusy, setResearchBusy] = useState(false);
   const [platform, setPlatform] = useState('all');
   const [seat, setSeat] = useState<StudioSeat>('lex');
   const [generalTitle, setGeneralTitle] = useState('');
@@ -52,6 +77,24 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
     () => jobs.find((job) => job.id === selectedId) ?? null,
     [jobs, selectedId]
   );
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(SLATE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as SlateItem[];
+        if (Array.isArray(parsed) && parsed.length > 0) setSlate(parsed);
+      }
+    } catch {
+      /* keep the catalog order */
+    }
+    setSlateReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!slateReady) return;
+    localStorage.setItem(SLATE_KEY, JSON.stringify(slate));
+  }, [slate, slateReady]);
 
   useEffect(() => {
     if (!selected) return;
@@ -111,6 +154,80 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
     }
   }
 
+  function moveSlate(index: number, direction: -1 | 1) {
+    const next = index + direction;
+    if (next < 0 || next >= slate.length) return;
+    const copy = slate.slice();
+    const [item] = copy.splice(index, 1);
+    copy.splice(next, 0, item);
+    setSlate(copy);
+  }
+
+  function addCustomTitle() {
+    const title = customTitle.trim();
+    if (title.length < 3) {
+      setError('Type a topic title of at least 3 letters.');
+      return;
+    }
+    setSlate((prev) => [
+      {
+        id: `custom-${Date.now()}`,
+        title,
+        factCard: `Topic: ${title}\nAdd a public source before you accept this card.\nSuperBud may say: notice the change and call your own veterinarian if it continues.\nDo not say: naming a condition as the answer, a treatment promise, a dose, or a reunion promise.`,
+        doNotSay: 'Naming a condition as the answer, a treatment promise, a dose, or a reunion promise.',
+      },
+      ...prev,
+    ]);
+    setCustomTitle('');
+    setMessage(`“${title}” is on the topic list. Queue it when you want it produced.`);
+  }
+
+  function addHitToSlate(hit: ResearchHit) {
+    const card = factCardFromHit(hit);
+    setSlate((prev) => [
+      {
+        id: hit.id,
+        title: hit.title,
+        factCard: card.factCard,
+        doNotSay: card.doNotSay,
+        sourceUrl: hit.url,
+      },
+      ...prev.filter((item) => item.id !== hit.id),
+    ]);
+    setMessage(`“${hit.title}” is on the topic list.`);
+  }
+
+  async function searchResearch() {
+    const q = researchQuery.trim();
+    setResearchBusy(true);
+    setError(null);
+    setMessage(null);
+    try {
+      const res = await fetch(`/api/ops/desk/research?q=${encodeURIComponent(q)}`);
+      const data = (await res.json()) as { success?: boolean; hits?: ResearchHit[]; error?: string };
+      if (!data.success) throw new Error(data.error || 'Research failed');
+      setResearchHits(data.hits ?? []);
+    } catch (e) {
+      setResearchHits([]);
+      setError(e instanceof Error ? e.message : 'Research failed');
+    } finally {
+      setResearchBusy(false);
+    }
+  }
+
+  function queueSlateItem(item: SlateItem) {
+    if (item.catalogCode) {
+      return run('Queue topic', { action: 'create_video', catalogCode: item.catalogCode, platform });
+    }
+    return run('Queue topic', {
+      action: 'queue_source',
+      title: item.title,
+      factCard: item.factCard || '',
+      doNotSay: item.doNotSay,
+      platform,
+    });
+  }
+
   async function copyPrompt() {
     if (!selected?.prompt) return;
     await navigator.clipboard.writeText(selected.prompt);
@@ -156,113 +273,227 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
         </div>
       ) : null}
 
-      <div className="grid lg:grid-cols-2 gap-4">
-        <OpsCard>
-          <h3 className="text-sm font-bold">New SuperBud video</h3>
-            <p className="mt-1 text-xs text-white/50">
-            Starts a FACT card from the topic catalog. One render. All platforms is the usual
-            choice. Voice stays SuperBud-FP-Designed. The still stays the locked host plate.
-          </p>
-          <div className="mt-3 grid sm:grid-cols-2 gap-3">
-            <label className="text-sm block">
-              <span className="text-white/50 text-xs uppercase tracking-wide">Topic</span>
-              <select
-                className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2"
-                value={catalogCode}
-                disabled={busy || !tableReady}
-                onChange={(e) => setCatalogCode(e.target.value)}
-              >
-                {STUDIO_TOPICS.map((topic) => (
-                  <option key={topic.code} value={topic.code}>
-                    {topic.code} · {topic.title}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="text-sm block">
-              <span className="text-white/50 text-xs uppercase tracking-wide">Platform</span>
-              <select
-                className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2"
-                value={platform}
-                disabled={busy || !tableReady}
-                onChange={(e) => setPlatform(e.target.value)}
-              >
-                <option value="all">All platforms</option>
-                {SOCIAL_PLATFORMS.map((item) => (
-                  <option key={item} value={item}>
-                    {item} only
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+      <div className="mb-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          disabled={busy || !tableReady}
+          onClick={() => setPlatform('all')}
+          className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
+            platform === 'all' ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]' : 'border-white/20 text-white/80'
+          }`}
+        >
+          All platforms
+        </button>
+        {SOCIAL_PLATFORMS.map((item) => (
           <button
+            key={item}
             type="button"
             disabled={busy || !tableReady}
-            className="mt-3 rounded-xl bg-[#F5C242] px-4 py-2 text-sm font-bold text-[#0A1428] disabled:opacity-50"
-            onClick={() => run('Create video', { action: 'create_video', catalogCode, platform })}
+            onClick={() => setPlatform(item)}
+            className={`rounded-full border px-3 py-1.5 text-xs font-bold capitalize ${
+              platform === item ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]' : 'border-white/20 text-white/80'
+            }`}
           >
-            Create video job
+            {item} only
           </button>
+        ))}
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-4">
+        <OpsCard>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-bold">Topic list</h3>
+              <p className="mt-1 text-xs text-white/50">
+                Reorder the titles, add your own, then queue the one you want produced. One render
+                still goes to the platforms selected above.
+              </p>
+            </div>
+            <button
+              type="button"
+              className="shrink-0 text-xs font-bold text-white/50 hover:text-white"
+              onClick={() => setSlate(catalogSlate())}
+            >
+              Reset
+            </button>
+          </div>
+          <div className="mt-3 flex gap-2">
+            <input
+              className="min-w-0 flex-1 rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
+              placeholder="Add a topic title"
+              value={customTitle}
+              onChange={(e) => setCustomTitle(e.target.value)}
+            />
+            <button
+              type="button"
+              className="rounded-xl border border-[#F5C242]/50 px-3 py-2 text-xs font-bold text-[#F5C242]"
+              onClick={addCustomTitle}
+            >
+              Add
+            </button>
+          </div>
+          <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
+            {slate.map((item, index) => (
+              <li key={item.id} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+                <p className="text-sm font-medium">{item.title}</p>
+                {item.sourceUrl ? (
+                  <a
+                    href={item.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 block text-xs text-[#F5C242] hover:underline"
+                  >
+                    Read source
+                  </a>
+                ) : null}
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    disabled={index === 0}
+                    className="rounded-lg border border-white/15 px-2 py-1 text-[11px] font-bold disabled:opacity-30"
+                    onClick={() => moveSlate(index, -1)}
+                  >
+                    Up
+                  </button>
+                  <button
+                    type="button"
+                    disabled={index === slate.length - 1}
+                    className="rounded-lg border border-white/15 px-2 py-1 text-[11px] font-bold disabled:opacity-30"
+                    onClick={() => moveSlate(index, 1)}
+                  >
+                    Down
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy || !tableReady}
+                    className="rounded-lg bg-[#F5C242] px-2 py-1 text-[11px] font-bold text-[#0A1428] disabled:opacity-40"
+                    onClick={() => void queueSlateItem(item)}
+                  >
+                    Queue
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-lg border border-white/15 px-2 py-1 text-[11px] font-bold text-white/60"
+                    onClick={() => setSlate((prev) => prev.filter((row) => row.id !== item.id))}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
         </OpsCard>
 
         <OpsCard>
-          <h3 className="text-sm font-bold">New agent job</h3>
+          <h3 className="text-sm font-bold">FACT research</h3>
           <p className="mt-1 text-xs text-white/50">
-            FACT, BUD, ECHO, FORGE, or LEX. The row holds a paste-ready prompt. It does not render
-            video.
+            Search veterinary and dog topics. Read the source, then add the ones you want produced.
+            SuperBud still teaches what an owner can notice and when to call a vet.
           </p>
-          <div className="mt-3 grid sm:grid-cols-2 gap-3">
-            <label className="text-sm block">
-              <span className="text-white/50 text-xs uppercase tracking-wide">Seat</span>
-              <select
-                className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2"
-                value={seat}
-                disabled={busy || !tableReady}
-                onChange={(e) => setSeat(e.target.value as StudioSeat)}
-              >
-                {STUDIO_SEATS.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="text-sm block">
-              <span className="text-white/50 text-xs uppercase tracking-wide">Title</span>
-              <input
-                className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2"
-                value={generalTitle}
-                disabled={busy || !tableReady}
-                onChange={(e) => setGeneralTitle(e.target.value)}
-              />
-            </label>
-          </div>
-          <textarea
-            className="mt-3 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
-            rows={2}
-            placeholder="What this seat should draft"
-            value={brief}
-            disabled={busy || !tableReady}
-            onChange={(e) => setBrief(e.target.value)}
-          />
-          <button
-            type="button"
-            disabled={busy || !tableReady}
-            className="mt-3 rounded-xl border border-[#F5C242]/50 px-4 py-2 text-sm font-bold text-[#F5C242] disabled:opacity-50"
-            onClick={() =>
-              run('Create job', {
-                action: 'create_general',
-                seat,
-                title: generalTitle,
-                brief,
-              })
-            }
+          <form
+            className="mt-3 flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void searchResearch();
+            }}
           >
-            Add job
-          </button>
+            <input
+              className="min-w-0 flex-1 rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
+              placeholder="Search, such as dog itchy skin"
+              value={researchQuery}
+              onChange={(e) => setResearchQuery(e.target.value)}
+            />
+            <button
+              type="submit"
+              disabled={researchBusy}
+              className="rounded-xl bg-[#F5C242] px-3 py-2 text-xs font-bold text-[#0A1428] disabled:opacity-40"
+            >
+              {researchBusy ? 'Searching' : 'Search'}
+            </button>
+          </form>
+          <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
+            {researchHits.length === 0 ? (
+              <li className="text-xs text-white/45">Results show here after a search.</li>
+            ) : (
+              researchHits.map((hit) => (
+                <li key={hit.id} className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-[#F5C242]">{hit.source}</p>
+                  <p className="mt-1 text-sm font-medium">{hit.title}</p>
+                  <p className="mt-1 text-xs text-white/55">{hit.summary}</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <a
+                      href={hit.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg border border-white/15 px-2 py-1 text-[11px] font-bold text-white/80"
+                    >
+                      Read
+                    </a>
+                    <button
+                      type="button"
+                      className="rounded-lg bg-[#F5C242] px-2 py-1 text-[11px] font-bold text-[#0A1428]"
+                      onClick={() => addHitToSlate(hit)}
+                    >
+                      Add to topic list
+                    </button>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
         </OpsCard>
       </div>
+
+      <OpsCard>
+        <h3 className="text-sm font-bold">New agent job</h3>
+        <p className="mt-1 text-xs text-white/50">
+          FACT, BUD, ECHO, FORGE, or LEX. The row holds a paste-ready prompt. It does not render video.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {STUDIO_SEATS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setSeat(item.id)}
+              className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
+                seat === item.id ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]' : 'border-white/20 text-white/80'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+        <input
+          className="mt-3 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
+          placeholder="Title"
+          value={generalTitle}
+          disabled={busy || !tableReady}
+          onChange={(e) => setGeneralTitle(e.target.value)}
+        />
+        <textarea
+          className="mt-3 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
+          rows={2}
+          placeholder="What this seat should draft"
+          value={brief}
+          disabled={busy || !tableReady}
+          onChange={(e) => setBrief(e.target.value)}
+        />
+        <button
+          type="button"
+          disabled={busy || !tableReady}
+          className="mt-3 rounded-xl border border-[#F5C242]/50 px-4 py-2 text-sm font-bold text-[#F5C242] disabled:opacity-50"
+          onClick={() =>
+            run('Create job', {
+              action: 'create_general',
+              seat,
+              title: generalTitle,
+              brief,
+            })
+          }
+        >
+          Add job
+        </button>
+      </OpsCard>
 
       <div className="grid lg:grid-cols-[280px_1fr] gap-4">
         <div className="space-y-2">

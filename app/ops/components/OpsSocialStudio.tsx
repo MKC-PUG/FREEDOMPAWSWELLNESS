@@ -187,37 +187,41 @@ export default function OpsSocialStudio({
 
       <OpsSection title="Generate draft">
         <OpsCard>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <label className="text-sm block">
-              <span className="text-white/50 text-xs uppercase tracking-wide">Pillar</span>
-              <select
-                className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2"
-                value={pillar}
+          <p className="text-xs uppercase tracking-wide text-white/50">Pillar</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {SOCIAL_PILLARS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
                 disabled={busy || !tableReady}
-                onChange={(e) => setPillar(e.target.value as SocialPillarId)}
+                onClick={() => setPillar(p.id)}
+                className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
+                  pillar === p.id
+                    ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]'
+                    : 'border-white/20 text-white/80'
+                }`}
               >
-                {SOCIAL_PILLARS.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="text-sm block">
-              <span className="text-white/50 text-xs uppercase tracking-wide">Platform</span>
-              <select
-                className="mt-1 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2"
-                value={platform}
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <p className="mt-4 text-xs uppercase tracking-wide text-white/50">Platform</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {PLATFORMS.map((p) => (
+              <button
+                key={p}
+                type="button"
                 disabled={busy || !tableReady}
-                onChange={(e) => setPlatform(e.target.value as SocialPlatform)}
+                onClick={() => setPlatform(p)}
+                className={`rounded-full border px-3 py-1.5 text-xs font-bold capitalize ${
+                  platform === p
+                    ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]'
+                    : 'border-white/20 text-white/80'
+                }`}
               >
-                {PLATFORMS.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
-            </label>
+                {p}
+              </button>
+            ))}
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             <button

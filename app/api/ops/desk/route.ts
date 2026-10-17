@@ -5,6 +5,7 @@ import {
   acceptResearch,
   approveScript,
   createGeneralJob,
+  createSourcedVideoJob,
   createVideoJob,
   listStudioJobs,
   pollStudioRender,
@@ -46,6 +47,7 @@ export async function POST(request: NextRequest) {
     title?: string;
     brief?: string;
     factCard?: string;
+    doNotSay?: string;
     script?: string;
     echoCaption?: string;
     echoArticle?: string;
@@ -64,6 +66,15 @@ export async function POST(request: NextRequest) {
         job = await createVideoJob({
           catalogCode: body.catalogCode || '',
           platform: body.platform || 'instagram',
+          userId,
+        });
+        break;
+      case 'queue_source':
+        job = await createSourcedVideoJob({
+          title: body.title || '',
+          factCard: body.factCard || '',
+          doNotSay: body.doNotSay,
+          platform: body.platform || 'all',
           userId,
         });
         break;
