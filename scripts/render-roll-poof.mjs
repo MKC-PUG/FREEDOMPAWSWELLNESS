@@ -1,5 +1,5 @@
 /**
- * Buddy to SuperBud. Not locked.
+ * Buddy to SuperBud. Locked cut. It can be replaced later.
  * Same face coloring as the locked SuperBud. He stands, the shake moves
  * continuously, then a gold smoke bomb goes off in front of him.
  */

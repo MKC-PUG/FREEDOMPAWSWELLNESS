@@ -39,10 +39,11 @@ export type ClipSlot = {
   cover: string;
   end: string;
   emptyNote: string;
-  previewSrc?: string;
+  src?: string;
+  locked?: boolean;
 };
 
-/** Approved action files land here. All five are empty until a clip is locked. */
+/** Approved action files land here. Shake and gold poof is locked. The other four are empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -51,8 +52,9 @@ export const CLIP_SLOTS: ClipSlot[] = [
     cover: 'A very quick whole-body shiver that builds as the gold smoke explodes',
     end: 'The smoke clears slowly and SuperBud is standing',
     emptyNote:
-      'Fifth cut. Not locked. The body blurs as it twists, faster as the gold smoke explodes, then the smoke clears slowly.',
-    previewSrc: '/clips/roll-poof-preview-5.mp4',
+      'Locked. Buddy stands on all four legs, shakes, the gold smoke bomb goes off in front of him, and it clears to SuperBud. This cut can be replaced later.',
+    src: '/clips/roll-poof.mp4',
+    locked: true,
   },
   {
     id: 'tornado',
@@ -310,7 +312,7 @@ function transformCopy(
     line: buddyToSuper
       ? 'I stand on all four paws, I shiver, a gold smoke bomb explodes in front of me, and it clears to show SuperBud.'
       : `I shake, a gold smoke bomb goes off, and I am ${next}.`,
-    clipLabel: 'Shake, then the gold smoke bomb. The shake is the trigger. Not locked.',
+    clipLabel: 'Shake, then the gold smoke bomb. The shake is the trigger. Locked.',
   };
 }
 

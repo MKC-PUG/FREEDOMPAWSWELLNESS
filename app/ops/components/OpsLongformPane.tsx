@@ -289,29 +289,44 @@ export default function OpsLongformPane({
       <div className="mt-4">
         <p className="text-[10px] font-bold uppercase tracking-wide text-white/40">Clip library</p>
         <p className="mt-1 text-xs text-white/50">
-          Five slots. Each stays empty until that clip is approved. The story uses a slot. It does not create the file.
+          Five slots. A slot stays empty until that clip is approved. The story uses a slot. It does not create the file.
         </p>
         <ul className="mt-2 grid gap-2 sm:grid-cols-2">
           {CLIP_SLOTS.map((slot) => {
             const used = plan.shots.some((shot) => shot.slotId === slot.id);
             return (
-              <li key={slot.id} className="rounded-xl border border-dashed border-white/20 px-3 py-2">
+              <li
+                key={slot.id}
+                className={`rounded-xl px-3 py-2 ${
+                  slot.locked
+                    ? 'border border-emerald-500/30 bg-white/[0.03]'
+                    : 'border border-dashed border-white/20'
+                }`}
+              >
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-bold">{slot.label}</p>
-                  <span className="rounded-full border border-amber-500/40 px-2 py-0.5 text-[10px] font-bold text-amber-200">
-                    {slot.previewSrc ? 'Watch' : 'Empty'}
+                  <span
+                    className={`rounded-full border px-2 py-0.5 text-[10px] font-bold ${
+                      slot.locked
+                        ? 'border-emerald-500/40 text-emerald-200'
+                        : 'border-amber-500/40 text-amber-200'
+                    }`}
+                  >
+                    {slot.locked ? 'Locked' : slot.src ? 'Watch' : 'Empty'}
                   </span>
                 </div>
-                {slot.previewSrc ? (
+                {slot.src ? (
                   <video
                     className="mt-2 w-full rounded-lg bg-black"
                     controls
                     playsInline
                     preload="metadata"
-                    src={slot.previewSrc}
+                    src={slot.src}
                   />
                 ) : null}
-                <p className="mt-1 text-[11px] text-amber-200">{slot.emptyNote}</p>
+                <p className={`mt-1 text-[11px] ${slot.locked ? 'text-white/55' : 'text-amber-200'}`}>
+                  {slot.emptyNote}
+                </p>
                 <p className="mt-1 text-[11px] text-white/45">
                   {used ? 'Used in this story.' : 'Not in this story.'} Starts on {slot.start}. {slot.cover}. Ends on {slot.end}.
                 </p>
@@ -411,7 +426,7 @@ function ShotRow({
         />
       </label>
       {shot.kind === 'action' ? (
-        <p className="mt-2 text-xs text-amber-200">
+        <p className={`mt-2 text-xs ${slot?.locked ? 'text-emerald-200' : 'text-amber-200'}`}>
           {slot
             ? `Clip slot: ${slot.label}. ${slot.emptyNote}`
             : `${shot.clipLabel} This action has no clip slot yet.`}
