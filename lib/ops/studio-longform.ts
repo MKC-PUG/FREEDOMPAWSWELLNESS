@@ -48,11 +48,11 @@ export const CLIP_SLOTS: ClipSlot[] = [
     id: 'roll-poof',
     label: 'Shake and gold poof',
     start: 'Buddy standing on all four legs',
-    cover: 'He shakes, and that shake blows a sparkling gold cloud around him',
+    cover: 'He shakes, and a gold smoke bomb goes off in front of him',
     end: 'SuperBud standing on all four legs',
     emptyNote:
-      'Second cut. Not locked. Stand, shake, gold cloud, then SuperBud. The shake is the trigger whenever Buddy becomes SuperBud.',
-    previewSrc: '/clips/roll-poof-preview-2.mp4',
+      'Third cut. Not locked. Same face coloring as SuperBud. Stand, shake, gold smoke bomb, then SuperBud.',
+    previewSrc: '/clips/roll-poof-preview-3.mp4',
   },
   {
     id: 'tornado',
@@ -308,9 +308,9 @@ function transformCopy(
   return {
     beat: 'Shake and gold poof',
     line: buddyToSuper
-      ? 'I stand on all four paws, I shake, a gold cloud blows up around me, and I am SuperBud.'
-      : `I shake, a gold cloud blows up, and I am ${next}.`,
-    clipLabel: 'Shake, then the gold cloud. The shake is the trigger. Not locked.',
+      ? 'I stand on all four paws, I shake, a gold smoke bomb goes off in front of me, and I am SuperBud.'
+      : `I shake, a gold smoke bomb goes off, and I am ${next}.`,
+    clipLabel: 'Shake, then the gold smoke bomb. The shake is the trigger. Not locked.',
   };
 }
 
@@ -583,7 +583,7 @@ export function planNotes(choices: LongChoices): string[] {
     choices.transform !== 'none'
   ) {
     notes.push(
-      'Buddy becomes SuperBud by standing, shaking, then the gold cloud. Tornado and the shield flash are for a later costume change.',
+      'Buddy becomes SuperBud by standing, shaking, then the gold smoke bomb. Tornado and the shield flash are for a later costume change.',
     );
   }
   if (choices.startsAs === 'ordinary' || choices.endsAs === 'ordinary') {
