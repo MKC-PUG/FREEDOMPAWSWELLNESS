@@ -31,6 +31,61 @@ export type LongChoices = {
   powers: PowerId[];
 };
 
+export type ClipSlotId = 'roll-poof' | 'tornado' | 'fly-land' | 'rides' | 'food-zap';
+
+export type ClipSlot = {
+  id: ClipSlotId;
+  label: string;
+  start: string;
+  cover: string;
+  end: string;
+  emptyNote: string;
+};
+
+/** Approved action files land here. All five are empty until a clip is locked. */
+export const CLIP_SLOTS: ClipSlot[] = [
+  {
+    id: 'roll-poof',
+    label: 'Roll and gold poof',
+    start: 'Paws on the ground, starting costume',
+    cover: 'A short roll, then a gold puff that hides him',
+    end: 'The other costume, standing',
+    emptyNote: 'Empty. No file yet.',
+  },
+  {
+    id: 'tornado',
+    label: 'Tornado cone',
+    start: 'SuperBud sharp in the center',
+    cover: 'Wind around him, thick enough to hide the body',
+    end: 'The other costume as the wind thins',
+    emptyNote: 'Empty. No file yet.',
+  },
+  {
+    id: 'fly-land',
+    label: 'Fly and land',
+    start: 'The locked flying pose',
+    cover: 'The whole picture drifts across the sky',
+    end: 'He lowers onto the sidewalk or the lake',
+    emptyNote: 'Empty. No file yet.',
+  },
+  {
+    id: 'rides',
+    label: 'Rides',
+    start: 'SuperBud sitting on the partner dog',
+    cover: 'The picture drifts forward',
+    end: 'The same pug, still on that dog',
+    emptyNote: 'Empty. The Lab and the Rottweiler each need their own file.',
+  },
+  {
+    id: 'food-zap',
+    label: 'Food zap',
+    start: 'The host still, shield toward a bowl',
+    cover: 'A gold beam from the shield to the bowl',
+    end: 'A separate shot of the stray at the bowl',
+    emptyNote: 'Empty. No file yet.',
+  },
+];
+
 export type LongShot = {
   id: string;
   chapter: ChapterId;
@@ -41,6 +96,7 @@ export type LongShot = {
   line: string;
   onScreenText: string;
   clipLabel: string;
+  slotId: ClipSlotId | null;
 };
 
 export type LongPlan = {
@@ -276,7 +332,21 @@ function talkShot(
     line,
     onScreenText,
     clipLabel: '',
+    slotId: null,
   };
+}
+
+export function clipSlotById(id: ClipSlotId | null): ClipSlot | null {
+  if (!id) return null;
+  return CLIP_SLOTS.find((slot) => slot.id === id) ?? null;
+}
+
+export function slotForShot(shotId: string, transform: TransformId): ClipSlotId | null {
+  if (shotId === 'transform' && (transform === 'roll-poof' || transform === 'tornado')) return transform;
+  if (shotId === 'power-fly-land') return 'fly-land';
+  if (shotId === 'power-ride-lab' || shotId === 'power-ride-rottweiler') return 'rides';
+  if (shotId === 'power-zap') return 'food-zap';
+  return null;
 }
 
 export function buildShots(choices: LongChoices): LongShot[] {
@@ -307,6 +377,7 @@ export function buildShots(choices: LongChoices): LongShot[] {
       line: copy.line,
       onScreenText: copy.beat,
       clipLabel: copy.clipLabel,
+      slotId: slotForShot(`power-${power}`, choices.transform),
     });
   }
   shots.push(
@@ -336,6 +407,7 @@ export function buildShots(choices: LongChoices): LongShot[] {
     line: copy.line,
     onScreenText: copy.beat,
     clipLabel: copy.clipLabel,
+    slotId: slotForShot('transform', choices.transform),
   };
   const lessonAt = shots.findIndex((shot) => shot.id === 'lesson');
   let insertAt = 1;

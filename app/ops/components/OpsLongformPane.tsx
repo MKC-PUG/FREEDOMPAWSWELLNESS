@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { findBannedPhrase } from '@/lib/ops/studio-compliance';
 import {
   CHAPTERS,
+  CLIP_SLOTS,
   EGOS,
   LENGTHS,
   LONGFORM_KEY,
@@ -12,6 +13,7 @@ import {
   TRANSFORMS,
   TRANSFORM_WHENS,
   applyChoices,
+  clipSlotById,
   labelOf,
   moveShot,
   originPlan,
@@ -248,6 +250,32 @@ export default function OpsLongformPane({
         </p>
       ) : null}
 
+      <div className="mt-4">
+        <p className="text-[10px] font-bold uppercase tracking-wide text-white/40">Clip library</p>
+        <p className="mt-1 text-xs text-white/50">
+          Five slots. Each stays empty until that clip is approved. The story uses a slot. It does not create the file.
+        </p>
+        <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+          {CLIP_SLOTS.map((slot) => {
+            const used = plan.shots.some((shot) => shot.slotId === slot.id);
+            return (
+              <li key={slot.id} className="rounded-xl border border-dashed border-white/20 px-3 py-2">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-bold">{slot.label}</p>
+                  <span className="rounded-full border border-amber-500/40 px-2 py-0.5 text-[10px] font-bold text-amber-200">
+                    Empty
+                  </span>
+                </div>
+                <p className="mt-1 text-[11px] text-amber-200">{slot.emptyNote}</p>
+                <p className="mt-1 text-[11px] text-white/45">
+                  {used ? 'Used in this story.' : 'Not in this story.'} Starts on {slot.start}. {slot.cover}. Ends on {slot.end}.
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
       <p className="mt-4 text-[11px] text-white/45">
         Changing the transform, its timing, or the powers rebuilds the shot order. Up and Down hold until then.
       </p>
@@ -310,6 +338,7 @@ function ShotRow({
   onSend?: () => void;
   sendDisabled: boolean;
 }) {
+  const slot = clipSlotById(shot.slotId);
   return (
     <li className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
       <p className="text-[10px] font-bold uppercase tracking-wide text-[#F5C242]">
@@ -336,7 +365,13 @@ function ShotRow({
           onChange={(e) => onPatch({ line: e.target.value })}
         />
       </label>
-      {shot.kind === 'action' ? <p className="mt-2 text-xs text-amber-200">{shot.clipLabel}</p> : null}
+      {shot.kind === 'action' ? (
+        <p className="mt-2 text-xs text-amber-200">
+          {slot
+            ? `Clip slot: ${slot.label}. ${slot.emptyNote}`
+            : `${shot.clipLabel} This action has no clip slot yet.`}
+        </p>
+      ) : null}
       <div className="mt-2 flex flex-wrap gap-2">
         <button
           type="button"
