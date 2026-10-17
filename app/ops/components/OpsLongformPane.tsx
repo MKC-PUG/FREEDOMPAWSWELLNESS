@@ -254,7 +254,7 @@ export default function OpsLongformPane({
       <div className="mt-4">
         <p className="text-[10px] font-bold uppercase tracking-wide text-white/40">Friends</p>
         <p className="mt-1 text-xs text-white/50">
-          Presley walks beside SuperBud. Charlie is the ride. These plates stay fixed.
+          Buddy is the ordinary pug. Presley walks beside SuperBud. Charlie is the ride.
         </p>
         <ul className="mt-2 grid gap-3 sm:grid-cols-2">
           {STUDIO_FRIENDS.map((friend) => (

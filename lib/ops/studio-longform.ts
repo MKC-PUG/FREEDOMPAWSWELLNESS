@@ -46,10 +46,10 @@ export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
     label: 'Roll and gold poof',
-    start: 'Paws on the ground, starting costume',
+    start: 'Buddy, the ordinary pug, paws on the ground',
     cover: 'A short roll, then a gold puff that hides him',
-    end: 'The other costume, standing',
-    emptyNote: 'Empty. No file yet.',
+    end: 'SuperBud standing',
+    emptyNote: 'Empty. Buddy’s plate is the start. The roll clip is not filmed yet.',
   },
   {
     id: 'tornado',
@@ -165,6 +165,16 @@ export const STUDIO_FRIENDS: {
   detail: string;
   plates: { label: string; src: string }[];
 }[] = [
+  {
+    id: 'buddy',
+    name: 'Buddy',
+    role: 'Ordinary pug',
+    detail: 'Buddy is SuperBud before the cape. These plates start the roll. The roll clip is not filmed yet.',
+    plates: [
+      { label: 'Front', src: '/images/brand/friends/buddy-front.jpg' },
+      { label: 'Side', src: '/images/brand/friends/buddy-side.jpg' },
+    ],
+  },
   {
     id: 'presley',
     name: 'Presley',
@@ -556,7 +566,7 @@ export function planNotes(choices: LongChoices): string[] {
     notes.push('With no power selected, the transform sits between the hook and the lesson.');
   }
   if (choices.startsAs === 'ordinary' || choices.endsAs === 'ordinary') {
-    notes.push('The ordinary-pug still is not approved yet. Talking shots use the locked SuperBud photo until that still exists.');
+    notes.push('Buddy’s ordinary-pug plates are on the desk. Talking shots still use the locked SuperBud photo until you lock those plates.');
   }
   return notes;
 }
