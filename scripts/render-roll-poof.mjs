@@ -1,7 +1,6 @@
 /**
- * Buddy to SuperBud. Locked cut. It can be replaced later.
- * Same face coloring as the locked SuperBud. He stands, the shake moves
- * continuously, then a gold smoke bomb goes off in front of him.
+ * Retired drawn shake. Do not render this over public/clips/roll-poof.mp4.
+ * The locked desk cut is the outdoor shiver and gold smoke master.
  */
 import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';

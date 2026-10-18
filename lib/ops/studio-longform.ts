@@ -52,7 +52,7 @@ export const CLIP_SLOTS: ClipSlot[] = [
     cover: 'A very quick whole-body shiver that builds as the gold smoke explodes',
     end: 'The smoke clears slowly and SuperBud is standing',
     emptyNote:
-      'Locked. Buddy stands on all four legs, shakes, the gold smoke bomb goes off in front of him, and it clears to SuperBud. This cut can be replaced later.',
+      'Locked. Buddy stands in daylight, shivers, a gold smoke bomb goes off in front of him, and it clears to SuperBud. This cut can be replaced later.',
     src: '/clips/roll-poof.mp4',
     locked: true,
   },
