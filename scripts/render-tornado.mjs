@@ -1,8 +1,8 @@
 /**
- * Buddy to SuperBud. First tornado cut. Not locked.
- * He stays in place. Dust lifts at his feet, then a solid funnel
- * hides him: wide and soft at the top, narrow at the ground, with a
- * debris skirt. The funnel thins and SuperBud is standing.
+ * Buddy to SuperBud. Second tornado cut. Not locked.
+ * A small cone starts at each paw, narrow at the ground and wide at the top.
+ * The four whirl and join into one cone. That cone grows until it covers
+ * Buddy, then lifts off to the upper left. SuperBud is standing as it goes.
  */
 import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
@@ -13,7 +13,13 @@ const outDir = join(root, 'tmp/tornado-frames');
 const clipDir = join(root, 'public/images/brand/clips');
 const W = 720;
 const H = 1280;
-const FRAMES = 156;
+const FRAMES = 180;
+const PAWS = [
+  { x: 36, y: 1248 },
+  { x: 190, y: 1252 },
+  { x: 410, y: 1248 },
+  { x: 660, y: 1252 },
+];
 
 async function fit(file) {
   const meta = await sharp(file).metadata();
@@ -30,75 +36,117 @@ async function fit(file) {
     .toBuffer();
 }
 
-function windAt(frame) {
-  if (frame < 16 || frame > 146) return null;
-  if (frame < 40) {
-    const u = (frame - 16) / 24;
-    return { spread: 0.22 + u * 0.15, fade: 0.35 + u * 0.45, speed: 10 + u * 8, hide: 0 };
-  }
-  if (frame < 68) {
-    const u = (frame - 40) / 28;
-    return { spread: 0.37 + u * 0.63, fade: 0.8 + u * 0.2, speed: 18 + u * 12, hide: u * 0.96 };
-  }
-  if (frame < 100) return { spread: 1, fade: 1, speed: 32, hide: 0.97 };
-  const u = (frame - 100) / 46;
-  return { spread: 1 - u * 0.15, fade: 1 - u, speed: 32 - u * 22, hide: 0.97 * (1 - u) };
-}
-
-function wedgePath(cx, footY, topY, baseHalf, topHalf, bulge) {
-  const midY = (footY + topY) / 2;
-  const midHalf = (baseHalf + topHalf) / 2 + bulge;
+function wedge(cx, footY, topY, baseHalf, topHalf) {
+  const midY = footY - (footY - topY) * 0.5;
+  const midHalf = (baseHalf + topHalf) * 0.5;
   return `M ${(cx - baseHalf).toFixed(1)} ${footY.toFixed(1)}
     Q ${(cx - midHalf).toFixed(1)} ${midY.toFixed(1)}, ${(cx - topHalf).toFixed(1)} ${topY.toFixed(1)}
     L ${(cx + topHalf).toFixed(1)} ${topY.toFixed(1)}
     Q ${(cx + midHalf).toFixed(1)} ${midY.toFixed(1)}, ${(cx + baseHalf).toFixed(1)} ${footY.toFixed(1)} Z`;
 }
 
-function windSvg(wind, frame) {
-  const cx = W / 2;
-  const footY = H * 0.99;
-  const topY = -60 + (1 - wind.spread) * H * 0.4;
-  const baseHalf = 340 + wind.spread * 40;
-  const topHalf = 390 + wind.spread * 50;
-  const lean = Math.sin(frame / 18) * 2 * wind.spread;
-  const bulge = Math.sin(frame * 0.35) * 36 * wind.spread;
-  const shift = Math.sin(frame * 0.4) * 50;
-  const body = wedgePath(cx, footY + 20, topY, baseHalf, topHalf, bulge);
-  const core = wedgePath(cx + shift * 0.3, footY + 20, topY, baseHalf * 0.55, topHalf * 0.5, bulge * 0.4);
+function stage(frame) {
+  if (frame < 14 || frame > 176) return null;
+  if (frame < 58) {
+    const u = (frame - 14) / 44;
+    return PAWS.map((paw, i) => ({
+      x: paw.x,
+      y: paw.y,
+      h: 32 + u * 160,
+      base: 5 + u * 5,
+      top: 16 + u * 40,
+      spin: frame * 0.62 + i * 1.5,
+      fade: 0.5 + u * 0.45,
+    }));
+  }
+  if (frame < 96) {
+    const u = (frame - 58) / 38;
+    return PAWS.map((paw, i) => ({
+      x: paw.x + (W / 2 - paw.x) * u,
+      y: paw.y + (1268 - paw.y) * u,
+      h: 192 + u * 430,
+      base: 10 + u * 16,
+      top: 56 + u * 130,
+      spin: frame * 0.75 + i,
+      fade: 0.94,
+    }));
+  }
+  if (frame < 132) {
+    const u = (frame - 96) / 36;
+    return [
+      {
+        x: W / 2,
+        y: 1270,
+        h: 860 + u * 800,
+        base: 190 + u * 30,
+        top: 430 + u * 140,
+        spin: frame * 0.85,
+        fade: 1,
+        wobble: 0,
+      },
+    ];
+  }
+  const u = (frame - 132) / 44;
+  const ease = u * u;
+  return [
+    {
+      x: W / 2 - ease * 1100,
+      y: 1270 - ease * 1800,
+      h: 1620,
+      base: 160,
+      top: 480,
+      spin: frame * 0.9,
+      fade: 1,
+      wobble: 2,
+      tilt: -24 * u,
+    },
+  ];
+}
+
+function windSvg(cones) {
+  const groups = cones.map((cone) => {
+    const topY = cone.y - cone.h;
+    const tilt = (Math.sin(cone.spin) * (cone.wobble ?? 8) + (cone.tilt || 0)).toFixed(2);
+    const rings = [];
+    for (let i = 0; i < 8; i += 1) {
+      const t = (i + 0.6) / 8;
+      const y = cone.y - cone.h * t;
+      const half = cone.base + (cone.top - cone.base) * t;
+      const x = cone.x + Math.sin(cone.spin * 1.3 + i * 0.9) * half * 0.28;
+      const color = i % 2 === 0 ? '#FFF6E4' : '#F0C24A';
+      rings.push(
+        `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(half * 0.92).toFixed(1)}" ry="${(3 + t * 6).toFixed(1)}" fill="none" stroke="${color}" stroke-width="${(1.4 + t * 2.2).toFixed(1)}" opacity="0.9"/>`,
+      );
+    }
+    const body = wedge(cone.x, cone.y, topY, cone.base, cone.top);
+    const core = wedge(cone.x, cone.y, topY + cone.h * 0.04, cone.base * 0.45, cone.top * 0.55);
+    return `<g opacity="${cone.fade.toFixed(3)}" transform="rotate(${tilt} ${cone.x.toFixed(1)} ${cone.y.toFixed(1)})">
+      <path d="${body}" fill="#E7D3A6"/>
+      <path d="${core}" fill="#B99255" opacity="0.55"/>
+      ${rings.join('')}
+    </g>`;
+  });
   return Buffer.from(`<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <linearGradient id="sheath" gradientUnits="userSpaceOnUse" x1="${(cx - topHalf).toFixed(1)}" x2="${(cx + topHalf + shift).toFixed(1)}" y1="0" y2="0">
-        <stop offset="0" stop-color="#F4EAD6"/>
-        <stop offset="0.22" stop-color="#E4D2AA"/>
-        <stop offset="0.5" stop-color="#A88B58"/>
-        <stop offset="0.78" stop-color="#E4D2AA"/>
-        <stop offset="1" stop-color="#F4EAD6"/>
-      </linearGradient>
-      <filter id="storm" x="-25%" y="-10%" width="150%" height="120%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.008 0.02" numOctaves="3" seed="${frame % 9}" result="noise"/>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="${(18 + wind.spread * 10).toFixed(1)}" xChannelSelector="R" yChannelSelector="G"/>
-        <feGaussianBlur stdDeviation="8"/>
+      <filter id="soft" x="-30%" y="-20%" width="160%" height="140%">
+        <feGaussianBlur stdDeviation="1.3"/>
       </filter>
     </defs>
-    <g opacity="${Math.min(1, wind.fade).toFixed(3)}" transform="rotate(${lean.toFixed(2)} ${cx} ${footY})" filter="url(#storm)">
-      <path d="${body}" fill="url(#sheath)"/>
-      <path d="${core}" fill="#8C7044" opacity="0.55"/>
-    </g>
+    <g filter="url(#soft)">${groups.join('')}</g>
   </svg>`);
 }
 
 const buddy = await fit(join(clipDir, 'buddy-full-neutral.jpg'));
 const superbud = await fit(join(clipDir, 'superbud-full-body.jpg'));
-rmSync(outDir, { recursive: true, force: true });
-mkdirSync(outDir, { recursive: true });
-
 const only = process.env.FRAME === undefined ? null : Number(process.env.FRAME);
+if (only === null) rmSync(outDir, { recursive: true, force: true });
+mkdirSync(outDir, { recursive: true });
 for (let frame = 0; frame < FRAMES; frame += 1) {
   if (only !== null && frame !== only) continue;
-  const dog = frame >= 84 ? superbud : buddy;
-  const wind = windAt(frame);
+  const dog = frame >= 128 ? superbud : buddy;
+  const cones = stage(frame);
   const layers = [];
-  if (wind && wind.fade > 0.02) layers.push({ input: windSvg(wind, frame), left: 0, top: 0 });
+  if (cones) layers.push({ input: windSvg(cones), left: 0, top: 0 });
   await sharp(dog, { raw: { width: W, height: H, channels: 4 } })
     .composite(layers)
     .png()

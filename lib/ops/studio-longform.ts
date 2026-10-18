@@ -43,7 +43,7 @@ export type ClipSlot = {
   locked?: boolean;
 };
 
-/** Approved action files land here. Shake and gold poof is locked. Tornado twist is a first cut. The other three are empty. */
+/** Approved action files land here. Shake and gold poof is locked. Tornado twist is a second cut. The other three are empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -60,11 +60,11 @@ export const CLIP_SLOTS: ClipSlot[] = [
     id: 'tornado',
     label: 'Tornado twist',
     start: 'Buddy standing on all four legs',
-    cover: 'He spins in place until his body is a tornado cone',
-    end: 'The wind thins and SuperBud is standing',
+    cover: 'Four small cones at his paws join into one cone that covers him',
+    end: 'The cone lifts off to the upper left and SuperBud is standing',
     emptyNote:
-      'First cut. Not locked. Dust lifts around Buddy and becomes a funnel that hides him, darker in the core and lighter at the edge. It thins and SuperBud is standing.',
-    src: '/clips/tornado-preview-1.mp4',
+      'Second cut. Not locked. A small cone starts at each paw. They join into one cone, cover Buddy, then lift off to the upper left as SuperBud appears.',
+    src: '/clips/tornado-preview-2.mp4',
   },
   {
     id: 'fly-land',
