@@ -43,7 +43,7 @@ export type ClipSlot = {
   locked?: boolean;
 };
 
-/** Approved action files land here. Shake and gold poof and Tornado twist are locked. Fly and land is a second cut, not locked. The other two are empty. */
+/** Approved action files land here. Shake and gold poof, Tornado twist, and Fly and land are locked. Ride Charlie and Food zap are empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -74,8 +74,9 @@ export const CLIP_SLOTS: ClipSlot[] = [
     cover: 'He holds the flight in the red cape, shield reading SuperBud',
     end: 'Still in the air. He does not land in this cut',
     emptyNote:
-      'Second cut. Not locked. Close pass of the flying movie. Red cape, striped shirt, shield reads SuperBud. The flag side of that movie is not in this cut. Other dogs are not in the frame. He does not land.',
-    src: '/clips/fly-land-preview-2.mp4',
+      'Locked. Close pass of the flying movie. Red cape, striped shirt, shield reads SuperBud. The flag side of that movie is not in this cut. Other dogs are not in the frame. He stays in the air. This cut can be replaced later.',
+    src: '/clips/fly-land.mp4',
+    locked: true,
   },
   {
     id: 'rides',
@@ -337,7 +338,7 @@ function powerCopy(id: PowerId, placeLabel: string): { beat: string; line: strin
     return {
       beat: 'Fly and land',
       line: 'I lift off, cross above the scene, and land before the lesson.',
-      clipLabel: 'Fly and land. Not locked. Close pass. He does not land yet.',
+      clipLabel: 'Fly and land. Locked. Close pass. He stays in the air.',
       place: 'sky',
     };
   }

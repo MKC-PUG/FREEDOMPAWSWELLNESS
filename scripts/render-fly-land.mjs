@@ -1,5 +1,5 @@
 /**
- * SuperBud fly and land. Second cut. Not locked.
+ * SuperBud fly and land. Locked. Close pass. He stays in the air.
  * Source: the founder's SuperBud FLYING movie, close pass only.
  * That pass has a flag on the outer cape and other dogs below him.
  * This cut stays on his face and chest: red cape, striped shirt, shield reading SuperBud.
