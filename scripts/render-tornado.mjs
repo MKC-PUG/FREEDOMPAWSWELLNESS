@@ -1,5 +1,5 @@
 /**
- * Buddy to SuperBud. Fourth tornado cut. Not locked.
+ * Buddy to SuperBud. Locked cut. It can be replaced later.
  * The dust funnels grow twice as fast, join, and fill the whole frame.
  * The funnel then moves off the upper left and SuperBud is standing.
  */
