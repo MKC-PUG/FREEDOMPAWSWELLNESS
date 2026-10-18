@@ -1,7 +1,6 @@
 /**
- * Buddy to SuperBud. Locked cut. It can be replaced later.
- * The dust funnels grow twice as fast, join, and fill the whole frame.
- * The funnel then moves off the upper left and SuperBud is standing.
+ * Retired drawn tornado. Do not render this over public/clips/tornado.mp4.
+ * The locked desk cut is the outdoor dust master.
  */
 import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';

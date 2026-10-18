@@ -60,10 +60,10 @@ export const CLIP_SLOTS: ClipSlot[] = [
     id: 'tornado',
     label: 'Tornado twist',
     start: 'Buddy standing on all four legs',
-    cover: 'Four dust funnels at his paws join into one and cover him',
-    end: 'The funnel lifts off to the upper left and SuperBud is standing',
+    cover: 'A dust tornado rises and covers him',
+    end: 'The dust clears and SuperBud is standing',
     emptyNote:
-      'Locked. Dust grows fast from the paws, fills the frame, then moves off the upper left and SuperBud is standing. This cut can be replaced later.',
+      'Locked. Buddy stands in daylight, a dust tornado covers him, then it clears and SuperBud is standing. This cut can be replaced later.',
     src: '/clips/tornado.mp4',
     locked: true,
   },
@@ -292,7 +292,7 @@ function transformCopy(
   if (id === 'tornado') {
     return {
       beat: 'Tornado twist',
-      line: `I spin in place, the wind becomes a cone around me, and I am ${next} when it thins.`,
+      line: `A dust tornado covers me, and I am ${next} when it clears.`,
       clipLabel: 'Tornado twist. Locked.',
     };
   }
