@@ -43,7 +43,7 @@ export type ClipSlot = {
   locked?: boolean;
 };
 
-/** Approved action files land here. Shake and gold poof, Tornado twist, and Fly and land are locked. Ride Charlie and Food zap are empty. */
+/** Approved action files land here. Shake and gold poof, Tornado twist, and Fly and land are locked. Food zap is a first cut, not locked. Ride Charlie is empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -91,8 +91,10 @@ export const CLIP_SLOTS: ClipSlot[] = [
     label: 'Food zap',
     start: 'The host still, shield toward a bowl',
     cover: 'A gold beam from the shield to the bowl',
-    end: 'A separate shot of the stray at the bowl',
-    emptyNote: 'Empty. No file yet.',
+    end: 'The bowl of ordinary food stays. The stray is not in this cut',
+    emptyNote:
+      'First cut. Not locked. The host still sends a gold beam to a bowl of ordinary food. The face is not redrawn. The stray is not in this cut.',
+    src: '/clips/food-zap-preview-1.mp4',
   },
 ];
 
@@ -353,7 +355,7 @@ function powerCopy(id: PowerId, placeLabel: string): { beat: string; line: strin
   return {
     beat: 'Zap food to a stray',
     line: 'I send an ordinary meal to a stray. A sick dog still needs a veterinarian the same day.',
-    clipLabel: 'Zap food to a stray. Not filmed yet.',
+    clipLabel: 'Zap food to a stray. Not locked. The stray is not in this cut.',
     place: 'sidewalk',
   };
 }
