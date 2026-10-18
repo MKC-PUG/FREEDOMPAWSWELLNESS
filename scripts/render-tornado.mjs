@@ -1,8 +1,7 @@
 /**
- * Buddy to SuperBud. Third tornado cut. Not locked.
- * A dust funnel starts at each paw. They whirl, join into one, and grow
- * until Buddy is inside it. The funnel then lifts off to the upper left
- * and SuperBud is standing. Grey-brown cloud, debris on the edges.
+ * Buddy to SuperBud. Fourth tornado cut. Not locked.
+ * The dust funnels grow twice as fast, join, and fill the whole frame.
+ * The funnel then moves off the upper left and SuperBud is standing.
  */
 import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
@@ -36,62 +35,67 @@ async function fit(file) {
     .toBuffer();
 }
 
+function fullFunnel(x, y, screen) {
+  return {
+    x,
+    y,
+    h: 1900,
+    base: 520,
+    top: 680,
+    spin: 0,
+    fade: 1,
+    wobble: 0,
+    screen,
+  };
+}
+
 function stage(frame) {
-  if (frame < 14 || frame > 176) return null;
-  if (frame < 58) {
-    const u = (frame - 14) / 44;
+  if (frame < 6 || frame > 168) return null;
+  if (frame < 28) {
+    const u = (frame - 6) / 22;
     return PAWS.map((paw, i) => ({
       x: paw.x,
       y: paw.y,
-      h: 78 + u * 190,
-      base: 12 + u * 8,
-      top: 34 + u * 48,
+      h: 78 + u * 220,
+      base: 12 + u * 10,
+      top: 34 + u * 70,
       spin: frame * 0.62 + i * 1.5,
-      fade: 0.5 + u * 0.45,
+      fade: 0.55 + u * 0.4,
     }));
   }
-  if (frame < 96) {
-    const u = (frame - 58) / 38;
+  if (frame < 47) {
+    const u = (frame - 28) / 19;
     return PAWS.map((paw, i) => ({
       x: paw.x + (W / 2 - paw.x) * u,
-      y: paw.y + (1268 - paw.y) * u,
-      h: 192 + u * 430,
-      base: 10 + u * 16,
-      top: 56 + u * 130,
+      y: paw.y + (1320 - paw.y) * u,
+      h: 300 + u * 700,
+      base: 22 + u * 180,
+      top: 104 + u * 280,
       spin: frame * 0.75 + i,
-      fade: 0.94,
+      fade: 1,
+      screen: u > 0.82,
     }));
   }
-  if (frame < 132) {
-    const u = (frame - 96) / 36;
+  if (frame < 65) {
+    const u = (frame - 47) / 18;
     return [
       {
         x: W / 2,
-        y: 1270,
-        h: 860 + u * 800,
-        base: 280 + u * 40,
-        top: 430 + u * 140,
+        y: 1360,
+        h: 1000 + u * 900,
+        base: 220 + u * 300,
+        top: 400 + u * 280,
         spin: frame * 0.85,
         fade: 1,
         wobble: 0,
+        screen: u > 0.45,
       },
     ];
   }
-  const u = (frame - 132) / 44;
+  if (frame < 78) return [fullFunnel(W / 2, 1360, true)];
+  const u = (frame - 78) / 80;
   const ease = u * u;
-  return [
-    {
-      x: W / 2 - ease * 1100,
-      y: 1270 - ease * 1800,
-      h: 1620,
-      base: 160,
-      top: 480,
-      spin: frame * 0.9,
-      fade: 1,
-      wobble: 2,
-      tilt: -24 * u,
-    },
-  ];
+  return [fullFunnel(W / 2 - ease * 1600, 1360 - ease * 2000, true)];
 }
 
 function dustPath(funnel, frame) {
@@ -152,7 +156,15 @@ function windSvg(funnels, frame) {
       return `<g opacity="${funnel.fade.toFixed(3)}" transform="rotate(${lean} ${funnel.x.toFixed(1)} ${funnel.y.toFixed(1)})">${debrisMarkup(funnel, frame)}</g>`;
     })
     .join('');
+  const veil = funnels
+    .filter((funnel) => funnel.screen)
+    .map(
+      (funnel) =>
+        `<rect x="${(funnel.x - 900).toFixed(1)}" y="${(funnel.y - funnel.h - 240).toFixed(1)}" width="1800" height="${(funnel.h + 480).toFixed(1)}" fill="#5C574F"/>`,
+    )
+    .join('');
   return Buffer.from(`<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+    ${veil}
     <defs>
       <filter id="storm" x="-30%" y="-15%" width="160%" height="130%">
         <feTurbulence type="fractalNoise" baseFrequency="0.012 0.028" numOctaves="2" seed="${frame % 8}" result="noise"/>
@@ -175,7 +187,7 @@ if (only === null) rmSync(outDir, { recursive: true, force: true });
 mkdirSync(outDir, { recursive: true });
 for (let frame = 0; frame < FRAMES; frame += 1) {
   if (only !== null && frame !== only) continue;
-  const dog = frame >= 128 ? superbud : buddy;
+  const dog = frame >= 58 ? superbud : buddy;
   const cones = stage(frame);
   const layers = [];
   if (cones) layers.push({ input: windSvg(cones, frame), left: 0, top: 0 });
