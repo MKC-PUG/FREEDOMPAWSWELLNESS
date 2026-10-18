@@ -1,7 +1,8 @@
 /**
- * Food zap. First cut. Not locked.
- * The locked host still sends a gold beam from the shield to a bowl of ordinary food.
- * The face is not redrawn. The stray is not in this cut. There is no recipient yet.
+ * Food zap. Second cut. Not locked.
+ * The locked host still sends a gold beam to a bowl of ordinary food.
+ * The cut then shows Charlie, the locked Rottweiler, with that bowl at his feet.
+ * Neither face is redrawn. Both mouths stay closed.
  */
 import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
@@ -9,10 +10,12 @@ import sharp from 'sharp';
 
 const root = new URL('..', import.meta.url).pathname;
 const host = join(root, 'public/images/brand/sb-host-front-canon.png');
+const charlie = join(root, 'public/images/brand/friends/charlie-side.jpg');
 const outDir = join(root, 'tmp/food-zap-frames');
 const W = 720;
 const H = 1280;
-const FRAMES = 72;
+const HOST_FRAMES = 72;
+const CHARLIE_FRAMES = 48;
 
 const SHIELD = { x: 360, y: 980 };
 const BOWL = { x: 390, y: 1210 };
@@ -36,6 +39,31 @@ async function fittedHost() {
   return sharp(host).resize(rw, rh).extract({ left, top, width: W, height: H }).png().toBuffer();
 }
 
+function bowlMarkup(x, y, glow) {
+  const kibble = [
+    [0, 6, 18],
+    [-36, 2, 15],
+    [34, 0, 16],
+    [-16, 16, 13],
+    [18, 16, 14],
+    [-52, 12, 12],
+    [50, 12, 13],
+    [0, 18, 12],
+  ]
+    .map(([dx, dy, r], i) => {
+      const fill = i % 2 === 0 ? '#A67C2D' : '#C9842A';
+      return `<ellipse cx="${x + dx}" cy="${y - 18 + dy}" rx="${r}" ry="${(r * 0.72).toFixed(1)}" fill="${fill}"/>`;
+    })
+    .join('');
+  return `<ellipse cx="${x}" cy="${y + 22}" rx="150" ry="26" fill="#1F2937" opacity="0.35"/>
+      <ellipse cx="${x}" cy="${y}" rx="146" ry="48" fill="#C5CCD6"/>
+      <ellipse cx="${x}" cy="${y + 6}" rx="146" ry="36" fill="#8B939E"/>
+      <ellipse cx="${x}" cy="${y - 6}" rx="118" ry="32" fill="#3F4752"/>
+      ${kibble}
+      <ellipse cx="${x}" cy="${y - 18}" rx="132" ry="18" fill="none" stroke="#F3F4F6" stroke-width="8"/>
+      <ellipse cx="${x}" cy="${y - 10}" rx="46" ry="16" fill="#FFE08A" opacity="${(glow * 0.55).toFixed(3)}"/>`;
+}
+
 function overlay(frame) {
   const bowlIn = ease(frame / 14);
   const beamU = frame < 16 ? 0 : ease((frame - 16) / 28);
@@ -54,22 +82,6 @@ function overlay(frame) {
       `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(4 + (i % 3) * 2).toFixed(1)}" fill="#FFE08A"/>`,
     );
   }
-  const kibble = [
-    [0, 6, 18],
-    [-36, 2, 15],
-    [34, 0, 16],
-    [-16, 16, 13],
-    [18, 16, 14],
-    [-52, 12, 12],
-    [50, 12, 13],
-    [0, 18, 12],
-  ]
-    .map(([x, y, r], i) => {
-      const fill = i % 2 === 0 ? '#A67C2D' : '#C9842A';
-      return `<ellipse cx="${BOWL.x + x}" cy="${BOWL.y - 18 + y}" rx="${r}" ry="${(r * 0.72).toFixed(1)}" fill="${fill}"/>`;
-    })
-    .join('');
-
   return Buffer.from(`<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
@@ -87,26 +99,65 @@ function overlay(frame) {
     <line x1="${SHIELD.x}" y1="${SHIELD.y}" x2="${tipX.toFixed(1)}" y2="${tipY.toFixed(1)}" stroke="url(#beam)" stroke-width="22" stroke-linecap="round" opacity="${glow.toFixed(3)}"/>
     <g opacity="${(glow * 0.9).toFixed(3)}">${sparks.join('')}</g>
     <g opacity="${bowlIn.toFixed(3)}">
-      <ellipse cx="${BOWL.x}" cy="${BOWL.y + 22}" rx="150" ry="26" fill="#1F2937" opacity="0.35"/>
-      <ellipse cx="${BOWL.x}" cy="${BOWL.y}" rx="146" ry="48" fill="#C5CCD6"/>
-      <ellipse cx="${BOWL.x}" cy="${BOWL.y + 6}" rx="146" ry="36" fill="#8B939E"/>
-      <ellipse cx="${BOWL.x}" cy="${BOWL.y - 6}" rx="118" ry="32" fill="#3F4752"/>
-      ${kibble}
-      <ellipse cx="${BOWL.x}" cy="${BOWL.y - 18}" rx="132" ry="18" fill="none" stroke="#F3F4F6" stroke-width="8"/>
-      <ellipse cx="${BOWL.x}" cy="${BOWL.y - 10}" rx="46" ry="16" fill="#FFE08A" opacity="${(glow * 0.55).toFixed(3)}"/>
+      ${bowlMarkup(BOWL.x, BOWL.y, glow)}
     </g>
     <circle cx="${SHIELD.x}" cy="${SHIELD.y}" r="${(10 + glow * 8).toFixed(1)}" fill="#FFE08A" opacity="${(glow * 0.8).toFixed(3)}"/>
+  </svg>`);
+}
+
+const CHARLIE_BOWL = { x: 400, y: 1204 };
+
+async function fittedCharlie() {
+  const scale = 1.32;
+  const meta = await sharp(charlie).metadata();
+  const rw = Math.round(meta.width * scale);
+  const rh = Math.round(meta.height * scale);
+  const dog = await sharp(charlie).resize(rw, rh).extract({ left: 0, top: 0, width: W, height: rh }).png().toBuffer();
+  const top = H - rh - 8;
+  const sky = await sharp(dog)
+    .extract({ left: 0, top: 0, width: W, height: 20 })
+    .resize(W, top + 30, { fit: 'fill' })
+    .blur(8)
+    .png()
+    .toBuffer();
+  return sharp({
+    create: { width: W, height: H, channels: 3, background: { r: 184, g: 175, b: 168 } },
+  })
+    .composite([
+      { input: sky, top: 0, left: 0 },
+      { input: dog, top, left: 0 },
+    ])
+    .png()
+    .toBuffer();
+}
+
+function charlieOverlay(frame) {
+  const bowlIn = ease(frame / 12);
+  const glow = frame < 28 ? 1 - ease(Math.max(0, (frame - 8) / 20)) : 0;
+  return Buffer.from(`<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+    <g opacity="${bowlIn.toFixed(3)}">
+      ${bowlMarkup(CHARLIE_BOWL.x, CHARLIE_BOWL.y, glow)}
+    </g>
   </svg>`);
 }
 
 rmSync(outDir, { recursive: true, force: true });
 mkdirSync(outDir, { recursive: true });
 const plate = await fittedHost();
-for (let frame = 0; frame < FRAMES; frame += 1) {
+const charliePlate = await fittedCharlie();
+let outIndex = 0;
+for (let frame = 0; frame < HOST_FRAMES; frame += 1) {
   await sharp(plate)
     .composite([{ input: overlay(frame), top: 0, left: 0 }])
     .png()
-    .toFile(join(outDir, `f${String(frame).padStart(3, '0')}.png`));
-  if (frame % 18 === 0) console.log('frame', frame);
+    .toFile(join(outDir, `f${String(outIndex).padStart(3, '0')}.png`));
+  outIndex += 1;
 }
-console.log('frames', FRAMES, outDir);
+for (let frame = 0; frame < CHARLIE_FRAMES; frame += 1) {
+  await sharp(charliePlate)
+    .composite([{ input: charlieOverlay(frame), top: 0, left: 0 }])
+    .png()
+    .toFile(join(outDir, `f${String(outIndex).padStart(3, '0')}.png`));
+  outIndex += 1;
+}
+console.log('frames', outIndex, outDir);

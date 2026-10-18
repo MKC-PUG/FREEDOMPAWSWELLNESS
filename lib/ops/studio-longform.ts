@@ -43,7 +43,7 @@ export type ClipSlot = {
   locked?: boolean;
 };
 
-/** Approved action files land here. Shake and gold poof, Tornado twist, and Fly and land are locked. Food zap is a first cut, not locked. Ride Charlie is empty. */
+/** Approved action files land here. Shake and gold poof, Tornado twist, and Fly and land are locked. Food zap is a second cut, not locked. Ride Charlie is empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -91,10 +91,10 @@ export const CLIP_SLOTS: ClipSlot[] = [
     label: 'Food zap',
     start: 'The host still, shield toward a bowl',
     cover: 'A gold beam from the shield to the bowl',
-    end: 'The bowl of ordinary food stays. The stray is not in this cut',
+    end: 'Charlie stands at the bowl. The meal has arrived',
     emptyNote:
-      'First cut. Not locked. The host still sends a gold beam to a bowl of ordinary food. The face is not redrawn. The stray is not in this cut.',
-    src: '/clips/food-zap-preview-1.mp4',
+      'Second cut. Not locked. The host still sends a gold beam to a bowl of ordinary food, then Charlie has that bowl at his feet. Mouths stay closed. The faces are not redrawn.',
+    src: '/clips/food-zap-preview-2.mp4',
   },
 ];
 
@@ -168,7 +168,7 @@ export const POWERS: { id: PowerId; label: string }[] = [
   { id: 'walk', label: 'Walk and talk' },
   { id: 'fly-land', label: 'Fly and land' },
   { id: 'ride-charlie', label: 'Ride Charlie' },
-  { id: 'zap', label: 'Zap food to a stray' },
+  { id: 'zap', label: 'Zap food to Charlie' },
 ];
 
 export const STUDIO_FRIENDS: {
@@ -353,9 +353,9 @@ function powerCopy(id: PowerId, placeLabel: string): { beat: string; line: strin
     };
   }
   return {
-    beat: 'Zap food to a stray',
-    line: 'I send an ordinary meal to a stray. A sick dog still needs a veterinarian the same day.',
-    clipLabel: 'Zap food to a stray. Not locked. The stray is not in this cut.',
+    beat: 'Zap food to Charlie',
+    line: 'I send an ordinary meal to Charlie. A sick dog still needs a veterinarian the same day.',
+    clipLabel: 'Zap food to Charlie. Not locked.',
     place: 'sidewalk',
   };
 }
@@ -581,7 +581,7 @@ export function planNotes(choices: LongChoices): string[] {
     notes.push('This situation names Charlie. Add Ride Charlie if SuperBud should ride in a shot.');
   }
   if (choices.situation === 'stray' && !choices.powers.includes('zap')) {
-    notes.push('This situation names a stray. Add Zap food to a stray if that beat should be in the film.');
+    notes.push('This situation names a stray. Add Zap food to Charlie if that beat should be in the film.');
   }
   if (choices.powers.filter((power) => power !== 'none').length === 0 && choices.transform !== 'none') {
     notes.push('With no power selected, the transform sits between the hook and the lesson.');
