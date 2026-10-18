@@ -1,8 +1,8 @@
 /**
- * Buddy to SuperBud. Second tornado cut. Not locked.
- * A small cone starts at each paw, narrow at the ground and wide at the top.
- * The four whirl and join into one cone. That cone grows until it covers
- * Buddy, then lifts off to the upper left. SuperBud is standing as it goes.
+ * Buddy to SuperBud. Third tornado cut. Not locked.
+ * A dust funnel starts at each paw. They whirl, join into one, and grow
+ * until Buddy is inside it. The funnel then lifts off to the upper left
+ * and SuperBud is standing. Grey-brown cloud, debris on the edges.
  */
 import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
@@ -36,15 +36,6 @@ async function fit(file) {
     .toBuffer();
 }
 
-function wedge(cx, footY, topY, baseHalf, topHalf) {
-  const midY = footY - (footY - topY) * 0.5;
-  const midHalf = (baseHalf + topHalf) * 0.5;
-  return `M ${(cx - baseHalf).toFixed(1)} ${footY.toFixed(1)}
-    Q ${(cx - midHalf).toFixed(1)} ${midY.toFixed(1)}, ${(cx - topHalf).toFixed(1)} ${topY.toFixed(1)}
-    L ${(cx + topHalf).toFixed(1)} ${topY.toFixed(1)}
-    Q ${(cx + midHalf).toFixed(1)} ${midY.toFixed(1)}, ${(cx + baseHalf).toFixed(1)} ${footY.toFixed(1)} Z`;
-}
-
 function stage(frame) {
   if (frame < 14 || frame > 176) return null;
   if (frame < 58) {
@@ -52,9 +43,9 @@ function stage(frame) {
     return PAWS.map((paw, i) => ({
       x: paw.x,
       y: paw.y,
-      h: 32 + u * 160,
-      base: 5 + u * 5,
-      top: 16 + u * 40,
+      h: 78 + u * 190,
+      base: 12 + u * 8,
+      top: 34 + u * 48,
       spin: frame * 0.62 + i * 1.5,
       fade: 0.5 + u * 0.45,
     }));
@@ -78,7 +69,7 @@ function stage(frame) {
         x: W / 2,
         y: 1270,
         h: 860 + u * 800,
-        base: 190 + u * 30,
+        base: 280 + u * 40,
         top: 430 + u * 140,
         spin: frame * 0.85,
         fade: 1,
@@ -103,36 +94,77 @@ function stage(frame) {
   ];
 }
 
-function windSvg(cones) {
-  const groups = cones.map((cone) => {
-    const topY = cone.y - cone.h;
-    const tilt = (Math.sin(cone.spin) * (cone.wobble ?? 8) + (cone.tilt || 0)).toFixed(2);
-    const rings = [];
-    for (let i = 0; i < 8; i += 1) {
-      const t = (i + 0.6) / 8;
-      const y = cone.y - cone.h * t;
-      const half = cone.base + (cone.top - cone.base) * t;
-      const x = cone.x + Math.sin(cone.spin * 1.3 + i * 0.9) * half * 0.28;
-      const color = i % 2 === 0 ? '#FFF6E4' : '#F0C24A';
-      rings.push(
-        `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(half * 0.92).toFixed(1)}" ry="${(3 + t * 6).toFixed(1)}" fill="none" stroke="${color}" stroke-width="${(1.4 + t * 2.2).toFixed(1)}" opacity="0.9"/>`,
-      );
-    }
-    const body = wedge(cone.x, cone.y, topY, cone.base, cone.top);
-    const core = wedge(cone.x, cone.y, topY + cone.h * 0.04, cone.base * 0.45, cone.top * 0.55);
-    return `<g opacity="${cone.fade.toFixed(3)}" transform="rotate(${tilt} ${cone.x.toFixed(1)} ${cone.y.toFixed(1)})">
-      <path d="${body}" fill="#E7D3A6"/>
-      <path d="${core}" fill="#B99255" opacity="0.55"/>
-      ${rings.join('')}
+function dustPath(funnel, frame) {
+  const topY = funnel.y - funnel.h;
+  const midY = funnel.y - funnel.h * 0.52;
+  const wobble = Math.sin(frame * 1.9 + funnel.x * 0.01) * funnel.top * 0.1;
+  const mid = funnel.base + (funnel.top - funnel.base) * 0.42;
+  return `M ${(funnel.x - funnel.base).toFixed(1)} ${funnel.y.toFixed(1)}
+    C ${(funnel.x - funnel.base * 1.6).toFixed(1)} ${(funnel.y - funnel.h * 0.18).toFixed(1)}, ${(funnel.x - mid - wobble).toFixed(1)} ${midY.toFixed(1)}, ${(funnel.x - funnel.top + wobble).toFixed(1)} ${topY.toFixed(1)}
+    L ${(funnel.x + funnel.top + wobble * 0.4).toFixed(1)} ${topY.toFixed(1)}
+    C ${(funnel.x + mid - wobble * 0.5).toFixed(1)} ${midY.toFixed(1)}, ${(funnel.x + funnel.base * 1.5).toFixed(1)} ${(funnel.y - funnel.h * 0.22).toFixed(1)}, ${(funnel.x + funnel.base).toFixed(1)} ${funnel.y.toFixed(1)} Z`;
+}
+
+function skirtMarkup(funnel) {
+  const skirt = Math.max(18, funnel.base * 2.1 + 8);
+  return `<ellipse cx="${funnel.x.toFixed(1)}" cy="${(funnel.y + 2).toFixed(1)}" rx="${skirt.toFixed(1)}" ry="${Math.max(8, skirt * 0.2).toFixed(1)}" fill="#6A5E52" opacity="0.8"/>`;
+}
+
+function debrisMarkup(funnel, frame) {
+  const bits = 8 + Math.round(funnel.h / 16);
+  const specks = [];
+  for (let i = 0; i < bits; i += 1) {
+    const t = ((i * 0.41) % 1) ** 0.32;
+    const y = funnel.y - funnel.h * t + Math.sin(i * 1.7) * 8;
+    const half = funnel.base + (funnel.top - funnel.base) * t;
+    const ang = frame * 0.85 + i * 2.4;
+    const x = funnel.x + Math.cos(ang) * half * (0.96 + (i % 5) * 0.05);
+    const size = 1.8 + (i % 4) * (0.8 + t * 2.2);
+    specks.push(
+      `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${size.toFixed(1)}" ry="${(size * 0.62).toFixed(1)}" fill="#1E1A16" opacity="${(0.35 + t * 0.6).toFixed(3)}"/>`,
+    );
+  }
+  return specks.join('');
+}
+
+function windSvg(funnels, frame) {
+  const clouds = funnels.map((funnel) => {
+    const shift = Math.sin(frame * 2.15 + funnel.x * 0.02) * funnel.top * 0.35;
+    const edge = funnel.top < 140 ? '#7C756C' : '#C9C3B8';
+    const mid = funnel.top < 140 ? '#5C564F' : '#8E877E';
+    const lean = ((funnel.tilt || 0) + Math.sin(frame * 0.35) * (funnel.wobble ?? 3)).toFixed(2);
+    const gid = `g${Math.round(funnel.x)}${Math.round(funnel.y)}`;
+    return `<linearGradient id="${gid}" gradientUnits="userSpaceOnUse" x1="${(funnel.x - funnel.top + shift).toFixed(1)}" x2="${(funnel.x + funnel.top + shift).toFixed(1)}" y1="0" y2="0">
+      <stop offset="0" stop-color="${edge}"/>
+      <stop offset="0.22" stop-color="${mid}"/>
+      <stop offset="0.5" stop-color="#3E3A36"/>
+      <stop offset="0.78" stop-color="${mid}"/>
+      <stop offset="1" stop-color="${edge}"/>
+    </linearGradient>
+    <g opacity="${funnel.fade.toFixed(3)}" transform="rotate(${lean} ${funnel.x.toFixed(1)} ${funnel.y.toFixed(1)})">
+      <path d="${dustPath(funnel, frame)}" fill="url(#${gid})"/>
+      ${skirtMarkup(funnel)}
     </g>`;
   });
+  const dirt = funnels
+    .map((funnel) => {
+      const lean = ((funnel.tilt || 0) + Math.sin(frame * 0.35) * (funnel.wobble ?? 3)).toFixed(2);
+      return `<g opacity="${funnel.fade.toFixed(3)}" transform="rotate(${lean} ${funnel.x.toFixed(1)} ${funnel.y.toFixed(1)})">${debrisMarkup(funnel, frame)}</g>`;
+    })
+    .join('');
   return Buffer.from(`<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <filter id="soft" x="-30%" y="-20%" width="160%" height="140%">
-        <feGaussianBlur stdDeviation="1.3"/>
+      <filter id="storm" x="-30%" y="-15%" width="160%" height="130%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.028" numOctaves="2" seed="${frame % 8}" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+        <feGaussianBlur stdDeviation="3.5"/>
+      </filter>
+      <filter id="speck" x="-15%" y="-15%" width="130%" height="130%">
+        <feGaussianBlur stdDeviation="1.4"/>
       </filter>
     </defs>
-    <g filter="url(#soft)">${groups.join('')}</g>
+    <g filter="url(#storm)">${clouds.join('')}</g>
+    <g filter="url(#speck)">${dirt}</g>
   </svg>`);
 }
 
@@ -146,7 +178,7 @@ for (let frame = 0; frame < FRAMES; frame += 1) {
   const dog = frame >= 128 ? superbud : buddy;
   const cones = stage(frame);
   const layers = [];
-  if (cones) layers.push({ input: windSvg(cones), left: 0, top: 0 });
+  if (cones) layers.push({ input: windSvg(cones, frame), left: 0, top: 0 });
   await sharp(dog, { raw: { width: W, height: H, channels: 4 } })
     .composite(layers)
     .png()
