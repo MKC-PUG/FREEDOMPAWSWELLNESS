@@ -14,7 +14,7 @@ export type LengthId = '60' | '90' | '120' | '180';
 export type EgoId = 'ordinary' | 'superbud' | 'scientist' | 'veterinarian';
 export type TransformId = 'roll-poof' | 'tornado' | 'shield' | 'none';
 export type TransformWhen = 'opening' | 'middle' | 'before-lesson';
-export type PowerId = 'none' | 'walk' | 'fly-land' | 'ride-charlie' | 'zap';
+export type PowerId = 'none' | 'walk' | 'fly-land' | 'ride-charlie';
 export type ChapterId = 'hook' | 'transform' | 'power' | 'lesson' | 'closer';
 export type PlaceId = 'sidewalk' | 'lakeside' | 'sky' | 'podium';
 
@@ -30,7 +30,7 @@ export type LongChoices = {
   powers: PowerId[];
 };
 
-export type ClipSlotId = 'roll-poof' | 'tornado' | 'fly-land' | 'rides' | 'food-zap';
+export type ClipSlotId = 'roll-poof' | 'tornado' | 'fly-land' | 'rides';
 
 export type ClipSlot = {
   id: ClipSlotId;
@@ -43,7 +43,7 @@ export type ClipSlot = {
   locked?: boolean;
 };
 
-/** Approved action files land here. Shake and gold poof, Tornado twist, and Fly and land are locked. Food zap is a second cut, not locked. Ride Charlie is empty. */
+/** Approved action files land here. Shake and gold poof, Tornado twist, and Fly and land are locked. Ride Charlie is empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -85,16 +85,6 @@ export const CLIP_SLOTS: ClipSlot[] = [
     cover: 'The picture drifts forward',
     end: 'The same pug, still on Charlie',
     emptyNote: 'Empty. Charlie’s plate is locked. The ride clip is not filmed yet.',
-  },
-  {
-    id: 'food-zap',
-    label: 'Food zap',
-    start: 'The host still, shield toward a bowl',
-    cover: 'A gold beam from the shield to the bowl',
-    end: 'Charlie stands at the bowl. The meal has arrived',
-    emptyNote:
-      'Second cut. Not locked. The host still sends a gold beam to a bowl of ordinary food, then Charlie has that bowl at his feet. Mouths stay closed. The faces are not redrawn.',
-    src: '/clips/food-zap-preview-2.mp4',
   },
 ];
 
@@ -168,7 +158,6 @@ export const POWERS: { id: PowerId; label: string }[] = [
   { id: 'walk', label: 'Walk and talk' },
   { id: 'fly-land', label: 'Fly and land' },
   { id: 'ride-charlie', label: 'Ride Charlie' },
-  { id: 'zap', label: 'Zap food to Charlie' },
 ];
 
 export const STUDIO_FRIENDS: {
@@ -344,18 +333,10 @@ function powerCopy(id: PowerId, placeLabel: string): { beat: string; line: strin
       place: 'sky',
     };
   }
-  if (id === 'ride-charlie') {
-    return {
-      beat: 'Ride Charlie',
-      line: 'I call Charlie, and I ride on his back from one block to the next.',
-      clipLabel: 'Ride Charlie. His plate is locked. The clip is not filmed yet.',
-      place: 'sidewalk',
-    };
-  }
   return {
-    beat: 'Zap food to Charlie',
-    line: 'I send an ordinary meal to Charlie. A sick dog still needs a veterinarian the same day.',
-    clipLabel: 'Zap food to Charlie. Not locked.',
+    beat: 'Ride Charlie',
+    line: 'I call Charlie, and I ride on his back from one block to the next.',
+    clipLabel: 'Ride Charlie. His plate is locked. The clip is not filmed yet.',
     place: 'sidewalk',
   };
 }
@@ -391,7 +372,6 @@ export function slotForShot(shotId: string, transform: TransformId): ClipSlotId 
   if (shotId === 'transform' && (transform === 'roll-poof' || transform === 'tornado')) return transform;
   if (shotId === 'power-fly-land') return 'fly-land';
   if (shotId === 'power-ride-charlie') return 'rides';
-  if (shotId === 'power-zap') return 'food-zap';
   return null;
 }
 
@@ -580,8 +560,8 @@ export function planNotes(choices: LongChoices): string[] {
   if (choices.situation === 'ride-charlie' && !choices.powers.includes('ride-charlie')) {
     notes.push('This situation names Charlie. Add Ride Charlie if SuperBud should ride in a shot.');
   }
-  if (choices.situation === 'stray' && !choices.powers.includes('zap')) {
-    notes.push('This situation names a stray. Add Zap food to Charlie if that beat should be in the film.');
+  if (choices.situation === 'stray') {
+    notes.push('Helping a stray is spoken in the lesson. There is no food clip.');
   }
   if (choices.powers.filter((power) => power !== 'none').length === 0 && choices.transform !== 'none') {
     notes.push('With no power selected, the transform sits between the hook and the lesson.');
@@ -631,7 +611,7 @@ export function parseLongPlan(raw: unknown): LongPlan | null {
         : base.situation;
   const rawPowers = Array.isArray(incoming.powers)
     ? incoming.powers.map((power) =>
-        power === 'ride-lab' || power === 'ride-rottweiler' ? 'ride-charlie' : power
+        power === 'ride-lab' || power === 'ride-rottweiler' ? 'ride-charlie' : power === 'zap' ? 'none' : power
       )
     : base.powers;
   const choices: LongChoices = {
