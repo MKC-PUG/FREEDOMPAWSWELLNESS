@@ -1,117 +1,102 @@
 /**
- * SuperBud fly and land. First cut. Not locked.
- * He is alone over the lake. The picture drifts, then he lowers toward the shore.
- * The crowd of dogs is not in this cut. The forest still is not in this cut.
+ * SuperBud fly and land. Second cut. Not locked.
+ * Source: the founder's SuperBud FLYING movie, close pass only.
+ * That pass has a flag on the outer cape and other dogs below him.
+ * This cut stays on his face and chest: red cape, striped shirt, shield reading SuperBud.
+ * The flag wing and the other dogs stay outside the frame.
+ * He does not land. The side of the movie is a flag cape, so it is not in this cut.
  */
-import { mkdirSync, rmSync } from 'node:fs';
+import { mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 
 const root = new URL('..', import.meta.url).pathname;
+const srcDir = join(root, 'tmp/fly-src/late');
 const outDir = join(root, 'tmp/fly-land-frames');
-const clipDir = join(root, 'public/images/brand/clips');
 const W = 720;
 const H = 1280;
-const FRAMES = 156;
-const BG_W = 980;
 
-function fadeSvg(w, h) {
-  return Buffer.from(`<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-        <stop offset="0.2" stop-color="#fff" stop-opacity="1"/>
-        <stop offset="0.94" stop-color="#fff" stop-opacity="1"/>
-        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#g)"/>
-  </svg>`);
+const files = readdirSync(srcDir)
+  .filter((name) => /^f\d+\.jpg$/.test(name))
+  .sort();
+const first = 6;
+const last = 12;
+const hold = 8;
+
+function lerp(a, b, u) {
+  return a + (b - a) * u;
 }
 
-async function loadShot(file, sky, ground) {
-  const src = sharp(file);
-  const meta = await src.metadata();
-  const photoW = W;
-  const photoH = Math.round((meta.height * photoW) / meta.width);
-  const photo = await sharp(file).resize(photoW, photoH).ensureAlpha().png().toBuffer();
-  const faded = await sharp(photo)
-    .composite([{ input: fadeSvg(photoW, photoH), blend: 'dest-in' }])
-    .png()
-    .toBuffer();
-
-  const skyBand = await sharp(file)
-    .extract(sky)
-    .resize(BG_W, 760, { fit: 'fill' })
-    .blur(10)
-    .png()
-    .toBuffer();
-  const groundTile = await sharp(file).extract(ground).resize(BG_W, 190, { fit: 'fill' }).png().toBuffer();
-  const groundFlip = await sharp(groundTile).flip().png().toBuffer();
-  const groundBand = await sharp({
-    create: { width: BG_W, height: 760, channels: 3, background: '#6d7a4a' },
-  })
-    .composite([
-      { input: groundTile, top: 0, left: 0 },
-      { input: groundFlip, top: 190, left: 0 },
-      { input: groundTile, top: 380, left: 0 },
-      { input: groundFlip, top: 570, left: 0 },
-    ])
-    .blur(22)
-    .png()
-    .toBuffer();
-  const background = await sharp({
-    create: { width: BG_W, height: H, channels: 3, background: '#8aa0b0' },
-  })
-    .composite([
-      { input: skyBand, top: 0, left: 0 },
-      { input: groundBand, top: H - 760, left: 0 },
-    ])
-    .png()
-    .toBuffer();
-
-  return { faded, photoW, photoH, background };
-}
-
-function shotAt(frame) {
-  const u = frame / (FRAMES - 1);
-  const drift = u < 0.42 ? u / 0.42 : 1;
-  const drop = u < 0.38 ? 0 : (u - 0.38) / 0.62;
-  const ease = drop * drop * (3 - 2 * drop);
+function windowFor(index, count) {
+  const u = count <= 1 ? 0 : index / (count - 1);
+  const ease = u * u * (3 - 2 * u);
   return {
-    which: 'lake',
-    y: Math.round(150 + ease * 640),
-    pan: Math.round(drift * 200),
+    left: Math.round(lerp(520, 548, ease)),
+    width: Math.round(lerp(500, 478, ease)),
+    height: Math.round(lerp(640, 652, ease)),
   };
 }
 
-const lake = await loadShot(join(clipDir, 'superbud-fly-lake.jpg'), { left: 0, top: 0, width: 700, height: 110 }, {
-  left: 420,
-  top: 545,
-  width: 560,
-  height: 76,
-});
-
-const only = process.env.FRAME === undefined ? null : Number(process.env.FRAME);
-if (only === null) {
-  rmSync(outDir, { recursive: true, force: true });
-  mkdirSync(outDir, { recursive: true });
-} else {
-  mkdirSync(outDir, { recursive: true });
+function fadeMask(height, fadeH) {
+  const start = Math.max(0, (height - fadeH) / height);
+  return Buffer.from(`<svg width="${W}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="${start}" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+</svg>`);
 }
 
-for (let frame = 0; frame < FRAMES; frame += 1) {
-  if (only !== null && frame !== only) continue;
-  const shot = shotAt(frame);
-  const plate = lake;
-  const top = Math.max(0, Math.min(H - plate.photoH, shot.y));
-  const bgLeft = Math.max(0, Math.min(BG_W - W, shot.pan));
-  const bg = await sharp(plate.background).extract({ left: bgLeft, top: 0, width: W, height: H }).png().toBuffer();
-  await sharp(bg)
-    .composite([{ input: plate.faded, left: 0, top }])
+rmSync(outDir, { recursive: true, force: true });
+mkdirSync(outDir, { recursive: true });
+
+const chosen = files.slice(first - 1, last);
+const total = chosen.length * hold;
+let outIndex = 0;
+
+for (let index = 0; index < chosen.length; index += 1) {
+  const src = join(srcDir, chosen[index]);
+  const win = windowFor(index, chosen.length);
+  const meta = await sharp(src).metadata();
+  const left = Math.max(0, Math.min(win.left, meta.width - win.width));
+  const height = Math.min(win.height, meta.height);
+  const plateH = Math.round(height * (W / win.width));
+  const plate = await sharp(src)
+    .extract({ left, top: 0, width: win.width, height })
+    .resize(W, plateH)
     .png()
-    .toFile(join(outDir, `f${String(frame).padStart(3, '0')}.png`));
-  if (frame % 12 === 0) console.log('frame', frame);
+    .toBuffer();
+  const bg = await sharp(src)
+    .extract({ left: 900, top: 40, width: 360, height: 420 })
+    .resize(W, H, { fit: 'cover' })
+    .blur(42)
+    .modulate({ brightness: 0.9, saturation: 0.85 })
+    .png()
+    .toBuffer();
+  const faded = await sharp(plate)
+    .composite([{ input: fadeMask(plateH, 200), blend: 'dest-in' }])
+    .png()
+    .toBuffer();
+  const frame = await sharp(bg).composite([{ input: faded, top: 0, left: 0 }]).png().toBuffer();
+
+  for (let copy = 0; copy < hold; copy += 1) {
+    const t = total <= 1 ? 0 : outIndex / (total - 1);
+    const zoom = 1 + 0.05 * t;
+    const zw = Math.round(W / zoom);
+    const zh = Math.round(H / zoom);
+    const zx = Math.round((W - zw) / 2);
+    const zy = Math.round((H - zh) * 0.35);
+    await sharp(frame)
+      .extract({ left: zx, top: zy, width: zw, height: zh })
+      .resize(W, H)
+      .png()
+      .toFile(join(outDir, `f${String(outIndex).padStart(3, '0')}.png`));
+    outIndex += 1;
+  }
+  console.log(chosen[index], 'left', left);
 }
 
-console.log(outDir);
+console.log('frames', outIndex, outDir);
