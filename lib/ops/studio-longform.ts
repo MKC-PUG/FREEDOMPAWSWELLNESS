@@ -70,12 +70,11 @@ export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'fly-land',
     label: 'Fly and land',
-    start: 'SuperBud flying, close',
-    cover: 'He holds the flight in the red cape, shield reading SuperBud',
-    end: 'Still in the air. He does not land in this cut',
-    emptyNote:
-      'Locked. Close pass of the flying movie. Red cape, striped shirt, shield reads SuperBud. The flag side of that movie is not in this cut. Other dogs are not in the frame. He stays in the air. This cut can be replaced later.',
-    src: '/clips/fly-land.mp4',
+    start: 'SuperBud walking',
+    cover: 'He flies, then lands',
+    end: 'He walks again',
+    emptyNote: 'Locked. Walk, fly, land, then walk.',
+    src: '/clips/fly-land.mp4?v=2026-10-19',
     locked: true,
   },
   {
@@ -329,7 +328,7 @@ function powerCopy(id: PowerId, placeLabel: string): { beat: string; line: strin
     return {
       beat: 'Fly and land',
       line: 'I lift off, cross above the scene, and land before the lesson.',
-      clipLabel: 'Fly and land. Locked. Close pass. He stays in the air.',
+      clipLabel: 'Fly and land. Locked. Walk, fly, land, then walk.',
       place: 'sky',
     };
   }
