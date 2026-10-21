@@ -30,7 +30,7 @@ export type LongChoices = {
   powers: PowerId[];
 };
 
-export type ClipSlotId = 'roll-poof' | 'tornado' | 'fly-land' | 'rides';
+export type ClipSlotId = 'roll-poof' | 'tornado' | 'fly-land' | 'fly-land-walk' | 'rides';
 
 export type ClipSlot = {
   id: ClipSlotId;
@@ -43,7 +43,7 @@ export type ClipSlot = {
   locked?: boolean;
 };
 
-/** Approved action files land here. Shake and gold poof, Tornado twist, and SuperBud Jump Fly Land are locked. Ride Charlie is empty. */
+/** Approved action files land here. Shake and gold poof, Tornado twist, SuperBud Jump Fly Land, and the earlier Fly and land cut are locked. Ride Charlie is empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -75,6 +75,16 @@ export const CLIP_SLOTS: ClipSlot[] = [
     end: 'He lands',
     emptyNote: 'Locked. Three beats: jump, fly, and land. The background is in this cut.',
     src: '/clips/superbud-jump-fly-land.mp4?v=2026-10-21',
+    locked: true,
+  },
+  {
+    id: 'fly-land-walk',
+    label: 'Fly and land',
+    start: 'SuperBud walking',
+    cover: 'He flies, then lands',
+    end: 'He walks again',
+    emptyNote: 'Locked. Earlier cut. Walk, fly, land, then walk.',
+    src: '/clips/fly-land.mp4?v=2026-10-19',
     locked: true,
   },
   {
