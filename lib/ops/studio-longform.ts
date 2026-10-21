@@ -43,7 +43,7 @@ export type ClipSlot = {
   locked?: boolean;
 };
 
-/** Approved action files land here. Shake and gold poof, Tornado twist, and Fly and land are locked. Ride Charlie is empty. */
+/** Approved action files land here. Shake and gold poof, Tornado twist, and SuperBud Jump Fly Land are locked. Ride Charlie is empty. */
 export const CLIP_SLOTS: ClipSlot[] = [
   {
     id: 'roll-poof',
@@ -69,12 +69,12 @@ export const CLIP_SLOTS: ClipSlot[] = [
   },
   {
     id: 'fly-land',
-    label: 'Fly and land',
-    start: 'SuperBud walking',
-    cover: 'He flies, then lands',
-    end: 'He walks again',
-    emptyNote: 'Locked. Walk, fly, land, then walk.',
-    src: '/clips/fly-land.mp4?v=2026-10-19',
+    label: 'SuperBud Jump Fly Land',
+    start: 'He jumps from the boulder on the hill',
+    cover: 'He flies down toward the grass, trees, and lake',
+    end: 'He lands',
+    emptyNote: 'Locked. Three beats: jump, fly, and land. The background is in this cut.',
+    src: '/clips/superbud-jump-fly-land.mp4?v=2026-10-21',
     locked: true,
   },
   {
@@ -328,7 +328,7 @@ function powerCopy(id: PowerId, placeLabel: string): { beat: string; line: strin
     return {
       beat: 'Fly and land',
       line: 'I lift off, cross above the scene, and land before the lesson.',
-      clipLabel: 'Fly and land. Locked. Walk, fly, land, then walk.',
+      clipLabel: 'SuperBud Jump Fly Land. Locked. Three beats: jump, fly, and land.',
       place: 'sky',
     };
   }
