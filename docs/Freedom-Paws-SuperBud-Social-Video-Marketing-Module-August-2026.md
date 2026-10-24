@@ -94,6 +94,9 @@ From the PDF — **the attached / archived reference video is the single source 
 - SuperBud Nutrition Lab  
 - SuperBud Freedom Paws Wellness Adoption Network  
 - Seasonal / timely specials  
+- Promotional spots: Photo Booth, Freedom Paws ID, Adoption Network  
+
+Topic list, codes, CTAs, and do-not-say lines: [SuperBud Series Topic Catalog](./brand/SuperBud-Series-Topic-Catalog.md).
 
 ---
 
