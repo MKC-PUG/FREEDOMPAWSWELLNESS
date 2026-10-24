@@ -1,11 +1,14 @@
+# UPDATED 10/23/26
 # Freedom Paws Wellness
 # Master Business Plan, Pet Monitor Module, Pricing & 12–15 Week Launch Roadmap
 
+**Title:** UPDATED 10/23/26  
 **Document purpose:** Strategic plan for the “everything app” vision — US launch first, pet room monitoring module, hybrid protocol pricing, 5-year outlook, and week-by-week tasks to launch in 12–15 weeks.
 
-**Last updated:** May 30, 2026  
+**Last updated:** May 30, 2026 (body). Title stamp October 23, 2026.  
+**Status:** Historical. The operating plan as of October 23, 2026 is `docs/(UPDATED 10-23-26) Freedom-Paws-Master-Business-Plan-and-Roadmap.md` and `docs/(UPDATED 10-23-26) Freedom-Paws-5-Year-Financial-Model.csv`. Do not budget or schedule the launch from this May file.  
 **Project folder:** `freedompaws-app`  
-**Companion spreadsheet:** `docs/Freedom-Paws-5-Year-Financial-Model.csv` (open in Excel or Google Sheets)  
+**Companion spreadsheet:** `docs/(UPDATED 10-23-26) Freedom-Paws-5-Year-Financial-Model.csv` (rebased October 23, 2026)  
 **Related docs:** `Photo-Booth-Phase-1-Roadmap.md`, `PWA-Setup.md`, `Deploy-and-Brand-Protection.md`
 
 ---
