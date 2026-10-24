@@ -1,6 +1,6 @@
 import type { SocialPillarId, SocialPlatform } from '@/lib/ops/social-pillars';
 
-export type StudioSeat = 'fact' | 'bud' | 'echo' | 'forge' | 'lex';
+export type StudioSeat = 'fact' | 'bud' | 'echo' | 'lex';
 export type StudioKind = 'superbud_video' | 'general';
 export type StudioStatus =
   | 'research'
@@ -105,12 +105,15 @@ export const STUDIO_TOPICS: StudioTopic[] = [
 ];
 
 export const STUDIO_SEATS: { id: StudioSeat; label: string }[] = [
-  { id: 'fact', label: 'FACT' },
-  { id: 'bud', label: 'BUD' },
-  { id: 'echo', label: 'ECHO' },
-  { id: 'forge', label: 'FORGE' },
-  { id: 'lex', label: 'LEX' },
+  { id: 'fact', label: 'FACT · research' },
+  { id: 'bud', label: 'BUD · script' },
+  { id: 'echo', label: 'ECHO · social' },
+  { id: 'lex', label: 'LEX · counsel' },
 ];
+
+export function studioSeatLabel(seat: string): string {
+  return STUDIO_SEATS.find((item) => item.id === seat)?.label ?? seat.toUpperCase();
+}
 
 export const STUDIO_STATUS_LABEL: Record<StudioStatus, string> = {
   research: 'Research',

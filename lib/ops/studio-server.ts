@@ -147,7 +147,9 @@ export async function listStudioJobs(limit = 40): Promise<StudioJob[]> {
     }
     throw error;
   }
-  return (data ?? []).map((row) => mapJob(row as Record<string, unknown>));
+  return (data ?? [])
+    .filter((row) => (row as { seat?: string }).seat !== 'forge')
+    .map((row) => mapJob(row as Record<string, unknown>));
 }
 
 export async function countWaitingOnFounder(): Promise<number> {

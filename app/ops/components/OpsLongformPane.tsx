@@ -297,7 +297,7 @@ export default function OpsLongformPane({
             return (
               <li
                 key={slot.id}
-                className={`rounded-xl px-3 py-2 ${
+                className={`min-w-0 rounded-xl px-3 py-2 ${
                   slot.locked
                     ? 'border border-emerald-500/30 bg-white/[0.03]'
                     : 'border border-dashed border-white/20'
@@ -316,13 +316,15 @@ export default function OpsLongformPane({
                   </span>
                 </div>
                 {slot.src ? (
-                  <video
-                    className="mt-2 w-full rounded-lg bg-black"
-                    controls
-                    playsInline
-                    preload="metadata"
-                    src={slot.src}
-                  />
+                  <div className="mt-2 w-[12.5%] min-w-0 overflow-hidden">
+                    <video
+                      className="block h-auto w-full min-w-0 rounded-lg bg-black"
+                      controls
+                      playsInline
+                      preload="metadata"
+                      src={slot.src}
+                    />
+                  </div>
                 ) : null}
                 <p className={`mt-1 text-[11px] ${slot.locked ? 'text-white/55' : 'text-amber-200'}`}>
                   {slot.emptyNote}

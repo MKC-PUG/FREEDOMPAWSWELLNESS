@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import {
   SOCIAL_PLATFORMS,
   STUDIO_SEATS,
+  studioSeatLabel,
   STUDIO_STATUS_LABEL,
   STUDIO_TOPICS,
   type StudioJob,
@@ -675,7 +676,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
       <OpsCard>
         <h3 className="text-sm font-bold">New agent job</h3>
         <p className="mt-1 text-xs text-white/50">
-          FACT, BUD, ECHO, FORGE, or LEX. The row holds a paste-ready prompt. It does not render video.
+          FACT · research, BUD · script, ECHO · social, or LEX · counsel. The row holds a paste-ready prompt. It does not render video.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {STUDIO_SEATS.map((item) => (
@@ -740,7 +741,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-bold text-[#F5C242]">{job.seat.toUpperCase()}</span>
+                  <span className="text-xs font-bold text-[#F5C242]">{studioSeatLabel(job.seat)}</span>
                   <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold ${statusClass(job.status)}`}>
                     {STUDIO_STATUS_LABEL[job.status]}
                   </span>
