@@ -18,11 +18,17 @@ export async function PATCH(request: NextRequest) {
   if (typeof body.id !== 'string' || body.id.length < 3) {
     return NextResponse.json({ success: false, error: 'Missing card.' }, { status: 400 });
   }
+  const id = body.id;
 
   try {
     const shelter = await getShelterDashboardStats();
-    const cards = await saveCeoCard(user!.id, shelter.pendingReviews, body);
-    await writeAuditLog(user!.id, 'ops.settings.update', 'ceo_inbox', body.id, {
+    const cards = await saveCeoCard(user!.id, shelter.pendingReviews, {
+      id,
+      state: body.state,
+      note: body.note,
+      draft: body.draft,
+    });
+    await writeAuditLog(user!.id, 'ops.settings.update', 'ceo_inbox', id, {
       state: body.state ?? null,
     });
     return NextResponse.json({ success: true, cards });
