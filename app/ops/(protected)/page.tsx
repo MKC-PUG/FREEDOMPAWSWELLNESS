@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import { getCeoDesk } from '@/lib/ops/ceo-desk-server';
 import { getOpsOverview } from '@/lib/ops/stats-server';
 import { getServerUser } from '@/lib/supabase/server';
 import { OPS_QUICK_LINKS } from '@/lib/ops/nav';
+import OpsCeoDesk from '../components/OpsCeoDesk';
 import {
   OpsCard,
   OpsExternalLink,
@@ -14,6 +16,7 @@ import {
 export default async function OpsHomePage() {
   const user = await getServerUser();
   const overview = await getOpsOverview(user?.email);
+  const ceoCards = await getCeoDesk(overview.shelterId.pendingReviews);
 
   const marketingStatus: 'active' | 'dormant' | 'blocked' = overview.marketing.emergencyStop
     ? 'blocked'
@@ -24,7 +27,7 @@ export default async function OpsHomePage() {
   return (
     <OpsPageShell
       title="Command Center"
-      subtitle={`Signed in as ${overview.userEmail ?? 'FP ops'}. One console for adoption, marketing, ID, wellness, product, and infrastructure.`}
+      subtitle={`Signed in as ${overview.userEmail ?? 'FP ops'}. Five boxes first. Studio stays the SuperBud factory. Nothing on this page sends.`}
       badge={<OpsStatusBadge status={marketingStatus} />}
     >
       {overview.marketing.emergencyStop ? (
@@ -33,6 +36,8 @@ export default async function OpsHomePage() {
           safe default.
         </div>
       ) : null}
+
+      <OpsCeoDesk initialCards={ceoCards} emergencyStop={overview.marketing.emergencyStop} />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         <OpsKpiCard
