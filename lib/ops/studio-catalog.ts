@@ -140,10 +140,20 @@ export function getStudioTopic(code: string): StudioTopic | undefined {
   return STUDIO_TOPICS.find((topic) => topic.code === code);
 }
 
-export const SOCIAL_PLATFORMS: SocialPlatform[] = ['instagram', 'tiktok', 'youtube', 'facebook'];
+export const SOCIAL_PLATFORMS: SocialPlatform[] = ['instagram', 'tiktok', 'youtube', 'facebook', 'x'];
 
 export function isSocialPlatform(value: string): value is SocialPlatform {
-  return value === 'instagram' || value === 'tiktok' || value === 'youtube' || value === 'facebook';
+  return (
+    value === 'instagram' ||
+    value === 'tiktok' ||
+    value === 'youtube' ||
+    value === 'facebook' ||
+    value === 'x'
+  );
+}
+
+export function socialPlatformLabel(platform: string): string {
+  return platform === 'x' ? 'X' : platform;
 }
 
 /** One render fans out to every network. A single name limits the queue to that network. */

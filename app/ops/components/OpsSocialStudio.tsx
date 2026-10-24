@@ -13,7 +13,7 @@ import {
 import type { SocialPost } from '@/lib/ops/social-server';
 import { OpsCard, OpsKpiCard, OpsSection, OpsStatusBadge } from './OpsUi';
 
-const PLATFORMS: SocialPlatform[] = ['instagram', 'tiktok', 'youtube', 'facebook'];
+const PLATFORMS: SocialPlatform[] = ['instagram', 'tiktok', 'youtube', 'facebook', 'x'];
 
 function toBadge(
   status: SocialPost['status']
@@ -219,7 +219,7 @@ export default function OpsSocialStudio({
                     : 'border-white/20 text-white/80'
                 }`}
               >
-                {p}
+                {p === 'x' ? 'X' : p}
               </button>
             ))}
           </div>

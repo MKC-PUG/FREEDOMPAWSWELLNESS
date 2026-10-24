@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   SOCIAL_PLATFORMS,
+  socialPlatformLabel,
   STUDIO_SEATS,
   studioSeatLabel,
   STUDIO_STATUS_LABEL,
@@ -465,7 +466,7 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               platform === item ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]' : 'border-white/20 text-white/80'
             }`}
           >
-            {item} only
+            {socialPlatformLabel(item)} only
           </button>
         ))}
       </div>

@@ -125,7 +125,13 @@ export function pillarOrDefault(value: string | null | undefined): SocialPillarI
 }
 
 export function platformOrDefault(value: string | null | undefined): SocialPlatform {
-  if (value === 'instagram' || value === 'tiktok' || value === 'youtube' || value === 'facebook') {
+  if (
+    value === 'instagram' ||
+    value === 'tiktok' ||
+    value === 'youtube' ||
+    value === 'facebook' ||
+    value === 'x'
+  ) {
     return value;
   }
   return 'instagram';

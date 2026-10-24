@@ -339,12 +339,14 @@ export async function sendSocialPostToBuffer(postId: string): Promise<SocialPost
     source: 'freedom-paws-ops',
     postId: post.id,
     platform: post.platform,
+    bufferService: post.platform === 'x' ? 'twitter' : post.platform,
     title: post.title,
     caption: post.caption,
     ctaUrl: post.ctaUrl,
     hashtags: post.hashtags,
     pillar: post.pillar,
     mascot: 'SuperBud',
+    account: post.platform === 'x' ? 'FreedomPawsWellness' : null,
   };
 
   if (!webhook) {

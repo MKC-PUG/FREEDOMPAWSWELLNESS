@@ -3,7 +3,7 @@
  * CTA paths are app-relative; full URLs use NEXT_PUBLIC_APP_URL when present.
  */
 
-export type SocialPlatform = 'instagram' | 'tiktok' | 'youtube' | 'facebook';
+export type SocialPlatform = 'instagram' | 'tiktok' | 'youtube' | 'facebook' | 'x';
 
 export type SocialPostStatus =
   | 'draft'
@@ -61,7 +61,7 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
     label: 'Adoption Network · TN',
     description: 'Adoptable dogs and partner shelters in the Tennessee pilot.',
     ctaPath: '/adopt/tn',
-    defaultPlatforms: ['instagram', 'tiktok', 'facebook'],
+    defaultPlatforms: ['instagram', 'tiktok', 'facebook', 'x'],
     hookIdeas: [
       'SuperBud introduces a TN shelter partner looking for forever homes.',
       'Meet this week’s adoptable dogs — tap to browse live listings.',
@@ -73,7 +73,7 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
     label: 'Freedom Paws ID',
     description: 'Biometric enroll, found-dog intake, and reunion tools.',
     ctaPath: '/id',
-    defaultPlatforms: ['instagram', 'tiktok', 'youtube'],
+    defaultPlatforms: ['instagram', 'tiktok', 'youtube', 'x'],
     hookIdeas: [
       'SuperBud explains why a Freedom Paws ID beats a tag that falls off.',
       '30-second enroll teaser → full wizard in the app.',
@@ -85,7 +85,7 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
     label: 'ViT Diagnostics',
     description: 'Visual wellness scans — education first, not a diagnosis.',
     ctaPath: '/diagnostics',
-    defaultPlatforms: ['instagram', 'tiktok', 'youtube'],
+    defaultPlatforms: ['instagram', 'tiktok', 'youtube', 'x'],
     hookIdeas: [
       'SuperBud demos a calm scan flow and wellness-first next steps.',
       'See → learn → protocol — always “not a veterinary diagnosis.”',
@@ -97,7 +97,7 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
     label: 'My Pets Vault',
     description: 'Records, notes, and history for every pet profile.',
     ctaPath: '/mypets',
-    defaultPlatforms: ['instagram', 'facebook'],
+    defaultPlatforms: ['instagram', 'facebook', 'x'],
     hookIdeas: [
       'Keep vaccines and daily notes where SuperBud can help you stay organized.',
       'One vault per pet — ready for travel, sitters, and vets.',
@@ -108,7 +108,7 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
     label: 'Photo Booth',
     description: 'Fun portraits, SuperBud scenes, shareable keepsakes.',
     ctaPath: '/photobooth',
-    defaultPlatforms: ['instagram', 'tiktok'],
+    defaultPlatforms: ['instagram', 'tiktok', 'x'],
     hookIdeas: [
       'Drop your dog into a SuperBud hero scene in Photo Booth.',
       'Holiday props + wellness warrior backgrounds — share with friends.',
@@ -119,7 +119,7 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
     label: 'Wellness Partners',
     description: 'Insurance & telehealth education with FP standards.',
     ctaPath: '/wellness',
-    defaultPlatforms: ['instagram', 'facebook', 'youtube'],
+    defaultPlatforms: ['instagram', 'facebook', 'youtube', 'x'],
     hookIdeas: [
       'SuperBud walks through wellness-first partner standards.',
       'Lost-dog + urgent-care coverage education (disclosed affiliates).',
@@ -130,7 +130,7 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
     label: 'Token Shop',
     description: 'Protocol unlocks and shop CTAs.',
     ctaPath: '/token-shop',
-    defaultPlatforms: ['instagram', 'tiktok'],
+    defaultPlatforms: ['instagram', 'tiktok', 'x'],
     hookIdeas: [
       'Unlock a SuperBud protocol pack — wellness rituals at home.',
     ],
@@ -140,7 +140,7 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
     label: 'Mission & Veterans',
     description: 'Buddy’s legacy, shelters, and community give-back.',
     ctaPath: '/waitlist',
-    defaultPlatforms: ['instagram', 'facebook', 'youtube'],
+    defaultPlatforms: ['instagram', 'facebook', 'youtube', 'x'],
     hookIdeas: [
       'Why SuperBud exists — honor Buddy, help shelters, serve veterans.',
       'Join the founding waitlist for Freedom Paws Wellness.',
