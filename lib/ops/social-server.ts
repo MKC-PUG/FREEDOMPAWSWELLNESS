@@ -30,6 +30,7 @@ export type SocialPost = {
   title: string;
   caption: string;
   ctaUrl: string;
+  videoUrl: string | null;
   hashtags: string[];
   script: string | null;
   storyboard: StoryboardFrame[];
@@ -65,6 +66,7 @@ function mapRow(row: Record<string, unknown>): SocialPost {
     title: row.title as string,
     caption: (row.caption as string) ?? '',
     ctaUrl: (row.cta_url as string) ?? '',
+    videoUrl: (row.video_url as string) ?? null,
     hashtags: (row.hashtags as string[]) ?? [],
     script: (row.script as string) ?? null,
     storyboard: (row.storyboard as StoryboardFrame[]) ?? [],
@@ -215,6 +217,7 @@ export async function updateSocialPost(
     status: SocialPostStatus;
     title: string;
     caption: string;
+    videoUrl: string | null;
     script: string;
     storyboard: StoryboardFrame[];
     productionChecklist: ChecklistItem[];
@@ -232,6 +235,7 @@ export async function updateSocialPost(
   if (patch.status !== undefined) row.status = patch.status;
   if (patch.title !== undefined) row.title = patch.title;
   if (patch.caption !== undefined) row.caption = patch.caption;
+  if (patch.videoUrl !== undefined) row.video_url = normalizePublicVideoUrl(patch.videoUrl);
   if (patch.script !== undefined) row.script = patch.script;
   if (patch.storyboard !== undefined) row.storyboard = patch.storyboard;
   if (patch.productionChecklist !== undefined) row.production_checklist = patch.productionChecklist;
@@ -323,11 +327,31 @@ export async function generateSocialDraft(input: {
   });
 }
 
+/** Stable public https address. Buffer fetches the file when the post publishes. */
+export function normalizePublicVideoUrl(value: string | null): string | null {
+  const trimmed = (value ?? '').trim();
+  if (!trimmed) return null;
+  let parsed: URL;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
+    throw new Error('Video link must be a full https:// address.');
+  }
+  if (parsed.protocol !== 'https:') {
+    throw new Error('Video link must start with https://.');
+  }
+  return parsed.toString();
+}
+
 export async function sendSocialPostToBuffer(postId: string): Promise<SocialPost> {
   const post = await getSocialPost(postId);
   if (!post) throw new Error('Post not found');
   if (post.status !== 'approved' && post.status !== 'scheduled') {
     throw new Error('Approve the post before sending to Buffer.');
+  }
+  const videoUrl = post.videoUrl ? normalizePublicVideoUrl(post.videoUrl) : null;
+  if (!videoUrl) {
+    throw new Error('Save the public video link on this post before sending to Buffer.');
   }
 
   const webhook =
@@ -342,6 +366,7 @@ export async function sendSocialPostToBuffer(postId: string): Promise<SocialPost
     bufferService: post.platform === 'x' ? 'twitter' : post.platform,
     title: post.title,
     caption: post.caption,
+    videoUrl,
     ctaUrl: post.ctaUrl,
     hashtags: post.hashtags,
     pillar: post.pillar,

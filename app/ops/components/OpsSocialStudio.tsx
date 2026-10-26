@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   PRODUCTION_TOOLS,
@@ -54,11 +54,16 @@ export default function OpsSocialStudio({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(tableError ?? null);
+  const [videoDraft, setVideoDraft] = useState('');
 
   const selected = useMemo(
     () => posts.find((p) => p.id === selectedId) ?? null,
     [posts, selectedId]
   );
+
+  useEffect(() => {
+    setVideoDraft(selected?.videoUrl ?? '');
+  }, [selected?.id, selected?.videoUrl]);
 
   async function run(
     label: string,
@@ -115,6 +120,18 @@ export default function OpsSocialStudio({
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: selectedId, action }),
+      });
+      return res.json();
+    });
+  }
+
+  function saveVideoLink() {
+    if (!selectedId) return;
+    return run('Save video link', async () => {
+      const res = await fetch('/api/ops/social/posts', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: selectedId, action: 'update', videoUrl: videoDraft }),
       });
       return res.json();
     });
@@ -328,6 +345,28 @@ export default function OpsSocialStudio({
                     </ol>
                   </div>
                 ) : null}
+                <div className="mt-4">
+                  <p className="text-xs uppercase tracking-wide text-white/45 mb-1">Video link</p>
+                  <input
+                    type="url"
+                    value={videoDraft}
+                    disabled={busy}
+                    placeholder="https://… finished CapCut mp4"
+                    onChange={(e) => setVideoDraft(e.target.value)}
+                    className="w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-xs text-white"
+                  />
+                  <p className="mt-1 text-[11px] text-white/45">
+                    Public https link. Buffer downloads this file when the post publishes.
+                  </p>
+                  <button
+                    type="button"
+                    disabled={busy || videoDraft.trim() === (selected.videoUrl ?? '')}
+                    onClick={() => void saveVideoLink()}
+                    className="mt-2 rounded-lg border border-[#F5C242]/50 px-3 py-1.5 text-xs font-semibold text-[#F5C242] disabled:opacity-40"
+                  >
+                    Save video link
+                  </button>
+                </div>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <button
                     type="button"
@@ -349,6 +388,7 @@ export default function OpsSocialStudio({
                     type="button"
                     disabled={
                       busy ||
+                      !selected.videoUrl ||
                       (selected.status !== 'approved' && selected.status !== 'scheduled')
                     }
                     onClick={() => void sendBuffer()}

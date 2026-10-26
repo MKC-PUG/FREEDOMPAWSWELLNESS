@@ -2,6 +2,7 @@ import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import {
   createSocialPost,
+  getSocialPost,
   sendSocialPostToBuffer,
   updateSocialPost,
 } from '@/lib/ops/social-server';
@@ -543,6 +544,12 @@ export async function queueSocialPost(id: string, userId: string): Promise<Studi
   }
 
   for (const postId of postIds) {
+    const post = await getSocialPost(postId);
+    if (!post?.videoUrl) {
+      throw new Error(
+        'Save the public video link on the SuperBud page, then use Send to Buffer.'
+      );
+    }
     await sendSocialPostToBuffer(postId);
   }
 

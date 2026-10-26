@@ -91,6 +91,7 @@ export async function PATCH(request: NextRequest) {
     action?: 'approve' | 'needs_approval' | 'archive' | 'update';
     title?: string;
     caption?: string;
+    videoUrl?: string | null;
     script?: string;
   };
   try {
@@ -120,6 +121,7 @@ export async function PATCH(request: NextRequest) {
       post = await updateSocialPost(body.id, {
         title: body.title,
         caption: body.caption,
+        videoUrl: body.videoUrl,
         script: body.script,
       });
     }
@@ -131,6 +133,16 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ success: true, post });
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Update failed';
-    return NextResponse.json({ success: false, error: msg }, { status: 500 });
+    if (msg.includes('video_url') || msg.includes('schema cache')) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            'Video link column is missing. Run supabase/migrations/020_social_post_video_url.sql in the Supabase SQL Editor.',
+        },
+        { status: 503 }
+      );
+    }
+    return NextResponse.json({ success: false, error: msg }, { status: 400 });
   }
 }
