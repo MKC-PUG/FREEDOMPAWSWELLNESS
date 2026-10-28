@@ -9,7 +9,7 @@ import {
 } from '@/lib/ops/studio-catalog';
 
 const L5_LINE =
-  'L5 is OPEN until Bass written clearance. No shop link, no hard give-back number, no reunion rate, no diagnosis.';
+  'L5 posting gate cleared October 28, 2026. Bass October 26 Terms and Privacy are final for the Tennessee pilot, not approved. No shop link, no hard give-back number, no reunion rate, no diagnosis.';
 
 export function factPrompt(topic: StudioTopic): string {
   return [

@@ -8,6 +8,12 @@ import { protocols } from '@/app/protocols/protocols';
 import { protocolDisplayName } from '@/lib/ai/symptom-lexicon';
 import type { AnalyzeApiResponse, ApiProtocolResult } from '@/lib/ai/types';
 import { vitResultToWellnessContext } from '@/lib/wellness/partners';
+import {
+  DIAGNOSTICS_GREEN_BODY,
+  DIAGNOSTICS_GREEN_TITLE,
+  DIAGNOSTICS_RED_DEFAULT,
+  DIAGNOSTICS_RED_TITLE,
+} from '@/lib/legal/diagnostics-disclaimer';
 
 type Props = {
   result: AnalyzeApiResponse;
@@ -161,27 +167,16 @@ export default function ViTResultsPanel({
       )}
 
       <div className="rounded-2xl border-2 border-green-500/60 bg-green-950/45 p-5">
-        <p className="text-green-300 font-bold text-sm">🛡 Educational tool only</p>
-        <p className="text-green-100/90 text-sm mt-2 leading-relaxed">
-          This wellness analysis is for education only — it is not a veterinary diagnosis and is
-          not a substitute for licensed veterinary care. Always consult a licensed veterinarian
-          for medical advice about your pet.
-        </p>
+        <p className="text-green-300 font-bold text-sm">{DIAGNOSTICS_GREEN_TITLE}</p>
+        <p className="text-green-100/90 text-sm mt-2 leading-relaxed">{DIAGNOSTICS_GREEN_BODY}</p>
       </div>
 
       {result.vetUrgent && (
         <div className="rounded-2xl border-2 border-red-500 bg-red-950/50 p-5">
-          <p className="text-red-300 font-bold text-sm">⚠️ Veterinary attention recommended</p>
+          <p className="text-red-300 font-bold text-sm">{DIAGNOSTICS_RED_TITLE}</p>
           <p className="text-red-200/90 text-sm mt-2 leading-relaxed">
-            {result.vetUrgentReason ||
-              'Visible or reported signs may need prompt professional evaluation.'}
+            {result.vetUrgentReason || DIAGNOSTICS_RED_DEFAULT}
           </p>
-          {(result.urgentCongruency ?? 0) > 0 && (
-            <p className="text-red-200/70 text-xs mt-2">
-              Severe indicator congruency: {result.urgentCongruency}%
-              {result.matchedSevereCondition ? ` — ${result.matchedSevereCondition}` : ''}
-            </p>
-          )}
         </div>
       )}
 

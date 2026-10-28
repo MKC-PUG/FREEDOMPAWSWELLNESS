@@ -616,7 +616,8 @@ export default function EnrollWizardClient({
                 className="mt-1 h-5 w-5 shrink-0 rounded border-white/30"
               />
               <span>
-                I agree to biometric capture and storage (v{BIOMETRIC_CONSENT_VERSION}).
+                I have read and agreed to Freedom Paws’ Privacy Policy and Terms of Use. Consent
+                version {BIOMETRIC_CONSENT_VERSION}.
               </span>
             </label>
             <PrimaryButton

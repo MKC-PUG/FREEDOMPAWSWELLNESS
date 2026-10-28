@@ -5,6 +5,7 @@ import type { ApprovedAlias } from '../symptom-feedback-store';
 import { AnalysisResponse } from './types';
 import { assessUrgentNeed } from './urgent-assessment';
 import { analyzeVisionFrames } from './vision-analyze';
+import { DIAGNOSTICS_FOOTER } from '@/lib/legal/diagnostics-disclaimer';
 
 export type VitMediaInput = {
   symptoms?: string;
@@ -147,7 +148,7 @@ export async function analyzeDogMedia(
           : '',
       ].filter(Boolean),
       disclaimer:
-        'Educational tool only. Not a diagnosis or substitute for licensed veterinary care. Always consult your veterinarian.',
+        DIAGNOSTICS_FOOTER,
       analyzedAt: new Date().toISOString(),
       vetUrgent,
       vetUrgentReason,

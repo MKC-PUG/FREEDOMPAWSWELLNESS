@@ -64,10 +64,11 @@ export default function OpsCeoDesk({ initialCards, emergencyStop }: Props) {
   return (
     <div className="mb-10">
       <OpsSection title="Today">
-        <div className="mb-4 rounded-2xl border border-amber-500/40 bg-amber-950/30 px-4 py-3 text-sm text-amber-50">
-          <strong>L5 is open.</strong> Reply to Paula and Roy went out October 24. Agents draft.
-          You send, pay, and publish. This page does not send email, place a call, or submit a
-          grant.
+        <div className="mb-4 rounded-2xl border border-emerald-500/40 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-50">
+          <strong>L5 posting gate cleared October 28, 2026.</strong> Bass October 26 Terms and
+          Privacy are final for the Tennessee pilot. They are not an approval letter. Agents
+          draft. You send, pay, and publish. This page does not send email, place a call, submit
+          a grant, or paste the Terms into the app.
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           <Strip label="Five boxes still open" value={String(openPriority)} />

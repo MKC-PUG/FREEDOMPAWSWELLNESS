@@ -8,10 +8,6 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <LegalPageShell
-      kind="terms"
-      title="Terms of Use"
-      intro="By using Freedom Paws Wellness (app.freedompawsinc.com), you agree to these terms. The platform is wellness-first education — not a substitute for licensed veterinary care."
-    />
+    <LegalPageShell kind="terms" />
   );
 }

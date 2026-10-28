@@ -1,5 +1,10 @@
 'use client';
 
+import {
+  DIAGNOSTICS_LANDING,
+  DIAGNOSTICS_LANDING_URGENT,
+} from '@/lib/legal/diagnostics-disclaimer';
+
 const STEPS = [
   {
     n: '1',
@@ -40,8 +45,7 @@ export default function ViTHowItWorks() {
         <p className="text-sm text-white/75 leading-relaxed pt-4">
           <strong className="text-white">ViT</strong> combines what you tell us with what we see in
           your photo or video — then maps signs to Freedom Paws{' '}
-          <strong className="text-white">holistic wellness protocols</strong>. This is educational
-          guidance only, not a veterinary diagnosis.
+          <strong className="text-white">holistic wellness protocols</strong>. {DIAGNOSTICS_LANDING}
         </p>
 
         <div className="grid gap-3 sm:grid-cols-3">
@@ -96,8 +100,7 @@ export default function ViTHowItWorks() {
         </div>
 
         <p className="text-[10px] text-white/40 leading-relaxed border-t border-white/10 pt-3">
-          Urgent signs (pale or blue gums, collapse, severe breathing trouble) may show a veterinary
-          attention banner. Always consult your licensed veterinarian for diagnosis and treatment.
+          {DIAGNOSTICS_LANDING_URGENT}
         </p>
       </div>
     </details>

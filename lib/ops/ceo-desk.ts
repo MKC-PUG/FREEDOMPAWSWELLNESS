@@ -51,14 +51,14 @@ function seed(partial: Omit<CeoCardSeed, 'seatLabel'> & { seat: CeoSeat }): CeoC
 export function ceoCardSeeds(pendingReviews: number): CeoCardSeed[] {
   return [
     seed({
-      id: 'orion-l5',
+      id: 'orion-l5-cleared',
       seat: 'orion',
       lane: 'priority',
-      title: 'Wait on Bass. Do not send another counsel email today.',
+      title: 'L5 posting gate is cleared. Do not send another counsel email.',
       draft:
-        'The October 24 reply to Paula Alvarez and Roy Wyman already asks for the Terms without the leftover arbitration notice and for written “approved for TN pilot.” Silence is not clearance. Send a short status note only if a silence date you set has already passed.',
-      doNot: 'Do not post Terms, flip public mode, or treat a polite reply as L5.',
-      doneWhen: 'You left the thread alone today, or you saved a real clearance PDF.',
+        'October 28, 2026. The October 26 Terms and Privacy are posted. Phone (629) 206-4430. The 10% give-back sentence is off the Terms page. The October 14 biometric consent, diagnostics disclaimer, and DPA outline were already cleared and are in place. Bass will say “final” for the Tennessee pilot. Bass will not say “approved.” You will say when the EIN is opened and the bank account is open.',
+      doNot: 'Do not call the email an approval. Do not send shelter Email 1 from this card. Do not start selling from this card.',
+      doneWhen: 'The October 26 clerk note is the record. You did not send a follow-up today.',
       href: null,
       hrefLabel: null,
       readyLabel: 'I’ll wait',
@@ -69,11 +69,11 @@ export function ceoCardSeeds(pendingReviews: number): CeoCardSeed[] {
       id: 'orion-entity',
       seat: 'orion',
       lane: 'priority',
-      title: 'Mail the name correction and sign the operating agreement.',
+      title: 'Sign the operating agreement. The name correction is filed.',
       draft:
-        'The Articles still show the prior last name Slumpff. Mail the Wyoming Statement of Correction to Michael Kevin Corey ($60) and keep a copy. Sign the operating agreement. The EIN may stay blank. Log founder advances: Bass $4,000 paid September 11, Framer, Wyoming fees, the registered agent, and the correction when it is mailed.',
-      doNot: 'Do not open an EIN or a company bank in this step.',
-      doneWhen: 'The correction is in the mail and the signed agreement is in the Legal folder.',
+        'Wyoming filed the Statement of Correction on October 9, 2026. The organizer name is Michael K. Corey. Receipt 005505671 records the $60 (check or money order 1303). Original ID 2026-002079066. Amendment ID 2026-006979381. The copy is in docs/legal/wy-sos/. Sign the operating agreement. The EIN may stay blank.',
+      doNot: 'Do not open an EIN or a company bank in this step. Do not mail a second correction.',
+      doneWhen: 'The signed operating agreement is in the Legal folder. The name correction is already filed.',
       href: null,
       hrefLabel: null,
       readyLabel: 'I’ll do this today',
@@ -86,7 +86,7 @@ export function ceoCardSeeds(pendingReviews: number): CeoCardSeed[] {
       lane: 'priority',
       title: 'Queue one educational SuperBud piece in Studio.',
       draft:
-        'Open Studio and queue one topic from the locked list. The CTA is watch, share, waitlist, the booth, ViT, or enroll. Target while L5 is open: about 4–7 Shorts a week. Buffer receives a draft only after you queue the post.',
+        'Open Studio and queue one topic from the locked list. The CTA is watch, share, waitlist, the booth, ViT, or enroll. Target about 4–7 Shorts a week. Buffer receives a draft only after you queue the post.',
       doNot: 'No shop, no affiliate link, no reunion rate, no diagnosis, no hard give-back percent.',
       doneWhen: 'One Studio job is queued, or you marked today as a rest day in the note.',
       href: '/ops/desk',
@@ -132,13 +132,13 @@ export function ceoCardSeeds(pendingReviews: number): CeoCardSeed[] {
       lane: 'overflow',
       title: 'Tennessee Email 1 stays HOLD.',
       draft:
-        'Six shelter drafts already live in docs/marketing/outbox/tn-pilot/. Each stays marked HOLD FOR L5. Do not personalize a send today. A call script can wait in the Calls card. No match-rate promise and no claim that Freedom Paws is the shelter or a government license.',
-      doNot: 'Do not send Email 1. Written TN-pilot approval is still open.',
+        'Six shelter drafts already live in docs/marketing/outbox/tn-pilot/. The posting gate is cleared. Scaled Email 1 is still not a send. Do not personalize a send today. A call script can wait in the Calls card. No match-rate promise and no claim that Freedom Paws is the shelter or a government license.',
+      doNot: 'Do not send Email 1. Posting clearance is not a partner send.',
       doneWhen: 'The card is held. Nothing left this building.',
       href: '/ops/adoption',
       hrefLabel: 'Adoption partners',
       readyLabel: null,
-      blockedReason: 'L5 is open. Shelter email cannot be marked ready to send.',
+      blockedReason: 'Scaled shelter Email 1 stays held. Posting clearance does not send it.',
       noteLabel: 'Your note',
     }),
     seed({
@@ -147,7 +147,7 @@ export function ceoCardSeeds(pendingReviews: number): CeoCardSeed[] {
       lane: 'overflow',
       title: 'Script for (629) 206-4430. This desk does not dial.',
       draft:
-        'Freedom Paws Wellness, this is Michael.\n\nFound dog: a person reviews the report before anyone contacts an owner. Do not confirm a match on the call.\n\nHealth question: this is general education. Their veterinarian decides.\n\nShelter: Email 1 is on hold until counsel clears the Tennessee pilot. Take a name and a time to talk after that.\n\nDo not quote a reunion rate, a give-back percent, or a shop offer.',
+        'Freedom Paws Wellness, this is Michael.\n\nFound dog: a person reviews the report before anyone contacts an owner. Do not confirm a match on the call.\n\nHealth question: this is general education. Their veterinarian decides.\n\nShelter: take a name and a time. Do not send Email 1 from this call.\n\nDo not quote a reunion rate, a give-back percent, or a shop offer.',
       doNot: 'Do not place the call from this page. Do not promise a reunion.',
       doneWhen: 'You used the script on a live call, or no call came in.',
       href: null,
@@ -162,13 +162,13 @@ export function ceoCardSeeds(pendingReviews: number): CeoCardSeed[] {
       lane: 'overflow',
       title: 'Grant narrative stays a draft. Do not submit.',
       draft:
-        'Petco Love, Maddie’s Fund, and ASPCA stay dark until L5 is saved and one partner listing is live. The July 2026 note said XRPL grant applications were closed — check the site before treating any draft as current.\n\nWhen the gate opens, the story is the Tennessee pilot, phone-first ID with a human review, and wellness education that is not a diagnosis. No welfare-grant fiction.',
+        'Petco Love, Maddie’s Fund, and ASPCA stay dark until one partner listing is live. The posting gate is cleared. That is not a submission. The July 2026 note said XRPL grant applications were closed — check the site before treating any draft as current.\n\nThe story, when you do write it, is the Tennessee pilot, phone-first ID with a human review, and wellness education that is not a diagnosis. No welfare-grant fiction.',
       doNot: 'Do not submit an application from this card.',
       doneWhen: 'The narrative is accepted as a hold file, not an application.',
       href: null,
       hrefLabel: null,
       readyLabel: null,
-      blockedReason: 'L5 is open and there is no live partner listing. Submit stays off.',
+      blockedReason: 'No live partner listing. Submit stays off. Posting clearance is not a grant filing.',
       noteLabel: 'Your note',
     }),
     seed({
