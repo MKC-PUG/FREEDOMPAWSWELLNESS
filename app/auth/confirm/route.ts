@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   const origin = request.nextUrl.origin;
 
   if (!tokenHash && !code) {
-    return NextResponse.redirect(loginUrlWithError(origin, next));
+    return NextResponse.redirect(loginUrlWithError(origin, safeNextPath(next)));
   }
 
   const action = escapeHtml(`${request.nextUrl.pathname}${request.nextUrl.search}`);
