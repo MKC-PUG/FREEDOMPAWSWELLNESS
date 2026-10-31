@@ -69,11 +69,19 @@ export default function LoginClient({ nextPath, configured, authError }: Props) 
 
     try {
       const supabase = createSupabaseBrowserClient();
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        email: email.trim(),
-        token: code,
-        type: 'email',
-      });
+      let verifyError: { message: string } | null = null;
+      for (const otpType of ['magiclink', 'email'] as const) {
+        const result = await supabase.auth.verifyOtp({
+          email: email.trim(),
+          token: code,
+          type: otpType,
+        });
+        if (!result.error) {
+          verifyError = null;
+          break;
+        }
+        verifyError = result.error;
+      }
 
       if (verifyError) {
         setError(verifyError.message);
@@ -116,8 +124,8 @@ export default function LoginClient({ nextPath, configured, authError }: Props) 
             <div className="rounded-2xl border border-emerald-500/40 bg-emerald-900/20 p-6 text-center">
               <p className="font-semibold text-emerald-300">Check your email</p>
               <p className="mt-2 text-sm text-white/70">
-                We sent a sign-in link and 6-digit code to <strong>{email}</strong>. Tap the link
-                once, or enter the code below (works even if the link was already used).
+                We sent a sign-in link and 6-digit code to <strong>{email}</strong>. Enter the
+                6-digit code below. Leave the link in the email untapped.
               </p>
             </div>
             <div className="rounded-2xl border border-white/15 bg-[#0A1428] p-5">
