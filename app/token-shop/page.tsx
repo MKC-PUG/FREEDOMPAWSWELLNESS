@@ -156,9 +156,7 @@ function TokenShopPageContent() {
       />
 
       <p className="mb-10 max-w-3xl mx-auto text-center text-white/75 leading-relaxed text-sm md:text-base">
-        Every purchase directly funds no-kill animal shelters and patriotic veteran-dog lake meetups.
-        <strong className="text-emerald-300/90"> 10% of net proceeds</strong> go to veteran dog
-        organizations and no-kill shelters (50/50). Protocols are ${SHOP_PRICE.rlusd}.00 USD each — pay
+        Protocols are ${SHOP_PRICE.rlusd}.00 USD each — pay
         in XRP via Xaman (live conversion at checkout) or by card.
       </p>
 

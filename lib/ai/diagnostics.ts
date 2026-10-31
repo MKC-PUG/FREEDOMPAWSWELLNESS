@@ -96,7 +96,7 @@ export async function analyzeDogMedia(
   }
 
   if (vetUrgent) {
-    reasoning = `⚠️ ${vetUrgentReason || 'Signs warrant prompt veterinary evaluation.'} ${reasoning}`;
+    reasoning = `⚠️ Visible or reported signs may need prompt professional evaluation. ${reasoning}`;
   } else if (mildModerateOnly) {
     reasoning += ' Signs appear mild-to-moderate — wellness protocols, lifestyle, and natural support may help; monitor and consult a vet if worsening.';
   }

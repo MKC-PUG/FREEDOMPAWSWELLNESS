@@ -175,7 +175,7 @@ export default function ViTResultsPanel({
         <div className="rounded-2xl border-2 border-red-500 bg-red-950/50 p-5">
           <p className="text-red-300 font-bold text-sm">{DIAGNOSTICS_RED_TITLE}</p>
           <p className="text-red-200/90 text-sm mt-2 leading-relaxed">
-            {result.vetUrgentReason || DIAGNOSTICS_RED_DEFAULT}
+          {DIAGNOSTICS_RED_DEFAULT}
           </p>
         </div>
       )}
