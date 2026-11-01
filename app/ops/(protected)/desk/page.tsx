@@ -1,6 +1,5 @@
-import { getSocialDashboardStats, listSocialPosts } from '@/lib/ops/social-server';
+import Link from 'next/link';
 import { getStudioKeyStatus, listStudioJobs } from '@/lib/ops/studio-server';
-import OpsSocialStudio from '../../components/OpsSocialStudio';
 import OpsStudioDesk from '../../components/OpsStudioDesk';
 import { OpsPageShell } from '../../components/OpsUi';
 
@@ -15,45 +14,25 @@ export default async function OpsDeskPage() {
     tableError = e instanceof Error ? e.message : 'ops_jobs unavailable';
   }
 
-  let posts: Awaited<ReturnType<typeof listSocialPosts>> = [];
-  let stats = {
-    total: 0,
-    draft: 0,
-    needsApproval: 0,
-    approved: 0,
-    scheduled: 0,
-    posted: 0,
-    failed: 0,
-  };
-  let socialReady = true;
-  let socialError: string | null = null;
-  try {
-    posts = await listSocialPosts(60);
-    stats = await getSocialDashboardStats();
-  } catch (e) {
-    socialReady = false;
-    socialError = e instanceof Error ? e.message : 'social_posts unavailable';
-  }
-
   return (
     <OpsPageShell
-      title="Studio desk"
-      subtitle="Videos and social posts in one place. Research, script, and the finished cut wait on you. Buffer receives a draft only after you queue the post."
+      title="Studio (Production)"
+      subtitle="Video jobs only. Research, script, plates, and the cut stay here. Sending lives on SuperBud (Distribution)."
     >
+      <div className="mb-6 rounded-2xl border border-[#F5C242]/30 bg-[#F5C242]/10 px-4 py-3 text-sm text-white/80">
+        When a cut is ready, use <strong>Hand to SuperBud</strong>. That creates draft cards. It
+        does not send them. Approve and send on{' '}
+        <Link href="/ops/marketing" className="font-bold text-[#F5C242] hover:underline">
+          SuperBud (Distribution)
+        </Link>
+        .
+      </div>
       <OpsStudioDesk
         initialJobs={jobs}
         tableReady={tableReady}
         tableError={tableError}
         keys={getStudioKeyStatus()}
       />
-      <div className="mt-12 border-t border-white/10 pt-8">
-        <OpsSocialStudio
-          initialPosts={posts}
-          stats={stats}
-          tableReady={socialReady}
-          tableError={socialError}
-        />
-      </div>
     </OpsPageShell>
   );
 }

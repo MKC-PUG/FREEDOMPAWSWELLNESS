@@ -164,11 +164,10 @@ export default function OpsSocialStudio({
             />
           </div>
           <div className="text-sm text-white/70 max-w-2xl">
-            <p className="font-semibold text-[#F5C242]">SuperBud production arm</p>
+            <p className="font-semibold text-[#F5C242]">SuperBud (Distribution)</p>
             <p className="mt-1">
-              Draft → approve → Buffer. SuperBud represents Freedom Paws Wellness across Adoption
-              TN, ID, Diagnostics, My Pets Vault, Photo Booth, and mission content. Nothing posts
-              without Ops approval.
+              Draft, approve, then send to Buffer. The picture is made on Studio (Production).
+              Nothing posts until you send it.
             </p>
             {!tableReady ? (
               <p className="mt-2 text-amber-300 text-xs">
@@ -411,11 +410,11 @@ export default function OpsSocialStudio({
         </div>
       </OpsSection>
 
-      <OpsSection title="Production studio — step-by-step">
+      <OpsSection title="Picture tools — used on Studio (Production)">
         <OpsCard>
           <p className="text-sm text-white/65 mb-4">
-            Use SuperBud as the hero still for every short. Work top → bottom. Open each tool in a
-            new tab (your accounts). Voice stays ElevenLabs; HeyGen only lip-syncs that audio.
+            These tools make the cut. Open them from Studio (Production), in your own accounts.
+            This page starts when the draft card is in the pipeline above.
           </p>
           <ol className="space-y-3 text-sm text-white/80 list-decimal pl-5">
             <li>

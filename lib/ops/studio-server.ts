@@ -1,11 +1,6 @@
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import {
-  createSocialPost,
-  getSocialPost,
-  sendSocialPostToBuffer,
-  updateSocialPost,
-} from '@/lib/ops/social-server';
+import { createSocialPost, updateSocialPost } from '@/lib/ops/social-server';
 import {
   getStudioTopic,
   isSocialPlatform,
@@ -499,73 +494,64 @@ export async function pollStudioRender(id: string): Promise<StudioJob> {
   return updateJob(id, { error_message: null });
 }
 
-export async function queueSocialPost(id: string, userId: string): Promise<StudioJob> {
+/** Copy the cut onto SuperBud as drafts. Does not approve them and does not call Buffer. */
+export async function handOffToSuperBud(id: string, userId: string): Promise<StudioJob> {
   const job = await getJob(id);
-  if (job.kind !== 'superbud_video') throw new Error('Social queue is for SuperBud videos.');
-  if (job.status !== 'watch' && job.status !== 'queued') {
-    throw new Error('Watch the cut and accept it before it can enter the social queue.');
+  if (job.kind !== 'superbud_video') {
+    throw new Error('Only a video job can be handed to SuperBud.');
   }
   const caption = job.echoCaption.trim();
   const script = job.script.trim();
-  if (!caption || !script) throw new Error('The social pack is empty.');
+  if (!caption || !script) {
+    throw new Error('Save a spoken script and a social caption before handing this to SuperBud.');
+  }
   assertStudioCopy(caption, 'Caption');
   assertStudioCopy(script, 'Script');
-  assertStudioCopy(job.echoArticle, 'Article');
+  if (job.echoArticle.trim()) assertStudioCopy(job.echoArticle, 'Article');
 
-  const destinations = platformsForJob(job.platform);
-  let postIds = job.socialPostIds.length
+  const existing = job.socialPostIds.length
     ? job.socialPostIds
     : job.socialPostId
       ? [job.socialPostId]
       : [];
-
-  if (postIds.length === 0) {
-    const created: string[] = [];
-    for (const platform of destinations) {
-      const text = captionForPlatform(platform, job);
-      assertStudioCopy(text, `${platform} caption`);
-      const post = await createSocialPost({
-        pillar: pillarOrDefault(job.pillar),
-        platform,
-        userId,
-        title: job.title,
-        caption: text,
-      });
-      await updateSocialPost(post.id, {
-        script,
-        status: 'approved',
-        approvedBy: userId,
-        approvedAt: new Date().toISOString(),
-        errorMessage: null,
-      });
-      created.push(post.id);
-    }
-    postIds = created;
+  if (existing.length > 0) {
+    throw new Error('This cut is already on SuperBud. Open SuperBud (Distribution) to approve and send.');
   }
 
-  for (const postId of postIds) {
-    const post = await getSocialPost(postId);
-    if (!post?.videoUrl) {
-      throw new Error(
-        'Save the public video link on the SuperBud page, then use Send to Buffer.'
-      );
-    }
-    await sendSocialPostToBuffer(postId);
+  const videoUrl = job.videoUrl?.startsWith('https://') ? job.videoUrl : null;
+  const created: string[] = [];
+  for (const platform of platformsForJob(job.platform)) {
+    const text = captionForPlatform(platform, job);
+    assertStudioCopy(text, `${platform} caption`);
+    const post = await createSocialPost({
+      pillar: pillarOrDefault(job.pillar),
+      platform,
+      userId,
+      title: job.title,
+      caption: text,
+    });
+    await updateSocialPost(post.id, {
+      script,
+      status: 'draft',
+      videoUrl,
+      approvedBy: null,
+      approvedAt: null,
+      errorMessage: null,
+    });
+    created.push(post.id);
   }
 
   try {
     return await updateJob(id, {
-      social_post_id: postIds[0] ?? null,
-      social_post_ids: postIds,
-      status: 'queued',
-      seat: 'echo',
+      social_post_id: created[0] ?? null,
+      social_post_ids: created,
       error_message: null,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : '';
     if (message.includes('social_post_ids')) {
       throw new Error(
-        'Run supabase/migrations/017_ops_job_all_platforms.sql in the Supabase SQL Editor, then queue again.'
+        'Run supabase/migrations/017_ops_job_all_platforms.sql in the Supabase SQL Editor, then hand off again.'
       );
     }
     throw error;

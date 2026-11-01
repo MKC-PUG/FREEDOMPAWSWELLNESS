@@ -4,6 +4,14 @@ const nextConfig = {
   outputFileTracingExcludes: {
     '*': ['./public/imgly-bg-removal/**/*'],
   },
+  outputFileTracingIncludes: {
+    '/ops/marketing': [
+      './docs/\\(UPDATED 10-24-26\\) Freedom-Paws-SuperBud-Page-Click-by-Click-Manual.md',
+    ],
+    '/api/ops/superbud-manual': [
+      './docs/\\(UPDATED 10-24-26\\) Freedom-Paws-SuperBud-Page-Click-by-Click-Manual.pdf',
+    ],
+  },
   images: {
     remotePatterns: [
       {

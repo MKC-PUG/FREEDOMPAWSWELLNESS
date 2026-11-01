@@ -759,7 +759,9 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               <div>
                 <p className="text-xs uppercase tracking-wide text-white/45">
                   {selected.kind === 'superbud_video' ? 'SuperBud video' : 'Agent job'} ·{' '}
-                  {selected.platform === 'all' ? 'Instagram, TikTok, YouTube, Facebook' : selected.platform}
+                  {selected.platform === 'all'
+                    ? 'Instagram, TikTok, YouTube, Facebook, X'
+                    : socialPlatformLabel(selected.platform)}
                 </p>
                 <h3 className="mt-1 text-lg font-bold">{selected.title}</h3>
               </div>
@@ -912,20 +914,35 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               {selected.kind === 'superbud_video' ? (
                 <button
                   type="button"
-                  disabled={busy || (selected.status !== 'watch' && selected.status !== 'queued')}
+                  disabled={busy || selected.socialPostIds.length > 0 || Boolean(selected.socialPostId)}
                   className="rounded-xl border border-emerald-400/40 px-3 py-2 text-xs font-bold text-emerald-200 disabled:opacity-40"
                   onClick={() => {
                     void (async () => {
-                      const saved = await run('Save', {
-                        action: 'save',
+                      const saved = await run(
+                        'Save',
+                        {
+                          action: 'save',
+                          id: selected.id,
+                          ...jobDraft(),
+                        },
+                        true
+                      );
+                      if (!saved) return;
+                      const handed = await run('Hand to SuperBud', {
+                        action: 'handoff_superbud',
                         id: selected.id,
-                        ...jobDraft(),
                       });
-                      if (saved) await run('Queue social', { action: 'queue_social', id: selected.id });
+                      if (handed) {
+                        setMessage(
+                          'Draft cards are on SuperBud (Distribution). Nothing was sent to Buffer.'
+                        );
+                      }
                     })();
                   }}
                 >
-                  {selected.platform === 'all' ? 'Queue all platforms' : 'Queue social post'}
+                  {selected.socialPostIds.length > 0 || selected.socialPostId
+                    ? 'On SuperBud'
+                    : 'Hand to SuperBud'}
                 </button>
               ) : null}
               <button

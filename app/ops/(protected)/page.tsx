@@ -27,7 +27,7 @@ export default async function OpsHomePage() {
   return (
     <OpsPageShell
       title="Command Center"
-      subtitle={`Signed in as ${overview.userEmail ?? 'FP ops'}. Five boxes first. Studio stays the SuperBud factory. Nothing on this page sends.`}
+      subtitle={`Signed in as ${overview.userEmail ?? 'FP ops'}. Five boxes first. Studio is production. SuperBud is distribution. Nothing on this page sends.`}
       badge={<OpsStatusBadge status={marketingStatus} />}
     >
       {overview.marketing.emergencyStop ? (
@@ -43,7 +43,7 @@ export default async function OpsHomePage() {
         <OpsKpiCard
           label="Waiting on you"
           value={overview.studio.waitingOnFounder}
-          hint="Studio jobs and social posts"
+          hint="Studio jobs waiting on you"
           accent="amber"
         />
         <OpsKpiCard
@@ -76,7 +76,7 @@ export default async function OpsHomePage() {
             [
               {
                 href: '/ops/desk',
-                title: 'Studio desk',
+                title: 'Studio (Production)',
                 stat: `${overview.studio.waitingOnFounder} waiting on you`,
                 status: overview.studio.waitingOnFounder > 0 ? 'warning' : 'ready',
               },
@@ -88,8 +88,8 @@ export default async function OpsHomePage() {
               },
               {
                 href: '/ops/marketing',
-                title: 'Marketing · SuperBud',
-                stat: overview.marketingCanSend ? 'Send path open' : 'Social studio',
+                title: 'SuperBud (Distribution)',
+                stat: overview.marketingCanSend ? 'Send path open' : 'Social drafts',
                 status: marketingStatus,
               },
               {

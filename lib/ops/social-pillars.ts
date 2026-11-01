@@ -212,7 +212,7 @@ export const PRODUCTION_TOOLS: ProductionTool[] = [
     name: 'Buffer',
     role: 'Schedule & distribute',
     url: 'https://buffer.com',
-    whenToUse: 'After Ops Approve — schedule IG / TikTok / YouTube / FB.',
+    whenToUse: 'After Ops Approve — schedule Instagram, TikTok, YouTube, Facebook, and X.',
   },
 ];
 

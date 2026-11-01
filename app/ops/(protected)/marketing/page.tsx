@@ -4,9 +4,12 @@ import {
   getSocialDashboardStats,
   listSocialPosts,
 } from '@/lib/ops/social-server';
+import { parseManual } from '@/lib/ops/manual-blocks';
+import { readSuperbudPageManual } from '@/lib/ops/manual-source';
 import { getServerUser } from '@/lib/supabase/server';
 import { MARKETING_WORKFLOW_LABELS } from '@/lib/ops/types';
 import OpsMarketingControls from '../../components/OpsMarketingControls';
+import { OpsReferenceManual } from '../../components/OpsReferenceManual';
 import OpsSocialStudio from '../../components/OpsSocialStudio';
 import {
   OpsCard,
@@ -51,16 +54,28 @@ export default async function OpsMarketingPage() {
 
   return (
     <OpsPageShell
-      title="Marketing & SuperBud studio"
-      subtitle="Social production arm — draft, approve, Buffer — plus CRM automation gates (dormant by default)."
+      title="SuperBud (Distribution)"
+      subtitle="Social posts to the platforms, and member email when a member list exists. Video production stays on Studio."
       badge={<OpsStatusBadge status={status} />}
     >
+      <OpsReferenceManual
+        kicker="UPDATED 10/24/26"
+        title="SuperBud page — click-by-click manual"
+        downloadHref="/api/ops/superbud-manual"
+        blocks={parseManual(readSuperbudPageManual())}
+      />
       <div className="mb-6 rounded-2xl border border-[#F5C242]/30 bg-[#F5C242]/10 px-4 py-3 text-sm text-white/80">
-        Video renders, script approval, and the social queue live on the{' '}
+        Make the picture on{' '}
         <Link href="/ops/desk" className="font-bold text-[#F5C242] hover:underline">
-          Studio desk
+          Studio (Production)
         </Link>
-        . This page keeps the marketing kill switch and the same social pipeline.
+        . This page distributes. A handed-off cut arrives as a draft. You approve it, then you send
+        it to Buffer.
+      </div>
+      <div className="mb-6 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white/75">
+        <strong className="text-white">Member email is closed.</strong> There is no member list.
+        When members exist, drafts will sit here and you will send them. This page does not connect
+        a mailbox. Shelter email stays on its own path.
       </div>
       <OpsSocialStudio
         initialPosts={posts}
@@ -73,8 +88,8 @@ export default async function OpsMarketingPage() {
         <div className="mb-6 rounded-2xl border border-[#F5C242]/25 bg-[#F5C242]/5 px-4 py-3 text-sm text-white/80">
           <strong>Email automation still does not send from this console.</strong> Toggles below
           record intent for n8n. Social Buffer send is separate (dry-run until{' '}
-          <code className="text-[#F5C242]">BUFFER_WEBHOOK_URL</code> is set). See{' '}
-          <code className="text-[#F5C242]">docs/ops/SUPERBUD-SOCIAL-STUDIO-CLICK-BY-CLICK.md</code>.
+          <code className="text-[#F5C242]">BUFFER_WEBHOOK_URL</code> is set). The click path is the
+          manual at the top of this page.
         </div>
 
         <OpsMarketingControls initial={marketing} canSend={marketingCanSend} />

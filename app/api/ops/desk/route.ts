@@ -7,9 +7,9 @@ import {
   createGeneralJob,
   createSourcedVideoJob,
   createVideoJob,
+  handOffToSuperBud,
   listStudioJobs,
   pollStudioRender,
-  queueSocialPost,
   saveStudioJob,
   setStudioStatus,
 } from '@/lib/ops/studio-server';
@@ -121,9 +121,13 @@ export async function POST(request: NextRequest) {
         if (!body.id) throw new Error('Job id is required');
         job = await pollStudioRender(body.id);
         break;
+      case 'handoff_superbud':
+        if (!body.id) throw new Error('Job id is required');
+        job = await handOffToSuperBud(body.id, userId);
+        break;
       case 'queue_social':
         if (!body.id) throw new Error('Job id is required');
-        job = await queueSocialPost(body.id, userId);
+        job = await handOffToSuperBud(body.id, userId);
         break;
       case 'hold':
       case 'done':
