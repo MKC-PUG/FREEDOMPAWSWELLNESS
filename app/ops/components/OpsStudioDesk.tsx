@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { PRODUCTION_TOOLS } from '@/lib/ops/social-pillars';
 import {
   SOCIAL_PLATFORMS,
   socialPlatformLabel,
@@ -407,18 +408,21 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
     setMessage('Prompt copied. Paste it into a new Grok chat.');
   }
 
+  const pictureTools = ['elevenlabs', 'heygen', 'runway', 'capcut', 'canva', 'descript']
+    .map((id) => PRODUCTION_TOOLS.find((tool) => tool.id === id))
+    .filter((tool): tool is (typeof PRODUCTION_TOOLS)[number] => Boolean(tool));
+
   return (
     <div className="space-y-8">
-      <OpsSection title="Video jobs">
+      <OpsSection title="See what is waiting" step={1}>
           <p className="mb-4 max-w-3xl text-sm text-white/65">
-          One row is one video: research, spoken script, and the cut. You make the picture in
-          ElevenLabs, HeyGen, Runway, and CapCut. Hand to SuperBud creates draft cards. It does
-          not send them.
+          One row is one video. The cut is made here. Hand to SuperBud creates draft cards. It
+          does not send them.
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <OpsKpiCard label="Waiting on you" value={waiting} accent="amber" hint="Research, script, or watch" />
           <OpsKpiCard label="Rendering" value={rendering} hint="HeyGen in flight" />
-          <OpsKpiCard label="Queued" value={queued} accent="emerald" hint="Approved into Buffer" />
+          <OpsKpiCard label="Queued" value={queued} accent="emerald" hint="Marked queued on this desk" />
           <OpsKpiCard
             label="Render keys"
             value={keys.elevenlabs && keys.heygen ? 'Ready' : 'Add keys'}
@@ -446,7 +450,11 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
         </div>
       ) : null}
 
-      <div className="mb-3 flex flex-wrap gap-2">
+      <OpsSection title="Choose the networks" step={2}>
+      <p className="mb-3 max-w-3xl text-sm text-white/65">
+        This choice is saved on the job when you queue it. Skip TikTok. It is not a Buffer channel.
+      </p>
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
           disabled={busy || !tableReady}
@@ -471,7 +479,9 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
           </button>
         ))}
       </div>
+      </OpsSection>
 
+      <OpsSection title="Queue one topic" step={3}>
       <div className="grid lg:grid-cols-2 gap-4">
         <OpsCard>
           <div className="flex items-start justify-between gap-3">
@@ -672,60 +682,9 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
           ) : null}
         </OpsCard>
       </div>
+      </OpsSection>
 
-      <OpsLongformPane onSendTalking={sendTalkingShots} />
-
-      <OpsCard>
-        <h3 className="text-sm font-bold">New agent job</h3>
-        <p className="mt-1 text-xs text-white/50">
-          FACT · research, BUD · script, ECHO · social, or LEX · counsel. The row holds a paste-ready prompt. It does not render video.
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {STUDIO_SEATS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setSeat(item.id)}
-              className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
-                seat === item.id ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]' : 'border-white/20 text-white/80'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-        <input
-          className="mt-3 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
-          placeholder="Title"
-          value={generalTitle}
-          disabled={busy || !tableReady}
-          onChange={(e) => setGeneralTitle(e.target.value)}
-        />
-        <textarea
-          className="mt-3 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
-          rows={2}
-          placeholder="What this seat should draft"
-          value={brief}
-          disabled={busy || !tableReady}
-          onChange={(e) => setBrief(e.target.value)}
-        />
-        <button
-          type="button"
-          disabled={busy || !tableReady}
-          className="mt-3 rounded-xl border border-[#F5C242]/50 px-4 py-2 text-sm font-bold text-[#F5C242] disabled:opacity-50"
-          onClick={() =>
-            run('Create job', {
-              action: 'create_general',
-              seat,
-              title: generalTitle,
-              brief,
-            })
-          }
-        >
-          Add job
-        </button>
-      </OpsCard>
-
+      <OpsSection title="Open the job and save the words" step={4}>
       <div className="grid lg:grid-cols-[280px_1fr] gap-4">
         <div className="space-y-2">
           {jobs.length === 0 ? (
@@ -844,50 +803,11 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               </div>
             ) : null}
 
-            {selected.audioUrl ? (
-              <audio className="mt-4 w-full" controls src={selected.audioUrl} />
-            ) : null}
-            {selected.videoUrl ? (
-              <video className="mt-3 w-full max-w-sm rounded-xl" controls src={selected.videoUrl} />
-            ) : null}
-
-            {selected.kind === 'superbud_video' ? (
-              <OpsCanvaPanel
-                jobId={selected.id}
-                draft={selected.canva}
-                busy={busy}
-                onDraft={(kind) => {
-                  void (async () => {
-                    const savedJob = await run(
-                      'Save',
-                      { action: 'save', id: selected.id, ...jobDraft() },
-                      true
-                    );
-                    if (!savedJob) return;
-                    const made = await run('Canva layout', {
-                      action: 'canva_draft',
-                      id: selected.id,
-                      kind,
-                    });
-                    if (made) {
-                      setMessage('Canva layout is ready. Approve it here. Nothing was sent.');
-                    }
-                  })();
-                }}
-                onApprove={() => {
-                  void run('Approve Canva', { action: 'canva_approve', id: selected.id });
-                }}
-                onReject={() => {
-                  void run('Reject Canva', { action: 'canva_reject', id: selected.id });
-                }}
-              />
-            ) : null}
-
             <div className="mt-4 flex flex-wrap gap-2">
               <button
                 type="button"
                 disabled={busy}
-                className="rounded-xl border border-white/20 px-3 py-2 text-xs font-bold"
+                className="rounded-xl bg-[#F5C242] px-3 py-2 text-xs font-bold text-[#0A1428]"
                 onClick={() =>
                   run('Save', {
                     action: 'save',
@@ -915,25 +835,82 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
               >
                 Accept research
               </button>
-              {selected.kind === 'superbud_video' ? (
-                <button
-                  type="button"
-                  disabled={busy}
-                  className="rounded-xl bg-[#F5C242] px-3 py-2 text-xs font-bold text-[#0A1428] disabled:opacity-50"
-                  onClick={() => {
-                    void (async () => {
-                      const saved = await run('Save', {
-                        action: 'save',
-                        id: selected.id,
-                        ...jobDraft(),
-                      });
-                      if (saved) await run('Render', { action: 'approve_script', id: selected.id });
-                    })();
-                  }}
-                >
-                  Approve script and render
-                </button>
+              {selected.kind !== 'superbud_video' ? (
+                <>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    className="rounded-xl border border-white/15 px-3 py-2 text-xs font-bold text-white/70"
+                    onClick={() => run('Hold', { action: 'hold', id: selected.id })}
+                  >
+                    Hold
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    className="rounded-xl border border-white/15 px-3 py-2 text-xs font-bold text-white/70"
+                    onClick={() => run('Done', { action: 'done', id: selected.id })}
+                  >
+                    Mark done
+                  </button>
+                </>
               ) : null}
+            </div>
+          </OpsCard>
+        ) : (
+          <OpsCard>
+            <p className="text-sm text-white/55">Queue a topic, then select the job.</p>
+          </OpsCard>
+        )}
+      </div>
+      </OpsSection>
+
+      {selected?.kind === 'superbud_video' ? (
+        <>
+          <OpsSection title="Make the picture" step={5}>
+            <p className="mb-4 max-w-3xl text-sm text-white/65">
+              ElevenLabs speaks. HeyGen Avatar IV talks from the locked still and that audio. Runway
+              moves only when the mouth is not delivering a line. CapCut joins the shots. Leave
+              Approve script and render alone when you are cutting the clips yourself.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {pictureTools.map((tool) => (
+                <a
+                  key={tool.id}
+                  href={tool.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-2xl border border-white/10 bg-white/5 p-4 hover:border-[#F5C242]/40 transition"
+                >
+                  <p className="font-bold text-sm text-[#F5C242]">{tool.name}</p>
+                  <p className="mt-1 text-[11px] uppercase tracking-wide text-white/45">{tool.role}</p>
+                  <p className="mt-2 text-xs text-white/60">{tool.whenToUse}</p>
+                  <p className="mt-3 text-[11px] text-sky-300">Open →</p>
+                </a>
+              ))}
+            </div>
+            {selected.audioUrl ? <audio className="mt-4 w-full" controls src={selected.audioUrl} /> : null}
+            {selected.videoUrl ? (
+              <video className="mt-3 w-full max-w-sm rounded-xl" controls src={selected.videoUrl} />
+            ) : null}
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={busy}
+                className="rounded-xl border border-white/20 px-3 py-2 text-xs font-bold text-white/70"
+                onClick={() => {
+                  void (async () => {
+                    const saved = await run('Save', {
+                      action: 'save',
+                      id: selected.id,
+                      ...jobDraft(),
+                    });
+                    if (saved) await run('Render', { action: 'approve_script', id: selected.id });
+                  })();
+                }}
+              >
+                Approve script and render
+              </button>
               {selected.heygenVideoId ? (
                 <button
                   type="button"
@@ -944,40 +921,71 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                   Check render
                 </button>
               ) : null}
-              {selected.kind === 'superbud_video' ? (
-                <button
-                  type="button"
-                  disabled={busy || selected.socialPostIds.length > 0 || Boolean(selected.socialPostId)}
-                  className="rounded-xl border border-emerald-400/40 px-3 py-2 text-xs font-bold text-emerald-200 disabled:opacity-40"
-                  onClick={() => {
-                    void (async () => {
-                      const saved = await run(
-                        'Save',
-                        {
-                          action: 'save',
-                          id: selected.id,
-                          ...jobDraft(),
-                        },
-                        true
-                      );
-                      if (!saved) return;
-                      const handed = await run('Hand to SuperBud', {
-                        action: 'handoff_superbud',
-                        id: selected.id,
-                      });
-                      if (handed) {
-                        setMessage(
-                          'Draft cards are on SuperBud (Distribution). Nothing was sent to Buffer.'
-                        );
-                      }
-                    })();
-                  }}
-                >
-                  {selected.socialPostIds.length > 0 || selected.socialPostId
-                    ? 'On SuperBud'
-                    : 'Hand to SuperBud'}
-                </button>
-              ) : null}
+            </div>
+          </OpsSection>
+
+          <OpsSection title="Canva layout, then approve it" step={6}>
+            <OpsCanvaPanel
+              jobId={selected.id}
+              draft={selected.canva}
+              busy={busy}
+              onDraft={(kind) => {
+                void (async () => {
+                  const savedJob = await run(
+                    'Save',
+                    { action: 'save', id: selected.id, ...jobDraft() },
+                    true
+                  );
+                  if (!savedJob) return;
+                  const made = await run('Canva layout', {
+                    action: 'canva_draft',
+                    id: selected.id,
+                    kind,
+                  });
+                  if (made) setMessage('Canva layout is ready. Approve it here. Nothing was sent.');
+                })();
+              }}
+              onApprove={() => {
+                void run('Approve Canva', { action: 'canva_approve', id: selected.id });
+              }}
+              onReject={() => {
+                void run('Reject Canva', { action: 'canva_reject', id: selected.id });
+              }}
+            />
+          </OpsSection>
+
+          <OpsSection title="Hand the cut to SuperBud" step={7}>
+            <p className="mb-4 max-w-3xl text-sm text-white/65">
+              This creates draft cards on SuperBud (Distribution). It does not send them to Buffer.
+              An unapproved Canva file blocks this step.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={busy || selected.socialPostIds.length > 0 || Boolean(selected.socialPostId)}
+                className="rounded-xl bg-[#F5C242] px-4 py-2 text-sm font-bold text-[#0A1428] disabled:opacity-40"
+                onClick={() => {
+                  void (async () => {
+                    const saved = await run(
+                      'Save',
+                      { action: 'save', id: selected.id, ...jobDraft() },
+                      true
+                    );
+                    if (!saved) return;
+                    const handed = await run('Hand to SuperBud', {
+                      action: 'handoff_superbud',
+                      id: selected.id,
+                    });
+                    if (handed) {
+                      setMessage('Draft cards are on SuperBud (Distribution). Nothing was sent to Buffer.');
+                    }
+                  })();
+                }}
+              >
+                {selected.socialPostIds.length > 0 || selected.socialPostId
+                  ? 'On SuperBud'
+                  : 'Hand to SuperBud'}
+              </button>
               <button
                 type="button"
                 disabled={busy}
@@ -995,13 +1003,68 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
                 Mark done
               </button>
             </div>
-          </OpsCard>
-        ) : (
+          </OpsSection>
+        </>
+      ) : null}
+
+      <OpsSection title="Outside this cut">
+        <div className="space-y-4">
+          <OpsLongformPane onSendTalking={sendTalkingShots} />
           <OpsCard>
-            <p className="text-sm text-white/55">Select a job.</p>
+            <h3 className="text-sm font-bold">New agent job</h3>
+            <p className="mt-1 text-xs text-white/50">
+              FACT · research, BUD · script, ECHO · social, or LEX · counsel. The row holds a
+              paste-ready prompt. It does not render video.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {STUDIO_SEATS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSeat(item.id)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
+                    seat === item.id
+                      ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]'
+                      : 'border-white/20 text-white/80'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <input
+              className="mt-3 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
+              placeholder="Title"
+              value={generalTitle}
+              disabled={busy || !tableReady}
+              onChange={(e) => setGeneralTitle(e.target.value)}
+            />
+            <textarea
+              className="mt-3 w-full rounded-xl border border-white/15 bg-[#0A1428] px-3 py-2 text-sm"
+              rows={2}
+              placeholder="What this seat should draft"
+              value={brief}
+              disabled={busy || !tableReady}
+              onChange={(e) => setBrief(e.target.value)}
+            />
+            <button
+              type="button"
+              disabled={busy || !tableReady}
+              className="mt-3 rounded-xl border border-[#F5C242]/50 px-4 py-2 text-sm font-bold text-[#F5C242] disabled:opacity-50"
+              onClick={() =>
+                run('Create job', {
+                  action: 'create_general',
+                  seat,
+                  title: generalTitle,
+                  brief,
+                })
+              }
+            >
+              Add job
+            </button>
           </OpsCard>
-        )}
-      </div>
+        </div>
+      </OpsSection>
     </div>
   );
 }

@@ -72,11 +72,6 @@ export default async function OpsMarketingPage() {
         . This page distributes. A handed-off cut arrives as a draft. You approve it, then you send
         it to Buffer.
       </div>
-      <div className="mb-6 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white/75">
-        <strong className="text-white">Member email is closed.</strong> There is no member list.
-        When members exist, drafts will sit here and you will send them. This page does not connect
-        a mailbox. Shelter email stays on its own path.
-      </div>
       <OpsSocialStudio
         initialPosts={posts}
         stats={stats}
@@ -85,16 +80,18 @@ export default async function OpsMarketingPage() {
       />
 
       <div className="my-10 border-t border-white/10 pt-8">
-        <div className="mb-6 rounded-2xl border border-[#F5C242]/25 bg-[#F5C242]/5 px-4 py-3 text-sm text-white/80">
-          <strong>Email automation still does not send from this console.</strong> Toggles below
-          record intent for n8n. Social Buffer send is separate (dry-run until{' '}
-          <code className="text-[#F5C242]">BUFFER_WEBHOOK_URL</code> is set). The click path is the
-          manual at the top of this page.
+        <div className="mb-6 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white/75">
+          <strong className="text-white">Member email is closed.</strong> There is no member list.
+          When members exist, drafts will sit here and you will send them. This page does not connect
+          a mailbox. Shelter email stays on its own path.
         </div>
-
-        <OpsMarketingControls initial={marketing} canSend={marketingCanSend} />
-
-        <OpsSection title="Workflow reference">
+        <OpsSection title="Not this send path">
+          <div className="mb-6 rounded-2xl border border-[#F5C242]/25 bg-[#F5C242]/5 px-4 py-3 text-sm text-white/80">
+            Email toggles below record intent for n8n. They do not send. Workflows A through I stay
+            off. Buffer send is the step above.
+          </div>
+          <OpsMarketingControls initial={marketing} canSend={marketingCanSend} />
+          <h3 className="mt-8 mb-4 text-sm font-bold text-white/80">Workflow reference</h3>
           <div className="grid sm:grid-cols-2 gap-3">
             {(
               Object.keys(MARKETING_WORKFLOW_LABELS) as Array<keyof typeof MARKETING_WORKFLOW_LABELS>
@@ -119,9 +116,7 @@ export default async function OpsMarketingPage() {
               );
             })}
           </div>
-        </OpsSection>
-
-        <OpsSection title="Local tooling">
+          <h3 className="mt-8 mb-4 text-sm font-bold text-white/80">Local tooling</h3>
           <OpsCard>
             <ul className="text-sm space-y-2 text-white/70">
               <li>

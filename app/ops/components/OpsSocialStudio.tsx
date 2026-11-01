@@ -151,7 +151,7 @@ export default function OpsSocialStudio({
 
   return (
     <div className="space-y-8">
-      <OpsSection title="SuperBud social dashboard">
+      <OpsSection title="See the counts" step={1}>
         <div className="mb-4 flex flex-col sm:flex-row gap-4 items-start">
           <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl border border-[#F5C242]/35 bg-white/5">
             <Image
@@ -164,10 +164,10 @@ export default function OpsSocialStudio({
             />
           </div>
           <div className="text-sm text-white/70 max-w-2xl">
-            <p className="font-semibold text-[#F5C242]">SuperBud (Distribution)</p>
+            <p className="font-semibold text-[#F5C242]">Drafts arrive from Studio</p>
             <p className="mt-1">
-              Draft, approve, then send to Buffer. The picture is made on Studio (Production).
-              Nothing posts until you send it.
+              Read the card, approve it, then send it to Buffer. Nothing posts until you send it.
+              In draft and Needs approval have not been published.
             </p>
             {!tableReady ? (
               <p className="mt-2 text-amber-300 text-xs">
@@ -201,71 +201,16 @@ export default function OpsSocialStudio({
         </div>
       ) : null}
 
-      <OpsSection title="Generate draft">
-        <OpsCard>
-          <p className="text-xs uppercase tracking-wide text-white/50">Pillar</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {SOCIAL_PILLARS.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                disabled={busy || !tableReady}
-                onClick={() => setPillar(p.id)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
-                  pillar === p.id
-                    ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]'
-                    : 'border-white/20 text-white/80'
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-          <p className="mt-4 text-xs uppercase tracking-wide text-white/50">Platform</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {PLATFORMS.map((p) => (
-              <button
-                key={p}
-                type="button"
-                disabled={busy || !tableReady}
-                onClick={() => setPlatform(p)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-bold capitalize ${
-                  platform === p
-                    ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]'
-                    : 'border-white/20 text-white/80'
-                }`}
-              >
-                {p === 'x' ? 'X' : p}
-              </button>
-            ))}
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              disabled={busy || !tableReady}
-              onClick={() => void createDraft('generate')}
-              className="rounded-xl bg-[#F5C242] px-4 py-2 text-sm font-bold text-black disabled:opacity-40"
-            >
-              Generate draft (AI)
-            </button>
-            <button
-              type="button"
-              disabled={busy || !tableReady}
-              onClick={() => void createDraft('create')}
-              className="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-white/90 disabled:opacity-40"
-            >
-              Create SuperBud template
-            </button>
-          </div>
-        </OpsCard>
-      </OpsSection>
-
-      <OpsSection title="Pipeline">
+      <OpsSection title="Open the draft" step={2}>
+        <p className="mb-4 max-w-3xl text-sm text-white/65">
+          One card per network. Read the caption and the script. If the words are not the approved
+          slate, archive the card. Then save the video link, approve, and send.
+        </p>
         <div className="grid lg:grid-cols-5 gap-4">
           <div className="lg:col-span-2 space-y-2 max-h-[28rem] overflow-y-auto pr-1">
             {posts.length === 0 ? (
               <OpsCard>
-                <p className="text-sm text-white/50">No posts yet — generate a SuperBud draft.</p>
+                <p className="text-sm text-white/50">No drafts yet. Hand a cut over from Studio (Production).</p>
               </OpsCard>
             ) : (
               posts.map((p) => (
@@ -294,7 +239,7 @@ export default function OpsSocialStudio({
           <div className="lg:col-span-3">
             {!selected ? (
               <OpsCard>
-                <p className="text-sm text-white/50">Select a post to review script & actions.</p>
+                <p className="text-sm text-white/50">Select a draft.</p>
               </OpsCard>
             ) : (
               <OpsCard>
@@ -351,7 +296,7 @@ export default function OpsSocialStudio({
                   </div>
                 ) : null}
                 <div className="mt-4">
-                  <p className="text-xs uppercase tracking-wide text-white/45 mb-1">Video link</p>
+                  <p className="text-xs uppercase tracking-wide text-[#F5C242] mb-1">3 · Save the video link</p>
                   <input
                     type="url"
                     value={videoDraft}
@@ -372,15 +317,9 @@ export default function OpsSocialStudio({
                     Save video link
                   </button>
                 </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    disabled={busy}
-                    onClick={() => void patchStatus('needs_approval')}
-                    className="rounded-lg border border-white/20 px-3 py-1.5 text-xs font-semibold"
-                  >
-                    Submit for approval
-                  </button>
+                <p className="mt-4 text-xs uppercase tracking-wide text-[#F5C242]">4 · Approve, then send</p>
+                <p className="mt-1 text-[11px] text-white/45">One send per card. A second send creates a second Buffer card.</p>
+                <div className="mt-2 flex flex-wrap gap-2">
                   <button
                     type="button"
                     disabled={busy}
@@ -409,70 +348,22 @@ export default function OpsSocialStudio({
                   >
                     Archive
                   </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => void patchStatus('needs_approval')}
+                    className="rounded-lg border border-white/20 px-3 py-1.5 text-xs font-semibold text-white/60"
+                  >
+                    Mark needs approval
+                  </button>
                 </div>
               </OpsCard>
             )}
           </div>
         </div>
-      </OpsSection>
-
-      <OpsSection title="Picture tools — used on Studio (Production)">
-        <OpsCard>
-          <p className="text-sm text-white/65 mb-4">
-            These tools make the cut. Open them from Studio (Production), in your own accounts.
-            This page starts when the draft card is in the pipeline above.
-          </p>
-          <ol className="space-y-3 text-sm text-white/80 list-decimal pl-5">
-            <li>
-              <strong>Script</strong> — Use the words you already marked APPROVED on the slate. Save
-              them on Studio.
-            </li>
-            <li>
-              <strong>Storyboard</strong> — Canva is for type, the logo, and a thumbnail made from a
-              locked still. Do not generate a new dog, suit, or emblem.
-            </li>
-            <li>
-              <strong>Voice</strong> — ElevenLabs → SuperBud-FP-Designed only → export WAV/MP3.
-            </li>
-            <li>
-              <strong>Host lip-sync</strong> — HeyGen Avatar IV → locked SuperBud still + that
-              audio. Do not use a HeyGen voice. Podium and teach-to-camera shots only.
-            </li>
-            <li>
-              <strong>Visuals</strong> — Runway for motion B-roll from the SuperBud still. Flying
-              and demo shots stay silent; lay the ElevenLabs track in CapCut.
-            </li>
-            <li>
-              <strong>Assemble</strong> — CapCut 9:16, captions, end card with CTA URL from the
-              post.
-            </li>
-            <li>
-              <strong>Distribute</strong> — Approve in Ops → Send to Buffer (dry-run until webhook
-              is set).
-            </li>
-          </ol>
-        </OpsCard>
-
-        <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {PRODUCTION_TOOLS.map((tool) => (
-            <a
-              key={tool.id}
-              href={tool.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-2xl border border-white/10 bg-white/5 p-4 hover:border-[#F5C242]/40 transition"
-            >
-              <p className="font-bold text-sm text-[#F5C242]">{tool.name}</p>
-              <p className="mt-1 text-[11px] uppercase tracking-wide text-white/45">{tool.role}</p>
-              <p className="mt-2 text-xs text-white/60">{tool.whenToUse}</p>
-              <p className="mt-3 text-[11px] text-sky-300">Open →</p>
-            </a>
-          ))}
-        </div>
-
         <div className="mt-4">
           <OpsCard>
-            <h3 className="font-bold text-sm mb-2">Pillar CTA map</h3>
+            <h3 className="font-bold text-sm mb-2">CTA check</h3>
             <ul className="grid sm:grid-cols-2 gap-2 text-xs text-white/65">
               {SOCIAL_PILLARS.map((p) => (
                 <li key={p.id} className="rounded-lg border border-white/10 px-3 py-2">
@@ -483,6 +374,89 @@ export default function OpsSocialStudio({
             </ul>
           </OpsCard>
         </div>
+      </OpsSection>
+
+      <OpsSection title="Confirm the queue in Buffer" step={5}>
+        <OpsCard>
+          <p className="text-sm text-white/70">
+            Open Buffer and confirm one video card, with no phone icon. Instagram says Reel.
+            Facebook says Reel. YouTube says Short. Leave Publish Now alone. Skip TikTok.
+          </p>
+          {PRODUCTION_TOOLS.filter((tool) => tool.id === 'buffer').map((tool) => (
+            <a
+              key={tool.id}
+              href={tool.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-block rounded-xl bg-[#F5C242] px-4 py-2 text-sm font-bold text-[#0A1428]"
+            >
+              Open Buffer
+            </a>
+          ))}
+        </OpsCard>
+      </OpsSection>
+
+      <OpsSection title="Outside this send">
+        <OpsCard>
+          <p className="text-sm text-white/65">
+            A normal card comes from Hand to SuperBud. Use this only when you need a card that did
+            not start on Studio.
+          </p>
+          <p className="mt-4 text-xs uppercase tracking-wide text-white/50">Pillar</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {SOCIAL_PILLARS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                disabled={busy || !tableReady}
+                onClick={() => setPillar(p.id)}
+                className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
+                  pillar === p.id
+                    ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]'
+                    : 'border-white/20 text-white/80'
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <p className="mt-4 text-xs uppercase tracking-wide text-white/50">Platform</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {PLATFORMS.map((p) => (
+              <button
+                key={p}
+                type="button"
+                disabled={busy || !tableReady}
+                onClick={() => setPlatform(p)}
+                className={`rounded-full border px-3 py-1.5 text-xs font-bold capitalize ${
+                  platform === p
+                    ? 'border-[#F5C242] bg-[#F5C242] text-[#0A1428]'
+                    : 'border-white/20 text-white/80'
+                }`}
+              >
+                {p === 'x' ? 'X' : p}
+              </button>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={busy || !tableReady}
+              onClick={() => void createDraft('generate')}
+              className="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-white/90 disabled:opacity-40"
+            >
+              Generate draft
+            </button>
+            <button
+              type="button"
+              disabled={busy || !tableReady}
+              onClick={() => void createDraft('create')}
+              className="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-white/90 disabled:opacity-40"
+            >
+              Create SuperBud template
+            </button>
+          </div>
+        </OpsCard>
       </OpsSection>
     </div>
   );

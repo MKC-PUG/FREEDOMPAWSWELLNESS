@@ -63,15 +63,20 @@ export function OpsSection({
   title,
   children,
   action,
+  step,
 }: {
   title: string;
   children: ReactNode;
   action?: ReactNode;
+  step?: number;
 }) {
   return (
     <section className="mb-8">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="text-lg font-bold text-white/90">{title}</h2>
+        <h2 className="text-lg font-bold text-white/90">
+          {step ? <span className="mr-2 text-[#F5C242]">{step}</span> : null}
+          {title}
+        </h2>
         {action}
       </div>
       {children}
