@@ -6,6 +6,7 @@ import {
   isSocialPlatform,
   platformsForJob,
   STUDIO_SEATS,
+  type CanvaKind,
   type StudioJob,
   type StudioKeyStatus,
   type StudioKind,
@@ -32,6 +33,8 @@ import {
   startAvatarRender,
   synthesizeSuperBud,
 } from '@/lib/ops/studio-render';
+import { appCtaUrl } from '@/lib/ops/social-pillars';
+import { canvaAppConfigured, fillBrandTemplate, parseCanvaDraft } from '@/lib/ops/canva';
 
 async function db() {
   const admin = createSupabaseAdminClient();
@@ -70,6 +73,7 @@ function mapJob(row: Record<string, unknown>): StudioJob {
     backgroundId: backgroundById((row.background_id as string) || undefined).id,
     motionId: motionById((row.motion_id as string) || undefined).id,
     onScreenText: (row.on_screen_text as string) ?? '',
+    canva: parseCanvaDraft(row.canva_draft),
     errorMessage: (row.error_message as string) ?? null,
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
@@ -90,6 +94,11 @@ function explainWriteError(error: { message?: string }): Error {
   ) {
     return new Error(
       'Run supabase/migrations/018_ops_job_storyboard.sql in the Supabase SQL Editor, then try again.'
+    );
+  }
+  if (message.includes('canva_draft')) {
+    return new Error(
+      'Run supabase/migrations/021_ops_job_canva.sql in the Supabase SQL Editor, then try again.'
     );
   }
   return error instanceof Error ? error : new Error(message);
@@ -127,6 +136,7 @@ export function getStudioKeyStatus(): StudioKeyStatus {
   return {
     ...keys,
     draftModel: Boolean(process.env.XAI_API_KEY?.trim() || process.env.OPENAI_API_KEY?.trim()),
+    canva: canvaAppConfigured(),
   };
 }
 
@@ -494,6 +504,67 @@ export async function pollStudioRender(id: string): Promise<StudioJob> {
   return updateJob(id, { error_message: null });
 }
 
+const CANVA_LABEL: Record<CanvaKind, string> = {
+  end_card: 'End card',
+  thumbnail: 'Thumbnail',
+  one_pager: 'One-page sheet',
+};
+
+/** Fill a locked Canva brand template. The file stays unapproved until you accept it. */
+export async function requestCanvaDraft(id: string, kind: CanvaKind): Promise<StudioJob> {
+  const job = await getJob(id);
+  if (job.kind !== 'superbud_video') {
+    throw new Error('Canva layouts are for a video job.');
+  }
+  const script = job.script.trim();
+  if (!script) throw new Error('Save the spoken script before making a Canva layout.');
+  const headline = (job.onScreenText.trim() || job.title).slice(0, 80);
+  const moduleName = job.title.slice(0, 80);
+  const cta = appCtaUrl(job.ctaPath || '/waitlist');
+  const body = (job.echoCaption.trim() || job.factCard.trim()).slice(0, 400);
+  assertStudioCopy(headline, 'Canva headline');
+  assertStudioCopy(moduleName, 'Canva module');
+  assertStudioCopy(body, 'Canva page');
+  const filled = await fillBrandTemplate({
+    kind,
+    jobId: job.id,
+    headline,
+    cta,
+    module: moduleName,
+    body,
+  });
+  return updateJob(id, {
+    canva_draft: {
+      kind,
+      status: 'ready',
+      headline,
+      cta,
+      module: moduleName,
+      designUrl: filled.designUrl,
+      exportUrl: filled.exportUrl,
+      requestedAt: new Date().toISOString(),
+      approvedAt: null,
+    },
+    error_message: null,
+  });
+}
+
+export async function approveCanvaDraft(id: string): Promise<StudioJob> {
+  const job = await getJob(id);
+  if (!job.canva || job.canva.status !== 'ready' || !job.canva.exportUrl) {
+    throw new Error('Make a Canva layout first. Approval is a separate click.');
+  }
+  return updateJob(id, {
+    canva_draft: { ...job.canva, status: 'approved', approvedAt: new Date().toISOString() },
+    error_message: null,
+  });
+}
+
+export async function rejectCanvaDraft(id: string): Promise<StudioJob> {
+  await getJob(id);
+  return updateJob(id, { canva_draft: {}, error_message: null });
+}
+
 /** Copy the cut onto SuperBud as drafts. Does not approve them and does not call Buffer. */
 export async function handOffToSuperBud(id: string, userId: string): Promise<StudioJob> {
   const job = await getJob(id);
@@ -508,6 +579,9 @@ export async function handOffToSuperBud(id: string, userId: string): Promise<Stu
   assertStudioCopy(caption, 'Caption');
   assertStudioCopy(script, 'Script');
   if (job.echoArticle.trim()) assertStudioCopy(job.echoArticle, 'Article');
+  if (job.canva?.status === 'ready') {
+    throw new Error('Approve the Canva layout, or reject it, before handing this to SuperBud.');
+  }
 
   const existing = job.socialPostIds.length
     ? job.socialPostIds
@@ -530,10 +604,23 @@ export async function handOffToSuperBud(id: string, userId: string): Promise<Stu
       title: job.title,
       caption: text,
     });
+    const storyboard =
+      job.canva?.status === 'approved' && job.canva.exportUrl
+        ? [
+            ...post.storyboard,
+            {
+              beat: 90,
+              visual: job.canva.exportUrl,
+              voiceover: `${CANVA_LABEL[job.canva.kind]} approved. This file is not sent to Buffer.`,
+              onScreenText: job.canva.headline,
+            },
+          ]
+        : post.storyboard;
     await updateSocialPost(post.id, {
       script,
       status: 'draft',
       videoUrl,
+      storyboard,
       approvedBy: null,
       approvedAt: null,
       errorMessage: null,

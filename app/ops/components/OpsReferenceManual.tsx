@@ -49,12 +49,14 @@ function Inline({ text }: { text: string }) {
 export function OpsReferenceManual({
   kicker,
   title,
+  note = 'Internal reference. Approving a caption still leaves the send in your hands.',
   downloadHref,
   blocks,
 }: {
   kicker: string;
   title: string;
-  downloadHref: string;
+  note?: string;
+  downloadHref?: string;
   blocks: ManualBlock[];
 }) {
   return (
@@ -63,16 +65,16 @@ export function OpsReferenceManual({
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#F5C242]/80">{kicker}</p>
           <h2 className="mt-1 text-lg font-bold">{title}</h2>
-          <p className="mt-1 text-xs text-white/50">
-            Internal reference. Approving a caption still leaves the send in your hands.
-          </p>
+          <p className="mt-1 text-xs text-white/50">{note}</p>
         </div>
-        <a
-          href={downloadHref}
-          className="shrink-0 rounded-xl border border-[#F5C242]/50 px-3 py-2 text-center text-xs font-bold text-[#F5C242]"
-        >
-          Download PDF
-        </a>
+        {downloadHref ? (
+          <a
+            href={downloadHref}
+            className="shrink-0 rounded-xl border border-[#F5C242]/50 px-3 py-2 text-center text-xs font-bold text-[#F5C242]"
+          >
+            Download PDF
+          </a>
+        ) : null}
       </div>
       <div className="max-h-[32rem] overflow-y-auto px-4 py-4 sm:px-5">
         <article className="space-y-3 text-sm leading-6 text-white/75">

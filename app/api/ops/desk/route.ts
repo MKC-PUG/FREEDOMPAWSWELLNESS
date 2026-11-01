@@ -7,12 +7,16 @@ import {
   createGeneralJob,
   createSourcedVideoJob,
   createVideoJob,
+  approveCanvaDraft,
   handOffToSuperBud,
   listStudioJobs,
   pollStudioRender,
+  rejectCanvaDraft,
+  requestCanvaDraft,
   saveStudioJob,
   setStudioStatus,
 } from '@/lib/ops/studio-server';
+import type { CanvaKind } from '@/lib/ops/studio-catalog';
 
 export const maxDuration = 60;
 
@@ -54,6 +58,7 @@ export async function POST(request: NextRequest) {
     onScreenText?: string;
     backgroundId?: string;
     motionId?: string;
+    kind?: string;
   };
   try {
     body = await request.json();
@@ -120,6 +125,21 @@ export async function POST(request: NextRequest) {
       case 'poll_render':
         if (!body.id) throw new Error('Job id is required');
         job = await pollStudioRender(body.id);
+        break;
+      case 'canva_draft':
+        if (!body.id) throw new Error('Job id is required');
+        if (body.kind !== 'end_card' && body.kind !== 'thumbnail' && body.kind !== 'one_pager') {
+          throw new Error('Choose an end card, a thumbnail, or a one-page sheet.');
+        }
+        job = await requestCanvaDraft(body.id, body.kind as CanvaKind);
+        break;
+      case 'canva_approve':
+        if (!body.id) throw new Error('Job id is required');
+        job = await approveCanvaDraft(body.id);
+        break;
+      case 'canva_reject':
+        if (!body.id) throw new Error('Job id is required');
+        job = await rejectCanvaDraft(body.id);
         break;
       case 'handoff_superbud':
         if (!body.id) throw new Error('Job id is required');

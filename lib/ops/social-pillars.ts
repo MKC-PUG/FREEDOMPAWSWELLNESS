@@ -25,8 +25,6 @@ export type SocialPillarId =
   | 'mission';
 
 export type ProductionToolId =
-  | 'chatgpt'
-  | 'claude'
   | 'canva'
   | 'capcut'
   | 'runway'
@@ -151,20 +149,6 @@ export const SOCIAL_PILLARS: SocialPillar[] = [
 /** External production tools — opened from Ops studio (founder accounts). */
 export const PRODUCTION_TOOLS: ProductionTool[] = [
   {
-    id: 'chatgpt',
-    name: 'ChatGPT',
-    role: 'Script & caption drafts',
-    url: 'https://chatgpt.com',
-    whenToUse: 'Expand hooks into 15s/30s/60s scripts and platform captions.',
-  },
-  {
-    id: 'claude',
-    name: 'Claude',
-    role: 'Brand-safe rewrite',
-    url: 'https://claude.ai',
-    whenToUse: 'Tone check: wellness-first, no vet diagnosis claims.',
-  },
-  {
     id: 'elevenlabs',
     name: 'ElevenLabs',
     role: 'Voiceover',
@@ -189,9 +173,10 @@ export const PRODUCTION_TOOLS: ProductionTool[] = [
   {
     id: 'canva',
     name: 'Canva',
-    role: 'Thumbnails & storyboards',
+    role: 'Type, logo, and thumbnails',
     url: 'https://www.canva.com',
-    whenToUse: 'Frames, captions, brand templates, storyboard boards.',
+    whenToUse:
+      'End cards, one-pagers, and a thumbnail from a locked still. Do not generate a new dog, suit, or emblem.',
   },
   {
     id: 'capcut',
@@ -218,7 +203,7 @@ export const PRODUCTION_TOOLS: ProductionTool[] = [
 
 export const DEFAULT_PRODUCTION_CHECKLIST = [
   { id: 'script', label: 'Approve script (wellness-first, no diagnosis claims)', done: false },
-  { id: 'storyboard', label: 'Storyboard 3–5 frames in Canva', done: false },
+  { id: 'storyboard', label: 'Canva layout approved on the Studio job, when you want one', done: false },
   { id: 'voice', label: 'Generate VO in ElevenLabs from approved script', done: false },
   {
     id: 'lipsync',

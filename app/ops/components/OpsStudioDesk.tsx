@@ -20,6 +20,7 @@ import { VENDOR_VIDEO_TOPICS, vendorFactCard } from '@/lib/ops/studio-vendors';
 import OpsLongformPane from './OpsLongformPane';
 import OpsStoryboardPreview from './OpsStoryboardPreview';
 import type { LongTalkingHandoff } from '@/lib/ops/studio-longform';
+import OpsCanvaPanel from './OpsCanvaPanel';
 import { OpsCard, OpsKpiCard, OpsSection } from './OpsUi';
 
 function statusClass(status: StudioStatus): string {
@@ -408,11 +409,11 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
 
   return (
     <div className="space-y-8">
-      <OpsSection title="Video and social jobs">
+      <OpsSection title="Video jobs">
           <p className="mb-4 max-w-3xl text-sm text-white/65">
-          One row is one SuperBud package: research, spoken script, one MP4, and the social pack.
-          Queue sends that same cut to Instagram, TikTok, YouTube, and Facebook. You still accept
-          the research, the spoken words, and the finished cut. Ad spend stays off.
+          One row is one video: research, spoken script, and the cut. You make the picture in
+          ElevenLabs, HeyGen, Runway, and CapCut. Hand to SuperBud creates draft cards. It does
+          not send them.
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <OpsKpiCard label="Waiting on you" value={waiting} accent="amber" hint="Research, script, or watch" />
@@ -848,6 +849,38 @@ export default function OpsStudioDesk({ initialJobs, tableReady, tableError, key
             ) : null}
             {selected.videoUrl ? (
               <video className="mt-3 w-full max-w-sm rounded-xl" controls src={selected.videoUrl} />
+            ) : null}
+
+            {selected.kind === 'superbud_video' ? (
+              <OpsCanvaPanel
+                jobId={selected.id}
+                draft={selected.canva}
+                busy={busy}
+                onDraft={(kind) => {
+                  void (async () => {
+                    const savedJob = await run(
+                      'Save',
+                      { action: 'save', id: selected.id, ...jobDraft() },
+                      true
+                    );
+                    if (!savedJob) return;
+                    const made = await run('Canva layout', {
+                      action: 'canva_draft',
+                      id: selected.id,
+                      kind,
+                    });
+                    if (made) {
+                      setMessage('Canva layout is ready. Approve it here. Nothing was sent.');
+                    }
+                  })();
+                }}
+                onApprove={() => {
+                  void run('Approve Canva', { action: 'canva_approve', id: selected.id });
+                }}
+                onReject={() => {
+                  void run('Reject Canva', { action: 'canva_reject', id: selected.id });
+                }}
+              />
             ) : null}
 
             <div className="mt-4 flex flex-wrap gap-2">

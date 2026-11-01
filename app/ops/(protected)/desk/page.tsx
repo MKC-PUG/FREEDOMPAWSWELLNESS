@@ -1,5 +1,8 @@
 import Link from 'next/link';
+import { parseManual } from '@/lib/ops/manual-blocks';
+import { readStudioPageManual } from '@/lib/ops/manual-source';
 import { getStudioKeyStatus, listStudioJobs } from '@/lib/ops/studio-server';
+import { OpsReferenceManual } from '../../components/OpsReferenceManual';
 import OpsStudioDesk from '../../components/OpsStudioDesk';
 import { OpsPageShell } from '../../components/OpsUi';
 
@@ -19,6 +22,12 @@ export default async function OpsDeskPage() {
       title="Studio (Production)"
       subtitle="Video jobs only. Research, script, plates, and the cut stay here. Sending lives on SuperBud (Distribution)."
     >
+      <OpsReferenceManual
+        kicker="UPDATED 11/1/26"
+        title="Studio page — click-by-click"
+        note="Internal reference. Hand to SuperBud creates drafts. It does not send them."
+        blocks={parseManual(readStudioPageManual())}
+      />
       <div className="mb-6 rounded-2xl border border-[#F5C242]/30 bg-[#F5C242]/10 px-4 py-3 text-sm text-white/80">
         When a cut is ready, use <strong>Hand to SuperBud</strong>. That creates draft cards. It
         does not send them. Approve and send on{' '}

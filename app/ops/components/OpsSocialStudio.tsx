@@ -337,7 +337,13 @@ export default function OpsSocialStudio({
                           className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-white/70"
                         >
                           <span className="font-bold text-[#F5C242]">Beat {frame.beat}.</span>{' '}
-                          {frame.visual}
+                          {frame.visual.startsWith('https://') ? (
+                            <a href={frame.visual} target="_blank" rel="noreferrer" className="text-[#F5C242] underline">
+                              Approved Canva file
+                            </a>
+                          ) : (
+                            frame.visual
+                          )}
                           <span className="block mt-1 text-white/50">VO: {frame.voiceover}</span>
                         </li>
                       ))}
@@ -418,12 +424,12 @@ export default function OpsSocialStudio({
           </p>
           <ol className="space-y-3 text-sm text-white/80 list-decimal pl-5">
             <li>
-              <strong>Script</strong> — Generate draft above (or polish in ChatGPT/Claude). Approve
-              wording in Ops.
+              <strong>Script</strong> — Use the words you already marked APPROVED on the slate. Save
+              them on Studio.
             </li>
             <li>
-              <strong>Storyboard</strong> — Copy beats into Canva; keep SuperBud chest emblem
-              readable.
+              <strong>Storyboard</strong> — Canva is for type, the logo, and a thumbnail made from a
+              locked still. Do not generate a new dog, suit, or emblem.
             </li>
             <li>
               <strong>Voice</strong> — ElevenLabs → SuperBud-FP-Designed only → export WAV/MP3.

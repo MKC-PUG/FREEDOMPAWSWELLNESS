@@ -59,9 +59,9 @@ export default async function OpsMarketingPage() {
       badge={<OpsStatusBadge status={status} />}
     >
       <OpsReferenceManual
-        kicker="UPDATED 10/24/26"
-        title="SuperBud page — click-by-click manual"
-        downloadHref="/api/ops/superbud-manual"
+        kicker="UPDATED 11/1/26"
+        title="SuperBud page — click-by-click"
+        note="Internal reference. Approving a caption still leaves the send in your hands."
         blocks={parseManual(readSuperbudPageManual())}
       />
       <div className="mb-6 rounded-2xl border border-[#F5C242]/30 bg-[#F5C242]/10 px-4 py-3 text-sm text-white/80">

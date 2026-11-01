@@ -5,9 +5,8 @@ const nextConfig = {
     '*': ['./public/imgly-bg-removal/**/*'],
   },
   outputFileTracingIncludes: {
-    '/ops/marketing': [
-      './docs/\\(UPDATED 10-24-26\\) Freedom-Paws-SuperBud-Page-Click-by-Click-Manual.md',
-    ],
+    '/ops/desk': ['./docs/ops/Studio-Production-Click-by-Click.md'],
+    '/ops/marketing': ['./docs/ops/SuperBud-Distribution-Click-by-Click.md'],
     '/api/ops/superbud-manual': [
       './docs/\\(UPDATED 10-24-26\\) Freedom-Paws-SuperBud-Page-Click-by-Click-Manual.pdf',
     ],

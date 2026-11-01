@@ -190,13 +190,29 @@ export type StudioJob = {
   backgroundId: string;
   motionId: string;
   onScreenText: string;
+  canva: CanvaDraft | null;
   errorMessage: string | null;
   createdAt: string;
   updatedAt: string;
+};
+
+export type CanvaKind = 'end_card' | 'thumbnail' | 'one_pager';
+
+export type CanvaDraft = {
+  kind: CanvaKind;
+  status: 'ready' | 'approved';
+  headline: string;
+  cta: string;
+  module: string;
+  designUrl: string | null;
+  exportUrl: string | null;
+  requestedAt: string;
+  approvedAt: string | null;
 };
 
 export type StudioKeyStatus = {
   elevenlabs: boolean;
   heygen: boolean;
   draftModel: boolean;
+  canva: boolean;
 };
