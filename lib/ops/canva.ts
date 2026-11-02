@@ -9,6 +9,7 @@ const API = 'https://api.canva.com/rest/v1';
 const AUTHORIZE = 'https://www.canva.com/api/oauth/authorize';
 
 export const CANVA_SCOPES = [
+  'design:meta:read',
   'design:content:read',
   'design:content:write',
   'brandtemplate:meta:read',

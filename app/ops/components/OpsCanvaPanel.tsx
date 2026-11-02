@@ -82,8 +82,8 @@ export default function OpsCanvaPanel({
         <p className="mt-2 text-xs text-amber-200">
           Add CANVA_CLIENT_ID and CANVA_CLIENT_SECRET in Vercel. Register the redirect
           https://app.freedompawsinc.com/api/ops/canva/callback on the Canva app. Scopes:
-          design content read and write, brand template meta and content read, asset read and
-          write.
+          design meta read, design content read and write, brand template meta and content read,
+          asset read and write.
         </p>
       ) : null}
 
