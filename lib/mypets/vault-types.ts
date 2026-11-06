@@ -49,6 +49,6 @@ export const VAULT_KIND_LABELS: Record<
     label: 'Gait clips',
     emoji: '🎥',
     addLabel: 'Add gait video',
-    emptyHint: 'Save a short walking video of a limp or a shorter stride. It plays on this phone.',
+    emptyHint: 'Save a short walking video. A veterinarian link can play it with this dog’s notes and pictures.',
   },
 };

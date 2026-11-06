@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import BackLink from '@/app/components/BackLink';
+import ConsultShareButton from '@/app/components/mypets/ConsultShareButton';
 import {
   createVaultEntryServer,
   deleteVaultEntryServer,
@@ -211,6 +212,16 @@ export default function PetVaultClient({ petId, petName }: Props) {
             </Link>{' '}
             for cloud sync across phones.
           </div>
+        )}
+
+        {useServer ? (
+          <div className="mt-4">
+            <ConsultShareButton petId={petId} />
+          </div>
+        ) : (
+          <p className="mt-4 text-sm text-white/60">
+            Sign in to make a link your veterinarian can open for the notes, pictures, and walking videos.
+          </p>
         )}
 
         <header className="mt-4 mb-6">

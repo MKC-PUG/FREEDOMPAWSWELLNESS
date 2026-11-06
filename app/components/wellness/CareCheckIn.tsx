@@ -9,6 +9,7 @@ import {
   DIAGNOSTICS_RED_DEFAULT,
   DIAGNOSTICS_RED_TITLE,
 } from '@/lib/legal/diagnostics-disclaimer';
+import ConsultShareButton from '@/app/components/mypets/ConsultShareButton';
 import { saveGaitVideoToPetRecord } from '@/lib/mypets/save-gait-record';
 import type { CareFormat } from '@/lib/wellness/care-format';
 import { escapeHtml, listHtml, openPrintDocument } from '@/lib/wellness/print-document';
@@ -75,8 +76,8 @@ export default function CareCheckIn({
       const where = await saveGaitVideoToPetRecord({ petId, file: gaitFile, seen });
       setSaveNote(
         where === 'vault'
-          ? 'Saved on this dog’s record. The video plays on this phone.'
-          : 'Saved on this phone in the pet record. Sign in to copy the note to the vault.'
+          ? 'Saved. Create the veterinarian link below so the visit can play this video with the notes and pictures.'
+          : 'Saved on this phone. Sign in to put the video, notes, and pictures on a link your veterinarian can open.'
       );
     } catch {
       setSaveNote('Could not save the video. Try again from My Pets.');
@@ -138,6 +139,8 @@ export default function CareCheckIn({
           </button>
         </>
       )}
+
+      {petId ? <ConsultShareButton petId={petId} /> : null}
 
       {care.saveGaitVideo && !urgent ? (
         <div className="rounded-2xl border border-white/10 p-4">
