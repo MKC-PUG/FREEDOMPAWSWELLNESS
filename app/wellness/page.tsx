@@ -262,6 +262,33 @@ export default function WellnessPage() {
           </p>
         </SectionCard>
 
+        <section className="grid grid-cols-1 gap-3 mb-8">
+          <Link
+            href="/wellness/label-scan"
+            className="rounded-2xl border border-emerald-400/40 bg-emerald-950/20 py-4 text-center text-sm font-bold text-emerald-200 hover:bg-emerald-950/30 transition"
+          >
+            Check a food, treat, chew, or toy label
+          </Link>
+          <Link
+            href="/wellness/daily"
+            className="rounded-2xl border border-white/10 bg-[#1F2A44] py-4 text-center text-sm font-bold hover:border-amber-400/40 transition"
+          >
+            Log food, movement, and training
+          </Link>
+          <Link
+            href="/wellness/training"
+            className="rounded-2xl border border-white/10 py-4 text-center text-sm font-semibold text-white/80 hover:text-white transition"
+          >
+            Seven-day training week
+          </Link>
+          <Link
+            href="/wellness/household-hazards"
+            className="rounded-2xl border border-white/10 py-4 text-center text-sm font-semibold text-white/80 hover:text-white transition"
+          >
+            Household hazards
+          </Link>
+        </section>
+
         <section className="grid grid-cols-1 gap-3">
           <Link
             href="/diagnostics"

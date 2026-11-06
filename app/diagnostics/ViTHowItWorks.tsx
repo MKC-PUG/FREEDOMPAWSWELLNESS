@@ -18,8 +18,8 @@ const STEPS = [
   },
   {
     n: '3',
-    title: 'Get top-2 protocols',
-    body: 'Prioritised supplement recommendations with confidence scores, protocol details, and Token Shop links.',
+    title: 'Get an owner plan',
+    body: 'What was noticed, then food, movement, and a training step. Protocol pages stay in a library under the plan.',
   },
 ] as const;
 
@@ -85,8 +85,8 @@ export default function ViTHowItWorks() {
             <li className="flex gap-2">
               <span className="text-amber-400 shrink-0">●</span>
               <span>
-                <strong className="text-white/85">Top-2 supplements</strong> — when signs overlap
-                (e.g. senior cognitive), you may see a #1 and #2 protocol pair.
+                <strong className="text-white/85">Owner plan</strong> — food, movement, and a
+                training step for the area you described. Protocol pages stay in the library.
               </span>
             </li>
             <li className="flex gap-2">

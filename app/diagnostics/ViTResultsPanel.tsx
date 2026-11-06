@@ -14,6 +14,7 @@ import {
   DIAGNOSTICS_RED_DEFAULT,
   DIAGNOSTICS_RED_TITLE,
 } from '@/lib/legal/diagnostics-disclaimer';
+import { buildOwnerPlan } from '@/lib/wellness/owner-plan';
 
 type Props = {
   result: AnalyzeApiResponse;
@@ -70,7 +71,7 @@ function ProtocolCard({
     tone === 'primary'
       ? 'bg-green-500/20 text-green-300 border-green-500/40'
       : 'bg-blue-500/20 text-blue-300 border-blue-500/40';
-  const rankLabel = rank === 1 ? '#1 PRIORITY SUPPLEMENT' : '#2 SUPPORTING SUPPLEMENT';
+  const rankLabel = rank === 1 ? 'In the library' : 'Also in the library';
 
   return (
     <div className={`rounded-2xl border-2 p-6 ${border}`}>
@@ -78,9 +79,7 @@ function ProtocolCard({
         <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${badge}`}>
           {rankLabel}
         </span>
-        {rank === 1 && (
-          <span className="text-[10px] text-amber-400/90 font-medium">Recommended first</span>
-        )}
+        <span className="text-[10px] text-white/45 font-medium">Read if you want</span>
       </div>
       <p className="text-sm text-amber-300/90 font-semibold leading-snug">{rec.specCategory}</p>
       <p className="text-2xl font-bold mt-2 leading-tight">{rec.brandedTitle}</p>
@@ -103,6 +102,42 @@ function ProtocolCard({
           </PwaNavLink>
         )}
       </div>
+    </div>
+  );
+}
+
+function OwnerPlanCard({ result }: { result: AnalyzeApiResponse }) {
+  const plan = buildOwnerPlan({
+    specShort: result.primary?.specShort,
+    matchedTerms: result.matchedTerms,
+    visualFindings: result.visualFindings,
+  });
+  const rows = [
+    ['Noticed', plan.noticed],
+    ['Area', plan.area],
+    ['Food', plan.food],
+    ['Movement', plan.movement],
+    ['Training', plan.training],
+    ['Call', plan.call],
+  ] as const;
+  return (
+    <div className="rounded-2xl border border-white/15 bg-[#0A1428]/50 p-5 space-y-4">
+      <h3 className="text-sm font-bold uppercase tracking-wide text-[#F5C242]">What you can do</h3>
+      {rows.map(([label, copy]) => (
+        <div key={label}>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-white/45">{label}</p>
+          <p className="mt-1 text-sm leading-relaxed text-white/80">{copy}</p>
+        </div>
+      ))}
+      <p className="text-xs text-white/45">
+        <a href="/wellness/daily" className="text-amber-300 underline">
+          Save food, movement, and training
+        </a>
+        {' · '}
+        <a href="/wellness/label-scan" className="text-amber-300 underline">
+          Check a label
+        </a>
+      </p>
     </div>
   );
 }
@@ -135,7 +170,7 @@ export default function ViTResultsPanel({
         <p className="text-[#F5C242] text-xs font-bold uppercase tracking-widest mb-1">
           Your wellness analysis
         </p>
-        <h3 className="text-xl font-bold text-white">Personalised protocol recommendations</h3>
+        <h3 className="text-xl font-bold text-white">A plan for this dog</h3>
         <p className="text-xs text-white/45 mt-2">{mediaLabel}</p>
         {result.usedVision && (
           <p className="text-sm text-amber-200/90 mt-3 leading-relaxed">
@@ -184,14 +219,25 @@ export default function ViTResultsPanel({
         <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/25 p-5">
           <p className="text-emerald-300 font-bold text-sm">🌿 Wellness-first routing</p>
           <p className="text-emerald-200/85 text-sm mt-2 leading-relaxed">
-            Signs appear mild-to-moderate. Focus on natural nutrition, detox support, lifestyle
-            shifts, and our protocol recommendations. Seek veterinary triage if symptoms worsen.
+            Signs look like a day you can work with at home. Use the food, movement, and training
+            steps below. Call your own veterinarian if they worsen.
           </p>
         </div>
       )}
 
-      {result.primary && <ProtocolCard rank={1} rec={result.primary} tone="primary" />}
-      {result.secondary && <ProtocolCard rank={2} rec={result.secondary} tone="secondary" />}
+      <OwnerPlanCard result={result} />
+
+      <div className="space-y-4">
+        <h3 className="text-sm font-bold uppercase tracking-wide text-white/50">
+          Protocol library
+        </h3>
+        <p className="text-sm text-white/55 leading-relaxed">
+          These pages are there if you want to read them. This check-in does not select a supplement
+          as the answer.
+        </p>
+        {result.primary && <ProtocolCard rank={1} rec={result.primary} tone="primary" />}
+        {result.secondary && <ProtocolCard rank={2} rec={result.secondary} tone="secondary" />}
+      </div>
 
       <ViTWellnessFunnel
         primarySlug={result.primary?.slug}
