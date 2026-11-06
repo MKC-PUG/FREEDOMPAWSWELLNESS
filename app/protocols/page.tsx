@@ -57,7 +57,7 @@ export default function ProtocolsPage() {
               </h2>
 
               <p className="mt-3 text-center text-sm md:text-base text-white/70 leading-relaxed">
-                <span className="font-bold text-[#F5C242]">AI-ViT</span> {p.detect}
+                {p.detect}
               </p>
 
               <div className="mt-auto pt-5 text-center text-sm md:text-base font-semibold text-[#F5C242]">

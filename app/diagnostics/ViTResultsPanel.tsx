@@ -1,12 +1,11 @@
 'use client';
 
-import PwaNavLink from '@/app/components/PwaNavLink';
 import ViTWellnessFunnel from '@/app/components/diagnostics/ViTWellnessFunnel';
-import { tokenShopHref } from '@/app/lib/routes';
+import CareCheckIn from '@/app/components/wellness/CareCheckIn';
 import WellnessPartnerPanel from '@/app/components/wellness/WellnessPartnerPanel';
 import { protocols } from '@/app/protocols/protocols';
 import { protocolDisplayName } from '@/lib/ai/symptom-lexicon';
-import type { AnalyzeApiResponse, ApiProtocolResult } from '@/lib/ai/types';
+import type { AnalyzeApiResponse } from '@/lib/ai/types';
 import { vitResultToWellnessContext } from '@/lib/wellness/partners';
 import {
   DIAGNOSTICS_GREEN_BODY,
@@ -14,7 +13,7 @@ import {
   DIAGNOSTICS_RED_DEFAULT,
   DIAGNOSTICS_RED_TITLE,
 } from '@/lib/legal/diagnostics-disclaimer';
-import { buildOwnerPlan } from '@/lib/wellness/owner-plan';
+import { careForSpec, visibleFindings } from '@/lib/wellness/care-format';
 
 type Props = {
   result: AnalyzeApiResponse;
@@ -23,124 +22,10 @@ type Props = {
   onWrongProtocolChange: (value: string) => void;
   onFeedback: (feedback: 'helpful' | 'wrong') => void;
   onTryAnother: () => void;
+  petId?: string | null;
+  petName?: string | null;
+  gaitFile?: File | null;
 };
-
-function ConfidenceBar({
-  value,
-  tone,
-}: {
-  value: number;
-  tone: 'primary' | 'secondary';
-}) {
-  const barClass =
-    tone === 'primary'
-      ? 'bg-gradient-to-r from-green-600 to-emerald-400'
-      : 'bg-gradient-to-r from-blue-600 to-cyan-400';
-  const labelClass = tone === 'primary' ? 'text-green-400' : 'text-blue-400';
-
-  return (
-    <div className="mt-4">
-      <div className="flex justify-between items-baseline mb-1.5">
-        <span className={`text-xs font-semibold uppercase tracking-wide ${labelClass}`}>
-          Match strength
-        </span>
-        <span className={`text-lg font-bold ${labelClass}`}>{value}%</span>
-      </div>
-      <div className="h-2.5 rounded-full bg-black/40 overflow-hidden">
-        <div
-          className={`h-full rounded-full transition-all duration-700 ${barClass}`}
-          style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function ProtocolCard({
-  rank,
-  rec,
-  tone,
-}: {
-  rank: 1 | 2;
-  rec: ApiProtocolResult;
-  tone: 'primary' | 'secondary';
-}) {
-  const border =
-    tone === 'primary' ? 'border-green-500/50 bg-green-900/25' : 'border-blue-500/50 bg-blue-900/25';
-  const badge =
-    tone === 'primary'
-      ? 'bg-green-500/20 text-green-300 border-green-500/40'
-      : 'bg-blue-500/20 text-blue-300 border-blue-500/40';
-  const rankLabel = rank === 1 ? 'In the library' : 'Also in the library';
-
-  return (
-    <div className={`rounded-2xl border-2 p-6 ${border}`}>
-      <div className="flex items-center justify-between gap-2 mb-3">
-        <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${badge}`}>
-          {rankLabel}
-        </span>
-        <span className="text-[10px] text-white/45 font-medium">Read if you want</span>
-      </div>
-      <p className="text-sm text-amber-300/90 font-semibold leading-snug">{rec.specCategory}</p>
-      <p className="text-2xl font-bold mt-2 leading-tight">{rec.brandedTitle}</p>
-      <ConfidenceBar value={rec.confidenceValue} tone={tone} />
-      <div className="mt-5 flex flex-col sm:flex-row gap-3">
-        {rec.slug && (
-          <PwaNavLink
-            href={`/protocols/${rec.slug}`}
-            className="flex-1 text-center rounded-xl border border-[#F5C242]/40 bg-[#F5C242]/10 px-4 py-3 text-sm font-semibold text-[#F5C242] hover:bg-[#F5C242]/20 transition touch-manipulation min-h-[48px] flex items-center justify-center"
-          >
-            Protocol details →
-          </PwaNavLink>
-        )}
-        {rec.slug && (
-          <PwaNavLink
-            href={tokenShopHref(rec.slug)}
-            className="flex-1 text-center rounded-xl bg-[#F5C242] px-4 py-3 text-sm font-bold text-black hover:bg-[#F5C242]/90 active:bg-amber-300 transition touch-manipulation min-h-[48px] flex items-center justify-center"
-          >
-            View in Token Shop
-          </PwaNavLink>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function OwnerPlanCard({ result }: { result: AnalyzeApiResponse }) {
-  const plan = buildOwnerPlan({
-    specShort: result.primary?.specShort,
-    matchedTerms: result.matchedTerms,
-    visualFindings: result.visualFindings,
-  });
-  const rows = [
-    ['Noticed', plan.noticed],
-    ['Area', plan.area],
-    ['Food', plan.food],
-    ['Movement', plan.movement],
-    ['Training', plan.training],
-    ['Call', plan.call],
-  ] as const;
-  return (
-    <div className="rounded-2xl border border-white/15 bg-[#0A1428]/50 p-5 space-y-4">
-      <h3 className="text-sm font-bold uppercase tracking-wide text-[#F5C242]">What you can do</h3>
-      {rows.map(([label, copy]) => (
-        <div key={label}>
-          <p className="text-[11px] font-bold uppercase tracking-wide text-white/45">{label}</p>
-          <p className="mt-1 text-sm leading-relaxed text-white/80">{copy}</p>
-        </div>
-      ))}
-      <p className="text-xs text-white/45">
-        <a href="/wellness/daily" className="text-amber-300 underline">
-          Save food, movement, and training
-        </a>
-        {' · '}
-        <a href="/wellness/label-scan" className="text-amber-300 underline">
-          Check a label
-        </a>
-      </p>
-    </div>
-  );
-}
 
 export default function ViTResultsPanel({
   result,
@@ -149,6 +34,9 @@ export default function ViTResultsPanel({
   onWrongProtocolChange,
   onFeedback,
   onTryAnother,
+  petId = null,
+  petName = null,
+  gaitFile = null,
 }: Props) {
   const wellnessContext = vitResultToWellnessContext({
     vetUrgent: result.vetUrgent,
@@ -163,6 +51,16 @@ export default function ViTResultsPanel({
       : result.usedVision
         ? 'Photo + AI vision'
         : 'Symptom matching';
+
+  const care = careForSpec(result.primary?.specShort) ?? careForSpec('Wellness Baseline');
+  const photoNotes = visibleFindings(result.visualFindings);
+  const seen = care
+    ? [care.seen, ...photoNotes.filter((line) => line !== care.seen)].join('. ')
+    : photoNotes.join('. ');
+  const also =
+    result.secondary?.slug && result.secondary.slug !== result.primary?.slug
+      ? result.secondary
+      : null;
 
   return (
     <div className="mt-8 space-y-6">
@@ -179,7 +77,7 @@ export default function ViTResultsPanel({
         )}
       </div>
 
-      {result.visualFindings && result.visualFindings.length > 0 && (
+      {photoNotes.length > 0 && (
         <div className="rounded-2xl border-2 border-amber-400/50 bg-amber-950/25 p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg" aria-hidden>
@@ -194,7 +92,7 @@ export default function ViTResultsPanel({
             symptoms come from what you typed or from video.
           </p>
           <ul className="text-sm text-white/90 list-disc pl-5 space-y-1.5">
-            {result.visualFindings.map((f) => (
+            {photoNotes.map((f) => (
               <li key={f}>{f}</li>
             ))}
           </ul>
@@ -225,32 +123,31 @@ export default function ViTResultsPanel({
         </div>
       )}
 
-      <OwnerPlanCard result={result} />
-
-      <div className="space-y-4">
-        <h3 className="text-sm font-bold uppercase tracking-wide text-white/50">
-          Protocol library
-        </h3>
-        <p className="text-sm text-white/55 leading-relaxed">
-          These pages are there if you want to read them. This check-in does not select a supplement
-          as the answer.
-        </p>
-        {result.primary && <ProtocolCard rank={1} rec={result.primary} tone="primary" />}
-        {result.secondary && <ProtocolCard rank={2} rec={result.secondary} tone="secondary" />}
-      </div>
+      {care ? (
+        <CareCheckIn
+          care={care}
+          seen={seen}
+          urgent={Boolean(result.vetUrgent)}
+          alsoSeenHref={also?.slug ? `/protocols/${also.slug}/pamphlet` : null}
+          alsoSeenLabel={also?.brandedTitle ?? null}
+          petId={petId}
+          petName={petName}
+          gaitFile={gaitFile}
+        />
+      ) : null}
 
       <ViTWellnessFunnel
         primarySlug={result.primary?.slug}
         secondarySlug={result.secondary?.slug}
       />
 
-      {result.matchedTerms && result.matchedTerms.length > 0 && (
+      {visibleFindings(result.matchedTerms).length > 0 && (
         <div className="rounded-xl border border-green-500/30 bg-green-950/20 p-4">
           <p className="text-xs font-semibold text-green-400 mb-3 uppercase tracking-wide">
             Symptoms recognised
           </p>
           <div className="flex flex-wrap gap-2">
-            {result.matchedTerms.map((t) => (
+            {visibleFindings(result.matchedTerms).map((t) => (
               <span
                 key={t}
                 className="text-xs px-3 py-1.5 rounded-full bg-green-900/40 border border-green-500/30 text-white/85"

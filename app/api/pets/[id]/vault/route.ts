@@ -10,7 +10,7 @@ import type { VaultEntryKind } from '@/lib/mypets/vault-types';
 
 type Params = { params: Promise<{ id: string }> };
 
-const KINDS: VaultEntryKind[] = ['vet_record', 'vaccination', 'daily_note'];
+const KINDS: VaultEntryKind[] = ['vet_record', 'vaccination', 'daily_note', 'gait_clip'];
 
 export async function GET(request: NextRequest, { params }: Params) {
   const { user, error } = await requireApiUser();

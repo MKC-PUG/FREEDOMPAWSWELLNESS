@@ -1,4 +1,4 @@
-export type VaultEntryKind = 'vet_record' | 'vaccination' | 'daily_note';
+export type VaultEntryKind = 'vet_record' | 'vaccination' | 'daily_note' | 'gait_clip';
 
 export type PetVaultEntry = {
   id: string;
@@ -44,5 +44,11 @@ export const VAULT_KIND_LABELS: Record<
     emoji: '📝',
     addLabel: 'Add daily note',
     emptyHint: 'Log mood, meals, supplements, walks, and wellness observations.',
+  },
+  gait_clip: {
+    label: 'Gait clips',
+    emoji: '🎥',
+    addLabel: 'Add gait video',
+    emptyHint: 'Save a short walking video of a limp or a shorter stride. It plays on this phone.',
   },
 };

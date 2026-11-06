@@ -30,18 +30,18 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
   'max-movement': {
     subtitle: 'Detailed protocol overview.',
     intro: [
-      'Purchase the Dynamic NFT or MPT on XRPL to unlock lifetime educational access. Upload a short walking video or photo; our Vision Transformer (ViT) AI instantly analyzes gait asymmetry and mobility patterns. Receive personalized whole-food diet, low-impact lake-walk lifestyle guidance, and natural joint-support recommendations.',
+      'Purchase the Dynamic NFT or MPT on XRPL to unlock lifetime educational access. Altered gait, limping, or hesitation on stairs. The printable plan covers short walks in a harness, and optional support includes a hip brace.',
       'Every access funds no-kill shelter mobility programs and veteran-dog lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
     sections: [
       {
         heading: 'Grant:',
         image: '/images/protocols/details/max-movement/gait-analysis.png',
-        imageAlt: 'SuperBud pug with ViT gait-analysis overlay',
+        imageAlt: 'SuperBud pug standing, ready to walk',
         imageSide: 'right',
         body: [
           { p: 'Tokenized RWA mobility solution for injured, senior and veteran working dogs.' },
-          { p: 'ViT detects gait asymmetry for instant protocol unlock.' },
+          { p: 'Altered gait, limping, or hesitation on stairs.' },
           { p: 'Funds no-kill shelters, mobility programs plus pet parent veterans meetups.' },
         ],
       },
@@ -110,7 +110,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
         'Connect your XRPL wallet (Xaman recommended) on freedompawsinc.com.',
         'Purchase or mint the Dynamic NFT or MPT for Max Movement Pro.',
         'Upload a short walking video or clear photo of your dog.',
-        'Our Vision Transformer (ViT) AI instantly analyzes gait and mobility.',
+        'Altered gait, limping, or hesitation on stairs. Save a short walking video on the pet record.',
         'Unlock your full personalized whole-food diet, lake-walk lifestyle plan, and natural support guidance.',
       ],
       notes: ['Every access directly funds no-kill shelter mobility programs and veteran-dog lake meetups.'],
@@ -125,7 +125,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     introHeading: 'How Protocol Works;',
     intro: [
       'Acquire the Dynamic NFT or MPT on XRPL for full protocol access.',
-      'Upload a photo; ViT AI detects stress indicators and breathing patterns. Unlock tailored whole-food calming diet, whole food supplement, shaded lake relaxation routines, and natural anxiety-support strategies.',
+      'Panting, pacing, hiding, or not settling. The plan covers a familiar walk in a harness, a settle mat, and a snug shirt if you choose one.',
       'Every access supports no-kill shelter calm-space programs and veteran working-dog meetups. Educational wellness information only — not veterinary medical advice.',
     ],
     sections: [
@@ -137,7 +137,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
         body: [
           { p: 'Tokenized calming support for disabled persons, military and veteran service dogs.' },
           {
-            p: 'ViT analyzes facial stress cues and channels DAO funds to shelter adoptions and veterans community wellness meetups.',
+            p: 'Panting, pacing, hiding, or not settling. Access channels DAO funds to shelter adoptions and veterans community wellness meetups.',
           },
         ],
       },
@@ -232,7 +232,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     introHeading: 'How Protocol 1 Works',
     intro: [
       'Purchase the Dynamic NFT or MPT on XRPL to activate this educational detox protocol.',
-      'Upload a photo; ViT AI identifies early liver/kidney stress markers. Receive whole-food cleansing diet, hydration-focused lifestyle guidance, and targeted natural support recommendations.',
+      'Thirst, appetite, energy, and how the coat looks. Keep the usual food and water. Leash walks use a harness. No detox product is selected from this page.',
       'Every access helps fund no-kill shelter detox and senior-dog care programs plus veteran lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
     sections: [
@@ -246,7 +246,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
             p: 'RWA-tokenized gentle detox support for rescue and shelter dogs post-medication or environmental exposure.',
           },
           {
-            p: 'ViT flags coat dullness and supports shelter rescue promotions and community volunteer meetups for veterans and dog owners.',
+            p: 'Thirst, appetite, energy, and how the coat looks. Access supports shelter rescue promotions and community volunteer meetups for veterans and dog owners.',
           },
         ],
       },
@@ -339,7 +339,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     introHeading: 'How Protocol Works;',
     intro: [
       'Acquire the Dynamic NFT or MPT on XRPL for lifelong access.',
-      'Upload a photo; ViT AI analyzes digestive patterns and gut health signals. Unlock personalized whole-food gut-support diet, calm lifestyle routines, and natural balance strategies inspired by Buddy’s own journey.',
+      'Appetite, stool, and comfort after meals. Keep today’s food. A calm leash walk uses a harness.',
       'Every access funds no-kill shelter gut-health programs and veteran-dog lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
     sections: [
@@ -352,7 +352,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
           {
             p: 'Comprehensive gut-balance and preventive cleanse RWA for no-kill shelter intakes and senior/working dogs.',
           },
-          { p: 'ViT detects digestive patterns and drives tokenized community support.' },
+          { p: 'Appetite, stool, and comfort after meals. Access drives tokenized community support.' },
         ],
       },
       {
@@ -442,7 +442,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     subtitle: 'Detailed protocol overview.',
     introHeading: 'How Protocol Works;',
     intro: [
-      'Purchase the Dynamic NFT or MPT on XRPL to unlock this educational spinal protocol. Upload a photo or short video; ViT AI detects spine and joint alignment issues. Receive whole-food anti-inflammatory diet, gentle swimming lifestyle guidance, and natural support recommendations.',
+      'Purchase the Dynamic NFT or MPT on XRPL to unlock this educational spinal protocol. Slow to get up, turn, or climb. Leash walks use a harness. Optional support includes a hip brace.',
       'Every access supports no-kill shelter mobility programs and veteran-dog lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
     sections: [
@@ -453,7 +453,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
         imageSide: 'right',
         body: [
           {
-            p: 'Home-therapy RWA for veteran & service dogs. ViT gait analysis unlocks sessions and lake mobility community meetups.',
+            p: 'Home notes for veteran and service dogs. Slow to get up, turn, or climb. Access supports lake mobility community meetups.',
           },
         ],
       },
@@ -533,18 +533,18 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     introHeading: 'How Protocol Works;',
     intro: [
       'Acquire the Dynamic NFT or MPT on XRPL for full protocol access.',
-      'Upload a photo; ViT AI identifies skin, coat, and allergy patterns. Unlock omega-rich whole-food diet, grooming-focused lifestyle routines, and natural coat-support strategies.',
+      'Dull coat, scratching, a bare patch, or a sore. A dog shirt is one of the optional supports, along with a lick sleeve. Leash walks use a harness.',
       'Every access funds no-kill shelter skin-care programs and veteran-dog lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
     sections: [
       {
         heading: 'Grant:',
         image: '/images/protocols/details/allergy-shield/grant.png',
-        imageAlt: 'Pug with ViT skin and coat analysis overlay',
+        imageAlt: 'Pug showing coat and skin',
         imageSide: 'right',
         body: [
           {
-            p: 'Addresses the #1 canine issue through tokenized RWA + ViT skin pattern recognition.',
+            p: 'Dull coat, scratching, a bare patch, or a sore.',
           },
           { p: 'Directly funds shelter rescue promotions and community volunteer meetups.' },
         ],
@@ -629,7 +629,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     introHeading: 'How Protocol Works;',
     intro: [
       'Purchase the Dynamic NFT or MPT on XRPL to unlock lifetime educational access.',
-      'Upload a photo; ViT AI analyzes teeth, gums, and oral health markers.',
+      'Tartar, a dark spot on a tooth, or one-sided chewing.',
       'Receive dental-supporting whole-food diet, gentle chewing lifestyle guidance, and natural oral-care recommendations.',
       'Every access helps fund no-kill shelter dental programs and veteran-dog lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
@@ -637,12 +637,12 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
       {
         heading: 'Grant:',
         image: '/images/protocols/details/fresh-smile-dental/grant.png',
-        imageAlt: 'Pug with ViT plaque detection overlay',
+        imageAlt: 'Pug close-up showing the mouth',
         imageSide: 'right',
         body: [
           { p: 'Preventive dental RWA for shelter and veteran dogs.' },
           {
-            p: 'ViT plaque detection provides tokenized access and community dental-check meetups.',
+            p: 'Tartar, a dark spot on a tooth, or one-sided chewing. Access includes community dental-check meetups.',
           },
         ],
       },
@@ -727,7 +727,7 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     subtitle: 'Detailed protocol overview.',
     introHeading: 'How Protocol Works;',
     intro: [
-      'Acquire the Dynamic NFT or MPT on XRPL for full protocol access. Upload a photo; ViT AI evaluates heart and cardiovascular indicators.',
+      'Acquire the Dynamic NFT or MPT on XRPL for full protocol access. Tiring on a usual walk, or hard breathing after rest. Leash walks use a harness.',
       'Unlock heart-healthy whole-food diet, moderate lake-walk lifestyle routines, and natural cardiovascular-support strategies.',
       'Every access supports no-kill shelter senior-dog heart programs and veteran lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
@@ -735,12 +735,12 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
       {
         heading: 'Grant:',
         image: '/images/protocols/details/heart-strong/grant.png',
-        imageAlt: 'Pug with ViT heart and cardiovascular monitoring overlay',
+        imageAlt: 'Pug resting outdoors',
         imageSide: 'right',
         body: [
           { p: 'Longevity tokenization for working dogs.' },
           {
-            p: 'ViT stamina monitoring powers patriotic DAO impact and veterans and healthy dog programs.',
+            p: 'Tiring on a usual walk, or hard breathing after rest. Access powers patriotic DAO impact and veterans and healthy dog programs.',
           },
         ],
       },
@@ -820,18 +820,18 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     introHeading: 'How Protocol Works;',
     intro: [
       'Purchase the Dynamic NFT or MPT on XRPL to activate this educational immune protocol.',
-      'Upload a photo; ViT AI assesses overall vitality and immune markers. Receive immune-boosting whole-food diet, moderate exercise lifestyle guidance, and natural vitality recommendations.',
+      'Energy, appetite, play, and sleep. Leash walks use a harness. This page does not name an immune product.',
       'Every access funds no-kill shelter wellness programs and patriotic veteran-dog lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
     sections: [
       {
         heading: 'Grant:',
         image: '/images/protocols/details/patriot-immune/grant.png',
-        imageAlt: 'Pug with ViT immune system and vitality monitoring overlay',
+        imageAlt: 'Pug outdoors, alert and at ease',
         imageSide: 'right',
         body: [
           { p: 'Broad resilience RWA for veteran and shelter dogs.' },
-          { p: 'ViT holistic pattern recognition.' },
+          { p: 'Energy, appetite, play, and sleep.' },
           {
             p: 'Veterans and dog parents community meetups drives XRPL adoption and real-world impact.',
           },
@@ -918,18 +918,18 @@ export const protocolDetails: Record<string, ProtocolDetail> = {
     introHeading: 'How Protocol Works;',
     intro: [
       'Acquire the Dynamic NFT or MPT on XRPL for lifetime educational access.',
-      'Upload a photo; ViT AI detects early eye changes, clouding, and redness. Unlock antioxidant-rich whole-food diet, shaded lake-walk lifestyle routines, and natural vision-support strategies.',
+      'Cloudy eye, red eye, squinting, or rubbing. Leash walks use a harness. No drops are listed on this page.',
       'Every access helps fund no-kill shelter vision programs and veteran-dog lake meetups. Educational wellness information only — not veterinary medical advice.',
     ],
     sections: [
       {
         heading: 'Grant:',
         image: '/images/protocols/details/clear-vision/grant.png',
-        imageAlt: 'Pug with ViT eye change detection overlay',
+        imageAlt: 'Pug face with the eyes easy to see',
         imageSide: 'right',
         body: [
           { p: 'Tokenized ocular RWA support for senior, veteran, and service dogs.' },
-          { p: 'ViT detects early eye changes (clouding, redness).' },
+          { p: 'Cloudy eye, red eye, squinting, or rubbing.' },
           {
             p: 'Funds no-kill shelter vision programs plus lakeside veterans dog meetups for prevention.',
           },

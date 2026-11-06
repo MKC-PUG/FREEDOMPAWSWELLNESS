@@ -9,6 +9,7 @@ import {
   fetchVaultEntries,
 } from '@/lib/mypets/vault-api';
 import { fileToVaultAttachment } from '@/lib/mypets/vault-attachment';
+import { clipIdFromBody, deleteGaitClip, getGaitClip, newClipId, saveGaitClip } from '@/lib/mypets/gait-clips';
 import {
   countVaultEntriesLocal,
   createVaultEntryLocal,
@@ -18,7 +19,7 @@ import {
 import type { PetVaultEntry, VaultEntryInput, VaultEntryKind } from '@/lib/mypets/vault-types';
 import { VAULT_KIND_LABELS } from '@/lib/mypets/vault-types';
 
-const TAB_ORDER: VaultEntryKind[] = ['vet_record', 'vaccination', 'daily_note'];
+const TAB_ORDER: VaultEntryKind[] = ['vet_record', 'vaccination', 'daily_note', 'gait_clip'];
 
 type Props = {
   petId: string;
@@ -33,6 +34,31 @@ const EMPTY_FORM = {
   attachmentName: null as string | null,
 };
 
+function GaitClipPlayer({ clipId }: { clipId: string }) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let active = true;
+    let objectUrl: string | null = null;
+    void getGaitClip(clipId).then((blob) => {
+      if (!active || !blob) return;
+      objectUrl = URL.createObjectURL(blob);
+      setUrl(objectUrl);
+    });
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [clipId]);
+  if (!url) {
+    return (
+      <p className="mt-2 text-xs text-white/45">
+        This clip plays on the phone that saved it.
+      </p>
+    );
+  }
+  return <video src={url} controls playsInline className="mt-3 w-full rounded-xl bg-black" />;
+}
+
 export default function PetVaultClient({ petId, petName }: Props) {
   const [activeKind, setActiveKind] = useState<VaultEntryKind>('vet_record');
   const [entries, setEntries] = useState<PetVaultEntry[]>([]);
@@ -42,6 +68,7 @@ export default function PetVaultClient({ petId, petName }: Props) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [formError, setFormError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const refresh = useCallback(async () => {
@@ -70,6 +97,7 @@ export default function PetVaultClient({ petId, petName }: Props) {
 
   const openAdd = () => {
     setForm(EMPTY_FORM);
+    setVideoFile(null);
     setFormError('');
     setFormOpen(true);
   };
@@ -78,6 +106,16 @@ export default function PetVaultClient({ petId, petName }: Props) {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
+    if (activeKind === 'gait_clip') {
+      if (!file.type.startsWith('video/')) {
+        setFormError('Use an MP4 or MOV walking video.');
+        return;
+      }
+      setVideoFile(file);
+      setForm((f) => ({ ...f, attachmentThumb: null, attachmentName: file.name }));
+      setFormError('');
+      return;
+    }
     try {
       const result = await fileToVaultAttachment(file);
       if (!result) {
@@ -102,10 +140,27 @@ export default function PetVaultClient({ petId, petName }: Props) {
     }
     setSaving(true);
     setFormError('');
+    let body = form.body;
+    if (activeKind === 'gait_clip') {
+      if (!videoFile) {
+        setSaving(false);
+        setFormError('Choose a walking video first.');
+        return;
+      }
+      try {
+        const clipId = newClipId();
+        await saveGaitClip(clipId, videoFile);
+        body = [`clipId:${clipId}`, form.body || 'Walking video.'].join('\n');
+      } catch {
+        setSaving(false);
+        setFormError('Could not store that video on this phone.');
+        return;
+      }
+    }
     const input: VaultEntryInput = {
       kind: activeKind,
       title: form.title,
-      body: form.body,
+      body,
       recordDate: form.recordDate || null,
       attachmentThumb: form.attachmentThumb,
       attachmentName: form.attachmentName,
@@ -133,6 +188,8 @@ export default function PetVaultClient({ petId, petName }: Props) {
       } else {
         deleteVaultEntryLocal(entryId);
       }
+      const clipId = clipIdFromBody(entries.find((entry) => entry.id === entryId)?.body ?? '');
+      if (clipId) await deleteGaitClip(clipId);
       await refresh();
     } catch {
       setFormError('Could not remove entry.');
@@ -248,9 +305,12 @@ export default function PetVaultClient({ petId, petName }: Props) {
                     )}
                     {entry.body && (
                       <p className="mt-2 text-xs text-white/55 leading-relaxed line-clamp-3">
-                        {entry.body}
+                        {entry.body.replace(/clipId:\S+\n?/, '')}
                       </p>
                     )}
+                    {activeKind === 'gait_clip' && clipIdFromBody(entry.body) ? (
+                      <GaitClipPlayer clipId={clipIdFromBody(entry.body)!} />
+                    ) : null}
                     {entry.attachmentName && !entry.attachmentThumb && (
                       <p className="mt-1 text-[10px] text-white/40 truncate">{entry.attachmentName}</p>
                     )}
@@ -296,7 +356,9 @@ export default function PetVaultClient({ petId, petName }: Props) {
                       ? 'Rabies booster'
                       : activeKind === 'daily_note'
                         ? 'Good energy after walk'
-                        : 'Annual wellness visit'
+                        : activeKind === 'gait_clip'
+                          ? 'Limp on a short walk'
+                          : 'Annual wellness visit'
                   }
                 />
               </label>
@@ -335,7 +397,7 @@ export default function PetVaultClient({ petId, petName }: Props) {
                     onClick={() => fileRef.current?.click()}
                     className="text-xs font-bold text-amber-400 touch-manipulation"
                   >
-                    {form.attachmentName ? 'Change file' : 'Add photo or PDF'}
+                    {form.attachmentName ? 'Change file' : activeKind === 'gait_clip' ? 'Add walking video' : 'Add photo or PDF'}
                   </button>
                   {form.attachmentName && (
                     <button
@@ -355,7 +417,7 @@ export default function PetVaultClient({ petId, petName }: Props) {
                   <input
                     ref={fileRef}
                     type="file"
-                    accept="image/*,application/pdf"
+                    accept={activeKind === 'gait_clip' ? 'video/mp4,video/quicktime,video/webm,video/*' : 'image/*,application/pdf'}
                     className="hidden"
                     onChange={(e) => void handleFile(e)}
                   />

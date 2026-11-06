@@ -668,6 +668,9 @@ export default function ViTDiagnosticsClient({
                 onWrongProtocolChange={setWrongProtocol}
                 onFeedback={(f) => void sendFeedback(f)}
                 onTryAnother={resetAnalysis}
+                petId={resolvedPetId}
+                petName={activePetName}
+                gaitFile={media?.kind === 'video' ? media.file : null}
               />
             ) : null}
           </div>

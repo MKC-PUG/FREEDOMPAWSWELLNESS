@@ -7,7 +7,14 @@ import type { ImageSelection } from '@/lib/read-image-file';
 
 export type VitMediaSelection =
   | { kind: 'photo'; file: File; previewUrl: string | null }
-  | { kind: 'video'; frames: File[]; previewUrl: string; durationSec: number; fileName: string };
+  | {
+      kind: 'video';
+      file: File;
+      frames: File[];
+      previewUrl: string;
+      durationSec: number;
+      fileName: string;
+    };
 
 type Props = {
   onSelect: (selection: VitMediaSelection) => void;
@@ -55,6 +62,7 @@ export default function ViTMediaUpload({
       setMode('video');
       onSelect({
         kind: 'video',
+        file,
         frames,
         previewUrl: posterDataUrl,
         durationSec,

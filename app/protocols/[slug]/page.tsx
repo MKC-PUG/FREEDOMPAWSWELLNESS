@@ -7,8 +7,8 @@ import PageHeader from '@/app/components/ui/PageHeader';
 import SectionCard from '@/app/components/ui/SectionCard';
 import PrimaryButton from '@/app/components/ui/PrimaryButton';
 import PwaNavLink from '@/app/components/PwaNavLink';
-import ProtocolAffiliatePicks from '@/app/components/protocols/ProtocolAffiliatePicks';
-import { getProtocolAffiliateSection } from '@/lib/protocols/affiliates';
+import OptionalSupportiveProducts from '@/app/components/wellness/OptionalSupportiveProducts';
+import { careForSlug } from '@/lib/wellness/care-format';
 import { protocols } from '../protocols';
 import { protocolDetails, type Block, type DetailSection } from '../details';
 import { protocolOverviewHref, tokenShopHref } from '../../lib/routes';
@@ -118,7 +118,7 @@ export default async function ProtocolDetailPage({
   if (!protocol) notFound();
 
   const detail = protocolDetails[slug];
-  const affiliateSection = getProtocolAffiliateSection(slug, protocol.title);
+  const care = careForSlug(slug);
 
   return (
     <PageShell maxWidth="5xl" backLink={{ href: protocolOverviewHref(), label: 'Back to Protocol Overview' }}>
@@ -169,7 +169,9 @@ export default async function ProtocolDetailPage({
 
             {/* Content sections */}
             <div className="mt-12 space-y-6">
-              {detail.sections.map((s, i) => (
+              {detail.sections
+                .filter((s) => s.heading !== 'Recommended Supplement')
+                .map((s, i) => (
                 <Section key={i} s={s} />
               ))}
             </div>
@@ -202,7 +204,19 @@ export default async function ProtocolDetailPage({
               </div>
             </SectionCard>
 
-            {affiliateSection && <ProtocolAffiliatePicks section={affiliateSection} />}
+            {care ? (
+              <div className="mt-8 space-y-4">
+                <p className="text-center text-sm text-white/70">
+                  <Link
+                    href={`/protocols/${slug}/pamphlet`}
+                    className="font-semibold text-[#F5C242] underline underline-offset-2"
+                  >
+                    Print the one-page plan
+                  </Link>
+                </p>
+                <OptionalSupportiveProducts care={care} showProducts />
+              </div>
+            ) : null}
 
             {/* Disclaimer */}
             <p className="mt-8 text-center text-xs leading-relaxed text-white/45 max-w-3xl mx-auto">
