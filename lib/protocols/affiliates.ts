@@ -1,5 +1,11 @@
 /** Protocol-aligned whole-food & safe-product affiliate picks — env URLs when signed. */
 
+import {
+  MEMBER_PRODUCT_DISCLOSURE,
+  productQualification,
+  type ProductQualification,
+} from '@/lib/wellness/product-qualification';
+
 export type ProtocolAffiliatePick = {
   id: string;
   brandName: string;
@@ -7,6 +13,8 @@ export type ProtocolAffiliatePick = {
   description: string;
   url: string | null;
   active: boolean;
+  qualification: ProductQualification;
+  levelNote: string | null;
 };
 
 export type ProtocolAffiliateSection = {
@@ -19,14 +27,15 @@ export type ProtocolAffiliateSection = {
   disclosure: string;
 };
 
-export const PROTOCOL_AFFILIATE_DISCLOSURE =
-  'Freedom Paws may earn a commission if you purchase through partner links. We only list non-toxic, whole-food, and mission-aligned brands that fit this protocol. Products are not veterinary treatment. Always consult your licensed veterinarian.';
+export const PROTOCOL_AFFILIATE_DISCLOSURE = MEMBER_PRODUCT_DISCLOSURE;
 
 type CatalogPick = {
   id: string;
   brandName: string;
   label: string;
   description: string;
+  qualification?: ProductQualification;
+  levelNote?: string;
 };
 
 /** Curated targets per protocol — URLs activate via env when affiliate deals are signed. */
@@ -43,6 +52,26 @@ export const PROTOCOL_AFFILIATE_CATALOG: Record<string, CatalogPick[]> = {
       brandName: 'The Honest Kitchen',
       label: 'Bone broth & whole-food toppers',
       description: 'Human-grade toppers for collagen and anti-inflammatory whole-food support.',
+    },
+    {
+      id: '3',
+      brandName: 'North Hound Life',
+      label: 'Listed collagen peptides',
+      description:
+        'Grass-fed bovine collagen peptides. One ingredient, mixed into a meal, for skin and joint support.',
+      qualification: 'listed',
+      levelNote:
+        'Metal limits are printed on the maker’s page. The farm is not named, so this is not a Verified product.',
+    },
+    {
+      id: '4',
+      brandName: 'miNATURALS',
+      label: 'Listed collagen peptides',
+      description:
+        'Grass-fed bovine collagen peptides. One ingredient, mixed into a meal, for hip, joint, skin, and coat support.',
+      qualification: 'listed',
+      levelNote:
+        'The maker states a cGMP facility and Health Canada license NN.C9K7. The lab panel is not printed on this card.',
     },
   ],
   'freedom-calm': [
@@ -213,6 +242,8 @@ function resolvePick(slug: string, catalog: CatalogPick): ProtocolAffiliatePick 
     description: catalog.description,
     url,
     active: Boolean(url),
+    qualification: productQualification(catalog.qualification),
+    levelNote: catalog.levelNote ?? null,
   };
 }
 

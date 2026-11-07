@@ -30,8 +30,8 @@ const FUNNEL_BY_SLUG: Record<string, Omit<VitWellnessFunnelHint, 'protocolSlug'>
   },
   'max-movement': {
     protocolLabel: 'Max Movement Pro',
-    safePickNote: 'Durable outdoor gear and joint-friendly enrichment',
-    safeProductIds: ['ruffwear', 'west-paw'],
+    safePickNote: 'Durable outdoor gear, joint-friendly enrichment, and Listed collagen peptides',
+    safeProductIds: ['north-hound-life-collagen', 'minaturals-k9-collagen', 'ruffwear', 'west-paw'],
   },
   'patriot-immune': {
     protocolLabel: 'Patriot Defender',
@@ -55,8 +55,8 @@ const FUNNEL_BY_SLUG: Record<string, Omit<VitWellnessFunnelHint, 'protocolSlug'>
   },
   'infrared-spine': {
     protocolLabel: 'Red Light Spine Support',
-    safePickNote: 'Gentle movement and recovery enrichment',
-    safeProductIds: ['ruffwear', 'west-paw'],
+    safePickNote: 'Gentle movement, recovery enrichment, and a Listed collagen peptide',
+    safeProductIds: ['north-hound-life-collagen', 'ruffwear', 'west-paw'],
   },
 };
 

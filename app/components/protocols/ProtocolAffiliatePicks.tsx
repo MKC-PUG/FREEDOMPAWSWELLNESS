@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ProtocolAffiliateSection } from '@/lib/protocols/affiliates';
+import { PRODUCT_QUALIFICATION_LABEL } from '@/lib/wellness/product-qualification';
 
 type Props = {
   section: ProtocolAffiliateSection;
@@ -36,8 +37,20 @@ export default function ProtocolAffiliatePicks({ section }: Props) {
                 <p className="text-xs font-bold uppercase tracking-wide text-emerald-400/90">
                   {pick.label}
                 </p>
+                <span
+                  className={`mt-2 inline-block rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                    pick.qualification === 'verified'
+                      ? 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300'
+                      : 'border-[#F5C242]/40 bg-[#F5C242]/10 text-[#F5C242]'
+                  }`}
+                >
+                  {PRODUCT_QUALIFICATION_LABEL[pick.qualification]}
+                </span>
                 <p className="mt-1 text-lg font-bold text-white">{pick.brandName}</p>
                 <p className="mt-1.5 text-sm text-white/60 leading-relaxed">{pick.description}</p>
+                {pick.levelNote ? (
+                  <p className="mt-1.5 text-xs text-white/45 leading-relaxed">{pick.levelNote}</p>
+                ) : null}
               </div>
               <div className="shrink-0 sm:pt-1">
                 {pick.active && pick.url ? (

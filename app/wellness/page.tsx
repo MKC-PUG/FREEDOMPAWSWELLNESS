@@ -64,11 +64,11 @@ export default function WellnessPage() {
             </span>
             <div className="min-w-0 flex-1">
               <h2 className="text-sm font-bold text-emerald-300">
-                Safe Picks — non-toxic chews, toys &amp; home
+                Safe Picks — Listed and Verified products
               </h2>
               <p className="mt-2 text-sm text-white/65 leading-relaxed">
-                Ten vetted brands for dental chews, enrichment toys, non-toxic cleaners, and
-                optional monitor setup — curated for allergy, gut, and dental protocol alignment.
+                Collagen peptides, dental chews, enrichment toys, non-toxic cleaners, and optional
+                monitor setup. Each card says Listed or Verified.
               </p>
               <Link
                 href="/wellness/safe-products"

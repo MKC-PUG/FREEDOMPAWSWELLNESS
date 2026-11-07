@@ -105,6 +105,19 @@ Publish internally now; publish externally on `/wellness/partners` (or a dedicat
 
 **SKU rule (unchanged from Safe Picks):** Brand acceptance ≠ every SKU. Whitelist per protocol; no BHA/BHT/ethoxyquin in primary picks; no rawhide as primary chew; quarterly FDA recall audit.
 
+### Member-facing product labels
+
+Founding, Verified, and Community stay the partnership with the company. The product card uses two other words.
+
+| Label | What the member is being told |
+|-------|-------------------------------|
+| **Listed** | The ingredient list is readable. The card says support only. A lab panel is requested. The source may still be unnamed. |
+| **Verified** | Everything in Listed, plus a named source, a printed contaminant panel, and a manufacturing record. The brand page does not promise a cure, a longer life, or treatment of a disease. |
+
+Both labels use one disclosure: Freedom Paws may earn a commission if you use a partner link. The partner sells the product. Freedom Paws does not. This is not veterinary treatment. Ask your own veterinarian about your dog.
+
+Listed peptide jars on the Safe Picks page: North Hound Life Pure Collagen and miNATURALS K9 collagen peptide powder. Neither is a Verified product. Taily, Collagenie, Vetrition, the Native Pet Skin+Coat chew, and GELITA are not on the list.
+
 ---
 
 ## 4. Partnership tiers

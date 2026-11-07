@@ -65,6 +65,26 @@ export const VENDOR_VIDEO_TOPICS: VendorVideoTopic[] = [
     backgroundId: 'hero',
   },
   {
+    id: 'vendor-north-hound-collagen',
+    title: 'A collagen peptide on the meal',
+    vendor: 'North Hound Life',
+    product: 'Pure Collagen peptides',
+    teach:
+      'A single-ingredient collagen peptide can be mixed into a meal as daily support for skin and joints. It is a Listed product. It does not repair joints or lengthen a life.',
+    doNotSay: 'It treats arthritis, reverses hip dysplasia, or is a Verified product.',
+    backgroundId: 'wellness',
+  },
+  {
+    id: 'vendor-minaturals-collagen',
+    title: 'Collagen peptides and the lab panel',
+    vendor: 'miNATURALS',
+    product: 'K9 collagen peptide powder',
+    teach:
+      'A single-ingredient collagen peptide powder can be mixed into a meal as support for hips, joints, skin, and coat. The lab panel is still requested, so the card stays Listed.',
+    doNotSay: 'It treats arthritis, the lab panel is already printed here, or the product is Verified.',
+    backgroundId: 'navy',
+  },
+  {
     id: 'vendor-branch-basics',
     title: 'Floors and itchy skin',
     vendor: 'Branch Basics',

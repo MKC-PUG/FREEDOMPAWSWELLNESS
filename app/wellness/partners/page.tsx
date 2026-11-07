@@ -61,6 +61,10 @@ export default function WellnessPartnersHubPage() {
             <li>Freedom Paws is education &amp; referral — not insurer, clinic, or prescriber.</li>
             <li>ViT urgent gating (≥80% severe-indicator congruency) always defers to in-person ER when indicated.</li>
             <li>Partners removed if misaligned with natural wellness positioning.</li>
+            <li>
+              Product cards use Listed and Verified. Those labels describe the jar. Founding,
+              Verified, and Community stay the partnership with the company.
+            </li>
           </ul>
           <p className="mt-4 text-xs text-white/45">
             Contact:{' '}

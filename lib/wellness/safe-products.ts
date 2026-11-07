@@ -1,6 +1,13 @@
-/** Freedom Paws Safe Picks — curated non-toxic chews, toys, and home products. */
+/** Freedom Paws Safe Picks — curated products with a member-facing Listed or Verified label. */
+
+import {
+  MEMBER_PRODUCT_DISCLOSURE,
+  productQualification,
+  type ProductQualification,
+} from '@/lib/wellness/product-qualification';
 
 export type SafeProductCategory =
+  | 'nutrition-peptides'
   | 'chews-dental'
   | 'toys-enrichment'
   | 'home-environment'
@@ -18,6 +25,8 @@ export type SafeProductPick = {
   url: string | null;
   active: boolean;
   priority: 'featured' | 'standard';
+  qualification: ProductQualification;
+  levelNote: string | null;
 };
 
 export type SafeProductsPageData = {
@@ -25,12 +34,13 @@ export type SafeProductsPageData = {
   picks: SafeProductPick[];
   activeCount: number;
   featured: SafeProductPick[];
+  listedCount: number;
+  verifiedCount: number;
   byCategory: Record<SafeProductCategory, SafeProductPick[]>;
   disclosure: string;
 };
 
-export const SAFE_PRODUCTS_DISCLOSURE =
-  'Freedom Paws may earn a commission on partner purchases. We curate for non-toxic materials and mission alignment — not every SKU from a brand is approved. Products are not veterinary treatment. Check ingredients for your dog\'s allergies and consult your licensed veterinarian.';
+export const SAFE_PRODUCTS_DISCLOSURE = MEMBER_PRODUCT_DISCLOSURE;
 
 export const SAFE_PRODUCT_CRITERIA = [
   'No rawhide in our primary chew picks',
@@ -44,6 +54,12 @@ export const SAFE_PRODUCT_CATEGORY_LABELS: Record<
   SafeProductCategory,
   { title: string; subtitle: string; icon: string }
 > = {
+  'nutrition-peptides': {
+    icon: '🥣',
+    title: 'Nutrition peptides',
+    subtitle:
+      'Collagen peptides with a readable ingredient list. These jars are Listed. None is a Verified product yet.',
+  },
   'chews-dental': {
     icon: '🦷',
     title: 'Chews & dental',
@@ -66,10 +82,53 @@ export const SAFE_PRODUCT_CATEGORY_LABELS: Record<
   },
 };
 
-type CatalogEntry = Omit<SafeProductPick, 'url' | 'active'>;
+type CatalogEntry = Omit<SafeProductPick, 'url' | 'active' | 'qualification' | 'levelNote'> & {
+  qualification?: ProductQualification;
+  levelNote?: string;
+};
 
 /** Curated catalog — affiliate URLs activate via env when signed. */
 export const SAFE_PRODUCTS_CATALOG: CatalogEntry[] = [
+  {
+    id: 'north-hound-life-collagen',
+    brandName: 'North Hound Life',
+    productLine: 'Pure Collagen peptides',
+    category: 'nutrition-peptides',
+    description:
+      'Grass-fed bovine collagen peptides. One ingredient, mixed into a meal, for skin and joint support.',
+    whySafe: [
+      'One ingredient',
+      'No BHA, BHT, or ethoxyquin',
+      'Heavy-metal limits printed by the maker',
+      'Support wording on this card only',
+    ],
+    protocolSlugs: ['max-movement', 'infrared-spine'],
+    applyUrl: null,
+    priority: 'standard',
+    qualification: 'listed',
+    levelNote:
+      'Metal limits are printed on the maker’s page. The farm is not named, so this is not a Verified product.',
+  },
+  {
+    id: 'minaturals-k9-collagen',
+    brandName: 'miNATURALS',
+    productLine: 'K9 collagen peptide powder',
+    category: 'nutrition-peptides',
+    description:
+      'Grass-fed bovine collagen peptides. One ingredient, mixed into a meal, for hip, joint, skin, and coat support.',
+    whySafe: [
+      'One ingredient',
+      'No BHA, BHT, or ethoxyquin',
+      'cGMP facility stated by the maker',
+      'Lab panel still requested',
+    ],
+    protocolSlugs: ['max-movement'],
+    applyUrl: null,
+    priority: 'standard',
+    qualification: 'listed',
+    levelNote:
+      'The maker states a cGMP facility and Health Canada license NN.C9K7. The lab panel is not printed on this card.',
+  },
   {
     id: 'west-paw',
     brandName: 'West Paw',
@@ -211,10 +270,13 @@ function resolvePick(entry: CatalogEntry): SafeProductPick {
     ...entry,
     url,
     active: Boolean(url),
+    qualification: productQualification(entry.qualification),
+    levelNote: entry.levelNote ?? null,
   };
 }
 
 const CATEGORY_ORDER: SafeProductCategory[] = [
+  'nutrition-peptides',
   'chews-dental',
   'toys-enrichment',
   'home-environment',
@@ -226,6 +288,8 @@ export function getSafeProductsPageData(): SafeProductsPageData {
   const picks = SAFE_PRODUCTS_CATALOG.map(resolvePick);
   const activeCount = picks.filter((p) => p.active).length;
   const featured = picks.filter((p) => p.priority === 'featured');
+  const listedCount = picks.filter((p) => p.qualification === 'listed').length;
+  const verifiedCount = picks.filter((p) => p.qualification === 'verified').length;
 
   const byCategory = CATEGORY_ORDER.reduce(
     (acc, cat) => {
@@ -240,6 +304,8 @@ export function getSafeProductsPageData(): SafeProductsPageData {
     picks,
     activeCount,
     featured,
+    listedCount,
+    verifiedCount,
     byCategory,
     disclosure: SAFE_PRODUCTS_DISCLOSURE,
   };

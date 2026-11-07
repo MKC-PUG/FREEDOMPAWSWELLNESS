@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { SafeProductPick } from '@/lib/wellness/safe-products';
+import { PRODUCT_QUALIFICATION_LABEL } from '@/lib/wellness/product-qualification';
 import { protocols } from '@/app/protocols/protocols';
 
 type Props = {
@@ -16,8 +17,17 @@ export default function SafeProductCard({ pick }: Props) {
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
+            <span
+              className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                pick.qualification === 'verified'
+                  ? 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300'
+                  : 'border-[#F5C242]/40 bg-[#F5C242]/10 text-[#F5C242]'
+              }`}
+            >
+              {PRODUCT_QUALIFICATION_LABEL[pick.qualification]}
+            </span>
             {pick.priority === 'featured' && (
-              <span className="inline-block rounded-full border border-emerald-500/40 bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-300">
+              <span className="ml-2 inline-block rounded-full border border-emerald-500/40 bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-300">
                 Featured pick
               </span>
             )}
@@ -26,6 +36,9 @@ export default function SafeProductCard({ pick }: Props) {
             </p>
             <p className="text-lg font-bold text-white">{pick.brandName}</p>
             <p className="mt-1.5 text-sm text-white/60 leading-relaxed">{pick.description}</p>
+            {pick.levelNote ? (
+              <p className="mt-1.5 text-xs text-white/45 leading-relaxed">{pick.levelNote}</p>
+            ) : null}
           </div>
           <div className="shrink-0">
             {pick.active && pick.url ? (

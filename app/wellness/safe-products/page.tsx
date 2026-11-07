@@ -9,6 +9,7 @@ import {
   SAFE_PRODUCT_CATEGORY_LABELS,
   SAFE_PRODUCT_CRITERIA,
 } from '@/lib/wellness/safe-products';
+import { PRODUCT_QUALIFICATION_SUMMARY } from '@/lib/wellness/product-qualification';
 
 export const metadata: Metadata = {
   title: 'Safe Picks • Non-Toxic Chews, Toys & Home • Freedom Paws',
@@ -35,17 +36,28 @@ export default function SafeProductsPage() {
         title="Curated non-toxic chews, toys & home"
         subtitle={
           <>
-            Ten vetted brands and product lines aligned with our{' '}
-            <strong className="text-white/90">wellness-first</strong> standards — no rawhide
-            priority, transparent sourcing, and quarterly recall review. Live affiliate links appear
-            as partners are signed.
+            Each product is <strong className="text-white/90">Listed</strong> or{' '}
+            <strong className="text-white/90">Verified</strong>. Those words describe the jar.
+            Founding, Verified, and Community stay the partnership with the company. Live affiliate
+            links appear as partners are signed.
           </>
         }
         className="mt-2 mb-8"
       />
 
         <SectionCard className="mb-8 border-emerald-500/25 bg-emerald-950/15">
-          <h2 className="text-sm font-bold text-emerald-300">How we vet Safe Picks</h2>
+          <h2 className="text-sm font-bold text-emerald-300">What the label means</h2>
+          <p className="mt-3 text-sm text-white/70 leading-relaxed">
+            <strong className="text-[#F5C242]">Listed.</strong> {PRODUCT_QUALIFICATION_SUMMARY.listed}
+          </p>
+          <p className="mt-2 text-sm text-white/70 leading-relaxed">
+            <strong className="text-emerald-300">Verified.</strong> {PRODUCT_QUALIFICATION_SUMMARY.verified}
+          </p>
+          <p className="mt-3 text-xs text-white/45">
+            {data.listedCount} Listed. {data.verifiedCount} Verified.
+            {data.verifiedCount === 0 ? ' No product on this page is Verified yet.' : ''}
+          </p>
+          <h2 className="mt-6 text-sm font-bold text-emerald-300">How we vet Safe Picks</h2>
           <ul className="mt-3 space-y-2 text-sm text-white/65 list-disc pl-5">
             {SAFE_PRODUCT_CRITERIA.map((c) => (
               <li key={c}>{c}</li>
