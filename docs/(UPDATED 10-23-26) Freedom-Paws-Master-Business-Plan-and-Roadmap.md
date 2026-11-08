@@ -1,18 +1,21 @@
-# UPDATED 10/23/26
+# UPDATED OCTOBER 31, 2026
 # Freedom Paws Wellness
 # Master Business Plan, Pet Monitor Module, Pricing & 12–15 Week Launch Roadmap
 
-**Title:** UPDATED 10/23/26  
+> **Superseded for operations on November 8, 2026.** The business bible is `(11-8-26) Freedom-Paws-Master-Business-Plan-2026-2030.md`. The launch checklist is `(11-8-26) Freedom-Paws-2026-2027-New-Launch-Roadmap.md`. This file is history. Do not follow its prices, week table, or module priorities when they differ from the bible.
+
+**Title:** UPDATED OCTOBER 31, 2026  
+**Earlier title on this file:** UPDATED 10/23/26. The October 23 body remains the plan. The October 31 change is the launch sequence after the posting gate.  
 **Document purpose:** Strategic plan for the “everything app” vision — US launch first, pet room monitoring module, hybrid protocol pricing, 5-year outlook, and week-by-week tasks to launch in 12–15 weeks.
 
-**Last updated:** October 23, 2026 (Phase 0 rebaseline: pre-L5 duties, category monetization, five planning years from today)  
+**Last updated:** October 31, 2026. L5 posting gate cleared October 28, 2026 on the October 26 Bass return. Working sequence: `docs/(UPDATED 10-31-26) Freedom-Paws-2026-Launch-Roadmap.md`.  
 **Project folder:** `freedompaws-app`  
 **Companion spreadsheet:** `docs/(UPDATED 10-23-26) Freedom-Paws-5-Year-Financial-Model.csv` (same numbers also at `docs/Freedom-Paws-5-Year-Financial-Model.csv`)  
 **Day-to-day checkboxes:** `docs/(9-22-26) Freedom-Paws-1-Master-Timeline-Checklist-Today-to-Thriving.md`  
 **Related docs:** `Photo-Booth-Phase-1-Roadmap.md`, `PWA-Setup.md`, `Deploy-and-Brand-Protection.md`  
 **Historical plan:** `docs/(UPDATED 10-23-26) Freedom-Paws-Master-Business-Plan-May-30-2026-Historical.md` (May 30, 2026 body). Kept for the record. Budgets and the launch clock use this file.
 
-**Not legal, tax, financial, or veterinary advice.** Figures are planning estimates. If the Bass clearance PDF arrives later than the planning date below, slide every selling milestone by the same number of weeks.
+**Not legal, tax, financial, or veterinary advice.** Figures are planning estimates. The posting writing is saved. If EIN or bank slips, slide every selling milestone by the same number of weeks.
 
 ---
 
@@ -20,19 +23,21 @@
 
 **Phase:** **0 — legal floor and brand. No selling.**  
 **Entity:** Freedom Paws Wellness LLC (Wyoming), formed September 11, 2026. Registered agent: Registered Agents Inc, 30 N Gould St Ste R, Sheridan, WY 82801.  
-**Founder name on the Articles:** still needs a Wyoming **Statement of Correction** (prior autofill **Slumpff** → **Michael Kevin Corey**, $60, mail). Use Corey on every new document.  
-**Counsel:** Bass, Berry & Sims — Roy Wyman. Engagement signed and **$4,000 paid September 11, 2026.** Drafts received about September 25–27. **One comment round sent October 2, 2026** (Paula Alvarez and Roy Wyman). **October 23, 2026:** Paula returned Privacy Policy and Terms. Sheridan registered-agent address stays (mail forwards to info@freedompawsinc.com). **October 24, 2026:** reply sent to Paula and Roy. Public phone on the clean drafts is **(629) 206-4430**. **L5 is still open** until she returns the Terms without the leftover arbitration notice and sends written “approved for TN pilot” confirmation. That confirmation is the L5 / A10 gate.  
+**Founder name on the Articles:** Wyoming **Statement of Correction filed October 9, 2026** (prior autofill **Slumpff** → **Michael K. Corey**). Original ID 2026-002079066. Amendment ID 2026-006979381. Receipt 005505671, $60 paid. Use Corey on every new document.  
+**Counsel:** Bass, Berry & Sims — Roy Wyman. Engagement signed and **$4,000 paid September 11, 2026.** **October 28, 2026: L5 / 0B.4 posting gate cleared** on the October 26 Terms and Privacy. Phone **(629) 206-4430**. Sheridan address kept. Arbitration leftovers are gone. The jury waiver stays, on counsel’s recommendation, and the founder accepted it. Bass’s word is **“final”** for the Tennessee pilot. Bass will not say **“approved.”** Clerk note: `docs/Packet-A-Counsel-Outreach-July-2026/BBS-return-2026-10-26/LEX-CLERK-NOTE-2026-10-26.md`.  
 **Money rails:** No EIN, no company bank, no Stripe payouts to the LLC. Pre-bank costs stay founder advances until the bank opens.  
 **Product:** Preview is live at `https://app.freedompawsinc.com`. ViT, Photo Booth, My Pets, Token Shop, Freedom Paws ID Track 1, and the adopt directory are largely built. Monitor is founder-beta only. VitProScan is a separate B2B path after consumer L5.  
 **Still held:** `SITE_MODE=public`, scaled shelter Email 1, shop CTAs, affiliate links, hard give-back percentages, reunion-rate claims, diagnosis claims.
 
-**Planning assumption for the selling clock (not a promise from counsel):** clearance PDF **by January 31, 2027**, EIN and bank in the following two weeks, first measured selling half **April 1–September 30, 2027**. Silence from Bass is not clearance. A short status note is allowed; the gate opens only when the PDF or written approval is saved.
+**October 31, 2026 — launch sequence.** The posting writing is saved **October 28, 2026**. Phone check of enroll consent (version 2026-10-14) and one urgent ViT red banner passed on production **October 31, 2026**. EIN and bank are the next money steps and are not done. Public mode also waits on a $1 Stripe charge into the LLC, a second-device unlock, and a Framer button audit. One shelter Email 1 is after public mode. Educational videos and one AAHA registry question may start now. Vendor links stay unpublished. Grant forms stay unsubmitted until the EIN and one live listing exist. First measured selling half remains **April 1–September 30, 2027** unless the EIN or the bank slips. Bass did not guarantee sufficiency.
+
+The full order is `docs/(UPDATED 10-31-26) Freedom-Paws-2026-Launch-Roadmap.md`.
 
 ---
 
-## Phase 0 duty list — finish these before L5, open banking, and selling
+## Phase 0 duty list — posting gate is cleared; banking and selling are not
 
-Work the open rows. Leave the hold list untouched until the clearance PDF is saved.
+Work the open rows. The hold list below is no longer waiting on Bass. Those items are still not done.
 
 ### Already done
 
@@ -50,12 +55,12 @@ Work the open rows. Leave the hold list untouched until the clearance PDF is sav
 | ☐ | # | Duty | Done when |
 |---|-----|------|-----------|
 | ☐ | 0A.1 | Confirm Articles and filing receipt are in the Legal folder | PDFs filed |
-| ☐ | 0A.2 | Mail Statement of Correction (Slumpff → Michael Kevin Corey) | $60 check and form mailed; copy kept |
+| ☑ | 0A.2 | Statement of Correction filed (Slumpff → Michael K. Corey) | Filed October 9, 2026. Receipt 005505671. Copy in `docs/legal/wy-sos/` |
 | ☐ | 0A.3 | Confirm Registered Agents Inc login and mail alerts | Scanned mail is visible |
 | ☐ | 0A.4 | Sign the Operating Agreement (Corey; EIN may stay blank) | Signed PDF kept private |
 | ☐ | 0A.5 | Log founder advances (Bass $4,000, Framer, Wyoming fees, correction) | Formation-record section 8 current |
-| ☐ | 0B.4 | Receive written **approved for TN pilot** PDF or email | **L5 / A10 gate** |
-| ☐ | 0B.5 | Save that PDF to `~/Documents/Freedom Paws Wellness/Legal/` and write the date on the checklist | File exists |
+| ☑ | 0B.4 | Receive the Tennessee-pilot posting writing | **Cleared October 28, 2026.** Bass says “final,” not “approved.” |
+| ☑ | 0B.5 | Save that writing to `~/Documents/Freedom Paws Wellness/Legal/` and write the date | **October 28, 2026.** `Legal/BBS-return-2026-10-26/`. No separate approval PDF. |
 | ☐ | 0C.1 | Lock the SuperBud reference (face and markings stay fixed) | Reference file named |
 | ☐ | 0C.2 | Produce 1 episode every 1–2 weeks and cut 5–8 Shorts | Files ready |
 | ☐ | 0C.3 | Every piece says it is not a diagnosis, gets a human review, and is not a government license | Caption checklist |
@@ -75,7 +80,9 @@ Work the open rows. Leave the hold list untouched until the clearance PDF is sav
 | ☐ | 0F.7 | Optional: one AAHA registry question (`petmicrochiplookup@aaha.org`). No partnership claim | Sent or deferred |
 | ☐ | 0F.8 | If Bass has been silent past the date you set, send one short status note to Paula and Roy | Note sent, or still inside your wait window |
 
-### Hold until the clearance PDF is saved
+### Still not done after the October 28, 2026 posting clearance
+
+The L5 hold on these rows is lifted. None of them is done.
 
 | Hold | What stays off |
 |------|----------------|
@@ -88,7 +95,7 @@ Work the open rows. Leave the hold list untouched until the clearance PDF is sav
 | ☐ | Scanner-kit inventory beyond a pilot the moment one shelter has said yes |
 | ☐ | Paid ads, cloud video recording, and a public token or wallet story |
 
-**Phase 0 exit:** 0B.4 clearance PDF saved **and** 0A.2 correction mailed.
+**Phase 0 counsel exit:** 0B.4 cleared October 28, 2026, and 0A.2 filed October 9, 2026. Public mode stays off.
 
 ---
 
@@ -114,7 +121,7 @@ Work the open rows. Leave the hold list untouched until the clearance PDF is sav
 
 Freedom Paws Wellness is a US-first, phone-first company: a daily habit for dog owners (ViT education, protocols, SuperBud Photo Booth, Freedom Paws ID) and, on a separate track, VitProScan for clinics. Shelters are the distribution wedge. Scanner kits open doors. Membership, protocols, affiliates, and clinic subscriptions are how the company gets paid.
 
-**Where the company is:** the product is largely built. The company may not sell until Bass writes the pilot clearance, the EIN exists, and a bank account is in the LLC’s name.
+**Where the company is:** the product is largely built. Bass delivered final Tennessee-pilot Terms and Privacy, and the posting gate cleared October 28, 2026. The company may not sell until the EIN exists, a bank account is in the LLC’s name, a $1 charge lands in that account, and public mode is actually on.
 
 **How this update changes the May 30, 2026 plan:**
 
@@ -346,12 +353,12 @@ Full ten selling halves (April 2027–March 2032), which is the shifted June mod
 
 ## 11. Twelve weeks after the bank is open
 
-Week 0 is the clearance day. Weeks 1–12 start once the PDF is saved. Dates below assume a **January 31, 2027** clearance. Move the whole block if that date moves.
+Week 0 was the posting clearance. That day was **October 28, 2026**, not a later assumed date. Week 1, putting the counsel text on the site, is done. Weeks 2–12 start when the bank opens. If the EIN or the bank slips, slide every later row by the same number of weeks. The October 31, 2026 sequence for videos, AAHA, the vendor list, the grant file, and one unsent Email 1 is `docs/(UPDATED 10-31-26) Freedom-Paws-2026-Launch-Roadmap.md`.
 
 | Week | Work | Pass |
 |------|------|------|
-| **0** | Save the clearance PDF. Mail the name correction if it is still open | Phase 0 exit checked |
-| **1** | Put approved text in `lib/legal/content.ts`. Set `LEGAL_LAST_UPDATED`. Deploy. Apply for the EIN in the name **Michael Kevin Corey**, Wyoming LLC | `/terms` and `/privacy` match counsel. CP 575 saved |
+| **0** | **Done October 28, 2026.** Posting writing saved. There is no separate approval PDF. The name correction is already filed (October 9, 2026) | Posting gate cleared. Other Phase 0 boxes stay open |
+| **1** | **Text is done October 28, 2026.** `/terms` and `/privacy` match the October 26 return. Privacy date line reads October 28, 2026. Still open: apply for the EIN in the name **Michael Kevin Corey**, Wyoming LLC | CP 575 saved |
 | **2** | Open the bank in **Freedom Paws Wellness LLC**. Book founder advances as reimbursement or capital. Stripe in **test** mode on the LLC | Account live. Test charge does not hit a personal account |
 | **3** | Turn Stripe live for a $1 test into the LLC. Confirm membership and one protocol unlock on a second device | $1 received |
 | **4** | `NEXT_PUBLIC_SITE_MODE=public`. Publish Framer. Waitlist email #1. Soft social CTA: start in the app | Indexing on. Six-tap iPhone check |
@@ -363,6 +370,9 @@ Week 0 is the clearance day. Weeks 1–12 start once the PDF is saved. Dates bel
 | **10** | Weekly 15-minute KPI glance: enrolls, ViT runs, payments, support | Sheet exists |
 | **11** | Fix the top three bugs. Read every public sentence for a diagnosis or a match-rate claim | Claim pass |
 | **12** | Scoreboard: public mode, one partner, one real payment, enrolls greater than zero. Clinic advisor conversations may start. Monitor stays off | Phase 2 exit |
+| **n8n** | The week the other five Tennessee pilot emails are logged. About 6 to 10 weeks after the bank opens, after week 6. Cloud Starter, billed monthly. New workspace, because the trial and its 30-day hold will have ended. | Workflows Inactive until `Approved=YES`. Same plan covers the nightly CRM sync, the weekly KPI note, and the Buffer webhook. Each run stays under 5 minutes. |
+
+**n8n reminder, inside this clock:** Do not subscribe the week the bank opens. The row above is the subscribe week. The reminder card is on Command, in Overflow, under the five boxes: **n8n Starter. After the bank. After the five pilot emails.** It is not one of the five boxes.
 
 **Explicitly outside these 12 weeks:** monitor cloud relay, VitProScan national marketing, scanner launch stock of 200, paid acquisition, XRPL checkout, a second state filing.
 
@@ -386,9 +396,9 @@ Week 0 is the clearance day. Weeks 1–12 start once the PDF is saved. Dates bel
 **Before any sale:**
 
 - [x] LLC active — Freedom Paws Wellness LLC (Wyoming), September 11, 2026  
-- [ ] Statement of Correction mailed  
-- [ ] Bass written clearance saved  
-- [ ] Terms and privacy match that clearance  
+- [x] Statement of Correction filed — October 9, 2026 (receipt 005505671)  
+- [x] Bass Tennessee-pilot posting writing saved — October 28, 2026. Word is “final,” not “approved.”  
+- [x] Terms and privacy match that return. Privacy date line reads October 28, 2026.  
 - [ ] EIN and LLC bank  
 - [ ] Stripe payouts to that bank, with a refund policy  
 - [ ] `NEXT_PUBLIC_SITE_MODE=public`  
@@ -402,6 +412,7 @@ Week 0 is the clearance day. Weeks 1–12 start once the PDF is saved. Dates bel
 | `docs/(UPDATED 10-23-26) Freedom-Paws-5-Year-Financial-Model.csv` | Numbers behind section 8 |
 | `docs/(UPDATED 10-23-26) Freedom-Paws-Master-Business-Plan-May-30-2026-Historical.md` | May 30, 2026 historical plan |
 | `docs/(9-22-26) Freedom-Paws-1-Master-Timeline-Checklist-Today-to-Thriving.md` | Phase checkboxes |
+| `docs/(UPDATED 10-31-26) Freedom-Paws-2026-Launch-Roadmap.md` | Sequence from October 31, 2026: EIN, bank, public mode, one Email 1, grants, vendors |
 
 ---
 
