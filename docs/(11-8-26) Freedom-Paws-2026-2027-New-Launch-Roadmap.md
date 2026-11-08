@@ -37,6 +37,8 @@ The best scaled approach, stated as a rule: finish the membership so a stranger 
 
 One founder does the work. Hours on each line are that person’s time. Waiting on the IRS, a bank, counsel, or an affiliate program is calendar time and is labeled as a wait.
 
+The click path for every line is `(11-8-26) Freedom-Paws-Growth-Plan-Checklist.md`. This roadmap states the decision and the boundary of the cash-register build. It does not walk the screens.
+
 If the EIN or the bank slips, slide every later date by the same number of weeks. Do not catch up by turning ads on early.
 
 The build in this roadmap ends in November 2027: a shelter can be invoiced, an adopter can claim a dog that was enrolled at intake, and a membership renews on the card already on file. After that, the work repeats. New product lines are not how the next year is won.
@@ -128,9 +130,43 @@ Raise ad spend to the next step only when the prior month hit at least 70 percen
 
 ---
 
+## What finishes the project
+
+The November cash register is the first slice. The project in this roadmap is finished in November 2027: a stranger can pay, a shelter can be invoiced, an adopter can claim a dog that was enrolled at intake, and a membership renews on the card already on file.
+
+Public mode, ads, and shelters are part of that finish. They sit in later months, not in the November code. The photo booth is already in the app. Selling photo packs is not a remaining step, and it stays off through November 2027.
+
+| Work | When it is done | What done looks like |
+|------|-----------------|----------------------|
+| Cash register | November 2026 | The $79 / $99 / $12 / $29 prices exist, and a second device shows the membership. |
+| Public mode | December 2026 | `NEXT_PUBLIC_SITE_MODE=public` after the $1 is in the LLC, the second-device test has passed, and every Framer button has been checked. Founding checkout is on. |
+| Ads | After five real memberships, then each month under the cost rule | The first budget is $350. It rises to $700 in February 2027 only if December and January produced at least 15 memberships and an ad-acquired member cost under $100. A set that spends $150 with no member under $120 is turned off. |
+| Shelters | December 2026 through November 2027 | Thirty Tennessee notes in December, municipal and private. Pilot paperwork in February. In May, a shelter enrolls a dog before an owner exists and a test adopter claims it. A second pilot in June, a third in August. The $69 agreement is drafted in September, signed in October if the pilot produced owner signups, and invoiced in November. |
+| Photo booth | Not a step in this project | The booth is already built. Pack checkout stays unpublished. A costume render has a real vendor cost, and this launch does not turn that checkout on. |
+
+The month sections below are the steps for each of those rows.
+
+---
+
 ## November 8–30, 2026 — the cash register
 
 The month is successful with zero members and zero ad spend, if a real card payment creates a membership that a second device can see. Overhead in the plan is about $90. Cash ends near $4,910 if the account started at $5,000. A different starting balance moves cash by the same amount. It does not change the work.
+
+### Cash-register build
+
+This is the build, and the new prices are the offer. A sale exists only when the membership is a row on the server, tied to the account.
+
+Founding annual is **$79** through February 28, 2027. Annual is **$99** from March 1, 2027, and that button stays off the page until that date. Monthly is **$12** and is not featured. The protocol pass is **$29** and covers one protocol for twelve months. The **$18** lifetime price comes off the primary button.
+
+Founding annual, standard annual, and the pass are one-time charges. Each row carries an end date twelve months out. Monthly is the only Stripe subscription. Charging a saved card again at the end of the year is the October and November 2027 renewal build. It is not part of this build.
+
+One webhook checks Stripe’s signature and writes the entitlement: the account, the plan, the status, and the end date. The success page does not grant access. A verified Xaman payment writes that same row, at the same dollar price. The browser flag used today is not a membership.
+
+The free ViT scan requires an account and stops after one run. The result page then shows the annual membership. A member gets eight ViT runs and eight label scans in that month, counted on the server. The public photo path is the in-browser upload that worked on the October 31 phone check.
+
+The build is proved when a test card creates the row, opening the success address by itself does not, and a second device on the same account shows the membership with no manual step. The live one-dollar charge waits until the LLC bank is the Stripe payout account. The test-card proof can finish before that deposit.
+
+Public mode, ads, and the shelter work are outside this November code, and they are the later months of this same roadmap. Photo-booth checkout stays unpublished through November 2027 and is not a step in finishing the project. Referral credit, the reorder email, and renewal billing are their own later months. Affiliate links wait until January, and only after the bank can receive the commission. ViT Pro, scanner kits, token minting, and n8n stay closed. The two checkout sentences for counsel, and the two insurance quotes, stay on this month’s list. They are not part of the code.
 
 - [ ] File the EIN. About 1 hour. Save the CP 575. IRS wait, often 1–4 weeks.
 - [ ] Open the LLC bank account. About 2 hours, plus the bank’s wait. Book founder advances as reimbursement or as capital. Optional 30-minute CPA note on startup costs. Calendar the Wyoming annual report.
@@ -287,18 +323,29 @@ Product work for this launch ends here. December 2027 through April 2028 are in 
 
 ---
 
-## Leave closed
+## Opens later in this roadmap
 
-| Closed | Until |
-|--------|--------|
-| Public mode | The $1 is in the LLC, the membership works on a second device, and Framer has been checked. |
-| Ad spend | Five real memberships have cleared. Then $350, and only inside the cost rule. |
+These are remaining steps. They are not part of the November cash-register code.
+
+| Work | Opens |
+|------|--------|
+| Public mode and Framer | December 2026, after the $1 is in the LLC, the membership works on a second device, and the Framer buttons have been checked. |
+| Ad spend | After five real memberships. Then $350, and only inside the cost rule. The February 2027 step is the first planned raise, to $700. |
+| Shelter notes | December 2026. Thirty personal notes, municipal and private. |
+| Shelter intake claim | May 2027. The dog is enrolled before an owner exists, and the adopter claims that record. |
+| Paid shelter seat | November 2027, at $69, if the pilot produced owner signups. |
+| Affiliate links | The week a program approves a tracked link, the bank can receive the commission, and the disclosure is on that page. |
+| Renewal billing | Built in October 2027. First use is November 2027. |
+
+## Stays closed through November 2027
+
+| Closed | Why it is not a step in this project |
+|--------|--------------------------------------|
 | $18 lifetime as the primary offer | Retired in November 2026, before ads. |
-| Affiliate links | Bank, disclosure, and a tracked URL. Then the matching protocol only. |
 | 10% sentence | Stays off the site. A planning reserve in a spreadsheet does not put the sentence on a page. |
 | Reunion-rate and diagnosis claims | They are not a video closer, not an ad, and not a grant sentence. |
 | Paid HeyGen, Runway, and studio production | Off through this roadmap. Phone clips only. |
-| Photo-booth checkout | Packs stay unpublished. The costume call has a real vendor cost. |
+| Photo-booth checkout | The booth is already in the app. Pack checkout stays unpublished. The costume call has a real vendor cost. |
 | ViT Pro billing and any clinical decision screen | Out through at least April 2028. A clinic seat on the consult packet is a year-3 test in the master plan, and only if five clinics say they would pay. |
 | Scanner-kit inventory | Out of this launch. Enrollment uses the phone the owner already holds and, at a shelter, the reader the shelter already owns. |
 | Token minting | Educational access is the product. A mint does not raise the fee. |
@@ -411,6 +458,7 @@ The four numbers that can retire a target are, in order: renewal rate, ad cost p
 | October 26 counsel note | Posting gate cleared October 28, 2026. “Final,” not “approved.” Selling, public mode, and the shop wait for the founder’s notice that the EIN and the bank are open. |
 | November 7, 2026 Valuation and Income Plan | Prices, the membership offer, the shelter handoff, the ad rule, the hours, and the planning-case month targets. |
 | November 8, 2026 Master Business Plan | The bible. This roadmap is the 14-month execution extract. If they ever disagree, the master plan wins, and this file is corrected the same week. |
+| November 8, 2026 Growth Plan Checklist | The click path for every to-do in this roadmap. |
 
 ---
 
