@@ -7,16 +7,17 @@ import PageHeader from '@/app/components/ui/PageHeader';
 import { getShopConfigStatus } from '@/lib/shop/config-status';
 import { getLivePriceQuote } from '@/lib/shop/pricing';
 import { protocolDetailHref } from '../lib/routes';
+import { MembershipOffer, ShopAccessProvider } from './ShopAccess';
 import TokenShopCheckout from './TokenShopCheckout';
 import TokenShopFocus from './TokenShopFocus';
 import TokenShopPaidReturn from './TokenShopPaidReturn';
 import { TokenShopProvider, toTokenShopQuote } from './TokenShopProvider';
-import { SHOP_PRICE, tokenShopItems } from './shop-items';
+import { tokenShopItems } from './shop-items';
 
 export const metadata: Metadata = {
   title: 'Token Shop • Freedom Paws Wellness',
   description:
-    'Lifetime wellness protocols on XRPL — ViT AI analysis, whole-food diet plans, and educational access via Dynamic NFT or MPT.',
+    'Annual membership for Freedom Paws protocols and scans. A twelve-month pass covers one protocol.',
 };
 
 function ViewProtocolButton({ href, label }: { href: string; label: string }) {
@@ -81,9 +82,7 @@ function TokenShopCard({ item }: { item: (typeof tokenShopItems)[number] }) {
         </ul>
 
         <p className="mt-5 text-center text-[11px] leading-relaxed text-white/50">
-          Lifetime access • Educational utility token
-          <br />
-          Supports no-kill shelters &amp; veteran programs
+          Included with the annual membership, or a twelve-month pass for this protocol.
         </p>
 
         <TokenShopCheckout slug={item.slug} cardTitle={item.cardTitle} />
@@ -106,7 +105,9 @@ export default async function TokenShopPage() {
       initialQuote={initialQuote}
       initialConfigReady={shopConfig.readyForXamanTest}
     >
-      <TokenShopPageContent />
+      <ShopAccessProvider>
+        <TokenShopPageContent />
+      </ShopAccessProvider>
     </TokenShopProvider>
   );
 }
@@ -143,21 +144,21 @@ function TokenShopPageContent() {
         center
         eyebrow="AI-Powered • XRPL Tokenized • Natural Holistic Care"
         eyebrowVariant="gold"
-        title="Lifetime Wellness Protocols"
+        title="Annual membership"
         subtitle={
           <>
-            Give your dog personalized, natural wellness support with 10 specialized protocols — each
-            combining Vision Transformer (ViT) AI analysis, whole-food diet plans, lifestyle guidance,
-            and educational resources. Every protocol is delivered as a lifetime-access Dynamic NFT or
-            MPT on the XRPL blockchain. Purchase once and own it forever.
+            The membership is the offer. It covers the ten protocols and the member scans for twelve
+            months. A single protocol is a twelve-month pass, not a lifetime purchase.
           </>
         }
         className="mt-8 mb-6"
       />
 
+      <MembershipOffer />
+
       <p className="mb-10 max-w-3xl mx-auto text-center text-white/75 leading-relaxed text-sm md:text-base">
-        Protocols are ${SHOP_PRICE.rlusd}.00 USD each — pay
-        in XRP via Xaman (live conversion at checkout) or by card.
+        Card and Xaman are the same dollar price. The membership is a row on the account, so a second
+        device signed into the same email shows it with no extra step.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

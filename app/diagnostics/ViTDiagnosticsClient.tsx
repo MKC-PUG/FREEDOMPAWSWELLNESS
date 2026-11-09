@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { protocols } from '@/app/protocols/protocols';
 import { compressFileToUpload } from '@/lib/compress-image';
@@ -82,6 +83,8 @@ export default function ViTDiagnosticsClient({
   const [alsoCaptureId, setAlsoCaptureId] = useState(false);
   const [media, setMedia] = useState<VitMediaSelection | null>(null);
   const [result, setResult] = useState<AnalyzeApiResponse | null>(null);
+  const [needsSignIn, setNeedsSignIn] = useState(false);
+  const [showMembership, setShowMembership] = useState(false);
   const [loading, setLoading] = useState(false);
   const [analyzeProgress, setAnalyzeProgress] = useState<TaskProgressSnapshot | null>(null);
   const [error, setError] = useState('');
@@ -255,6 +258,8 @@ export default function ViTDiagnosticsClient({
 
     setLoading(true);
     setError('');
+    setNeedsSignIn(false);
+    setShowMembership(false);
     setResult(null);
     setFeedbackSent(null);
     const progress = createMonotonicProgress(setAnalyzeProgress);
@@ -344,12 +349,16 @@ export default function ViTDiagnosticsClient({
       const data = await response.json();
       if (data.success) {
         progress.complete('Analysis complete');
+        setNeedsSignIn(false);
+        setShowMembership(Boolean(data.showMembership));
         setResult(data);
         if (data.mode === 'wellness' || data.mode === 'both') {
           saveVitRunLocal(data, resolvedPetId ?? null, resolvedPetName ?? null);
           if (resolvedPetId) void saveVitRunServer(resolvedPetId, data);
         }
       } else {
+        setNeedsSignIn(data.code === 'SIGN_IN_REQUIRED');
+        setShowMembership(data.code === 'FREE_SCAN_USED' || data.code === 'MEMBERSHIP_REQUIRED');
         setError(data.error || 'Analysis failed');
       }
     } catch {
@@ -635,12 +644,34 @@ export default function ViTDiagnosticsClient({
               </p>
             )}
 
-            {error && <p className="text-red-400 mt-6 text-center">{error}</p>}
+            {error && (
+              <div className="mt-6 text-center">
+                <p className="text-red-400">{error}</p>
+                {needsSignIn && (
+                  <Link href="/login?next=/diagnostics" className="mt-3 inline-block text-sm font-bold text-[#F5C242] underline">
+                    Sign in with email
+                  </Link>
+                )}
+                {showMembership && !needsSignIn && (
+                  <Link href="/token-shop" className="mt-3 inline-block text-sm font-bold text-[#F5C242] underline">
+                    See the annual membership
+                  </Link>
+                )}
+              </div>
+            )}
           </SectionCard>
         </div>
 
         {result ? (
           <div ref={resultsRef} className="mt-10 space-y-10 scroll-mt-6">
+            {showMembership && (
+              <SectionCard className="border-[#F5C242]/40 bg-[#0A1428] text-center">
+                <p className="text-sm text-white/80">The free scan is one run. The annual membership includes eight ViT runs and eight label scans a month.</p>
+                <Link href="/token-shop" className="mt-3 inline-block text-sm font-bold text-[#F5C242] underline">
+                  See the annual membership
+                </Link>
+              </SectionCard>
+            )}
             {result.mode === 'both' && result.identity ? (
               <SectionCard className="border-emerald-500/35 bg-emerald-950/20 text-center">
                 <p className="text-sm text-emerald-100/90">

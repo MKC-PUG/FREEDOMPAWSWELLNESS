@@ -2,6 +2,15 @@ import { XummSdk } from 'xumm-sdk';
 import { SHOP_PRICE } from '@/app/token-shop/shop-items';
 import { getCatalogBySlug } from '@/lib/shop/protocol-catalog';
 import {
+  PLAN_AMOUNT_USD,
+  PLAN_LABEL,
+  isMembershipPlanId,
+  planIsOffered,
+  xrpForUsd,
+  type MembershipPlanId,
+} from '@/lib/shop/membership-plans';
+import { getLivePriceQuote } from '@/lib/shop/pricing';
+import {
   getRlusdCurrencyCode,
   getRlusdIssuer,
   getXummCredentials,
@@ -10,6 +19,7 @@ import {
   validateTreasuryAddress,
   xrpToDrops,
 } from './config';
+import { appOrigin } from '@/lib/site-urls';
 
 let sdkSingleton: XummSdk | null = null;
 
@@ -192,6 +202,143 @@ export async function createProtocolPaymentPayload(
   }
 }
 
+export type XamanGrant = {
+  userId: string;
+  plan: MembershipPlanId;
+  protocolSlug: string | null;
+  usd: number;
+};
+
+function shopCheckoutReturnUrl(): string {
+  const path = '/token-shop?checkout=1';
+  const origin = appOrigin();
+  return origin ? `${origin}${path}` : `http://localhost:3000${path}`;
+}
+
+export async function createMembershipPaymentPayload(input: {
+  userId: string;
+  plan: MembershipPlanId;
+  protocolSlug?: string | null;
+  currency: ShopCurrency;
+}): Promise<CreatePayloadResult> {
+  if (!planIsOffered(input.plan, new Date())) {
+    return { ok: false, code: 'INVALID_PLAN', error: 'That plan is not for sale.' };
+  }
+  if (input.plan === 'pass') {
+    if (!input.protocolSlug || !getCatalogBySlug(input.protocolSlug)) {
+      return { ok: false, code: 'INVALID_PROTOCOL', error: 'Choose a protocol for the pass.' };
+    }
+  }
+
+  const sdk = getXummSdk();
+  if (!sdk) {
+    return {
+      ok: false,
+      code: 'XUMM_NOT_CONFIGURED',
+      error: 'Xaman checkout is not configured.',
+    };
+  }
+  const treasuryCheck = validateTreasuryAddress();
+  if (!treasuryCheck.ok) {
+    return {
+      ok: false,
+      code: treasuryCheck.code === 'X_ADDRESS' ? 'TREASURY_X_ADDRESS' : 'TREASURY_NOT_CONFIGURED',
+      error: treasuryCheck.message,
+    };
+  }
+
+  const usd = PLAN_AMOUNT_USD[input.plan];
+  let amount: string | { currency: string; issuer: string; value: string };
+  let amountLabel: string;
+  if (input.currency === 'rlusd') {
+    const issuer = getRlusdIssuer();
+    if (!issuer) {
+      return { ok: false, code: 'RLUSD_NOT_CONFIGURED', error: 'RLUSD is not configured.' };
+    }
+    const currency = getRlusdCurrencyCode();
+    amount = { currency, issuer, value: String(usd) };
+    amountLabel = `${usd} ${currency}`;
+  } else {
+    let rate = 0;
+    try {
+      const quote = await getLivePriceQuote();
+      rate = quote.xrpUsdRate;
+    } catch {
+      rate = 0;
+    }
+    const xrp = xrpForUsd(usd, rate);
+    amount = xrpToDrops(xrp);
+    amountLabel = `${xrp} XRP`;
+  }
+
+  const grant: XamanGrant = {
+    userId: input.userId,
+    plan: input.plan,
+    protocolSlug: input.plan === 'pass' ? input.protocolSlug ?? null : null,
+    usd,
+  };
+  const txjson = {
+    TransactionType: 'Payment' as const,
+    Destination: treasuryCheck.address,
+    Amount: amount,
+  };
+  const payload = {
+    txjson,
+    custom_meta: {
+      identifier: 'fp-plan',
+      blob: JSON.stringify(grant),
+      instruction: `${PLAN_LABEL[input.plan]} — ${amountLabel}`,
+    },
+    options: {
+      submit: true,
+      expire: 15,
+      return_url: { app: shopCheckoutReturnUrl(), web: shopCheckoutReturnUrl() },
+    },
+  };
+
+  try {
+    type CreatedPayload = { uuid?: string; next?: { always?: string }; refs?: { qr_png?: string } };
+    const created = (await sdk.payload.create(
+      payload as unknown as Parameters<typeof sdk.payload.create>[0],
+      true
+    )) as CreatedPayload;
+    if (!created?.uuid) {
+      return { ok: false, code: 'XUMM_PAYLOAD_FAILED', error: 'Xaman returned no payload.' };
+    }
+    const deeplink = created.next?.always || `https://xaman.app/sign/${created.uuid}`;
+    return {
+      ok: true,
+      uuid: created.uuid,
+      deeplink,
+      qrPng: created.refs?.qr_png ?? null,
+      currency: input.currency,
+      amountLabel,
+      protocolTitle: PLAN_LABEL[input.plan],
+    };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Xaman payload creation failed';
+    console.error('[xumm/create-plan]', msg);
+    return { ok: false, code: 'XUMM_ERROR', error: msg };
+  }
+}
+
+export function parseXamanGrant(blob: unknown): XamanGrant | null {
+  if (typeof blob !== 'string' || !blob.startsWith('{')) return null;
+  try {
+    const parsed = JSON.parse(blob) as Partial<XamanGrant>;
+    if (!parsed.userId || !isMembershipPlanId(parsed.plan) || typeof parsed.usd !== 'number') return null;
+    if (parsed.usd !== PLAN_AMOUNT_USD[parsed.plan]) return null;
+    return {
+      userId: parsed.userId,
+      plan: parsed.plan,
+      protocolSlug: parsed.protocolSlug ?? null,
+      usd: parsed.usd,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export type PayloadStatusResult =
   | {
       ok: true;
@@ -201,6 +348,8 @@ export type PayloadStatusResult =
       resolved: boolean;
       txid: string | null;
       slug: string | null;
+      grant: XamanGrant | null;
+      legacyProtocol: boolean;
     }
   | { ok: false; error: string; code: string };
 
@@ -223,6 +372,7 @@ export async function getPayloadStatus(uuid: string): Promise<PayloadStatusResul
       ? identifier.slice('fp-protocol-'.length)
       : null;
     const txid = typeof payload.response?.txid === 'string' ? payload.response.txid : null;
+    const grant = identifier === 'fp-plan' ? parseXamanGrant(payload.custom_meta?.blob) : null;
 
     return {
       ok: true,
@@ -232,6 +382,8 @@ export async function getPayloadStatus(uuid: string): Promise<PayloadStatusResul
       resolved,
       txid,
       slug: slugFromId,
+      grant,
+      legacyProtocol: Boolean(slugFromId) && !grant,
     };
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Status check failed';

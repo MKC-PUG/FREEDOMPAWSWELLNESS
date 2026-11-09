@@ -16,6 +16,26 @@ import {
 import { getApprovedAliases, recordAnalysis } from '@/lib/symptom-feedback-store';
 import { analyzeVitPro } from '@/lib/vit-pro/vit-pro-analyze';
 import { parseVitProRegionHint } from '@/lib/vit-pro/detect-region';
+import { consumeScan } from '@/lib/shop/entitlements-server';
+import { getServerUser } from '@/lib/supabase/server';
+
+async function gateVitRun(): Promise<NextResponse | { showMembership: boolean }> {
+  const user = await getServerUser();
+  if (!user) {
+    return NextResponse.json(
+      { success: false, code: 'SIGN_IN_REQUIRED', error: 'Sign in with your email to run a scan.' },
+      { status: 401 }
+    );
+  }
+  const gate = await consumeScan(user.id, 'vit');
+  if (!gate.ok) {
+    return NextResponse.json(
+      { success: false, code: gate.code, error: gate.error },
+      { status: gate.status }
+    );
+  }
+  return { showMembership: gate.showMembership };
+}
 
 function parseAnalyzeMode(raw: string): AnalyzeMode {
   const mode = raw.trim().toLowerCase();
@@ -82,6 +102,9 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        const vitGate = await gateVitRun();
+        if (vitGate instanceof NextResponse) return vitGate;
+
         const approved = await getApprovedAliases();
         const [wellness, identity] = await Promise.all([
           analyzeDogMedia({ symptoms, mediaType, frames }, approved),
@@ -112,15 +135,16 @@ export async function POST(request: NextRequest) {
           console.warn('Analysis record not persisted (continuing):', persistErr);
         }
 
-        return NextResponse.json(
-          toBothAnalyzeApiResponse(analysisId, wellness.data, identity, {
+        return NextResponse.json({
+          ...toBothAnalyzeApiResponse(analysisId, wellness.data, identity, {
             matchedTerms: wellness.analysisMeta?.matchedTerms ?? [],
             unknownPhrases: wellness.analysisMeta?.unknownPhrases ?? [],
             usedVision: identity.usedVision || Boolean(wellness.data.usedVision),
             mediaType: identity.mediaType,
             frameCount: identity.frameCount,
-          })
-        );
+          }),
+          showMembership: vitGate.showMembership,
+        });
       }
 
       const identity = await analyzeIdentityFrames(frames, regions, mediaType, identityNotes);
@@ -171,6 +195,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const vitGate = await gateVitRun();
+    if (vitGate instanceof NextResponse) return vitGate;
+
     const approved = await getApprovedAliases();
     const analysis = await analyzeDogMedia(
       { symptoms, mediaType, frames },
@@ -203,12 +230,13 @@ export async function POST(request: NextRequest) {
       console.warn('Analysis record not persisted (continuing):', persistErr);
     }
 
-    return NextResponse.json(
-      toAnalyzeApiResponse(analysisId, data, {
+    return NextResponse.json({
+      ...toAnalyzeApiResponse(analysisId, data, {
         matchedTerms: analysisMeta?.matchedTerms ?? [],
         unknownPhrases: analysisMeta?.unknownPhrases ?? [],
-      })
-    );
+      }),
+      showMembership: vitGate.showMembership,
+    });
   } catch (error) {
     console.error('Analysis error:', error);
     const detail = error instanceof Error ? error.message : 'Unknown error';

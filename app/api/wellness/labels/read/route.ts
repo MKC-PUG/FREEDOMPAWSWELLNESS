@@ -1,6 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { consumeScan } from '@/lib/shop/entitlements-server';
+import { getServerUser } from '@/lib/supabase/server';
 import { resultFromText, transcriptFromImage } from '@/lib/wellness/read-label';
 import type { LabelCategory } from '@/lib/wellness/not-good-list';
+
+async function gateLabel(): Promise<NextResponse | null> {
+  const user = await getServerUser();
+  if (!user) {
+    return NextResponse.json(
+      { success: false, code: 'SIGN_IN_REQUIRED', error: 'Sign in with your email to read a label.' },
+      { status: 401 }
+    );
+  }
+  const gate = await consumeScan(user.id, 'label');
+  if (!gate.ok) {
+    return NextResponse.json(
+      { success: false, code: gate.code, error: gate.error },
+      { status: gate.status }
+    );
+  }
+  return null;
+}
 
 export const runtime = 'nodejs';
 
@@ -29,6 +49,8 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+      const blocked = await gateLabel();
+      if (blocked) return blocked;
       return NextResponse.json({ success: true, result: resultFromText(text, category, 'pasted-text') });
     }
 
@@ -47,6 +69,9 @@ export async function POST(request: NextRequest) {
     if (image.type && !image.type.startsWith('image/')) {
       return NextResponse.json({ success: false, error: 'Upload a photo of the label.' }, { status: 400 });
     }
+
+    const blocked = await gateLabel();
+    if (blocked) return blocked;
 
     const read = await transcriptFromImage(image);
     return NextResponse.json({

@@ -109,6 +109,7 @@ export default function ViTMediaUpload({
           onError={onError}
           storageKey="vit-diagnostics"
           returnTo={returnTo}
+          inBrowserOnly
         />
       )}
 

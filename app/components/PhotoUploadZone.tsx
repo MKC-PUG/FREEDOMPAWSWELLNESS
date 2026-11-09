@@ -25,6 +25,8 @@ type PhotoUploadZoneProps = {
   /** POST via fetch + JSON response — no full-page reload (Photo Booth). */
   useFetchUpload?: boolean;
   onUploadId?: (uploadId: string) => void;
+  /** Public ViT path: read the file in the browser. Skip Direct Upload and the backup page. */
+  inBrowserOnly?: boolean;
 };
 
 const POLL_MS = 50;
@@ -41,6 +43,7 @@ export default function PhotoUploadZone({
   restoreOnLoad = true,
   useFetchUpload = false,
   onUploadId,
+  inBrowserOnly = false,
 }: PhotoUploadZoneProps) {
   const libraryRef = useRef<HTMLInputElement>(null);
   const directFormRef = useRef<HTMLFormElement>(null);
@@ -56,7 +59,11 @@ export default function PhotoUploadZone({
 
   const [displayUrl, setDisplayUrl] = useState<string | null>(null);
   const [status, setStatus] = useState(
-    useFetchUpload ? 'Tap Choose Photo below — upload starts automatically' : 'Use Direct Upload below (recommended on iPhone)'
+    inBrowserOnly
+      ? 'Choose a photo below. It is read on this phone.'
+      : useFetchUpload
+        ? 'Tap Choose Photo below — upload starts automatically'
+        : 'Use Direct Upload below (recommended on iPhone)'
   );
 
   const onSelectRef = useRef(onSelect);
@@ -347,6 +354,7 @@ export default function PhotoUploadZone({
 
   return (
     <div className={className}>
+      {!inBrowserOnly && (
       <div className="mb-5 rounded-2xl border-2 border-[#F5C242] bg-[#F5C242]/10 p-4">
         <p className="mb-1 text-base font-bold text-[#F5C242]">★ Direct Upload (iPhone Chrome)</p>
         <p className="mb-4 text-xs text-white/60 leading-relaxed">
@@ -396,6 +404,7 @@ export default function PhotoUploadZone({
           </a>
         </p>
       </div>
+      )}
 
       {!useFetchUpload && (
       <div className="rounded-3xl border-2 border-dashed border-[#F5C242]/50 bg-black/20 p-4 sm:p-5">
@@ -414,7 +423,9 @@ export default function PhotoUploadZone({
           />
         </div>
 
-        <p className="mb-2 text-xs text-white/45">Optional JS upload (desktop browsers)</p>
+        <p className="mb-2 text-xs text-white/45">
+          {inBrowserOnly ? 'Choose a photo. It stays in this browser until the scan runs.' : 'Optional JS upload (desktop browsers)'}
+        </p>
         <input ref={libraryRef} type="file" accept="image/*" className={inputClass} />
 
         <p ref={statusRef} className="mt-4 text-center text-sm font-medium text-[#F5C242]">
