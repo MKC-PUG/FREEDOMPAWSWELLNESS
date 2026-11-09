@@ -72,13 +72,15 @@ export default function OpsCeoDesk({ initialCards, emergencyStop }: Props) {
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           <Strip label="Five boxes still open" value={String(openPriority)} />
-          <Strip label="Overflow" value={String(overflow.length)} />
+          <Strip label="Next" value={String(overflow.length)} />
           <Strip label="Public mode" value="Off" />
           <Strip label="Emergency stop" value={emergencyStop ? 'On' : 'Off'} />
         </div>
         <p className="text-xs text-white/45">
-          Budget about 30–45 minutes. Work the five cards. Overflow waits. info@ and (629)
-          206-4430 are live; this desk does not log into either one.
+          Work the five boxes from top to bottom. They are the current steps on the November 8,
+          2026 plan. The EIN waits until January 1, 2027. Accepting a draft keeps that card here.
+          The next step is the next card, in Next. info@ and (629) 206-4430 are live; this desk
+          does not log into either one.
         </p>
       </OpsSection>
 
@@ -111,7 +113,7 @@ export default function OpsCeoDesk({ initialCards, emergencyStop }: Props) {
         </div>
       </OpsSection>
 
-      <OpsSection title="Overflow">
+      <OpsSection title="Next, in roadmap order">
         <div className="space-y-4">
           {overflow.map((card) => (
             <CardEditor
