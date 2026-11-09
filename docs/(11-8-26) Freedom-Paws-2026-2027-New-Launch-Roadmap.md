@@ -3,7 +3,7 @@
 
 **Title:** 2026–2027 New Launch Roadmap  
 **Date:** November 8, 2026  
-**Document purpose:** The working sequence from the cleared Tennessee-pilot posting gate to a membership that survives a second device, public mode, the first cash, and a finished commercial build in November 2027.  
+**Document purpose:** The working sequence from the cleared Tennessee-pilot posting gate to a membership that survives a second device, public mode, the first cash, and a finished commercial build in January 2028.  
 **Entity:** Freedom Paws Wellness LLC (Wyoming), formed September 11, 2026  
 **Production app:** https://app.freedompawsinc.com (preview mode until the gate below is met)  
 **Website:** https://freedompawsinc.com (Framer)  
@@ -39,11 +39,21 @@ One founder does the work. Hours on each line are that person’s time. Waiting 
 
 The click path for every line is `(11-8-26) Freedom-Paws-Growth-Plan-Checklist.md`. This roadmap states the decision and the boundary of the cash-register build. It does not walk the screens.
 
-If the EIN or the bank slips, slide every later date by the same number of weeks. Do not catch up by turning ads on early.
+If the EIN or the bank slips again after the date below, slide every later date by the same number of weeks. Do not catch up by turning ads on early.
 
-The build in this roadmap ends in November 2027: a shelter can be invoiced, an adopter can claim a dog that was enrolled at intake, and a membership renews on the card already on file. After that, the work repeats. New product lines are not how the next year is won.
+## Clock set November 8, 2026
 
-About **55 hours** fall in the rest of November 2026. About **160 hours** of product work fall between November 8, 2026 and November 2027. From December 2026 on, the weekly rhythm is about **8 hours** and sits on top of those project hours.
+The EIN and the company bank wait until the move to Tennessee. Apply for the EIN on **January 1, 2027**. The bank opens the week the CP 575 is saved. This roadmap uses **January 31, 2027** as that week. If the letter arrives on another week, slide every later date by that difference. Do not file the EIN before January 1. Do not sell on January 1.
+
+Public mode, the live one-dollar charge, ads, shelter notes, and affiliate applications start the week the bank is open. In this planning case, that is the **first week of February 2027**. That is two months later than the December 2026 first-cash date this file was first written with. The month headings below already include that two-month move.
+
+The founding price is **$79** from the week checkout turns on through **April 30, 2027**. The **$99** annual price starts **May 1, 2027**.
+
+November and December 2026 are the cash-register code and phone clips. No public mode, no ads, no shelter email, and no affiliate applications.
+
+The build in this roadmap ends in **January 2028**: a shelter can be invoiced, an adopter can claim a dog that was enrolled at intake, and a membership renews on the card already on file. After that, the work repeats. New product lines are not how the next year is won.
+
+About **55 hours** fall in the rest of November 2026. About **160 hours** of product work fall between November 8, 2026 and January 2028. From February 2027 on, the weekly rhythm is about **8 hours** and sits on top of those project hours.
 
 ---
 
@@ -80,7 +90,7 @@ About **55 hours** fall in the rest of November 2026. About **160 hours** of pro
 
 The October 31 roadmap was still opening the company, then treating a protocol unlock and one shelter email as the launch. Four decisions replace that.
 
-1. The product for sale is an annual membership. Founding price is **$79** through February 28, 2027. The standard price is **$99** from March 1, 2027. A **$12** monthly plan exists and is not featured. A **$29** pass covers one protocol for 12 months for someone who refuses the membership. The **$18 lifetime** price stops being the offer.
+1. The product for sale is an annual membership. Founding price is **$79** through April 30, 2027. The standard price is **$99** from May 1, 2027. A **$12** monthly plan exists and is not featured. A **$29** pass covers one protocol for 12 months for someone who refuses the membership. The **$18 lifetime** price stops being the offer.
 2. A payment is finished only when a second device shows the membership with no manual step. A browser flag set from the success URL is not a sale. Xaman writes the same server row. Card is the default.
 3. Shelters and rescues, municipal and private, are the distribution door. Tennessee is first because the directory and the found-dog queue are built there. The seat fee is small. The build that matters is enrolling the dog at intake and having the adopter claim that record. A hardware scanner is not part of this launch.
 4. SuperBud may host five posts a week that point at the free scan. Paid HeyGen, Runway, and similar studio spend stay off. The photo booth stays unpublished.
@@ -101,7 +111,7 @@ Besides the EIN and the bank, public mode waits on these:
 4. The **founder notice** that the EIN and the bank are actually open. The clerk note does not open public mode by itself.
 5. The **iPhone photo path.** On October 31, 2026, Direct Upload and `/vit-upload.html` completed the upload and then could not load the photo, because Vercel temporary storage is not shared across instances. The dashed-box upload that reads the file in the browser worked. A public ViT invite uses that path.
 
-Do not flip the switch on the day the bank login arrives. Flip it after the $1 is in the LLC and the second-device membership works. That flip is planned for December 2026, in the same week founding checkout turns on.
+Do not flip the switch on the day the bank login arrives. Flip it after the $1 is in the LLC and the second-device membership works. That flip is planned for the first week of February 2027, in the same week founding checkout turns on.
 
 ---
 
@@ -112,14 +122,14 @@ Do not flip the switch on the day the bank login arrives. Flip it after the $1 i
 | Posts and SuperBud | Five pieces a week from protocols already written. Education only. Close on the free scan. Health pieces tell the owner to call their own veterinarian. | Paid studio tools stay off. No shop link, affiliate link, 10% line, reunion rate, or diagnosis until the matching gate below is open. A membership link waits for the second-device test. |
 | AAHA | One registry question to petmicrochiplookup@aaha.org. No endorsement and no partnership claim. | Do not order scanner kits from this email or from any later email in this roadmap. |
 | Vendor acquisition | Five ledger moves a week, in the existing order. Honest Kitchen, Pets Best, West Paw, and Vetster come first. Publish nothing. | A tracked link goes on the matching protocol only after the bank can receive the commission and the disclosure is on the page. Brands on hold stay off email: Open Farm, Whimzees, Ruffwear, Native Pet, Walkin’ Pets, Help ’Em Up, North Hound Life, miNATURALS. |
-| Shelter conversations | Draft, then send personal notes. Municipal shelters and private rescues are both in scope. | Thirty Tennessee notes go out in December, after public mode, from shelter@. The first free 90-day pilot is paperwork in February and a live seat in May. |
+| Shelter conversations | Draft notes now. Do not send them before public mode. | Thirty Tennessee notes go out in February 2027, after public mode, from shelter@. The first free 90-day pilot is paperwork in April and a live seat in July. |
 | Grants | The RippleX invitation form may be sent in November with a checkout demo. Count $0. | Petco Love, PetSmart Charities, and Maddie’s Fund pay shelters, not this LLC. A shelter applies, if it chooses, after it has a live listing. Do not file a research grant that calls the scan a diagnosis. |
-| EIN | Apply at irs.gov. Responsible party **Michael Kevin Corey**. Wyoming LLC. | CP 575 saved before the bank. About 1 hour, then an IRS wait that is often one to four weeks. |
-| Bank | Open it after the EIN. | Account titled **Freedom Paws Wellness LLC**. Then book founder advances. Confirm it can receive an affiliate commission. About 2 hours, plus the bank’s wait. |
+| EIN | Do not apply before January 1, 2027. Responsible party **Michael Kevin Corey**. Wyoming LLC. | On January 1, apply at irs.gov. CP 575 saved before the bank. About 1 hour, then an IRS wait that is often one to four weeks. |
+| Bank | Open it after the CP 575, not on January 1 unless the letter is already saved. | Planning date January 31, 2027. Account titled **Freedom Paws Wellness LLC**. Then book founder advances. Confirm it can receive an affiliate commission. About 2 hours, plus the bank’s wait. |
 
 ---
 
-## Weekly rhythm, from December 2026 through November 2027
+## Weekly rhythm, from February 2027 through January 2028
 
 - Five vendor-ledger moves and no more. About 2.5 hours.
 - Five shelter or rescue conversations. About 2.5 hours.
@@ -132,16 +142,16 @@ Raise ad spend to the next step only when the prior month hit at least 70 percen
 
 ## What finishes the project
 
-The November cash register is the first slice. The project in this roadmap is finished in November 2027: a stranger can pay, a shelter can be invoiced, an adopter can claim a dog that was enrolled at intake, and a membership renews on the card already on file.
+The November cash register is the first slice. The project in this roadmap is finished in January 2028: a stranger can pay, a shelter can be invoiced, an adopter can claim a dog that was enrolled at intake, and a membership renews on the card already on file.
 
-Public mode, ads, and shelters are part of that finish. They sit in later months, not in the November code. The photo booth is already in the app. Selling photo packs is not a remaining step, and it stays off through November 2027.
+Public mode, ads, and shelters are part of that finish. They sit in later months, not in the November code. The photo booth is already in the app. Selling photo packs is not a remaining step, and it stays off through January 2028.
 
 | Work | When it is done | What done looks like |
 |------|-----------------|----------------------|
 | Cash register | November 2026 | The $79 / $99 / $12 / $29 prices exist, and a second device shows the membership. |
-| Public mode | December 2026 | `NEXT_PUBLIC_SITE_MODE=public` after the $1 is in the LLC, the second-device test has passed, and every Framer button has been checked. Founding checkout is on. |
-| Ads | After five real memberships, then each month under the cost rule | The first budget is $350. It rises to $700 in February 2027 only if December and January produced at least 15 memberships and an ad-acquired member cost under $100. A set that spends $150 with no member under $120 is turned off. |
-| Shelters | December 2026 through November 2027 | Thirty Tennessee notes in December, municipal and private. Pilot paperwork in February. In May, a shelter enrolls a dog before an owner exists and a test adopter claims it. A second pilot in June, a third in August. The $69 agreement is drafted in September, signed in October if the pilot produced owner signups, and invoiced in November. |
+| Public mode | February 2027 | `NEXT_PUBLIC_SITE_MODE=public` after the $1 is in the LLC, the second-device test has passed, and every Framer button has been checked. Founding checkout is on. |
+| Ads | After five real memberships, then each month under the cost rule | The first budget is $350. It rises to $700 in April 2027 only if February and March produced at least 15 memberships and an ad-acquired member cost under $100. A set that spends $150 with no member under $120 is turned off. |
+| Shelters | February 2027 through January 2028 | Thirty Tennessee notes in February, municipal and private. Pilot paperwork in April. In July, a shelter enrolls a dog before an owner exists and a test adopter claims it. A second pilot in August, a third in October. The $69 agreement is drafted in November, signed in December if the pilot produced owner signups, and invoiced in January 2028. |
 | Photo booth | Not a step in this project | The booth is already built. Pack checkout stays unpublished. A costume render has a real vendor cost, and this launch does not turn that checkout on. |
 
 The month sections below are the steps for each of those rows.
@@ -156,9 +166,9 @@ The month is successful with zero members and zero ad spend, if a real card paym
 
 This is the build, and the new prices are the offer. A sale exists only when the membership is a row on the server, tied to the account.
 
-Founding annual is **$79** through February 28, 2027. Annual is **$99** from March 1, 2027, and that button stays off the page until that date. Monthly is **$12** and is not featured. The protocol pass is **$29** and covers one protocol for twelve months. The **$18** lifetime price comes off the primary button.
+Founding annual is **$79** through April 30, 2027. Annual is **$99** from May 1, 2027, and that button stays off the page until that date. Monthly is **$12** and is not featured. The protocol pass is **$29** and covers one protocol for twelve months. The **$18** lifetime price comes off the primary button.
 
-Founding annual, standard annual, and the pass are one-time charges. Each row carries an end date twelve months out. Monthly is the only Stripe subscription. Charging a saved card again at the end of the year is the October and November 2027 renewal build. It is not part of this build.
+Founding annual, standard annual, and the pass are one-time charges. Each row carries an end date twelve months out. Monthly is the only Stripe subscription. Charging a saved card again at the end of the year is the December 2027 and January 2028 renewal build. It is not part of this build.
 
 One webhook checks Stripe’s signature and writes the entitlement: the account, the plan, the status, and the end date. The success page does not grant access. A verified Xaman payment writes that same row, at the same dollar price. The browser flag used today is not a membership.
 
@@ -166,29 +176,38 @@ The free ViT scan requires an account and stops after one run. The result page t
 
 The build is proved when a test card creates the row, opening the success address by itself does not, and a second device on the same account shows the membership with no manual step. The live one-dollar charge waits until the LLC bank is the Stripe payout account. The test-card proof can finish before that deposit.
 
-Public mode, ads, and the shelter work are outside this November code, and they are the later months of this same roadmap. Photo-booth checkout stays unpublished through November 2027 and is not a step in finishing the project. Referral credit, the reorder email, and renewal billing are their own later months. Affiliate links wait until January, and only after the bank can receive the commission. ViT Pro, scanner kits, token minting, and n8n stay closed. The two checkout sentences for counsel, and the two insurance quotes, stay on this month’s list. They are not part of the code.
+Public mode, ads, and the shelter work are outside this November code, and they are the later months of this same roadmap. Photo-booth checkout stays unpublished through January 2028 and is not a step in finishing the project. Referral credit, the reorder email, and renewal billing are their own later months. Affiliate links wait until March 2027, and only after the bank can receive the commission. ViT Pro, scanner kits, token minting, and n8n stay closed. The two checkout sentences for counsel, and the two insurance quotes, stay on this month’s list. They are not part of the code.
 
-- [ ] File the EIN. About 1 hour. Save the CP 575. IRS wait, often 1–4 weeks.
-- [ ] Open the LLC bank account. About 2 hours, plus the bank’s wait. Book founder advances as reimbursement or as capital. Optional 30-minute CPA note on startup costs. Calendar the Wyoming annual report.
-- [ ] Confirm the account can receive an affiliate commission. About 30 minutes. This gate stays closed in the product until it is true.
-- [ ] Create Stripe products: Founding Annual $79, Annual $99 hidden until March 1, 2027, Monthly $12, Protocol Pass $29. About 3 hours.
+- [ ] Create Stripe products: Founding Annual $79, Annual $99 hidden until May 1, 2027, Monthly $12, Protocol Pass $29. About 3 hours.
 - [ ] Add one Stripe webhook that writes the entitlement on the server, tied to the account. Remove the unlock that fires from the success URL alone. About 16 hours.
-- [ ] Take a live $1 payment into the LLC, then confirm a real membership price on a second device with no manual step. About 3 hours.
+- [ ] Prove the membership with a Stripe test card on a second device. The live $1 into the LLC waits until the bank is open, planned for the week of January 31, 2027. About 3 hours.
 - [ ] Give an Xaman payment the same server write. A signed payload that only sets a browser flag is not a sale. About 10 hours.
 - [ ] Put the free ViT scan behind an email. Limit a free account to one run. Show the membership immediately after the result. Set the member allowance at eight ViT runs and eight label scans a month. About 10 hours.
 - [ ] Point the public photo path at the in-browser upload that worked on October 31. About 6 hours.
 - [ ] Make the annual membership the offer on the shop page. Leave $18 lifetime off the primary button. About 6 hours.
 - [ ] Place the commission disclosure that already exists in the product on every page that will hold a partner link. About 3 hours.
 - [ ] Ask counsel to look at two sentences before they go on the checkout page: a 14-day refund on the annual plan, and the line that the membership is education and tools. About 1 hour to send. Do not rewrite the posted terms beyond those two sentences. Counsel’s review is their clock.
-- [ ] Request two quotes for technology and professional liability insurance. About 2 hours. Buy the policy in February, not this month.
+- [ ] Request two quotes for technology and professional liability insurance. About 2 hours. Buy the policy in April 2027, not this month.
 - [ ] Send the RippleX invitation form with a demo of membership checkout, including Xaman, and a one-page note that the milestone is server entitlements and on-ledger settlement of the same price. About 2 hours. Count $0. Ask XRPL Commons when the next Aquarium cohort opens. About 30 minutes.
-- [ ] Stop paid video production. Same-day decision. December’s content is a phone clip and a paragraph from a protocol already written.
+- [ ] Stop paid video production. Same-day decision. Content through January 2027 is a phone clip and a paragraph from a protocol already written. No shop link.
 
 **Done when:** the second device shows the membership, the free scan is capped, and the shop leads with the annual plan.
 
 ---
 
-## December 2026 — first cash
+## January 2027 — file the EIN, then open the bank
+
+Do not start this section before January 1, 2027.
+
+- [ ] On January 1, 2027, file the EIN at irs.gov. Responsible party Michael Kevin Corey. Wyoming LLC. About 1 hour. Save the CP 575. The IRS wait is often one to four weeks.
+- [ ] The week the CP 575 is saved, open the bank in the name Freedom Paws Wellness LLC. About 2 hours, plus the bank’s wait. Planning date January 31, 2027. Book founder advances. Confirm the account can receive an affiliate commission.
+- [ ] After that account is the Stripe payout account, take the live $1 into the LLC. About 1 hour.
+
+**Done when:** the CP 575 is filed, the bank is titled Freedom Paws Wellness LLC, and the $1 is in that account. If the letter is not here by January 31, do not start February selling. Slide February and every later month.
+
+---
+
+## February 2027 — first cash
 
 Planning case: 10 new members, about $906 of revenue, about $228 of operating profit, cash near $5,138. Ads of $350 stay locked until five real memberships have cleared. If they have not, December is the organic line only and January picks up the ads.
 
@@ -202,7 +221,7 @@ Planning case: 10 new members, about $906 of revenue, about $228 of operating pr
 
 ---
 
-## January 2027 — links that have actually been approved
+## March 2027 — links that have actually been approved
 
 Planning case: 14 new members, 24 active, about $1,251 of revenue, about $557 of operating profit, cash near $5,695.
 
@@ -215,11 +234,11 @@ Planning case: 14 new members, 24 active, about $1,251 of revenue, about $557 of
 
 ---
 
-## February 2027 — founding price ends
+## April 2027 — founding price ends
 
 Planning case: 20 new members, 44 active, about $1,783 of revenue, about $514 of operating profit, cash near $6,209.
 
-- [ ] In the last week of the month, email everyone who has scanned or bought and say the founding price ends February 28. About 2 hours.
+- [ ] In the last week of the month, email everyone who has scanned or bought and say the founding price ends April 30. About 2 hours.
 - [ ] Bind the technology and professional liability policy. About 2 hours, plus the insurer’s clock. The plan carries $200 a month from this month. The posted terms limit liability in the contract. They do not replace a policy.
 - [ ] Raise ads from $350 to $700 only if December and January together reached at least 15 memberships and the ad cost per member is under $100. Turn off any single ad set that has spent $150 and has not produced a member under $120. About 2 hours.
 - [ ] Open paperwork for the first shelter pilot, at no charge, for 90 days, aimed at a May start. Municipal or rescue. About 4 hours.
@@ -228,18 +247,18 @@ Planning case: 20 new members, 44 active, about $1,783 of revenue, about $514 of
 
 ---
 
-## March 2027 — one annual price
+## May 2027 — one annual price
 
 Planning case: 22 new members, 66 active, about $2,460 of revenue, about $1,166 of operating profit, cash near $7,375. Affiliate deposits in the model begin this month, about $50, and only if a real program is approved. If none is approved, the month is still a success on membership alone.
 
-- [ ] On March 1, make $99 the only annual plan on the page. Retire founding checkout. About 2 hours.
+- [ ] On May 1, make $99 the only annual plan on the page. Retire founding checkout. About 2 hours.
 - [ ] Reconcile affiliate clicks against deposits once a week. About 30 minutes a week. Remove a program that cannot report.
 
 **Done when:** a new buyer cannot still check out at $79.
 
 ---
 
-## April 2027 — read the first 90 days
+## June 2027 — read the first 90 days
 
 Planning case: 24 new members, 90 active, about $2,676 of revenue, about $1,296 of operating profit, cash near $8,671.
 
@@ -252,7 +271,7 @@ Planning case: 24 new members, 90 active, about $2,676 of revenue, about $1,296 
 
 ---
 
-## May 2027 — enroll the dog at intake
+## July 2027 — enroll the dog at intake
 
 Planning case: 29 new members, 119 active, about $3,250 of revenue, about $1,609 of operating profit, cash near $10,280. One of those new members is attributed to the shelter. That is the counted rate for a free pilot: about one new member a month. A shelter that sends ten is upside, and it changes the forecast only after it is measured.
 
@@ -266,7 +285,7 @@ This is the build that makes a shelter worth using on every dog that comes in. T
 
 ---
 
-## June 2027 — referrals on, second pilot
+## August 2027 — referrals on, second pilot
 
 Planning case: 32 new members, 151 active, about $3,600 of revenue, about $1,941 of operating profit.
 
@@ -275,7 +294,7 @@ Planning case: 32 new members, 151 active, about $3,600 of revenue, about $1,941
 
 ---
 
-## July 2027 — the reorder note
+## September 2027 — the reorder note
 
 Planning case: 36 new members, 187 active, about $4,268 of revenue. The affiliate line in the model steps up this month because this email exists. If the email slips, use the downside affiliate rate until it is live.
 
@@ -283,7 +302,7 @@ Planning case: 36 new members, 187 active, about $4,268 of revenue. The affiliat
 
 ---
 
-## August 2027 — aim the posts
+## October 2027 — aim the posts
 
 Planning case: 41 new members, 228 active, about $4,864 of revenue.
 
@@ -292,18 +311,18 @@ Planning case: 41 new members, 228 active, about $4,864 of revenue.
 
 ---
 
-## September 2027 — the paid seat and the renewal note
+## November 2027 — the paid seat and the renewal note
 
 Planning case: 43 new members, 271 active, about $5,166 of revenue.
 
 - [ ] Draft the paid shelter agreement at $69 a month, starting when that organization’s 90-day pilot ends. About 4 hours. Send it to counsel if the draft needs a review. Their clock is separate.
-- [ ] Draft the renewal email the December 2026 cohort receives in November, 30 days before the year is up. One-click renewal at $99. No new discount. About 3 hours of copy.
+- [ ] Draft the renewal email the February 2027 cohort receives in January 2028, 30 days before the year is up. One-click renewal at $99. No new discount. About 3 hours of copy.
 
 ---
 
-## October 2027 — close year 1 on paper
+## December 2027 — close the first selling year on paper
 
-Planning case for the full year, November 2026 through October 2027: about $35,700 of revenue, about $20,100 of operating profit, 316 active members, cash near $25,129. Economic profit for the year is still a loss of about $52,000, because the founder’s labor is charged at $6,000 a month in that second view. The company can pay its bills. It has not yet paid the founder.
+Planning case for the first twelve selling months, February 2027 through January 2028: about $35,700 of revenue, about $20,100 of operating profit, 316 active members, cash near $25,129. That reading lands in December 2027’s close and January 2028’s invoice, not in October 2027. November 2026 through January 2027 add no sales. Economic profit for the year is still a loss of about $52,000, because the founder’s labor is charged at $6,000 a month in that second view. The company can pay its bills. It has not yet paid the founder.
 
 - [ ] Compare actual members with 316, affiliate deposits with about $2,100, and ad cost per member with $70 to $85. About 3 hours. Write down the miss.
 - [ ] Sign the first shelter onto the paid seat for November if the pilot produced even a handful of owner signups. If it produced none, extend the pilot once and do not invoice. About 2 hours.
@@ -311,7 +330,7 @@ Planning case for the full year, November 2026 through October 2027: about $35,7
 
 ---
 
-## November 2027 — the launch build is complete
+## January 2028 — the launch build is complete
 
 Planning case: 52 new members, 368 active, 1 paid shelter, about $6,383 of revenue, about $4,600 of operating profit, cash near $29,729.
 
@@ -329,15 +348,15 @@ These are remaining steps. They are not part of the November cash-register code.
 
 | Work | Opens |
 |------|--------|
-| Public mode and Framer | December 2026, after the $1 is in the LLC, the membership works on a second device, and the Framer buttons have been checked. |
-| Ad spend | After five real memberships. Then $350, and only inside the cost rule. The February 2027 step is the first planned raise, to $700. |
-| Shelter notes | December 2026. Thirty personal notes, municipal and private. |
-| Shelter intake claim | May 2027. The dog is enrolled before an owner exists, and the adopter claims that record. |
-| Paid shelter seat | November 2027, at $69, if the pilot produced owner signups. |
-| Affiliate links | The week a program approves a tracked link, the bank can receive the commission, and the disclosure is on that page. |
-| Renewal billing | Built in October 2027. First use is November 2027. |
+| Public mode and Framer | February 2027, after the $1 is in the LLC, the membership works on a second device, and the Framer buttons have been checked. |
+| Ad spend | After five real memberships. Then $350, and only inside the cost rule. The April 2027 step is the first planned raise, to $700. |
+| Shelter notes | February 2027. Thirty personal notes, municipal and private. |
+| Shelter intake claim | July 2027. The dog is enrolled before an owner exists, and the adopter claims that record. |
+| Paid shelter seat | January 2028, at $69, if the pilot produced owner signups. |
+| Affiliate links | The week a program approves a tracked link, the bank can receive the commission, and the disclosure is on that page. Not before the bank, planned January 31, 2027. |
+| Renewal billing | Built in December 2027. First use is January 2028. |
 
-## Stays closed through November 2027
+## Stays closed through January 2028
 
 | Closed | Why it is not a step in this project |
 |--------|--------------------------------------|
@@ -438,13 +457,14 @@ Production, after deploy `59e9eef`. Carried forward so the next phone check has 
 
 | Gate | Pass |
 |------|------|
-| November 2026 | Second device shows a membership. Free scan is one run. Shop leads with annual. |
-| December 2026 | A stranger has paid. Ads are still off until five memberships, or they are on and under $100 a member. |
-| February 28, 2027 | Founding price is over. Insurance is bound. |
-| May 2027 | One shelter can enroll a dog at intake and a test owner can claim it. |
-| July 2027 | A reorder note goes out with a disclosure, or the affiliate target is cut to the downside. |
-| October 2027 | Year 1 is written down against 316 members, about $2,100 of affiliate deposits, and a $70–$85 ad cost. The miss is named. |
-| November 2027 | One shelter is invoiced at $69. Renewal billing is armed. |
+| November 2026 | Second device shows a membership in test mode. Free scan is one run. Shop leads with annual. No EIN yet. |
+| January 1, 2027 | The EIN application is filed. The bank is not presumed open that day. |
+| February 2027 | A stranger has paid. Ads are still off until five memberships, or they are on and under $100 a member. |
+| April 30, 2027 | Founding price is over. Insurance is bound. |
+| July 2027 | One shelter can enroll a dog at intake and a test owner can claim it. |
+| September 2027 | A reorder note goes out with a disclosure, or the affiliate target is cut to the downside. |
+| December 2027 | The first selling year is written down against 316 members, about $2,100 of affiliate deposits, and a $70–$85 ad cost. The miss is named. |
+| January 2028 | One shelter is invoiced at $69. Renewal billing is armed. |
 
 The four numbers that can retire a target are, in order: renewal rate, ad cost per member, affiliate dollars per member, and members per shelter. Replace the assumption in the month it becomes a measurement.
 

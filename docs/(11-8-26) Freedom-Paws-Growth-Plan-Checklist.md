@@ -4,7 +4,9 @@ Checklist dated November 8, 2026. Source of the sequence: the November 7, 2026 v
 
 This is the build. It ends in November 2027, when a shelter can be invoiced, an adopter can claim a dog that was enrolled at intake, and a membership renews on the card already on file. After that the work repeats: acquire, activate, retain, collect. A clinic seat is the only later build, and only if the year-3 profit test is met. Years 4 and 5 add no product.
 
-Hours are founder time, one person, doing the engineering and the outreach. Waiting on the IRS, a bank, counsel, or an affiliate program is calendar time and is labeled separately. If the EIN or the bank slips, slide every later date by the same number of weeks. Do not catch up by spending the ad budget early.
+Hours are founder time, one person, doing the engineering and the outreach. Waiting on the IRS, a bank, counsel, or an affiliate program is calendar time and is labeled separately. If the CP 575 arrives on a week other than January 31, 2027, slide every later date by the same number of weeks. Do not catch up by spending the ad budget early.
+
+**Clock set November 8, 2026.** The EIN and the bank wait until the move to Tennessee. Apply for the EIN on January 1, 2027. The bank opens the week the CP 575 is saved. This checklist uses January 31, 2027 as that week. Do not file the EIN before January 1. Do not sell on January 1. Public mode, the live one-dollar charge, ads, shelter notes, and affiliate applications start the first week of February 2027. That is two months later than the first draft of this file. The section headings below already include that move. The founding price is $79 through April 30, 2027. The $99 price starts May 1, 2027. November and December 2026 are code and phone clips only.
 
 Each to-do below is a heading. The numbered lines under it are the clicks, in order. The last line is the pass. The decision and the cash-register boundary are in `(11-8-26) Freedom-Paws-2026-2027-New-Launch-Roadmap.md`. This file walks the screens.
 
@@ -14,7 +16,7 @@ The app already has the scan, the ten protocols, the vault, the consult link, th
 
 The growth plan changes that order in four ways.
 
-- The first product to sell is an annual membership at $79 through February 28, 2027, then $99. The $18 lifetime protocol stops being the offer. A $12 monthly plan and a $29 twelve-month single-protocol pass exist so a conversation can still close.
+- The first product to sell is an annual membership at $79 through April 30, 2027, then $99. The $18 lifetime protocol stops being the offer. A $12 monthly plan and a $29 twelve-month single-protocol pass exist so a conversation can still close.
 - A payment is finished only when a second device shows the membership with no manual step. The browser flag used today does not count.
 - Shelters and rescues, municipal and private, are the distribution door. The seat fee is small. The build that matters is enrolling the dog at intake and having the adopter claim that record. A hardware scanner is not part of this build.
 - SuperBud is the face of five posts a week that point at the free scan. Paid video tools stay off. The photo booth stays unpublished.
@@ -83,7 +85,7 @@ Counted product work from here to the November 2027 finish is about **160 hours*
 2. Search each page for “10%” and for “give-back.”
 3. Pass when the sentence is absent from all three. A spreadsheet reserve does not put it back on a page.
 
-## Weekly rhythm, from December 2026 until the build is finished
+## Weekly rhythm, from February 2027 until the build is finished
 
 Do this block once each week. It is about 8 hours. It sits on top of the month’s project hours.
 
@@ -137,13 +139,14 @@ About 30 minutes.
 
 The month is done when a real card payment creates a membership that appears on a second device. No members and no ad spend are required.
 
-The cash-register build is the price and entitlement work in this section. Founding annual is $79 through February 28, 2027. Annual is $99 and stays hidden until March 1, 2027. Monthly is $12 and is not featured. The protocol pass is $29 for twelve months. Annual and the pass are one-time charges with an end date twelve months out. Monthly is the only subscription. The success page does not grant access. Xaman writes the same server row. Public mode, ads, live affiliate links, the shelter claim, and the photo booth stay out of the build. The live one-dollar charge waits until the LLC bank is the Stripe payout account.
+The cash-register build is the price and entitlement work in this section. Founding annual is $79 through April 30, 2027. Annual is $99 and stays hidden until May 1, 2027. Monthly is $12 and is not featured. The protocol pass is $29 for twelve months. Annual and the pass are one-time charges with an end date twelve months out. Monthly is the only subscription. The success page does not grant access. Xaman writes the same server row. Public mode, ads, live affiliate links, the shelter claim, and the photo booth stay out of the build. The live one-dollar charge waits until the LLC bank is the Stripe payout account.
 
-### File the EIN
+### File the EIN on January 1, 2027
 
-About 1 hour. The IRS wait is often one to four weeks.
+About 1 hour. Do not start before January 1, 2027. The IRS wait after that day is often one to four weeks.
 
-1. Open https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online during the IRS online hours.
+1. If the date is before January 1, 2027, stop. Leave this task closed.
+2. On January 1, 2027, open https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online during the IRS online hours.
 2. Start a new application for a limited liability company.
 3. Enter the legal name Freedom Paws Wellness LLC, formed in Wyoming on September 11, 2026.
 4. Enter the responsible party as Michael Kevin Corey, and use his own taxpayer identification where the form asks for the responsible party.
@@ -152,9 +155,9 @@ About 1 hour. The IRS wait is often one to four weeks.
 7. Save the CP 575 in the Legal folder. Do not send it to anyone except the bank.
 8. Pass when the CP 575 is a file you can open, showing the EIN for Freedom Paws Wellness LLC.
 
-### Open the LLC bank account
+### Open the LLC bank account after the CP 575
 
-About 2 hours, plus several business days of bank wait. Start this only after the CP 575 is saved.
+About 2 hours, plus several business days of bank wait. Start this only after the CP 575 is saved. The planning date is January 31, 2027. If the letter is not saved, do not open the bank and do not start the February selling steps.
 
 1. Take the CP 575, the Wyoming formation receipt, the signed operating agreement, and a government photo ID to the bank you have chosen for the company.
 2. Open a business checking account. The title on the account and on the checks must read Freedom Paws Wellness LLC.
@@ -172,7 +175,7 @@ About 3 hours. Do this in test mode first. Repeat it in live mode only after the
 2. Turn on Test mode.
 3. Open Product catalog and choose Add product.
 4. Create Founding Annual Membership. Set the price to $79. Choose one time, not recurring. Save, and copy the price ID.
-5. Create Annual Membership at $99, one time. Copy the price ID. This price stays unused on the page until March 1, 2027.
+5. Create Annual Membership at $99, one time. Copy the price ID. This price stays unused on the page until May 1, 2027.
 6. Create Monthly Membership at $12. Choose recurring, billed every month. Copy the price ID.
 7. Create Protocol Pass at $29, one time. Copy the price ID.
 8. In the Vercel project that serves https://app.freedompawsinc.com, add the four price IDs as `STRIPE_PRICE_FOUNDING_ANNUAL`, `STRIPE_PRICE_ANNUAL`, `STRIPE_PRICE_MONTHLY`, and `STRIPE_PRICE_PASS`. Leave `STRIPE_SECRET_KEY` as it is. `STRIPE_PROTOCOL_PRICE_ID` is no longer the offer.
@@ -243,10 +246,10 @@ About 6 hours.
 About 6 hours.
 
 1. Open the token shop.
-2. Put Founding Annual at $79 in the first position, with the date it ends: February 28, 2027.
+2. Put Founding Annual at $79 in the first position, with the date it ends: April 30, 2027.
 3. Put the $29 protocol pass behind it, labeled as one protocol for twelve months.
 4. Put Monthly at $12 where a visitor can find it, and do not feature it.
-5. Do not show the $99 annual button. That button appears on March 1, 2027.
+5. Do not show the $99 annual button. That button appears on May 1, 2027.
 6. Remove $18 lifetime from the primary button. Leave old browser flags in place for people who already paid, and do not sell a new $18 lifetime from this page.
 7. Read the page once for a diagnosis claim, a reunion rate, and the 10% sentence. Remove any that appear.
 8. Pass when a new visitor’s first price is $79 for the year, and $18 is not the button in front of them.
@@ -298,11 +301,11 @@ Same-day decision. The clicks are in the Stop section above.
 1. Write December’s first five post topics, each one a step from a protocol already written, each one closing on the free scan.
 2. Pass when those five topics are on the December list and no studio render is scheduled.
 
-November build time: about 55 hours, plus IRS, bank, and counsel waits.
+November and December build time: about 55 hours. The IRS and the bank are the January tasks, not this month.
 
-## 2. December 2026 — first cash
+## 2. February 2027 — first cash
 
-Ads of $350 stay locked until five real memberships have cleared. If they have not, December is the organic line only, and January picks up the same ads.
+Do not start this section until the LLC bank is open and the $1 is in that account. Ads of $350 stay locked until five real memberships have cleared. If they have not, February is the organic line only, and March picks up the same ads.
 
 ### Turn founding checkout on in public
 
@@ -340,7 +343,7 @@ About 8 hours across the month.
 2. While the first applications are still open, use the moves on Honest Kitchen, Pets Best, West Paw, and Vetster before you go further down the list.
 3. Pass when each week of December shows five ledger moves.
 
-## 3. January 2027 — links that have actually been approved
+## 3. March 2027 — links that have actually been approved
 
 ### Follow up on quiet affiliate applications
 
@@ -381,14 +384,14 @@ About 2 hours.
 3. File a sentence only when the reply includes permission.
 4. Pass when ten asks are sent, and any sentence you keep has a yes attached.
 
-## 4. February 2027 — founding price ends, insurance starts
+## 4. April 2027 — founding price ends, insurance starts
 
 ### Tell people the founding price ends
 
 About 2 hours. Do this in the last week of February.
 
 1. Export two lists: accounts that have run the free scan, and accounts with a founding annual entitlement.
-2. Email both lists. Say the founding price of $79 ends on February 28, 2027, and that the annual price on March 1 is $99.
+2. Email both lists. Say the founding price of $79 ends on April 30, 2027, and that the annual price on May 1 is $99.
 3. Do not offer a new discount.
 4. Send a test to yourself first.
 5. Pass when both lists have been sent and the end date is in the message.
@@ -418,17 +421,17 @@ About 2 hours.
 
 About 4 hours.
 
-1. Choose one Tennessee organization, municipal or rescue, that answered the December notes.
-2. Write a one-page pilot: $0 for 90 days, aimed at a May 2027 start, enrollment of dogs at intake, and no scanner kit.
+1. Choose one Tennessee organization, municipal or rescue, that answered the February notes.
+2. Write a one-page pilot: $0 for 90 days, aimed at a July 2027 start, enrollment of dogs at intake, and no scanner kit.
 3. Send it from shelter@. Do not send an invoice.
 4. Log the agreed start month, or the refusal.
-5. Pass when one organization has a May start written down, or the refusal is logged and the next organization is chosen.
+5. Pass when one organization has a July start written down, or the refusal is logged and the next organization is chosen.
 
-## 5. March 2027 — one annual price
+## 5. May 2027 — one annual price
 
 ### Retire founding checkout
 
-About 2 hours. Do this on March 1.
+About 2 hours. Do this on May 1.
 
 1. Open the shop.
 2. Remove the $79 founding button.
@@ -446,7 +449,7 @@ About 30 minutes a week.
 3. If a program cannot show clicks or deposits, remove its link from the protocol page that week.
 4. Pass when the week line has clicks, dollars, and no link left for a program that cannot report.
 
-## 6. April 2027 — read the first 90 days, add no feature
+## 6. June 2027 — read the first 90 days, add no feature
 
 ### Start the monthly bookkeeping close
 
@@ -484,7 +487,7 @@ About 1 hour.
 3. Do not open a build branch for a new module.
 4. Pass when the month ends with no new product shipped.
 
-## 7. May 2027 — first shelter pilot and the intake handoff
+## 7. July 2027 — first shelter pilot and the intake handoff
 
 This is the build that makes a shelter worth using on every dog that comes in. The dog is enrolled at intake. At adoption, the new owner claims that record and lands on the free scan with the shelter’s name attached. The scanner they already own can supply a chip number. A Freedom Paws hardware kit is not required.
 
@@ -520,7 +523,7 @@ About 12 hours. It turns on in June.
 4. Do not turn the control on for the public this month.
 5. Pass when two test accounts show the credit in the data and the public switch is still off.
 
-## 8. June 2027 — referrals on, second pilot
+## 8. August 2027 — referrals on, second pilot
 
 ### Turn the referral credit on
 
@@ -541,7 +544,7 @@ About 6 hours.
 4. Log the start date.
 5. Pass when the second organization has enrolled a test dog and can see it.
 
-## 9. July 2027 — the reorder note
+## 9. September 2027 — the reorder note
 
 ### Ship the care-reminder email
 
@@ -560,7 +563,7 @@ About 16 hours.
 2. If it has not, mark the affiliate line for the rest of the year at the downside rate until the note is live.
 3. Pass when either the note is live or the downside rate is written on the forecast.
 
-## 10. August 2027 — aim the posts
+## 10. October 2027 — aim the posts
 
 ### Open a third pilot shelter
 
@@ -580,7 +583,7 @@ About 3 hours.
 3. For the next month, write posts and ad tests only from those two. Leave the other eight in the library for members.
 4. Pass when the next four posts name one of those two protocols.
 
-## 11. September 2027 — the paid seat and the renewal note
+## 11. November 2027 — the paid seat and the renewal note
 
 ### Draft the paid shelter agreement
 
@@ -596,13 +599,13 @@ About 4 hours, plus counsel if you want a review.
 
 About 3 hours of copy. The billing build is the October block.
 
-1. Write one email for the December 2026 cohort. It goes out 30 days before the year is up.
+1. Write one email for the February 2027 cohort. It goes out in January 2028, 30 days before the year is up.
 2. The offer is renewal at $99. Do not add a new discount.
 3. Include a line that they can renew in one click and a line that they can cancel.
 4. Save the copy. Do not send it this month.
 5. Pass when the copy is filed for use in November.
 
-## 12. October 2027 — close year 1 on paper
+## 12. December 2027 — close the first selling year on paper
 
 ### Compare the year with the plan
 
@@ -635,7 +638,7 @@ About 16 hours. First use is November.
 6. Run the sequence on one test entitlement whose end date you set to tomorrow.
 7. Pass when that test account is charged, receipted, and able to cancel, without a new card number being typed.
 
-## 13. November 2027 — the build is complete
+## 13. January 2028 — the build is complete
 
 ### Invoice the first shelter at $69
 
@@ -659,13 +662,13 @@ About 2 hours.
 
 About 1 hour.
 
-1. Open the entitlements that expire in December 2026’s cohort window.
+1. Open the entitlements that expire in the February 2027 cohort window.
 2. Confirm each one has a renewal email dated 30 days prior and a charge dated on the period end.
 3. Pass when every December renewal is scheduled.
 
 Product work for the growth plan ends here. About 160 hours from November 8, 2026.
 
-## 14. December 2027 through April 2028 — run the machine, then one hire
+## 14. February 2028 through June 2028 — run the machine, then one hire
 
 These months are operating time, about 8 hours a week, plus the items below. No new product.
 

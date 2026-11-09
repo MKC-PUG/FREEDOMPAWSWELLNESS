@@ -13,6 +13,8 @@
 
 **Not a promise.** Figures are the planning case of a model with stated assumptions. They are not an appraisal, a solvency opinion, tax advice, or veterinary advice. Bass, Berry & Sims did not guarantee sufficiency and did not give governmental approval.
 
+**Clock set November 8, 2026.** The EIN and the company bank wait until the move to Tennessee. Apply for the EIN on January 1, 2027. The bank opens the week the CP 575 is saved. This plan uses January 31, 2027 as that week. Do not file the EIN before January 1, and do not sell on January 1. First cash, public mode, ads, shelter notes, and affiliate applications start the week the bank is open, in this planning case the first week of February 2027. That is two months later than the December 2026 first-cash date the tables were built with. The founding price is $79 through April 30, 2027. The $99 price starts May 1, 2027. If the CP 575 arrives on another week, slide every later date by that difference. The month-by-month tables in section 10 keep their original labels. Read each row from December 2026 onward two months later. The row labeled October 2027 is the December 2027 reading.
+
 ---
 
 ## 1. How to run the company from this document
@@ -63,7 +65,7 @@ The asset that can become a multi-million-dollar company is the owner record —
 
 In the planning case:
 
-- First cash is December 2026.
+- First cash is February 2027, the week the bank is open. November 2026 through January 2027 have no sales.
 - Cash operating profit, with the founder unpaid, starts the same month.
 - Economic profit, after a $6,000 monthly charge for founder labor, starts in year 2.
 - Equity crosses $1 million at month 30, April 2029.
@@ -89,17 +91,17 @@ A shelter enrolls the dog at intake, while the dog is still a stray or a surrend
 
 ## 5. The offer
 
-These are planning prices. They are not the prices live in the application on November 8, 2026. The live shop still shows $18 lifetime per protocol. That offer is retired before any advertisement runs.
+These are the prices in the application code as of November 8, 2026. Selling them waits until the LLC bank is the Stripe payout account. The $18 lifetime protocol is no longer the offer.
 
 | Offer | Price | Who it is for | When it turns on |
 |-------|-------|---------------|------------------|
 | Free scan | $0, one time, email required | Every new owner | November 2026, before any ad |
-| Founding membership | $79 per year | Buyers through February 28, 2027 | December 2026 |
-| Membership | $99 per year | The standard offer | March 1, 2027 |
-| Monthly membership | $12 per month | People who will not prepay. Offered, not featured. | December 2026 |
-| Protocol pass | $29 for 12 months of one protocol | People who refuse the membership | December 2026 |
-| Shelter seat, pilot | $0 for 90 days | Tennessee rescues and shelters, municipal and private | First pilot May 2027 |
-| Shelter seat | $69 per month, then $99 for new agreements from November 2028 | Organizations that finish the pilot | First paid seat November 2027 |
+| Founding membership | $79 per year | Buyers through April 30, 2027 | February 2027 |
+| Membership | $99 per year | The standard offer | May 1, 2027 |
+| Monthly membership | $12 per month | People who will not prepay. Offered, not featured. | February 2027 |
+| Protocol pass | $29 for 12 months of one protocol | People who refuse the membership | February 2027 |
+| Shelter seat, pilot | $0 for 90 days | Tennessee rescues and shelters, municipal and private | First pilot July 2027 |
+| Shelter seat | $69 per month, then $99 for new agreements from January 2029 | Organizations that finish the pilot | First paid seat January 2028 |
 
 The membership includes all ten protocols, the vault, the consult packet, the training week, the daily log, care reminders, and a monthly allowance of eight ViT runs and eight label scans. The free user gets one ViT run. That cap is the profit protection on the OpenAI bill.
 
@@ -217,7 +219,9 @@ Card fees are 2.9 percent plus 30 cents. OpenAI in the model is about 4.5 cents 
 
 ## 10. Financial goals
 
-Years run November through October. Year 1 is November 2026 through October 2027. Operating profit does not subtract the owner draw. Economic profit subtracts $72,000 and does not also subtract the draw. Ending equity is rounded to the nearest thousand. Ending cash is the model balance.
+The tables below were calculated with first cash in December 2026. They are the selling ramp, not the new calendar. Add two months to every row from December 2026 on. November 2026, December 2026, and January 2027 have no sales. The row labeled October 2027, 316 members and about $20,100 of operating profit for the year, is the reading for December 2027. Years in the annual table still run November through October as labels. The economic story is unchanged. The dates move.
+
+Years run November through October. Year 1 in the old labels is November 2026 through October 2027. Operating profit does not subtract the owner draw. Economic profit subtracts $72,000 and does not also subtract the draw. Ending equity is rounded to the nearest thousand. Ending cash is the model balance.
 
 ### Annual planning case, through the 48-month horizon
 
@@ -345,29 +349,29 @@ If the price stays at $18 for life, with the same ads, year-1 revenue is about $
 
 Hours below are founder time unless the contractor is named. The launch roadmap holds the week-by-week boxes for November 2026 through November 2027. This section is the management view: what the period is for, what done looks like, and what to refuse.
 
-### Months 1–2. November–December 2026. Open the register.
+### November 2026 through January 2027. Build the register. Do not sell.
 
-File the EIN (about 1 hour, then the IRS wait). Open the bank in the LLC’s name (about 2 hours, then the bank’s wait). Build the webhook, the four prices, the one-scan cap, and the Xaman write (about 45 hours). Ask counsel about two checkout sentences (about 1 hour to send). Quote insurance (about 2 hours). Send the RippleX form and count $0 (about 2 hours). In December, turn public mode and founding checkout on only after the second-device test, write to 30 Tennessee shelters and rescues (about 8 hours), and keep ads locked until five memberships have cleared.
+Build the webhook, the four prices, the one-scan cap, and the Xaman write. Ask counsel about two checkout sentences (about 1 hour to send). Quote insurance (about 2 hours). Send the RippleX form and count $0 (about 2 hours). Phone clips may point at the free scan. On January 1, 2027, file the EIN (about 1 hour, then the IRS wait). Open the bank the week the CP 575 is saved, planned as January 31 (about 2 hours, then the bank’s wait). Do not turn public mode on in this window.
 
-**Refuse:** ads before five sales, the $18 button as the offer, paid video, scanner orders, and any grant that calls the scan a diagnosis.
+**Refuse:** an EIN application before January 1, ads, shelter email, affiliate applications, the $18 button as the offer, paid video, scanner orders, and any grant that calls the scan a diagnosis.
 
-### Months 3–6. January–April 2027. Make the price real.
+### February–June 2027. First cash, then one annual price.
 
-Place affiliate links only as each program clears the bank (about 1 hour each). Send the day-7 care note (about 4 hours to set up). End the founding price on February 28 (about 2 hours). Bind insurance (about 2 hours). Raise ads to $700 only inside the cost rule. On March 1, $99 is the only annual plan (about 2 hours). In April, start the monthly close (about 3 hours to set up) and add no feature.
+In the week the bank is open, turn public mode and founding checkout on only after the $1 is in the LLC and the second-device test has passed. Write to 30 Tennessee shelters and rescues (about 8 hours). Keep ads locked until five memberships have cleared. Place affiliate links only as each program clears the bank (about 1 hour each). Send the day-7 care note (about 4 hours to set up). End the founding price on April 30 (about 2 hours). Bind insurance (about 2 hours). Raise ads to $700 only inside the cost rule. On May 1, $99 is the only annual plan (about 2 hours). In June, start the monthly close (about 3 hours to set up) and add no feature.
 
-**Done when:** 90 active members is the planning target, and the 90-day note names the number that missed. A miss does not get an ad increase.
+**Done when:** 90 active members is the planning target for the first ninety selling days, and the note names the number that missed. A miss does not get an ad increase.
 
-### Months 7–12. May–October 2027. The owner engine and the first shelters.
+### July–December 2027. The owner engine and the first shelters.
 
-Build the intake claim (about 24 hours) and the referral credit (about 12 hours). Open three pilots, about 6 hours each. Ship the reorder email in July (about 16 hours). In September, draft the $69 agreement (about 4 hours) and the renewal note (about 3 hours). In October, write year 1 down against 316 members and about $2,100 of affiliate deposits (about 3 hours), and finish renewal billing (about 16 hours).
+Build the intake claim (about 24 hours) and the referral credit (about 12 hours). Open three pilots, about 6 hours each. Ship the reorder email in September (about 16 hours). In November, draft the $69 agreement (about 4 hours) and the renewal note (about 3 hours). In December, write the first selling year down against 316 members and about $2,100 of affiliate deposits (about 3 hours), and finish renewal billing (about 16 hours).
 
 **Insight.** A shelter that enrolls every incoming dog and never gets an adopter to claim the record has not acquired a member. The claim screen, the shelter’s name on it, and a human who shows the adopter how to finish are the product. The scanner is not. If the first pilot produces zero owner signups, extend it once and do not invoice.
 
 **Year-1 reading.** Operating profit near $20,000 is a successful year. Economic profit near −$52,000 means the founder is still the unpaid workforce. Do not hire. Do not read the cash profit as a salary.
 
-### Months 13–18. November 2027–April 2028. Charge for the seat, then one hire.
+### January–June 2028. Charge for the seat, then one hire.
 
-Invoice the first shelter at $69 in November (about 3 hours). In December, renew the original ten personally (about 3 hours). The model keeps 6. If the real rate is under 45 percent, freeze ad increases. Move later pilots onto $69 as they end, about 6 hours of onboarding each. Paid-org count in the plan: 1, then 1, then 2, then 2, then 3, then 4. Take the $3,000 draw in February only if the rule is met. Write the contractor description in March (about 2 hours). Hire in April only if the rule is met. Hand them the inbox and the shelter checklist. This is the last month of the hard $1,500 cap.
+Invoice the first shelter at $69 in January (about 3 hours). In February, renew the original cohort personally (about 3 hours). The model keeps 6 of 10. If the real rate is under 45 percent, freeze ad increases. Move later pilots onto $69 as they end, about 6 hours of onboarding each. Take the $3,000 draw in April only if the rule is met. Write the contractor description in May (about 2 hours). Hire in June only if the rule is met. Hand them the inbox and the shelter checklist. June 2028 is the last month of the hard $1,500 cap under this shifted clock.
 
 **Refuse:** a new product line, a second full-time employee, and a draw funded by a new owner contribution.
 
